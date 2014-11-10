@@ -1,0 +1,514 @@
+\documentclass[12pt]{article}
+\usepackage{tipa}
+\usepackage{graphicx}
+\usepackage[section]{placeins}
+\usepackage{pbox}
+\usepackage{lmodern}
+\usepackage[math]{cellspace}
+\usepackage{caption}
+\usepackage{enumerate}
+\usepackage{parskip}
+\usepackage{framed}
+\usepackage{hyperref}
+\usepackage{pdfpages}
+\RequirePackage{vmargin}		% Force narrower margins
+\setpapersize{USletter}
+\setmarginsrb{1.0in}{1.0in}{1.0in}{1in}{0pt}{0pt}{0pt}{0in}
+\begin{document}
+\title{Design Document}
+\pagenumbering{gobble}
+\setlength{\voffset}{0cm}
+\setlength{\hoffset}{0cm}
+\includepdf[pages=-]{DesignDocCoverPage.pdf}
+\setlength{\voffset}{-2.54cm}
+\setlength{\hoffset}{-2.54cm}
+\tableofcontents
+\clearpage
+\pagenumbering{arabic}
+
+
+\renewcommand{\thefigure}{\arabic{section}.\arabic{figure}}
+
+\section{Executive Summary}
+Technology plays an integral part in our daily lives and continues to redefine how we function.  For example, Philips created LED light bulbs, Hue Lights, that can replace any Edison screw light bulb in a home.  These Philips Hue Lights have several iOS and Android applications for controlling the lights. These applications can do anything from changing the color and brightness to setting alarms and timers for bulbs. The caveat with these applications is that each application only focus on a few different ways to control the Philips Hue Light bulbs.  This means that in order to have a full experience with the bulbs the user has to cycle between Hue Light applications to use the respective feature to control the bulbs. We are going to fix this issue by taking the most useful features from the existing applications, improving them, incorporating them all into a new iOS and Android application, and exposing the bulbs to the internet. 
+
+Our most anticipated feature is the ability to synchronize the Hue Lights to music in real time.  This has already been done. The problem with the existing applications that do it is that there seems to be no rhyme or reason behind how the music is causing the bulbs to change.  We will fix this problem by allowing the user to set rules per bulb as to how the bulb will change to the music.  In a nutshell this feature will make the user feel like they are almost programming their light bulbs to their lights. While music synchronization is paramount to this application, it is only the beginning of the story of how this application will change the way people interact with Hue Lights.
+
+On top of the music synchronization there will be many more features.  A feature that will allow the user to automate the bulbs based off the user's Geolocation will be in this application.  Another feature will be to set timers and alarms.  An example for this would be if the user wakes up at 6am then the Hue Lights will turn on at 5:50am and gradually brighten over a ten minute duration.  There will be many more smart features that will make the bulbs change according to user defined rules and simplify the current user experience. 
+
+With all of our features, users will have full control over their Philips Hue Light bulbs from a single application and will no longer have a need to cycle through multiple applications to have the fullest feature experience.  Improving features and making them accessible in a single mobile aplication is not the only way that we will improve the current experience with the Philips Hue Lights.  On top of dramatically changing the user experience through our application we will also make the Philips Hue Lights controllable via the internet.
+
+Currently, there is limited access the Philips Hue Light bulbs from the internet and only full control of the bulbs if the user is on their home Wifi.   Our Hue Lights home server will act as a wrapper around the Hue Lights and expose them to the internet so that our mobile application will have full access to the bulbs regardless of how the mobile device is connected to the internet.  On top of exposing the Hue Light bulbs to the internet our server will also make it possible to create user accounts.  This server will allow for account administration and overall more control.
+
+In conclusion, our Hue Lights mobile application will improve the way people experience the Hue Lights by letting them have more control over the bulbs than ever before.  With our application there will be no need to have many Hue Lights applications on a single device as well as no need to be on the same LAN as the Hue Lights in order to control them. 
+\section{Background}
+Our inspiration for this project came from the lack of an application that fully encompassed the broad range of features the Hue Light bulbs are capable of. There were several disparate applications that could be combined to create a serviceable controller for the bulbs, but even mixing and matching did not allow the user enough control over the light bulb's behavior. For instance, using the Philip's Hue iOS application to change a light bulb's color and then Ambify by Kai Aras to synchronize the light bulbs to music allows a user to control their light bulbs but only in a disjointed manner. Our application, however, will allow the user to access these key features in one central location while providing more control over the general workings of the bulbs.
+
+Our goal of creating a full-featured home automation system grew from a desire to extend a similar level of control to other smart appliances. While there are applications such as SmartThings by SmartThings, Inc. and Wink by Wink, Inc. that do interface with multiple home controlling devices, they don't share our depth-first approach and they lack in security. Our application will focus on each product in detail with additional security and administrative privileges, providing a more useful service.
+
+\subsection{Required Technology}
+We plan to develop an iOS, Android, and web application using Swift, Java, and Scala respectfully.  Our focus will be on creating a working version in the most recent versions of iOS, Android, and browsers. For the frontend of the web application, we will leverage Twitter's Bootstrap stylesheet and possibly Google's Angular JS and Google Closure for quick development. There already exists a Phillips Hue API that we will use to control the lights with RESTful JSON messages.  We also will create a server application that will carry out the automation tasks, access control, and messaging using Scala. Finally, we will use a database to keep track of the user accounts, administration, and automation.
+
+\subsection{Software/Hardware Requirements}
+Our system is going to require a number of hardware devices for testing, all of which team Prism already has on hand.  These will include the mobile devices, server (Rasberry Pi), network infrastructure, and the Hue Lights themselves.  As time permits, other smart devices may be required such as optional sensors that connect with Raspberry Pi, but these purchases will be made by an individual who has interest in purchasing them regardless.
+
+As for the software side, the software necessary for implementing our project is already part of standard libraries. For example, in pitch detection with real time audio, we will use the native audio processing libraries in the respective platform.  We will also use native libraries for displaying the audio in waveform or we may use the Visualization Toolkit, VTK (\url{http://www.vtk.org/Wiki/VES}) to do our visualizations of the real time audio. On top of that, we plan on using the K-Means clustering algorithm (\url{http://en.wikipedia.org/wiki/K-means_clustering}), which we may or may not need to implement ourselves, to cluster pitches so that we can programmatically assign pitch ranges to particular bulbs. After that, much of our code will rely purely on user interface and backend libraries.
+
+
+\clearpage
+
+\section{Requirement Analysis}
+
+
+\subsection{System Architecture}   
+
+\subsubsection*{Hue Lights}
+The Hue Lights will be controlled by the Web Server and mobile applications via Philip's Hue Light API.
+
+\subsubsection*{Database}
+The database will handle storing the Prism Hue application settings and data from the Web Server.  It will store information for all Hue bulb owners using Team Prism's application.
+
+\subsubsection*{Web Server}
+Team Prism's Web Server will support user accounts, Hue bulb rules, manual light control, smart controls, and settings. The Web Server backend will be developed in Scala and a frontend web application is in the bells and whistles portion of our planning.  
+
+\subsubsection*{iOS Application}
+The Prism project will have an iOS application that will have an intuitive UI for controlling the Hue light bulbs.  The iOS application will interface directly with the Philip's Hue API as well as through the Web Server.
+
+\subsubsection*{Android Application}
+The Prism project will have an Android application that will have an intuitive UI for controlling the Hue light bulbs.  The Android application will interface directly with the Philip's Hue API as well as through the Web Server.
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=130mm]{System_Architecture_-_System_Architecture.png}
+    \caption{System Architecture}
+  \end{figure}
+\FloatBarrier
+\subsection{Personnel}
+Each team member will be the lead on specific areas of the system architecture.
+\subsubsection*{Trudy Firestone}
+Trudy will be focusing on the Android application, consisting of the GUI, the data model, and calls to the server. She has taken the Android Mobile Application Programming course in Fall of 2014, so she will be well prepared for this responsibility. She will also help define the server API for communicating between the devices and the server with Brian and Cody's help. 
+\subsubsection*{Cody Foltz}
+Cody's main responsibility is the iOS application.  He has past experience creating applications for other clients and will be able to handle this application.  In addition, Cody will help define the server API that the iOS and Android applications will use to communicate with the server.
+
+\subsubsection*{Alma Knudson}
+Alma's main responsibilities are the Music Synchronization algorithms, the Web Server's interface with the Hue Light bulbs, and the Database. His experience in data mining will allow him to develop sophisticated algorithms to cluster music pitches in real time and his web development experience will allow him to take charge of his Web Server and Database responsibilities. 
+
+\subsubsection*{Brian Oh}
+Brian's main responsibilities will be the portion of the server responsible for communicating with the mobile applications. He will make sure all requests from other devices are valid, and that the server responds appropriately.
+
+\subsection{System Features}
+The features in the system are broken into three sections, bare essentials, planned features, and bells and whistles.  The bare essentials must be finished or the entire system will not work.  The planned features are the features that should be finished by release time while the bells and whistles are the features that would be nice to have before release but are not expected to be finished in time.
+\subsubsection*{Bare Essentials}
+\begin{itemize}
+\item Manual control of a single light bulb
+\begin{itemize}
+\item Toggle a single light on/off
+\item Change a single light bulb's color
+\item Adjust the brightness of a single light bulb
+\item User will be able to control the bulb through the LAN and through the server
+\end{itemize}
+
+\item User Accounts
+\begin{itemize}
+\item User will be able to authenticate to the server
+\item Allow or deny access to a bulb
+\item Guest account
+\end{itemize}
+
+\item Music Synchronization
+\begin{itemize}
+\item When audio is sensed by the mobile device's microphone then the Hue bulbs will change color and brightness to that audio
+\end{itemize}
+\end{itemize}
+
+\subsubsection*{Planned Features}
+\begin{itemize}
+\item Alarms
+\begin{itemize}
+\item Lights turn on/off at a specific time
+\item Can be set to gradually turn off or on
+\end{itemize}
+\item Timers	
+\begin{itemize}
+\item Turns light off after X amount of minutes
+\item Can be set to gradually turn off light
+\end{itemize}
+
+\item Dynamic Lighting
+\begin{itemize}
+\item Sunset - Lights dim as sun comes up
+\item Sunrise - Lights brighten as sun goes down
+\item Weather - Lights brighten when weather blocks out the sun
+\end{itemize}
+
+\item Manually control groups of light bulbs
+\begin{itemize}
+\item Assign bulbs to groups
+\item Manually control a group of bulbs
+\end{itemize}
+\item User Controls
+\begin{itemize}
+\item Users will be able to enable and disable features
+\item User preferences are saved on the server
+\end{itemize}
+
+\item User Access controls
+\begin{itemize}
+\item User can be restricted from specific features
+\end{itemize}
+	
+\item Cycle colors automatically
+\begin{itemize}
+\item Set a bulb to cycle through specific colors over a time period
+\item Set color, duration, brightness, and transition speed
+\end{itemize}
+
+
+\item Music Synchronization
+\begin{itemize}
+\item Real time audio will be presented on the GUI in a pitch wave.  The user will be able to select a pitch range that will determine the range of pitches that a particular light bulb will change to. These settings will then be able to be saved as a theme.  This allows for the creation of several themes that can be reused later.
+\end{itemize}
+
+
+\item Geolocation
+\begin{itemize}
+\item Prism will allow users to set a geographical location (called GeoFencing) that notify the server when the user enters or exits that location.  The server will then be able to modify lights based on the user entering or exiting that location. 
+\end{itemize}
+\end{itemize}
+
+\subsubsection*{Bells and Whistles}
+\begin{itemize}
+\item Voice Commands
+\begin{itemize}
+\item Prism will allow users to turn bulbs on and off by voice command
+\item Voice commands to enable/disable a specific feature
+\item Change color and brightness via voice commands
+\end{itemize}
+	
+\item Advanced Music Synchronization
+\begin{itemize}
+\item To make this Music Synchronization feature truly advanced the pitches will be clustered programmatically, and Prism will provide a default theme for music based off of these pitch clusterings. This will require minimal modifications to our Mock UI for this feature, but will require a significant amount of algorithm work.
+\end{itemize}
+
+\item Share User Created Data
+\begin{itemize}
+\item User will be able to share groups, themes, schedules and other feature settings with other users
+\end{itemize}
+
+\item Schedules
+\begin{itemize}
+\item Be able to create a daily schedule for when the lights should be on/off, brightness, and color
+\item Ability to save the schedule for reuse
+\end{itemize}
+
+\item Light sensor
+\begin{itemize}
+\item User will be able to add optional light sensors for ultimate automated light control
+\end{itemize}
+
+\item Web Application
+\begin{itemize}
+\item Users will be able to control the lights and interface with the server through their web browser
+\item The web application will not support music synchronization
+\end{itemize}
+\end{itemize}
+
+
+\clearpage
+
+
+
+\section{Appendix}
+\setcounter{figure}{0}
+  \subsection{Use Cases}
+  \begin{samepage}
+  \begin{framed}
+    \textbf{Use Case 1}\\
+    \textbf{Title}: Initial Setup\\
+    \textbf{Short Description}:  The Actor will set up the Hue light application for first time use.  \\
+    \textbf{Actor}: Homeowner \\
+    \textbf{Precondition}: Have Philip's Hue lights, mobile device, and computer for a home server. \\
+    \textbf{List of Steps}:
+    \begin{enumerate}
+      \item Connect server
+      \item Install server software
+      \item Install app
+      \item Open app
+      \item App will then auto locate server
+      \item Create Admin account
+      \item Name lightbulbs
+    \end{enumerate}
+    \textbf{Related UI}: See Figure \ref{fig:settings} 
+  \end{framed}
+\end{samepage}
+
+\begin{samepage}
+  \begin{framed}
+    \textbf{Use Case 2}\\
+    \textbf{Title}: Change Single Light Bulb's Color\\
+    \textbf{Short Description}: The Actor changes the color of a single Hue light bulb.\\
+    \textbf{Actor}: Homeowner \\
+    \textbf{Precondition}: Actor is logged into app \\
+    \textbf{List of Steps}:
+    \begin{enumerate}
+      \item Select bulb
+      \item Open bulb settings in manual control
+      \item Change color of bulb
+    \end{enumerate}
+    \textbf{Related UI}:  See Figure \ref{fig:home} and Figure \ref{fig:singleControl} 
+  \end{framed}
+\end{samepage}
+
+\begin{samepage}
+  \begin{framed}
+    \textbf{Use Case 3} \\
+    \textbf{Title}: Group bulb setting \\
+    \textbf{Short Description}: The Actor can group Hue light bulbs together and control them as if they are a single Hue light bulb. \\
+    \textbf{Actor}: Homeowner \\
+    \textbf{Precondition}: Actor is logged into app \\
+    \textbf{List of Steps}:
+    \begin{enumerate}
+      \item Open group settings
+      \item Name group
+      \item Add bulbs to group
+      \item Save group
+    \end{enumerate}
+    \textbf{Related UI}:  See Figure \ref{fig:home} and Figure \ref{fig:singleControl}. In Figure \ref{fig:home}, a group is created by dragging a lightbulb onto another. 
+  \end{framed}
+\end{samepage}
+
+\begin{samepage}
+  \begin{framed}
+    \textbf{Use Case 4} \\
+    \textbf{Title}: Schedule \\
+    \textbf{Short Description}: The actor sets up a schedule for their lightbulbs. \\
+    \textbf{Actor}: Homeowner \\
+    \textbf{Precondition}: Actor is logged into app and has used app for at least one day \\
+    \textbf{List of Steps}:
+    \begin{enumerate}
+      \item Navigate to schedule menu
+      \item Copy previous day's schedule to today
+      \item Add an additional scheduled item through the calendar menu
+      \item Select device to be scheduled
+      \item Apply rule, color, etc. through manual control.
+      \item Save schedule
+    \end{enumerate}
+    \textbf{Related UI}:  See Figure \ref{fig:schedule} and Figure \ref{fig:singleControl}
+  \end{framed}
+\end{samepage}
+
+\begin{samepage}
+  \begin{framed}
+    \textbf{Use Case 5} \\
+    \textbf{Title}: Music Light Control \\
+    \textbf{Short Description}: The actor syncs their music and lightbulbs by the selecting a predefined music synchronization theme.\\
+    \textbf{Actor}: Homeowner \\
+    \textbf{Precondition}: Actor is logged into app \\
+    \textbf{List of Steps}:
+    \begin{enumerate}
+      \item Play music that is audible to the microphone on device
+      \item Navigate to the Music Light Control Menu
+      \item Select predetermined music synchronization theme
+      \item Watch bulbs change to the music
+    \end{enumerate}
+    \textbf{Related UI}: See Figure \ref{fig:musicThemes} 
+  \end{framed}
+\end{samepage}
+
+\begin{samepage}
+  \begin{framed}
+    \textbf{Use Case 6} \\
+    \textbf{Title}: Music Synchronization Theme Creation \\
+    \textbf{Short Description}:  Actor creates a new music theme that will control the lights in real time based on the music playing. \\
+    \textbf{Actor}: Homeowner \\
+    \textbf{Precondition}: Actor is logged into app \\
+    \textbf{List of Steps}: 
+    \begin{enumerate}
+        \item Navigate to Music Light Control Menu
+        \item Add new theme
+        \item Select range of pitches for each bulb
+        \item Set colors that a bulb can show
+        \item Save theme
+    \end{enumerate}
+    \textbf{Related UI}:  See Figure \ref{fig:musicThemes} and Figure \ref{fig:musicRules} and Figure \ref{fig:musicColors} 
+  \end{framed}
+\end{samepage}
+
+\begin{samepage}
+  \begin{framed}
+    \textbf{Use Case 7} \\
+    \textbf{Title}: Custom Automation Rule \\
+    \textbf{Short Description}: Actor creates an automated task \\
+    \textbf{Actor}: Homeowner \\
+    \textbf{Precondition}: Actor is logged into app \\
+    \textbf{List of Steps}:
+    \begin{enumerate}
+        \item Navigate to automation rules
+        \item Select create new ``Cause Effect" rule
+        \item Name the rule
+        \item Set the ``Cause" to some event. (ie. specific time, enter room, dish washer finished, arrive home, etc.)
+        \item Set the ``Effect" to be an event that the Actor would like to happen. (ie. turn on lights, start to brew coffee, notify Actor, turn on hot tub, etc.)
+        \item Save the rule
+        \item Enable the new rule
+    \end{enumerate}
+    \textbf{Related UI}:  See Figure \ref{fig:singleControl}, Figure \ref{fig:rules}, Figure \ref{fig:newRule}, and Figure \ref{fig:newCauseEffectRule}
+  \end{framed}
+\end{samepage}
+
+\begin{samepage}
+  \begin{framed}
+    \textbf{Use Case 8}\\
+    \textbf{Title}: Enable Predetermined Automation Tasks For a Bulb\\
+    \textbf{Short Description}: User wants to enable a predetermined automation task for a bulb\\
+    \textbf{Actor}: Homeowner \\
+    \textbf{Precondition}: Actor is logged into app \\
+    \textbf{List of Steps}:
+    \begin{enumerate}
+      \item Navigate to rules
+      \item Select bulb
+      \item Turn on predetermined feature
+    \end{enumerate}
+    \textbf{Related UI}:  See Figure \ref{fig:singleControl} and Figure \ref{fig:rules} 
+  \end{framed}
+\end{samepage}
+
+\begin{samepage}
+  \begin{framed}
+    \textbf{Use Case 9}\\
+    \textbf{Title}: Color Cycle Setting\\
+    \textbf{Short Description}: Actor can make a rule to have a bulb cycle through a set of colors over time. \\
+    \textbf{Actor}: Homeowner \\
+    \textbf{Precondition}: Actor is logged into app \\
+    \textbf{List of Steps}:
+    \begin{enumerate}
+     \item Navigate to automation rules
+     \item Select create new color cycle rule
+     \item Name the color cycle rule
+     \item Select bulbs
+     \item Set the starting color
+     \item Set the brightness of the first color
+     \item Set the amount of time before transitioning to the next color
+     \item Repeat steps 5 through 7 for each color to be included in the cycle
+     \item Save the rule
+     \item Start rule
+    \end{enumerate}
+    \textbf{Related UI}:  See Figure \ref{fig:singleControl}, Figure \ref{fig:rules}, Figure \ref{fig:newRule}, Figure \ref{fig:newCycleColorRule}, and Figure \ref{fig:addColorCycle}
+  \end{framed}
+\end{samepage}
+
+
+
+\subsection{UI Sketches}
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=50mm]{Settings.png}
+    \caption{General Settings}
+    \label{fig:settings}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=50mm]{Home.png}
+    \caption{Home Screen}
+    \label{fig:home}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=50mm]{ManualControl.png}
+    \caption{Manual Control}
+    \label{fig:singleControl}
+  \end{figure}
+  
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=50mm]{ApplyRule.png}
+    \caption{Rules}
+    \label{fig:rules}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=50mm]{Create_Rule.png}
+    \caption{Create New Rule}
+    \label{fig:newRule}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=50mm]{CauseEffect.png}
+    \caption{Create New Cause-Effect Rule}
+    \label{fig:newCauseEffectRule}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=50mm]{Cycle_Colors.png}
+    \caption{Create New Cycle-Color Rule}
+    \label{fig:newCycleColorRule}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=50mm]{Add_Color.png}
+    \caption{Add Color to Color Cycle}
+    \label{fig:addColorCycle}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=50mm]{Schedule.png}
+    \caption{Schedule}
+    \label{fig:schedule}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=50mm]{iPhone_music_theme.png}
+    \caption{Music Themes}
+    \label{fig:musicThemes}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=50mm]{iPhone_music_select_bulb.png}
+    \caption{Bulb Selection Screen}
+    \label{fig:bulbSelectionScreen}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=50mm]{iPhone_music_main.png}
+    \caption{Music Rules Screen}
+    \label{fig:musicRules}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=50mm]{iPhone_music_color.png}
+    \caption{Music Colors Screen}
+    \label{fig:musicColors}
+  \end{figure}
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  
+  
+  
+
+\end{document}
