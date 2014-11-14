@@ -31,7 +31,7 @@
 
 \section{Executive Summary}
 Technology plays an integral part in our daily lives and continues to redefine how we function.  For example, Philips created LED light bulbs, Hue Lights, that can replace any Edison screw light bulb in a home.  These Philips Hue Lights have several iOS and Android applications for controlling the lights. These applications can do anything from changing the color and brightness to setting alarms and timers for bulbs. The caveat with these applications is that each application only focus on a few different ways to control the Philips Hue Light bulbs.  This means that in order to have a full experience with the bulbs the user has to cycle between Hue Light applications to use the respective feature to control the bulbs. We are going to fix this issue by taking the most useful features from the existing applications, improving them, incorporating them all into a new iOS and Android application, and exposing the bulbs to the internet. 
-
+ 
 Our most anticipated feature is the ability to synchronize the Hue Lights to music in real time.  This has already been done. The problem with the existing applications that do it is that there seems to be no rhyme or reason behind how the music is causing the bulbs to change.  We will fix this problem by allowing the user to set rules per bulb as to how the bulb will change to the music.  In a nutshell this feature will make the user feel like they are almost programming their light bulbs to their lights. While music synchronization is paramount to this application, it is only the beginning of the story of how this application will change the way people interact with Hue Lights.
 
 On top of the music synchronization there will be many more features.  A feature that will allow the user to automate the bulbs based off the user's Geolocation will be in this application.  Another feature will be to set timers and alarms.  An example for this would be if the user wakes up at 6am then the Hue Lights will turn on at 5:50am and gradually brighten over a ten minute duration.  There will be many more smart features that will make the bulbs change according to user defined rules and simplify the current user experience. 
@@ -91,7 +91,8 @@ Each team member will be the lead on specific areas of the system architecture.
 \subsubsection*{Trudy Firestone}
 Trudy will be focusing on the Android application, consisting of the GUI, the data model, and calls to the server. She has taken the Android Mobile Application Programming course in Fall of 2014, so she will be well prepared for this responsibility. She will also help define the server API for communicating between the devices and the server with Brian and Cody's help. 
 \subsubsection*{Cody Foltz}
-Cody's main responsibility is the iOS application.  He has past experience creating applications for other clients and will be able to handle this application.  In addition, Cody will help define the server API that the iOS and Android applications will use to communicate with the server.
+Cody's main responsibility is the iOS application.  He has past experience creating applications for other clients and will be able to handle this application.  In addition, Cody will help define the server API that the iOS and Android ap
+plications will use to communicate with the server.
 
 \subsubsection*{Alma Knudson}
 Alma's main responsibilities are the Music Synchronization algorithms, the Web Server's interface with the Hue Light bulbs, and the Database. His experience in data mining will allow him to develop sophisticated algorithms to cluster music pitches in real time and his web development experience will allow him to take charge of his Web Server and Database responsibilities. 
@@ -215,7 +216,10 @@ The features in the system are broken into three sections, bare essentials, plan
 \item The web application will not support music synchronization
 \end{itemize}
 \end{itemize}
-
+%Temporary clearpage so we can see how long it is
+\clearpage
+\section{Software Engineering Tools and Techniques}
+As our main software engineering process, we've chosed to use agile development. Each week will represent a single sprint. These small sprints will allow us to remain on track to complete our project. Initially, it's unlikely that we will have a finished version of Prism at the end of each sprint, but we still plan to set goals and review the sprint for these initial weeks. Once we have our bare essentials completed for both of our mobile platforms, we should be able to complete an improved product at the end of each sprint which we can test over the course of the following sprint. This will allow us to focus on maintaining a polished project while we continue to add features.
 
 \clearpage
 
