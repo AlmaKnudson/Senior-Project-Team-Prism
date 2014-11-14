@@ -32,7 +32,7 @@
 \section{Executive Summary}
 Technology plays an integral part in our daily lives and continues to redefine how we function.  For example, Philips created LED light bulbs, Hue Lights, that can replace any Edison screw light bulb in a home.  These Philips Hue Lights have several iOS and Android applications for controlling the lights. These applications can do anything from changing the color and brightness to setting alarms and timers for bulbs. The caveat with these applications is that each application only focus on a few different ways to control the Philips Hue Light bulbs.  This means that in order to have a full experience with the bulbs the user has to cycle between Hue Light applications to use the respective feature to control the bulbs. We are going to fix this issue by taking the most useful features from the existing applications, improving them, incorporating them all into a new iOS and Android application, and exposing the bulbs to the internet. 
  
-Our most anticipated feature is the ability to synchronize the Hue Lights to music in real time.  This has already been done. The problem with the existing applications that do it is that there seems to be no rhyme or reason behind how the music is causing the bulbs to change.  We will fix this problem by allowing the user to set rules per bulb as to how the bulb will change to the music.  In a nutshell this feature will make the user feel like they are almost programming their light bulbs to their lights. While music synchronization is paramount to this application, it is only the beginning of the story of how this application will change the way people interact with Hue Lights.
+Our most exciting feature is the ability to synchronize the Hue Lights to music in real time.  This has already been done. The problem with the existing applications that do it is that there seems to be no rhyme or reason behind how the music is causing the bulbs to change.  We will fix this problem by allowing the user to set rules per bulb as to how the bulb will change to the music.  In a nutshell this feature will make the user feel like they are almost programming their light bulbs to their lights. While music synchronization is paramount to this application, it is only the beginning of the story of how this application will change the way people interact with Hue Lights.
 
 On top of the music synchronization there will be many more features.  A feature that will allow the user to automate the bulbs based off the user's Geolocation will be in this application.  Another feature will be to set timers and alarms.  An example for this would be if the user wakes up at 6am then the Hue Lights will turn on at 5:50am and gradually brighten over a ten minute duration.  There will be many more smart features that will make the bulbs change according to user defined rules and simplify the current user experience. 
 
@@ -218,9 +218,36 @@ The features in the system are broken into three sections, bare essentials, plan
 \end{itemize}
 %Temporary clearpage so we can see how long it is
 \clearpage
-\section{Software Engineering Tools and Techniques}
-As our main software engineering process, we've chosed to use agile development. Each week will represent a single sprint. These small sprints will allow us to remain on track to complete our project. Initially, it's unlikely that we will have a finished version of Prism at the end of each sprint, but we still plan to set goals and review the sprint for these initial weeks. Once we have our bare essentials completed for both of our mobile platforms, we should be able to complete an improved product at the end of each sprint which we can test over the course of the following sprint. This will allow us to focus on maintaining a polished project while we continue to add features.
 
+\section{Software Engineering Tools and Techniques}
+\subsection{Agile Vs. Waterfall}
+As our main software engineering process, we've chosed to use agile development. Each week will represent a single sprint. These small sprints will allow us to remain on track to complete our project. Initially, it's unlikely that we will have a finished version of Prism at the end of each sprint, but we still plan to set goals and review the sprint for these initial weeks. Once we have our bare essentials completed for both of our mobile platforms, we should be able to complete an improved product at the end of each sprint which we can test over the course of the following sprint. This will allow us to focus on maintaining a polished project while we continue to add features.
+\subsection{Versioning, Bug Tracking, and Documentation}
+\begin{itemize}
+\item Code reviews before push code to master
+\item plan to merge once a week, when there is a peer review
+\item merge when substantial benefits are provided to the project
+\end{itemize}
+\subsection{Testing}
+\begin{itemize}
+\item Family and friends to test just by using the application
+\item Automated Unit tests on the server side
+\item UI testing for Android and iOS
+\item testing each other's features
+\item document testing from the beginning
+\item try to automate as much testing as possible
+\end{itemize}
+\subsection{Team Communication and Meetings}
+\begin{itemize}
+\item group texts
+\item google hangouts
+\item git issue tracking
+\item version one
+\item calling for urgent needs
+\item team meeting agenda --each person talks for a few minutes describing what they've been doing, updates team on what they've accomplished the previous week and what they'll accomplish the following week. Discuss roadblocks teh person is having.
+\item Meeting before class each Monday and Wednesday.
+\item Retrospective-what we did last week that was bad and how we can improve it each Monday.
+\end{itemize}
 \clearpage
 
 
@@ -498,26 +525,4 @@ As our main software engineering process, we've chosed to use agile development.
     \caption{Music Colors Screen}
     \label{fig:musicColors}
   \end{figure}
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  
-  
-  
-  
-  
-
 \end{document}
