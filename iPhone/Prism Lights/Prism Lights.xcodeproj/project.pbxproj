@@ -7,6 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D3A78FF1A26A70B003AC6D4 /* HueSDK_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3A78FE1A26A70B003AC6D4 /* HueSDK_iOS.framework */; };
+		0D3A79001A26A70B003AC6D4 /* HueSDK_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3A78FE1A26A70B003AC6D4 /* HueSDK_iOS.framework */; };
+		0D3A79111A26A716003AC6D4 /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79031A26A716003AC6D4 /* DDAbstractDatabaseLogger.m */; };
+		0D3A79121A26A716003AC6D4 /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79031A26A716003AC6D4 /* DDAbstractDatabaseLogger.m */; };
+		0D3A79131A26A716003AC6D4 /* DDASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79051A26A716003AC6D4 /* DDASLLogger.m */; };
+		0D3A79141A26A716003AC6D4 /* DDASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79051A26A716003AC6D4 /* DDASLLogger.m */; };
+		0D3A79151A26A716003AC6D4 /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79071A26A716003AC6D4 /* DDFileLogger.m */; };
+		0D3A79161A26A716003AC6D4 /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79071A26A716003AC6D4 /* DDFileLogger.m */; };
+		0D3A79171A26A716003AC6D4 /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79091A26A716003AC6D4 /* DDLog.m */; };
+		0D3A79181A26A716003AC6D4 /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79091A26A716003AC6D4 /* DDLog.m */; };
+		0D3A79191A26A716003AC6D4 /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A790B1A26A716003AC6D4 /* DDTTYLogger.m */; };
+		0D3A791A1A26A716003AC6D4 /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A790B1A26A716003AC6D4 /* DDTTYLogger.m */; };
+		0D3A791B1A26A716003AC6D4 /* ContextFilterLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A790E1A26A716003AC6D4 /* ContextFilterLogFormatter.m */; };
+		0D3A791C1A26A716003AC6D4 /* ContextFilterLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A790E1A26A716003AC6D4 /* ContextFilterLogFormatter.m */; };
+		0D3A791D1A26A716003AC6D4 /* DispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79101A26A716003AC6D4 /* DispatchQueueLogFormatter.m */; };
+		0D3A791E1A26A716003AC6D4 /* DispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79101A26A716003AC6D4 /* DispatchQueueLogFormatter.m */; };
 		0D9862541A1D2C0B00FAD175 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862531A1D2C0B00FAD175 /* AppDelegate.swift */; };
 		0D9862561A1D2C0B00FAD175 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862551A1D2C0B00FAD175 /* FirstViewController.swift */; };
 		0D9862581A1D2C0B00FAD175 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862571A1D2C0B00FAD175 /* SecondViewController.swift */; };
@@ -27,6 +43,22 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0D3A78F61A26A6AA003AC6D4 /* Prism Lights-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Prism Lights-Bridging-Header.h"; sourceTree = "<group>"; };
+		0D3A78FE1A26A70B003AC6D4 /* HueSDK_iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = HueSDK_iOS.framework; sourceTree = "<group>"; };
+		0D3A79021A26A716003AC6D4 /* DDAbstractDatabaseLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDAbstractDatabaseLogger.h; sourceTree = "<group>"; };
+		0D3A79031A26A716003AC6D4 /* DDAbstractDatabaseLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDAbstractDatabaseLogger.m; sourceTree = "<group>"; };
+		0D3A79041A26A716003AC6D4 /* DDASLLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDASLLogger.h; sourceTree = "<group>"; };
+		0D3A79051A26A716003AC6D4 /* DDASLLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDASLLogger.m; sourceTree = "<group>"; };
+		0D3A79061A26A716003AC6D4 /* DDFileLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDFileLogger.h; sourceTree = "<group>"; };
+		0D3A79071A26A716003AC6D4 /* DDFileLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDFileLogger.m; sourceTree = "<group>"; };
+		0D3A79081A26A716003AC6D4 /* DDLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDLog.h; sourceTree = "<group>"; };
+		0D3A79091A26A716003AC6D4 /* DDLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDLog.m; sourceTree = "<group>"; };
+		0D3A790A1A26A716003AC6D4 /* DDTTYLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDTTYLogger.h; sourceTree = "<group>"; };
+		0D3A790B1A26A716003AC6D4 /* DDTTYLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDTTYLogger.m; sourceTree = "<group>"; };
+		0D3A790D1A26A716003AC6D4 /* ContextFilterLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContextFilterLogFormatter.h; sourceTree = "<group>"; };
+		0D3A790E1A26A716003AC6D4 /* ContextFilterLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContextFilterLogFormatter.m; sourceTree = "<group>"; };
+		0D3A790F1A26A716003AC6D4 /* DispatchQueueLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DispatchQueueLogFormatter.h; sourceTree = "<group>"; };
+		0D3A79101A26A716003AC6D4 /* DispatchQueueLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DispatchQueueLogFormatter.m; sourceTree = "<group>"; };
 		0D98624E1A1D2C0B00FAD175 /* Prism Lights.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Prism Lights.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D9862521A1D2C0B00FAD175 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0D9862531A1D2C0B00FAD175 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -45,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D3A78FF1A26A70B003AC6D4 /* HueSDK_iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,18 +85,50 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D3A79001A26A70B003AC6D4 /* HueSDK_iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0D3A79011A26A716003AC6D4 /* Lumberjack */ = {
+			isa = PBXGroup;
+			children = (
+				0D3A79021A26A716003AC6D4 /* DDAbstractDatabaseLogger.h */,
+				0D3A79031A26A716003AC6D4 /* DDAbstractDatabaseLogger.m */,
+				0D3A79041A26A716003AC6D4 /* DDASLLogger.h */,
+				0D3A79051A26A716003AC6D4 /* DDASLLogger.m */,
+				0D3A79061A26A716003AC6D4 /* DDFileLogger.h */,
+				0D3A79071A26A716003AC6D4 /* DDFileLogger.m */,
+				0D3A79081A26A716003AC6D4 /* DDLog.h */,
+				0D3A79091A26A716003AC6D4 /* DDLog.m */,
+				0D3A790A1A26A716003AC6D4 /* DDTTYLogger.h */,
+				0D3A790B1A26A716003AC6D4 /* DDTTYLogger.m */,
+				0D3A790C1A26A716003AC6D4 /* Extensions */,
+			);
+			path = Lumberjack;
+			sourceTree = "<group>";
+		};
+		0D3A790C1A26A716003AC6D4 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				0D3A790D1A26A716003AC6D4 /* ContextFilterLogFormatter.h */,
+				0D3A790E1A26A716003AC6D4 /* ContextFilterLogFormatter.m */,
+				0D3A790F1A26A716003AC6D4 /* DispatchQueueLogFormatter.h */,
+				0D3A79101A26A716003AC6D4 /* DispatchQueueLogFormatter.m */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		0D9862451A1D2C0B00FAD175 = {
 			isa = PBXGroup;
 			children = (
 				0D9862501A1D2C0B00FAD175 /* Prism Lights */,
 				0D9862681A1D2C0B00FAD175 /* Prism LightsTests */,
 				0D98624F1A1D2C0B00FAD175 /* Products */,
+				0D3A79011A26A716003AC6D4 /* Lumberjack */,
+				0D3A78FE1A26A70B003AC6D4 /* HueSDK_iOS.framework */,
 			);
 			sourceTree = "<group>";
 		};
@@ -85,6 +150,7 @@
 				0D9862591A1D2C0B00FAD175 /* Main.storyboard */,
 				0D98625C1A1D2C0B00FAD175 /* Images.xcassets */,
 				0D98625E1A1D2C0B00FAD175 /* LaunchScreen.xib */,
+				0D3A78F61A26A6AA003AC6D4 /* Prism Lights-Bridging-Header.h */,
 				0D9862511A1D2C0B00FAD175 /* Supporting Files */,
 			);
 			path = "Prism Lights";
@@ -215,9 +281,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D3A79171A26A716003AC6D4 /* DDLog.m in Sources */,
+				0D3A79191A26A716003AC6D4 /* DDTTYLogger.m in Sources */,
 				0D9862581A1D2C0B00FAD175 /* SecondViewController.swift in Sources */,
+				0D3A79151A26A716003AC6D4 /* DDFileLogger.m in Sources */,
 				0D9862541A1D2C0B00FAD175 /* AppDelegate.swift in Sources */,
+				0D3A791D1A26A716003AC6D4 /* DispatchQueueLogFormatter.m in Sources */,
+				0D3A79111A26A716003AC6D4 /* DDAbstractDatabaseLogger.m in Sources */,
 				0D9862561A1D2C0B00FAD175 /* FirstViewController.swift in Sources */,
+				0D3A79131A26A716003AC6D4 /* DDASLLogger.m in Sources */,
+				0D3A791B1A26A716003AC6D4 /* ContextFilterLogFormatter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,7 +298,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D3A79181A26A716003AC6D4 /* DDLog.m in Sources */,
+				0D3A791E1A26A716003AC6D4 /* DispatchQueueLogFormatter.m in Sources */,
+				0D3A791C1A26A716003AC6D4 /* ContextFilterLogFormatter.m in Sources */,
+				0D3A79121A26A716003AC6D4 /* DDAbstractDatabaseLogger.m in Sources */,
+				0D3A79161A26A716003AC6D4 /* DDFileLogger.m in Sources */,
+				0D3A791A1A26A716003AC6D4 /* DDTTYLogger.m in Sources */,
 				0D98626C1A1D2C0B00FAD175 /* Prism_LightsTests.swift in Sources */,
+				0D3A79141A26A716003AC6D4 /* DDASLLogger.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -342,9 +422,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "Prism Lights/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Prism Lights/Prism Lights-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -352,9 +439,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "Prism Lights/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Prism Lights/Prism Lights-Bridging-Header.h";
 			};
 			name = Release;
 		};
@@ -365,6 +458,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
+					"$(PROJECT_DIR)",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -384,6 +478,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Prism LightsTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -411,6 +506,7 @@
 				0D9862711A1D2C0B00FAD175 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0D9862721A1D2C0B00FAD175 /* Build configuration list for PBXNativeTarget "Prism LightsTests" */ = {
 			isa = XCConfigurationList;
@@ -419,6 +515,7 @@
 				0D9862741A1D2C0B00FAD175 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
