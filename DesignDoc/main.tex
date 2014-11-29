@@ -30,29 +30,27 @@
 \renewcommand{\thefigure}{\arabic{section}.\arabic{figure}}
 
 \section{Executive Summary}
-Technology plays an integral part in our daily lives and continues to redefine how we function.  For example, Philips created LED light bulbs, Hue Lights, that can replace any Edison screw light bulb in a home.  These Philips Hue Lights have several iOS and Android applications for controlling the lights. These applications can do anything from changing the color and brightness to setting alarms and timers for bulbs. The caveat with these applications is that each application only focus on a few different ways to control the Philips Hue Light bulbs.  This means that in order to have a full experience with the bulbs the user has to cycle between Hue Light applications to use the respective feature to control the bulbs. We are going to fix this issue by taking the most useful features from the existing applications, improving them, incorporating them all into a new iOS and Android application, and exposing the bulbs to the internet. 
+Technology plays an integral part in our daily lives and continues to redefine how we function.  An example of this is the Philips Hue Lights. The Hue Lights are LED lights that can replace any Edison screw light bulb in a home.  These Philips Hue Lights have many different mobile applications for controlling them. These applications can do anything from changing the color and brightness to setting alarms and timers for bulbs. While these applications are useful, they do not do a perfect job. Most applications focus only one a single way to control the bulbs. This means that in order for the user to have a full experience with the bulbs then the user has to switch from one application to another to use the feature unique to each app to control the bulbs. Team Prism will not only fix this issue of having to switch between applications, but also improve it.  This will be done by incorporating the most useful features from the existing applications, improving them, and adding bluetooth position tracking to further automate the Hue Light experience in a home. 
  
-Our most exciting feature is the ability to synchronize the Hue Lights to music in real time.  This has already been done. The problem with the existing applications that do it is that there seems to be no rhyme or reason behind how the music is causing the bulbs to change.  We will fix this problem by allowing the user to set rules per bulb as to how the bulb will change to the music.  In a nutshell this feature will make the user feel like they are almost programming their light bulbs to their lights. While music synchronization is paramount to this application, it is only the beginning of the story of how this application will change the way people interact with Hue Lights.
+A more notable feature will be the ability to synchronize the Hue Lights to music in real time.  This has already been done, but not well. The problem with the existing applications that do it is that there seems to be no rhyme or reason behind how the music is causing the bulbs to change.  We will fix this problem by allowing the user to set rules per bulb as to how each bulb will change to the music. While music synchronization is paramount to this application, it is only the beginning of the story of how this application will change the way people interact with Hue Lights.
 
-On top of the music synchronization there will be many more features.  A feature that will allow the user to automate the bulbs based off the user's Geolocation will be in this application.  Another feature will be to set timers and alarms.  An example for this would be if the user wakes up at 6am then the Hue Lights will turn on at 5:50am and gradually brighten over a ten minute duration.  There will be many more smart features that will make the bulbs change according to user defined rules and simplify the current user experience. 
+There will be many more features other than music synchronization. These features will allow the user to automate the bulbs based off the user's Geolocation, set timers and alarms, and make the bulbs change according to user defined rules.  An example for this would be if the user wakes up at 6am then the Hue Lights will turn on at 5:50am and gradually brighten over a ten minute duration. These are some of many ways that the Hue application will simplify and improve upon the current user experience. 
 
-With all of our features, users will have full control over their Philips Hue Light bulbs from a single application and will no longer have a need to cycle through multiple applications to have the fullest feature experience.  Improving features and making them accessible in a single mobile aplication is not the only way that we will improve the current experience with the Philips Hue Lights.  On top of dramatically changing the user experience through our application we will also make the Philips Hue Lights controllable via the internet.
+With all of our features, users will have full control over their Philips Hue Light bulbs from a single application and will no longer have a need to cycle through multiple applications to have the fullest feature experience.  Improving features and making them accessible in a single mobile aplication is not the only way that we will improve the current experience with the Philips Hue Lights. 
 
-Currently, there is limited access the Philips Hue Light bulbs from the internet and only full control of the bulbs if the user is on their home Wifi.   Our Hue Lights home server will act as a wrapper around the Hue Lights and expose them to the internet so that our mobile application will have full access to the bulbs regardless of how the mobile device is connected to the internet.  On top of exposing the Hue Light bulbs to the internet our server will also make it possible to create user accounts.  This server will allow for account administration and overall more control.
-
-In conclusion, our Hue Lights mobile application will improve the way people experience the Hue Lights by letting them have more control over the bulbs than ever before.  With our application there will be no need to have many Hue Lights applications on a single device as well as no need to be on the same LAN as the Hue Lights in order to control them. 
+In conclusion, our Hue Lights mobile application will improve the way people experience the Hue Lights by letting them have more control over the bulbs than ever before.  With our application there will be no need to have many Hue Lights applications on a single device in order to fully control them. 
 \section{Background}
-Our inspiration for this project came from the lack of an application that fully encompassed the broad range of features the Hue Light bulbs are capable of. There were several disparate applications that could be combined to create a serviceable controller for the bulbs, but even mixing and matching did not allow the user enough control over the light bulb's behavior. For instance, using the Philip's Hue iOS application to change a light bulb's color and then Ambify by Kai Aras to synchronize the light bulbs to music allows a user to control their light bulbs but only in a disjointed manner. Our application, however, will allow the user to access these key features in one central location while providing more control over the general workings of the bulbs.
+Our inspiration for this project came from the lack of an application that fully encompassed the broad range of features the Hue Light bulbs are capable of. There were several disparate applications that could be combined to create a serviceable controller for the bulbs, but even mixing and matching did not allow the user enough control over the light bulb's behavior. For instance, the Philip's Hue iOS application allows the user to change a light bulb's color and the Ambify by Kai Aras synchronizes the light bulbs to music but this only allows the user to control their light bulbs in a disjointed manner. Our application, however, will allow the user to access these key features in a single application while providing better control over the general workings of the bulbs.
 
-Our goal of creating a full-featured home automation system grew from a desire to extend a similar level of control to other smart appliances. While there are applications such as SmartThings by SmartThings, Inc. and Wink by Wink, Inc. that do interface with multiple home controlling devices, they don't share our depth-first approach and they lack in security. Our application will focus on each product in detail with additional security and administrative privileges, providing a more useful service.
+Our goal of a creating the best Hue light mobile application is a lofty one and if done right has the potential to be the most widely used Hue application.  There will be no major need or use for any of the other existing applications after team Prism finishes this application.  Our application will allow more control over the Philip Hue bulbs than any other application and will do so in a easy to use fashion.
 
 \subsection{Required Technology}
-We plan to develop an iOS, Android, and web application using Swift, Java, and Scala respectfully.  Our focus will be on creating a working version in the most recent versions of iOS, Android, and browsers. For the frontend of the web application, we will leverage Twitter's Bootstrap stylesheet and possibly Google's Angular JS and Google Closure for quick development. There already exists a Phillips Hue API that we will use to control the lights with RESTful JSON messages.  We also will create a server application that will carry out the automation tasks, access control, and messaging using Scala. Finally, we will use a database to keep track of the user accounts, administration, and automation.
+We plan to develop an iOS and Android application using Swift and Java respectfully.  Our focus will be on creating a working version in the most recent versions of iOS and Android. There already exists a Phillips Hue API that we will use to control the lights with RESTful JSON messages.  
 
 \subsection{Software/Hardware Requirements}
-Our system is going to require a number of hardware devices for testing, all of which team Prism already has on hand.  These will include the mobile devices, server (Rasberry Pi), network infrastructure, and the Hue Lights themselves.  As time permits, other smart devices may be required such as optional sensors that connect with Raspberry Pi, but these purchases will be made by an individual who has interest in purchasing them regardless.
+Our system is going to require a number of hardware devices for testing, all of which team Prism already has on hand.  These will include the mobile devices, network infrastructure, and the Hue Lights themselves. Aside from the mobile devices and the Philips hardware, we plan to encorporated the Estimote bluetooth beacons into our project in a innovative manner.
 
-As for the software side, the software necessary for implementing our project is already part of standard libraries. For example, in pitch detection with real time audio, we will use the native audio processing libraries in the respective platform.  We will also use native libraries for displaying the audio in waveform or we may use the Visualization Toolkit, VTK (\url{http://www.vtk.org/Wiki/VES}) to do our visualizations of the real time audio. On top of that, we plan on using the K-Means clustering algorithm (\url{http://en.wikipedia.org/wiki/K-means_clustering}), which we may or may not need to implement ourselves, to cluster pitches so that we can programmatically assign pitch ranges to particular bulbs. After that, much of our code will rely purely on user interface and backend libraries.
+As for the software side, the software necessary for implementing our project is already part of standard libraries. For example, in pitch detection with real time audio, we will use the native audio processing libraries in the respective platform.  We will also use native libraries for displaying the audio in waveform or we may use the Visualization Toolkit, VTK (\url{http://www.vtk.org/Wiki/VES}) to do our visualizations of the real time audio. On top of that, we plan on using the K-Means clustering algorithm (\url{http://en.wikipedia.org/wiki/K-means_clustering}), which we may or may not need to implement ourselves, to cluster pitches so that we can programmatically assign pitch ranges to particular bulbs. After that, much of our code will rely purely on user interface and backend libraries.  There are also plans to use Estimote bluetooth beacon API to improve the user experience. 
 
 
 \clearpage
@@ -69,14 +67,11 @@ As for the software side, the software necessary for implementing our project is
 \subsubsection*{Hue Lights}
 The Hue Lights will be controlled by the Web Server and mobile applications via Philip's Hue Light API.
 
-\subsubsection*{Database}
-The database will handle storing the Prism Hue application settings and data from the Web Server.  It will store information for all Hue bulb owners using Team Prism's application.
+\subsubsection*{iOS Application}
+The Prism project will have an iOS application that will have an intuitive UI for controlling the Hue light bulbs.  The iOS application will interface directly with the Philip's Hue API as well as through the Web Server.
 
-\subsubsection*{Web Server}
-Team Prism's Web Server will support user accounts, Hue bulb rules, manual light control, smart controls, and settings. The Web Server backend will be developed in Scala and a frontend web application is in the bells and whistles portion of our planning.  
-
-\subsubsection*{Mobile Application}
-The Prism project will have an Android and iOS application that will have an intuitive UI for controlling the Hue light bulbs.  The application will interface directly with the Philip's Hue API as well as through the Web Server.
+\subsubsection*{Android Application}
+The Prism project will have an Android application that will have an intuitive UI for controlling the Hue light bulbs.  The Android application will interface directly with the Philip's Hue API as well as through the Web Server.
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=130mm]{System_Architecture_-_System_Architecture.png}
@@ -86,16 +81,15 @@ The Prism project will have an Android and iOS application that will have an int
 \subsection{Personnel}
 Each team member will be the lead on specific areas of the system architecture.
 \subsubsection*{Trudy Firestone}
-Trudy will be focusing on the Android application, consisting of the GUI, the data model, and calls to the server. She has taken the Android Mobile Application Programming course in Fall of 2014, so she will be well prepared for this responsibility. She will also help define the server API for communicating between the devices and the server with Brian and Cody's help. 
+Trudy will be focusing on the GUI and backing up Brian on the Android application. She has taken the Android Mobile Application Programming course in Fall of 2014, so she will be well prepared for this responsibility. 
 \subsubsection*{Cody Foltz}
-Cody's main responsibility is the iOS application.  He has past experience creating applications for other clients and will be able to handle this application.  In addition, Cody will help define the server API that the iOS and Android ap
-plications will use to communicate with the server.
+Cody's main responsibility is the iOS application.  He has past experience creating applications for other clients and will be able to handle this application.
 
 \subsubsection*{Alma Knudson}
-Alma's main responsibilities are the Music Synchronization algorithms, the Web Server's interface with the Hue Light bulbs, and the Database. His experience in data mining will allow him to develop sophisticated algorithms to cluster music pitches in real time and his web development experience will allow him to take charge of his Web Server and Database responsibilities. 
+Alma's main responsibilities are the Music Synchronization algorithms, Philip's Hue API interaction for both mobile applications, and the indoor tracking using the Estimote bluetooth beacons. His experience in data mining will allow him to develop sophisticated algorithms to cluster music pitches in real time. 
 
 \subsubsection*{Brian Oh}
-Brian's main responsibilities will be the portion of the server responsible for communicating with the mobile applications. He will make sure all requests from other devices are valid, and that the server responds appropriately.
+Brian's main responsibilities will be developing the Android application. His experience from taking the Android development class will prove to be paramount in his epic journey on this project.
 
 \subsection{System Features}
 The features in the system are broken into three sections, bare essentials, planned features, and bells and whistles.  The bare essentials must be finished or the entire system will not work.  The planned features are the features that should be finished by release time while the bells and whistles are the features that would be nice to have before release but are not expected to be finished in time.
@@ -109,6 +103,10 @@ The features in the system are broken into three sections, bare essentials, plan
 \item User will be able to control the bulb through the LAN and through the server
 \end{itemize}
 
+
+
+
+%Do we still handle this in a clever way?
 \item User Accounts
 \begin{itemize}
 \item User will be able to authenticate to the server
@@ -116,13 +114,6 @@ The features in the system are broken into three sections, bare essentials, plan
 \item Guest account
 \end{itemize}
 
-\item Music Synchronization
-\begin{itemize}
-\item When audio is sensed by the mobile device's microphone then the Hue bulbs will change color and brightness to that audio
-\end{itemize}
-\end{itemize}
-
-\subsubsection*{Planned Features}
 \begin{itemize}
 \item Alarms
 \begin{itemize}
@@ -133,13 +124,6 @@ The features in the system are broken into three sections, bare essentials, plan
 \begin{itemize}
 \item Turns light off after X amount of minutes
 \item Can be set to gradually turn off light
-\end{itemize}
-
-\item Dynamic Lighting
-\begin{itemize}
-\item Sunset - Lights dim as sun comes up
-\item Sunrise - Lights brighten as sun goes down
-\item Weather - Lights brighten when weather blocks out the sun
 \end{itemize}
 
 \item Manually control groups of light bulbs
@@ -153,6 +137,22 @@ The features in the system are broken into three sections, bare essentials, plan
 \item User preferences are saved on the server
 \end{itemize}
 
+\item Music Synchronization
+\begin{itemize}
+\item When audio is sensed by the mobile device's microphone then the Hue bulbs will change color and brightness to that audio
+\end{itemize}
+\end{itemize}
+
+\subsubsection*{Planned Features}
+
+\item Dynamic Lighting
+\begin{itemize}
+\item Sunset - Lights dim as sun comes up
+\item Sunrise - Lights brighten as sun goes down
+\item Weather - Lights brighten when weather blocks out the sun
+\end{itemize}
+
+
 \item User Access controls
 \begin{itemize}
 \item User can be restricted from specific features
@@ -162,6 +162,13 @@ The features in the system are broken into three sections, bare essentials, plan
 \begin{itemize}
 \item Set a bulb to cycle through specific colors over a time period
 \item Set color, duration, brightness, and transition speed
+\end{itemize}
+
+\item Voice Commands
+\begin{itemize}
+\item Toggle individual bulbs on and off by bulb name- "Night stand bulb, on"
+\item Toggle group of bulbs on and off by group name- "Kitchen bulbs, off"
+\item Change the color of individual and/or group of bulb- "Kitchen bulbs, blue"
 \end{itemize}
 
 
@@ -181,7 +188,6 @@ The features in the system are broken into three sections, bare essentials, plan
 \begin{itemize}
 \item Voice Commands
 \begin{itemize}
-\item Prism will allow users to turn bulbs on and off by voice command
 \item Voice commands to enable/disable a specific feature
 \item Change color and brightness via voice commands
 \end{itemize}
@@ -202,42 +208,44 @@ The features in the system are broken into three sections, bare essentials, plan
 \item Ability to save the schedule for reuse
 \end{itemize}
 
+
+%Do we need this?
 \item Light sensor
 \begin{itemize}
 \item User will be able to add optional light sensors for ultimate automated light control
 \end{itemize}
 
-\item Web Application
-\begin{itemize}
-\item Users will be able to control the lights and interface with the server through their web browser
-\item The web application will not support music synchronization
-\end{itemize}
-\end{itemize}
 %Temporary clearpage so we can see how long it is
 \clearpage
 
 \section{Software Engineering Tools and Techniques}
 \subsection{Agile Vs. Waterfall}
-As our main software engineering process, we've chosen to use agile development. Each week will represent a single sprint, a set block of time dedicated to certain tasks aimed at iteratively adding features and polish to our product. These small sprints will allow us to remain on track to complete our project. Initially, it's unlikely that we will have a finished version of Prism at the end of each sprint, but we still plan to set goals and review the sprint for these initial weeks. Once we have our bare essentials completed for both of our mobile platforms, we should be able to complete an improved product at the end of each sprint which we can test over the course of the following sprint. This will allow us to focus on maintaining a polished project while we continue to add features.
-
-After using Trello and Version One for team planning and delegation, we have chosen to continue using Version One. It will allow us to easily visualize where we are in the sprint by keeping track of tasks and, unlike Trello's free version, generating a burndown chart, a line graph depicting our progress vs. the progress we planned for the sprint. This system will simplify the paperwork aspect of the agile development and allow us to easily stay on track with our goals.
-
+As our main software engineering process, we've chosed to use agile development. Each week will represent a single sprint. These small sprints will allow us to remain on track to complete our project. Initially, it's unlikely that we will have a finished version of Prism at the end of each sprint, but we still plan to set goals and review the sprint for these initial weeks. Once we have our bare essentials completed for both of our mobile platforms, we should be able to complete an improved product at the end of each sprint which we can test over the course of the following sprint. This will allow us to focus on maintaining a polished project while we continue to add features.
 \subsection{Versioning, Bug Tracking, and Documentation}
-For versioning, we plan on using Git with GitHub. We found that in addition to the normal public git repository, GitHub also has bug tracking, pull requests (request for peer review), and a wiki. We plan to use all of these features not only to help ourselves stay on track but to allow everyone the chance to see how the project evolves throughout the senior year.
+As a team, we decided we wanted to have our coding skill be something we could be proud to present to others.  We thought the best way to present our code would be on a public site such as GitHub.  We found that in addition to the normal public git repository, GitHub also has bug tracking, pull requests (request for peer review), and a wiki.  We plan to use all of these features not only to help ourselves stay on track but to allow everyone the chance to see how the project evolves through out the senior year.  
 
-Our team is committed to using Git, and we plan to have at least one other member of the team peer review code prior to merging that code into the master branch. Directly after that review, we'll update the wiki with any useful information and close out any issues that have been resolved. This will allow us to stay up to date with documentation and project issues while hopefully lowering the amount of potential bugs in the project.
+Our team is committed to using git and we plan to have at least one other member of the team peer review code prior to merging that code into the master branch.  Directly after that review, we'll update the wiki with any useful information and close out any issues that have been resolved.  This will allow us to stay up to date with documentation and project issues while hopefully lowering the amount of potential bugs in the project.
 
 \subsection{Testing}
-Our main approach to testing our program will be to use it in our daily lives. To acquire third-person points of view, we will ask our friends and families to test it and give us feedback. To limit the amount of time spent manually testing our application, we also plan to use several automated testing approaches, depending on the platform.
-
-The server will be written in Scala and we plan to use a testing framework for Scala, Specs2. In the spirit of unit testing, instead of interactions with the file system we'll use mocks with Mockito (already included in Specs2) or ScalaMock. All the code will be implemented using Test-Driven Development (TDD).
-
-For our mobile platforms, iOS and Android, we will use unit tests to quickly verify the state of the controller and its interactions with other components in isolation. Test cases for the UI will also be created for complex UI components in addition to our manual testing.
-
+\begin{itemize}
+\item Family and friends to test just by using the application
+\item Automated Unit tests on the server side
+\item UI testing for Android and iOS
+\item testing each other's features
+\item document testing from the beginning
+\item try to automate as much testing as possible
+\end{itemize}
 \subsection{Team Communication and Meetings}
-In order to improve team efficiency, Team Prism has agreed to use group texting, Git issue tracking, Version One, and emergency phone calls. For day-to-day communication, Team Prism will primarily use group texting. This will insure that each team member is receiving the same information as the rest of the team and will not require any second hand information. The team will also use issue tracking in Git to keep the team current on any code related issues that may arise in the development process. As mentioned above, Version One will be used for agile team planning, allowing weekly tasks and due dates to be assigned via Version One. Finally, team members will be able to call each other for any urgent issues.
-
-In addition to varied communications throughout the week, Team Prism plans to have a brief stand-up meeting at the beginning of each week. In this meeting, each member will state what they accomplished during the previous week, what they plan to accomplish in the upcoming week, and any roadblocks that they may have run into during the week. After this stand-up meeting, each team member will be given an opportunity to express any concerns about the efficiency of the team during the previous week and offer ideas on how to improve performance as a team. This will act as Team Prism's weekly agenda meeting. Team Prism also plans to have many group meetings via Google Hangouts when the team can not meet face-to-face. For now, Team Prism plans to conduct in-person meetings on Monday and Wednesday mornings each week. This will help the team to get started early on each weekly sprint and help guarantee successful iterations as we develop the Hue project.
+\begin{itemize}
+\item group texts
+\item google hangouts
+\item git issue tracking
+\item version one
+\item calling for urgent needs
+\item team meeting agenda --each person talks for a few minutes describing what they've been doing, updates team on what they've accomplished the previous week and what they'll accomplish the following week. Discuss roadblocks teh person is having.
+\item Meeting before class each Monday and Wednesday.
+\item Retrospective-what we did last week that was bad and how we can improve it each Monday.
+\end{itemize}
 \clearpage
 
 
@@ -252,15 +260,15 @@ In addition to varied communications throughout the week, Team Prism plans to ha
     \textbf{Title}: Initial Setup\\
     \textbf{Short Description}:  The Actor will set up the Hue light application for first time use.  \\
     \textbf{Actor}: Homeowner \\
-    \textbf{Precondition}: Have Philip's Hue lights, mobile device, and computer for a home server. \\
+    \textbf{Precondition}: Have Philip's Hue lights, mobile device, and optional Estimote beacons. \\
     \textbf{List of Steps}:
     \begin{enumerate}
-      \item Connect server
-      \item Install server software
-      \item Install app
+      \item Replace incondecent bulbs with Hue bulbs
+      \item Place Estimote beacons in each room or every 25 feet (beacons are optional)
+      \item Install app on mobile device
       \item Open app
-      \item App will then auto locate server
-      \item Create Admin account
+      \item App will then auto locate Bridge
+      \item Authenticate app with Bridge by following on screen instructions
       \item Name lightbulbs
     \end{enumerate}
     \textbf{Related UI}: See Figure \ref{fig:settings} 
