@@ -123,7 +123,7 @@
         <!--Setting-->
         <scene sceneID="N4g-Ve-cUD">
             <objects>
-                <viewController id="Zeu-1g-Fq7" sceneMemberID="viewController">
+                <viewController id="Zeu-1g-Fq7" customClass="BridgeConnect" customModule="Prism_Lights" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="21N-tG-3AD"/>
                         <viewControllerLayoutGuide type="bottom" id="mcH-Dw-nsD"/>
@@ -132,9 +132,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="csw-3S-ZAW">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="csw-3S-ZAW">
                                 <rect key="frame" x="0.0" y="261" width="600" height="290"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="1Iy-RS-4cY">
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1Iy-RS-4cY" id="mST-0Y-3Pn">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d7I-hr-m6x">
                                 <rect key="frame" x="0.0" y="20" width="600" height="241"/>
@@ -190,6 +198,15 @@
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wjt-8g-SPT">
+                                        <rect key="frame" x="276" y="182" width="48" height="30"/>
+                                        <state key="normal" title="Search">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="SearchForBridge:" destination="Zeu-1g-Fq7" eventType="touchUpInside" id="Smp-uF-j4I"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -205,6 +222,7 @@
                                     <constraint firstItem="XVp-xf-PhH" firstAttribute="top" secondItem="5FO-ad-aRf" secondAttribute="bottom" constant="8" symbolic="YES" id="Rj2-Zk-Jfc"/>
                                     <constraint firstItem="o8B-rJ-4uN" firstAttribute="leading" secondItem="dCE-LH-asb" secondAttribute="leading" id="UqS-7i-3Mi"/>
                                     <constraint firstItem="XVp-xf-PhH" firstAttribute="leading" secondItem="dCE-LH-asb" secondAttribute="leading" id="ZCF-UH-PrF"/>
+                                    <constraint firstItem="wjt-8g-SPT" firstAttribute="centerX" secondItem="d7I-hr-m6x" secondAttribute="centerX" id="Zkq-0d-pHV"/>
                                     <constraint firstItem="XVp-xf-PhH" firstAttribute="leading" secondItem="d7I-hr-m6x" secondAttribute="leading" constant="44" id="fAw-g2-ukr"/>
                                     <constraint firstItem="WTs-Vk-4ke" firstAttribute="leading" secondItem="VJp-ld-hH7" secondAttribute="leading" id="gf0-yo-HV8"/>
                                     <constraint firstItem="VJp-ld-hH7" firstAttribute="leading" secondItem="d7I-hr-m6x" secondAttribute="leading" constant="273" id="hrZ-2r-oNK"/>
@@ -213,6 +231,7 @@
                                     <constraint firstItem="VJp-ld-hH7" firstAttribute="baseline" secondItem="XVp-xf-PhH" secondAttribute="firstBaseline" id="ukk-5S-dqG"/>
                                     <constraint firstItem="XVp-xf-PhH" firstAttribute="trailing" secondItem="dCE-LH-asb" secondAttribute="trailing" id="vEO-vW-cLL"/>
                                     <constraint firstItem="5FO-ad-aRf" firstAttribute="leading" secondItem="d7I-hr-m6x" secondAttribute="leadingMargin" id="wGw-S3-lEF"/>
+                                    <constraint firstItem="wjt-8g-SPT" firstAttribute="top" secondItem="kkl-y8-4HZ" secondAttribute="bottom" constant="51" id="zWf-YR-Z7n"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -240,6 +259,11 @@
                         </variation>
                     </view>
                     <tabBarItem key="tabBarItem" title="Setting" id="Vhm-P8-e48"/>
+                    <connections>
+                        <outlet property="IP_Label" destination="VJp-ld-hH7" id="CFH-yO-aYz"/>
+                        <outlet property="heartbeatLabel" destination="BmF-wI-pYz" id="aVF-tL-8wp"/>
+                        <outlet property="macLabel" destination="9Yb-VH-Dus" id="kP5-05-04p"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G32-ye-wkS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -23,6 +23,7 @@
 		0D3A791C1A26A716003AC6D4 /* ContextFilterLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A790E1A26A716003AC6D4 /* ContextFilterLogFormatter.m */; };
 		0D3A791D1A26A716003AC6D4 /* DispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79101A26A716003AC6D4 /* DispatchQueueLogFormatter.m */; };
 		0D3A791E1A26A716003AC6D4 /* DispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79101A26A716003AC6D4 /* DispatchQueueLogFormatter.m */; };
+		0D4F25451A2AD34A005C61EA /* BridgeConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D4F25441A2AD34A005C61EA /* BridgeConnect.swift */; };
 		0D9862541A1D2C0B00FAD175 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862531A1D2C0B00FAD175 /* AppDelegate.swift */; };
 		0D9862561A1D2C0B00FAD175 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862551A1D2C0B00FAD175 /* FirstViewController.swift */; };
 		0D9862581A1D2C0B00FAD175 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862571A1D2C0B00FAD175 /* SecondViewController.swift */; };
@@ -59,6 +60,7 @@
 		0D3A790E1A26A716003AC6D4 /* ContextFilterLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContextFilterLogFormatter.m; sourceTree = "<group>"; };
 		0D3A790F1A26A716003AC6D4 /* DispatchQueueLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DispatchQueueLogFormatter.h; sourceTree = "<group>"; };
 		0D3A79101A26A716003AC6D4 /* DispatchQueueLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DispatchQueueLogFormatter.m; sourceTree = "<group>"; };
+		0D4F25441A2AD34A005C61EA /* BridgeConnect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BridgeConnect.swift; sourceTree = "<group>"; };
 		0D98624E1A1D2C0B00FAD175 /* Prism Lights.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Prism Lights.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D9862521A1D2C0B00FAD175 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0D9862531A1D2C0B00FAD175 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 				0D98625E1A1D2C0B00FAD175 /* LaunchScreen.xib */,
 				0D3A78F61A26A6AA003AC6D4 /* Prism Lights-Bridging-Header.h */,
 				0D9862511A1D2C0B00FAD175 /* Supporting Files */,
+				0D4F25441A2AD34A005C61EA /* BridgeConnect.swift */,
 			);
 			path = "Prism Lights";
 			sourceTree = "<group>";
@@ -290,6 +293,7 @@
 				0D3A79111A26A716003AC6D4 /* DDAbstractDatabaseLogger.m in Sources */,
 				0D9862561A1D2C0B00FAD175 /* FirstViewController.swift in Sources */,
 				0D3A79131A26A716003AC6D4 /* DDASLLogger.m in Sources */,
+				0D4F25451A2AD34A005C61EA /* BridgeConnect.swift in Sources */,
 				0D3A791B1A26A716003AC6D4 /* ContextFilterLogFormatter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
