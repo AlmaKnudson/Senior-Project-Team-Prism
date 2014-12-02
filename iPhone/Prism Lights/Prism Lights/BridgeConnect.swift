@@ -8,42 +8,154 @@
 
 import UIKit
 
-class BridgeConnect: UIViewController {
+class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    @IBOutlet weak var IP_Label: UILabel!
-    @IBOutlet weak var macLabel: NSLayoutConstraint!
-    @IBOutlet weak var heartbeatLabel: NSLayoutConstraint!
+    //MARK: - Class Vars
+    @IBOutlet weak var ipLabel: UILabel!
+    @IBOutlet weak var macLabel: UILabel!
+    @IBOutlet weak var heartbeatLabel: UILabel!
+
+    @IBOutlet weak var blur: UIVisualEffectView!
+    @IBOutlet weak var loadingView: UIActivityIndicatorView!
+    @IBOutlet weak var bridgesFound: UITableView!
+    var addresses:[String:String] = [:]
+    var macAddresses :[String] = []
     
-    var dictionary:[String:String]?
     
+    // MARK: - Actions
     @IBAction func SearchForBridge(sender: AnyObject) {
-//        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-//        let hueSDK = appDelegate.hueSDK
-
-        let bridgeSearch = PHBridgeSearching(upnpSearch: true, andPortalSearch: true, andIpAdressSearch: true)
-
-        
-        bridgeSearch.startSearchWithCompletionHandler { ([NSObject : AnyObject]!) -> Void in
-            
-            //Convert returned obj-C dictionary to strong typed swift dictionary
-            // I believe the type is string string
-        }
-        
-        
+        self.blur.hidden = false
+        loadingView.startAnimating()
+        self.SearchForBridge()
     }
     
     
+    
+    //MARK: - UIViewController
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
-        
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        var manager = PHNotificationManager.defaultManager()
+        manager!.registerObject(self, withSelector: "ConnectedToBridge", forNotification: "LOCAL_CONNECTION_NOTIFICATION")
+        manager!.registerObject(self, withSelector: "BridgeUnavailable", forNotification: "NO_LOCAL_CONNECTION_NOTIFICATION")
+        manager!.registerObject(self, withSelector: "NotAuthorized", forNotification: "NO_LOCAL_AUTHENTICATION_NOTIFICATION")
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func LoadBridgeValues(ip:String, mac:String, lastHeartBeat:String){
+        ipLabel.text = ip
+        macLabel.text = mac
+        heartbeatLabel.text = lastHeartBeat
+        
+    }
 
+    
+    //MARK: - UITableView
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cellIdentifier = "bridgeCell"
+        var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as? UITableViewCell
+        
+        if cell == nil {
+            cell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: cellIdentifier)
+        }
+        
+        let mac = macAddresses[indexPath.row]
+        let ip:String = addresses[mac]!
+        cell!.textLabel.text = mac
+        cell!.detailTextLabel!.text = ip
+        
+        return cell!
+        
+    }
+    
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
+        return []
+        
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        return macAddresses.count
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let mac = macAddresses[indexPath.row]
+        let ip = addresses[mac]!
+        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let hueSDK = appDelegate.hueSDK
+        hueSDK!.setBridgeToUseWithIpAddress(ip, macAddress: mac)
+        hueSDK!.enableLocalConnection()
+        
+    }
+    
+    //MARK: - HueSDK Methods
+    
+    func ConnectedToBridge(){
+        println("Connected to Bridge")
+        let cache = PHBridgeResourcesReader.readBridgeResourcesCache()
+        
+        if (cache != nil && cache.bridgeConfiguration != nil && cache.bridgeConfiguration.ipaddress != nil){
+            let ip = cache.bridgeConfiguration.ipaddress
+            let mac = cache.bridgeConfiguration.mac
+            var lastHeartbeat :String
+            if (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.localConnected(){
+                let formatter = NSDateFormatter()
+                formatter.dateStyle = NSDateFormatterStyle.NoStyle
+                formatter.timeStyle = NSDateFormatterStyle.MediumStyle
+                lastHeartbeat = formatter.stringFromDate(NSDate())
+            } else{
+                lastHeartbeat = "Waiting..."
+            }
+            LoadBridgeValues(ip, mac: mac, lastHeartBeat: lastHeartbeat)
+            
+        }
+    }
+    
+    func BridgeUnavailable(){
+        (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.disableLocalConnection()
+        ipLabel.text = "Not Connected"
+        macLabel.text = "Not Connected"
+        heartbeatLabel.text = "Not Connected"
+        
+        
+        var alert = UIAlertController(title: "No Connection", message: "Unable to connect to bridge. Insure the bridge is available and your network is working", preferredStyle: UIAlertControllerStyle.Alert)
+        let cancelButton = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Cancel) { (cancelButton) -> Void in     }
+        alert.addAction(cancelButton)
+        self.presentViewController(alert, animated: true) { () -> Void in}
+        
+        
+    }
+    
+    func NotAuthorized(){
+        
+    }
+    
+    
+    func SearchForBridge(){
+        let bridgeSearch = PHBridgeSearching(upnpSearch: true, andPortalSearch: false, andIpAdressSearch: false)
+        bridgeSearch.startSearchWithCompletionHandler { (dict:[NSObject : AnyObject]!) -> Void in
+            self.addresses = dict as [String:String]
+            self.macAddresses = [String](self.addresses.keys)
+            //self.macAddresses.append("00:17:88:0A:6D:13")
+            //self.addresses.updateValue("50.168.199.108", forKey: "00:17:88:0A:6D:13")
+            self.bridgesFound.reloadData()
+            self.loadingView.stopAnimating()
+            self.blur.hidden = true
+        }
+
+    }
+    
+    
     
 }
