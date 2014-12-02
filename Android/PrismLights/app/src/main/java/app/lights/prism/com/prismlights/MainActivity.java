@@ -1,9 +1,14 @@
 package app.lights.prism.com.prismlights;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTabHost;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 
 public class MainActivity extends Activity {
@@ -11,7 +16,14 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FragmentTabHost tabHost = new FragmentTabHost(this);
         setContentView(R.layout.activity_main);
+        Dialog dialog = new ProgressDialog(this);
+        dialog.show();
+        TextView textView = new TextView(this);
+        textView.setText("Searching For Bridge...");
+        textView.setTextColor(Color.WHITE);
+        dialog.setContentView(textView);
     }
 
 
