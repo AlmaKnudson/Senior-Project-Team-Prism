@@ -139,10 +139,8 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
     
     func NotAuthorized(){
         (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.disableLocalConnection()
-        var x = PushAuthController()
-        self.presentViewController(x, animated: true) { () -> Void in
-            x.StartPushLink()
-        }
+        self.performSegueWithIdentifier("pushAuth", sender: self)
+
     }
     
     
@@ -151,8 +149,8 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
         bridgeSearch.startSearchWithCompletionHandler { (dict:[NSObject : AnyObject]!) -> Void in
             self.addresses = dict as [String:String]
             self.macAddresses = [String](self.addresses.keys)
-            //self.macAddresses.append("00:17:88:0A:6D:13")
-            //self.addresses.updateValue("50.168.199.108", forKey: "00:17:88:0A:6D:13")
+            self.macAddresses.append("00:17:88:0A:6D:13")
+            self.addresses.updateValue("50.168.199.108", forKey: "00:17:88:0A:6D:13")
             self.bridgesFound.reloadData()
             self.loadingView.stopAnimating()
             self.blur.hidden = true
