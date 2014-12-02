@@ -12,9 +12,13 @@ class PushAuthController : UIViewController {
 
     @IBOutlet weak var pushImageView: UIImageView!
     
+    //MARK: - UIViewController Methods
+    
     override func viewDidAppear(animated: Bool) {
         StartPushLink()
     }
+    
+    
     
     
     func StartPushLink(){
@@ -36,6 +40,8 @@ class PushAuthController : UIViewController {
     
     }
     
+    
+    //MARK: - Notification Methods
     func AuthSuccessful(){
         PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
         self.dismissViewControllerAnimated(true, completion: { () -> Void in})

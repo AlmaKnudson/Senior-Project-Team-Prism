@@ -14,6 +14,15 @@ class BulbCollectionCell : UICollectionViewCell{
     @IBOutlet weak var bulbLabel: UILabel!
     
     
+    func SetBulbImage(on:Bool){
+        bulbImageView!.image = UIImage(named: "pushAuth")
+    }
+    
+    func SetBulbLabel(){
+        
+    }
+    
+    
     
     
 }
