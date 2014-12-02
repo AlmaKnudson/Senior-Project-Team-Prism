@@ -115,6 +115,32 @@
             </objects>
             <point key="canvasLocation" x="750" y="360"/>
         </scene>
+        <!--Push Auth Controller-->
+        <scene sceneID="m4j-EH-B9S">
+            <objects>
+                <viewController id="dYi-Ic-E3x" customClass="PushAuthController" customModule="Prism_Lights" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="K0c-Cu-5oE"/>
+                        <viewControllerLayoutGuide type="bottom" id="gvs-mU-RIe"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="uKc-dq-Pr3">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="pushAuth" translatesAutoresizingMaskIntoConstraints="NO" id="hkf-Im-0nf">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="pushImageView" destination="hkf-Im-0nf" id="ylf-fC-PVT"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="icC-cJ-GDS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="692" y="1021"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
             <objects>
@@ -405,6 +431,7 @@
     <resources>
         <image name="bulb" width="80" height="108"/>
         <image name="first" width="30" height="30"/>
+        <image name="pushAuth" width="516" height="475"/>
         <image name="second" width="30" height="30"/>
     </resources>
 </document>
