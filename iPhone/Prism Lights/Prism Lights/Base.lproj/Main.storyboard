@@ -154,11 +154,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="pushAuth" translatesAutoresizingMaskIntoConstraints="NO" id="hkf-Im-0nf">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pushAuth" translatesAutoresizingMaskIntoConstraints="NO" id="hkf-Im-0nf">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="hkf-Im-0nf" firstAttribute="leading" secondItem="uKc-dq-Pr3" secondAttribute="leading" id="FP5-47-Kdo"/>
+                            <constraint firstItem="hkf-Im-0nf" firstAttribute="top" secondItem="uKc-dq-Pr3" secondAttribute="top" id="VNO-4b-0F4"/>
+                            <constraint firstAttribute="trailing" secondItem="hkf-Im-0nf" secondAttribute="trailing" id="Ymp-pg-HqU"/>
+                            <constraint firstAttribute="bottom" secondItem="hkf-Im-0nf" secondAttribute="bottom" id="zGl-eB-Tw9"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="pushImageView" destination="hkf-Im-0nf" id="ylf-fC-PVT"/>

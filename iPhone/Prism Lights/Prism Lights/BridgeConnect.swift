@@ -46,6 +46,8 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
         manager!.registerObject(self, withSelector: "ConnectedToBridge", forNotification: "LOCAL_CONNECTION_NOTIFICATION")
         manager!.registerObject(self, withSelector: "BridgeUnavailable", forNotification: "NO_LOCAL_CONNECTION_NOTIFICATION")
         manager!.registerObject(self, withSelector: "NotAuthorized", forNotification: "NO_LOCAL_AUTHENTICATION_NOTIFICATION")
+        
+        (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.enableLocalConnection()
     }
     
     override func didReceiveMemoryWarning() {
@@ -128,6 +130,7 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
         macLabel.text = "Not Connected"
         heartbeatLabel.text = "Not Connected"
         
+        //TODO: No alert when starting for first time
         
         var alert = UIAlertController(title: "No Connection", message: "Unable to connect to bridge. Insure the bridge is available and your network is working", preferredStyle: UIAlertControllerStyle.Alert)
         let cancelButton = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Cancel) { (cancelButton) -> Void in     }
@@ -149,8 +152,8 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
         bridgeSearch.startSearchWithCompletionHandler { (dict:[NSObject : AnyObject]!) -> Void in
             self.addresses = dict as [String:String]
             self.macAddresses = [String](self.addresses.keys)
-            self.macAddresses.append("00:17:88:0A:6D:13")
-            self.addresses.updateValue("50.168.199.108", forKey: "00:17:88:0A:6D:13")
+            //self.macAddresses.append("00:17:88:0A:6D:13")
+            //self.addresses.updateValue("50.168.199.108", forKey: "00:17:88:0A:6D:13")
             self.bridgesFound.reloadData()
             self.loadingView.stopAnimating()
             self.blur.hidden = true

@@ -12,6 +12,7 @@ class PushAuthController : UIViewController {
 
     @IBOutlet weak var pushImageView: UIImageView!
     
+    
     //MARK: - UIViewController Methods
     
     override func viewDidAppear(animated: Bool) {
@@ -19,22 +20,18 @@ class PushAuthController : UIViewController {
     }
     
     
-    
-    
     func StartPushLink(){
-        //pushImageView!.image = UIImage(named: "pushAuth")
         
+        var manager = PHNotificationManager.defaultManager()
+        manager!.registerObject(self, withSelector: "AuthSuccessful", forNotification: "PUSHLINK_LOCAL_AUTHENTICATION_SUCCESS_NOTIFICATION")
         
-        let manager = PHNotificationManager.defaultManager()
-        manager.registerObject(self, withSelector: "AuthSuccessful", forNotification: "PUSHLINK_LOCAL_AUTHENTICATION_SUCCESS_NOTIFICATION")
+        manager!.registerObject(self, withSelector: "AuthFailed", forNotification: "PUSHLINK_LOCAL_AUTHENTICATION_FAILED_NOTIFICATION")
+
+        manager!.registerObject(self, withSelector: "NoConnection", forNotification: "PUSHLINK_NO_LOCAL_CONNECTION_NOTIFICATION")
         
-        manager.registerObject(self, withSelector: "AuthFailed", forNotification: "PUSHLINK_LOCAL_AUTHENTICATION_FAILED_NOTIFICATION")
-        
-        manager.registerObject(self, withSelector: "NoConnection", forNotification: "PUSHLINK_NO_LOCAL_CONNECTION_NOTIFICATION")
-        
-        manager.registerObject(self, withSelector: "NoBridgeSet", forNotification:         "PUSHLINK_NO_LOCAL_BRIDGE_KNOWN_NOTIFICATION")
-        
-        manager.registerObject(self, withSelector: "ButtonNotPressed", forNotification:         "PUSHLINK_BUTTON_NOT_PRESSED_NOTIFICATION")
+        manager!.registerObject(self, withSelector: "NoBridgeSet", forNotification: "PUSHLINK_NO_LOCAL_BRIDGE_KNOWN_NOTIFICATION")
+
+        manager!.registerObject(self, withSelector: "ButtonNotPressed", forNotification: "PUSHLINK_BUTTON_NOT_PRESSED_NOTIFICATION")
         
         (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.startPushlinkAuthentication()
     
@@ -47,12 +44,7 @@ class PushAuthController : UIViewController {
         self.dismissViewControllerAnimated(true, completion: { () -> Void in})
     }
     
-    
-    
     //Dv4wWL9lxCRo5CYe user on Cody's laptop simulator
-    
-    
-    
     
     func AuthFailed(){
         PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
@@ -73,11 +65,8 @@ class PushAuthController : UIViewController {
     }
     
     func ButtonNotPressed(){
-        PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
+        //PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
         //TODO: Provide a timer for amount left to push button
-        self.dismissViewControllerAnimated(true, completion: { () -> Void in})
     }
-    
-    
     
 }

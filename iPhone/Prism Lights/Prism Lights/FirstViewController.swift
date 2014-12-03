@@ -7,6 +7,7 @@
 //
 
 import UIKit
+let MAX_HUE:UInt32 = 65535
 
 class FirstViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
@@ -23,7 +24,27 @@ class FirstViewController: UIViewController, UICollectionViewDataSource, UIColle
         manager!.registerObject(self, withSelector: "HeartBeatReceived", forNotification: "LOCAL_CONNECTION_NOTIFICATION")
         manager!.registerObject(self, withSelector: "NetworkConnectionLost", forNotification: "NO_LOCAL_CONNECTION_NOTIFICATION")
         manager!.registerObject(self, withSelector: "NotAuthorized", forNotification: "NO_LOCAL_AUTHENTICATION_NOTIFICATION")
+        
+        if !((UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.localConnected()){
+            //TODO: Popup notification telling user that there is no connection yet...
+        } else{
+            //TODO: Grab list of bulbs/lights
+            var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
+            for light in cache.lights.values{
+                var lightState = PHLightState()
+                
+                lightState.hue = 65535
+                lightState.brightness = 150
+                lightState.saturation = 200
+                
+                var bridgeSendAPI = PHBridgeSendAPI()
+                bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil)
+            }
+            
+        }
+        
     }
+    
     
     override func viewDidDisappear(animated: Bool) {
         PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
