@@ -10,6 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.brian_oh.prismlights.R;
+
 
 public class MainActivity extends Activity {
 
