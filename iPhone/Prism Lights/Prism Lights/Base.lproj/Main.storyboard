@@ -71,7 +71,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Home" image="first" id="acW-dT-cKf"/>
                     <connections>
-                        <segue destination="5xJ-tq-vqj" kind="show" id="Zij-yb-hZI"/>
+                        <segue destination="5xJ-tq-vqj" kind="show" identifier="BulbNav" id="Zij-yb-hZI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
@@ -95,7 +95,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="AP5-cY-iA3" kind="show" id="flw-2n-8Yv"/>
+                        <segue destination="AP5-cY-iA3" kind="show" identifier="BulbSetting" id="flw-2n-8Yv"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Iz-l3-vvK" userLabel="First Responder" sceneMemberID="firstResponder"/>
