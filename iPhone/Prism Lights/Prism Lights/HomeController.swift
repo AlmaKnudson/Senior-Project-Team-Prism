@@ -9,7 +9,7 @@
 import UIKit
 let MAX_HUE:UInt32 = 65535
 
-class FirstViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class HomeController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
     
     //MARK: - UIViewController Methods
