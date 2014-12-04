@@ -261,7 +261,7 @@
      *****************************************************/
     
     // Start search
-    self.bridgeSearch = [[PHBridgeSearching alloc] initWithUpnpSearch:YES andPortalSearch:YES andIpAdressSearch:YES];
+    self.bridgeSearch = [[PHBridgeSearching alloc] initWithUpnpSearch:YES andPortalSearch:NO andIpAdressSearch:NO];
     [self.bridgeSearch startSearchWithCompletionHandler:^(NSDictionary *bridgesFound) {
         // Done with search, remove loading view
         [self removeLoadingView];
