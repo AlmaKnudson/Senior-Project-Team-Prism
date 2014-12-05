@@ -25,6 +25,7 @@ import java.util.List;
 public class MainActivity extends Activity implements PHSDKListener{
 
     PHHueSDK hueBridgeSdk;
+    Dialog waitingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +36,7 @@ public class MainActivity extends Activity implements PHSDKListener{
 //        hueBridgeSdk.setAppName("Prism Lights");
         hueBridgeSdk.setDeviceName(Build.MODEL);
         hueBridgeSdk.getNotificationManager().registerSDKListener(this);
-        Dialog dialog = new ProgressDialog(this);
-        dialog.show();
-        TextView textView = new TextView(this);
-        textView.setText("Searching For Bridge...");
-        textView.setTextColor(Color.WHITE);
-        dialog.setContentView(textView);
+        String waitingText = "";
         //code from example app
         HueSharedPreferences prefs = HueSharedPreferences.getInstance(getApplicationContext());
         String lastIpAddress = prefs.getLastConnectedIPAddress();
@@ -51,11 +47,21 @@ public class MainActivity extends Activity implements PHSDKListener{
             lastAccessPoint.setUsername(lastUsername);
             if (!hueBridgeSdk.isAccessPointConnected(lastAccessPoint)) {
                 hueBridgeSdk.connect(lastAccessPoint);
+                waitingText = "Connecting to Bridge...";
             }
         } else {
             PHBridgeSearchManager bridgeSearchManager = (PHBridgeSearchManager) hueBridgeSdk.getSDKService(PHHueSDK.SEARCH_BRIDGE);
             bridgeSearchManager.search(true, true);
+            waitingText = "Searching for Bridge...";
         }
+        waitingDialog = new ProgressDialog(this);
+        waitingDialog.setCanceledOnTouchOutside(false);
+        waitingDialog.setCancelable(false);
+        waitingDialog.show();
+        TextView textView = new TextView(this);
+        textView.setText(waitingText);
+        textView.setTextColor(Color.WHITE);
+        waitingDialog.setContentView(textView);
         //end code from example app
     }
 
@@ -80,8 +86,8 @@ public class MainActivity extends Activity implements PHSDKListener{
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.container, new HomeFragment());
                 fragmentTransaction.commit();
-                Toast toast = Toast.makeText(MainActivity.this, "Connected", Toast.LENGTH_LONG);
-                toast.show();
+                waitingDialog.setCancelable(true);
+                waitingDialog.cancel();
             }
         });
     }
@@ -124,6 +130,8 @@ public class MainActivity extends Activity implements PHSDKListener{
             accessPoint.setUsername(preferences.getUsername());
             preferences.setLastConnectedIPAddress(accessPoint.getIpAddress());
             hueBridgeSdk.connect(accessPoints.get(0));
+            waitingDialog.setCancelable(true);
+            waitingDialog.cancel();
         }
     }
 

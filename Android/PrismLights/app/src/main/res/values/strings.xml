@@ -10,5 +10,7 @@
     <string name="select_color">Select Color</string>
     <string name="name_label">Name:</string>
     <string name="brightness">Brightness:</string>
+    <string name="searching">Searching for Bridge...</string>
+    <string name="connecting">Connecting to Bridge...</string>
 
 </resources>

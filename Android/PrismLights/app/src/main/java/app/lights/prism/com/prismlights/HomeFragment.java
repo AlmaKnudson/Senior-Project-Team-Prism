@@ -21,9 +21,11 @@ import android.widget.Toast;
 import com.philips.lighting.hue.listener.PHLightListener;
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.model.PHBridge;
+import com.philips.lighting.model.PHHueError;
 import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
 
+import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -66,12 +68,14 @@ public class HomeFragment extends Fragment {
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
 
 
                 PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
 
                 PHLightState lightState = new PHLightState();   // Or get the light state from the PHLight object (e.g. light.getLastKnownLightState())
+                //TODO: only do this when heartbeat is received
+                currentLights = hueSDK.getSelectedBridge().getResourceCache().getAllLights();
                 if(currentLights.get(position).getLastKnownLightState().isOn()) {
                     lightState.setOn(false);
                    // currentLights.get(position).setLastKnownLightState(new);
