@@ -9,40 +9,45 @@
 
     <FrameLayout
         android:layout_width="fill_parent"
-        android:layout_height="450dp"></FrameLayout>
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="app.lights.prism.com.prismlights.SettingsFragment"
+        tools:layout="@layout/settings_fragment"
+        android:id="@+id/settings_fragment">
 
-    <RelativeLayout
+        </fragment></FrameLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Button"
-            android:id="@+id/button2"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Button"
-            android:id="@+id/button3"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/button2"
-            android:layout_toEndOf="@+id/button2" />
+        android:layout_height="50dp">
 
         <ImageButton
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageButton"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/button2"
-            android:layout_toStartOf="@+id/button2"
-            android:layout_alignBottom="@+id/button2"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_launcher"
+            android:padding="0dp"
+            android:id="@+id/imageButton"/>
 
-            />
-    </RelativeLayout>
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:padding="0dp"
+            android:text="@string/home"
+            android:id="@+id/button2" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:padding="0dp"
+            android:text="@string/music"
+            android:id="@+id/button3" />
+
+    </LinearLayout>
+
 </LinearLayout>
