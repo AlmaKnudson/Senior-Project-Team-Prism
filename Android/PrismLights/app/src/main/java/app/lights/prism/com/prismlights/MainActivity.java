@@ -2,6 +2,7 @@ package app.lights.prism.com.prismlights;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Build;
@@ -15,7 +16,6 @@ import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.PHMessageType;
 import com.philips.lighting.hue.sdk.PHSDKListener;
 import com.philips.lighting.model.PHBridge;
-import com.philips.lighting.model.PHHueParsingError;
 
 import java.util.List;
 
@@ -30,24 +30,22 @@ public class MainActivity extends Activity implements PHSDKListener{
         setContentView(R.layout.activity_main);
 
         hueBridgeSdk = PHHueSDK.getInstance();
-        hueBridgeSdk.setAppName("Prism Lights");
+//        hueBridgeSdk.setAppName("Prism Lights");
         hueBridgeSdk.setDeviceName(Build.MODEL);
         hueBridgeSdk.getNotificationManager().registerSDKListener(this);
-//        Dialog dialog = new ProgressDialog(this);
-//        dialog.show();
-//        TextView textView = new TextView(this);
-//        textView.setText("Searching For Bridge...");
-//        textView.setTextColor(Color.WHITE);
-//        dialog.setContentView(textView);
+        Dialog dialog = new ProgressDialog(this);
+        dialog.show();
+        TextView textView = new TextView(this);
+        textView.setText("Searching For Bridge...");
+        textView.setTextColor(Color.WHITE);
+        dialog.setContentView(textView);
         PHBridgeSearchManager bridgeSearchManager = (PHBridgeSearchManager) hueBridgeSdk.getSDKService(PHHueSDK.SEARCH_BRIDGE);
         bridgeSearchManager.search(true,true);
     }
 
     @Override
-    public void onCacheUpdated(List<Integer> cacheNotificationsList, PHBridge bridge) {
-        if (cacheNotificationsList.contains(PHMessageType.LIGHTS_CACHE_UPDATED)) {
-            System.out.println("Lights Cache Updated ");
-        }
+    public void onCacheUpdated(int i, com.philips.lighting.model.PHBridge phBridge) {
+
     }
 
     @Override
@@ -58,6 +56,16 @@ public class MainActivity extends Activity implements PHSDKListener{
      * Also it is recommended you store the connected IP Address/ Username in your app here.  This will allow easy automatic connection on subsequent use.
      */
     public void onBridgeConnected(PHBridge phBridge) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.container, new HomeFragment());
+                fragmentTransaction.commit();
+                Toast toast = Toast.makeText(MainActivity.this, "Connected", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        });
         hueBridgeSdk.setSelectedBridge(phBridge);
         hueBridgeSdk.enableHeartbeat(phBridge, PHHueSDK.HB_INTERVAL);
     }
@@ -69,6 +77,14 @@ public class MainActivity extends Activity implements PHSDKListener{
      * you will display a pushlink image (with a timer) indicating to to the user they need to push the button on their bridge within 30 seconds.
      */
     public void onAuthenticationRequired(PHAccessPoint accessPoint) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.container, new PushButtonFragment());
+                fragmentTransaction.commit();
+            }
+        });
         hueBridgeSdk.startPushlinkAuthentication(accessPoint);
     }
 
@@ -79,8 +95,18 @@ public class MainActivity extends Activity implements PHSDKListener{
      * and let the user select their bridge.   If one is found you may opt to connect automatically to that bridge.
      */
     public void onAccessPointsFound(List<PHAccessPoint> accessPoints) {
-        Toast toast = Toast.makeText(this, "Access Points Found", Toast.LENGTH_SHORT);
-        toast.show();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast toast = Toast.makeText(MainActivity.this, "Access Points Found", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        });
+        if(accessPoints != null && accessPoints.size() == 1) {
+            PHAccessPoint accessPoint = accessPoints.get(0);
+            accessPoint.setUsername("thisisarewreallyallynewuser");
+            hueBridgeSdk.connect(accessPoints.get(0));
+        }
     }
 
     @Override
@@ -88,9 +114,14 @@ public class MainActivity extends Activity implements PHSDKListener{
      * From API:
      * Here you can handle events such as Bridge Not Responding, Authentication Failed and Bridge Not Found
      */
-    public void onError(int i, String s) {
-        Toast toast = Toast.makeText(this, "Error", Toast.LENGTH_SHORT);
-        toast.show();
+    public void onError(int code, final String message) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast toast = Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
     }
 
     @Override
@@ -104,11 +135,6 @@ public class MainActivity extends Activity implements PHSDKListener{
      * Here you would handle the loss of connection to your bridge.
      */
     public void onConnectionLost(PHAccessPoint phAccessPoint) {
-
-    }
-
-    @Override
-    public void onParsingErrors(List<PHHueParsingError> phHueParsingErrors) {
 
     }
 }
