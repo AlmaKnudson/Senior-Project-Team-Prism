@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import app.lights.prism.com.prismlights.R;
 
@@ -22,6 +23,9 @@ public class LightSettingsFragment extends Fragment {
 
 //    private OnFragmentInteractionListener mListener;
 
+    //TODO: I need to change this for group of lights. now it is just for a single light.
+    int position; // The number for the chosen Light
+
     public LightSettingsFragment() {
         // Required empty public constructor
     }
@@ -29,6 +33,11 @@ public class LightSettingsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        position = getArguments().getInt("POSITION");
+
+        Toast.makeText(getActivity(), "SettingFragment opened with light " + position, Toast.LENGTH_SHORT).show();
+
     }
 
     @Override

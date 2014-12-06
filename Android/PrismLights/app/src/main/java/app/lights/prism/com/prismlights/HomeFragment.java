@@ -1,6 +1,7 @@
 package app.lights.prism.com.prismlights;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -79,6 +80,24 @@ public class HomeFragment extends Fragment {
                     lightState.setOn(true);
                 }
                 bridge.updateLightState(currentLights.get(position), lightState);
+            }
+        });
+
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
+                //TODO: I need to change this for group of lights. now it is just for a single light.
+                Bundle bundle = new Bundle();
+                bundle.putInt("POSITION", position);
+
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                LightSettingsFragment lightSettingFragment = new LightSettingsFragment();
+                lightSettingFragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.container, lightSettingFragment);
+                fragmentTransaction.commit();
+
+                return false;
             }
         });
 
