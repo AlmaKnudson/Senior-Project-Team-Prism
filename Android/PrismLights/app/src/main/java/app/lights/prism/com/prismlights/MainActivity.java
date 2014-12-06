@@ -16,6 +16,8 @@ import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.PHMessageType;
 import com.philips.lighting.hue.sdk.PHSDKListener;
 import com.philips.lighting.model.PHBridge;
+import com.philips.lighting.model.PHLight;
+import com.philips.lighting.model.PHLightState;
 
 import java.util.List;
 
@@ -39,8 +41,22 @@ public class MainActivity extends Activity implements PHSDKListener{
         textView.setText("Searching For Bridge...");
         textView.setTextColor(Color.WHITE);
         dialog.setContentView(textView);
-        PHBridgeSearchManager bridgeSearchManager = (PHBridgeSearchManager) hueBridgeSdk.getSDKService(PHHueSDK.SEARCH_BRIDGE);
-        bridgeSearchManager.search(true,true);
+        //code from example app
+        HueSharedPreferences prefs = HueSharedPreferences.getInstance(getApplicationContext());
+        String lastIpAddress = prefs.getLastConnectedIPAddress();
+        String lastUsername = prefs.getUsername();
+        if (lastIpAddress !=null && !lastIpAddress.equals("")) {
+            PHAccessPoint lastAccessPoint = new PHAccessPoint();
+            lastAccessPoint.setIpAddress(lastIpAddress);
+            lastAccessPoint.setUsername(lastUsername);
+            if (!hueBridgeSdk.isAccessPointConnected(lastAccessPoint)) {
+                hueBridgeSdk.connect(lastAccessPoint);
+            }
+        } else {
+            PHBridgeSearchManager bridgeSearchManager = (PHBridgeSearchManager) hueBridgeSdk.getSDKService(PHHueSDK.SEARCH_BRIDGE);
+            bridgeSearchManager.search(true, true);
+        }
+        //end code from example app
     }
 
     @Override
@@ -56,10 +72,8 @@ public class MainActivity extends Activity implements PHSDKListener{
      * Also it is recommended you store the connected IP Address/ Username in your app here.  This will allow easy automatic connection on subsequent use.
      */
     public void onBridgeConnected(PHBridge phBridge) {
-
         hueBridgeSdk.setSelectedBridge(phBridge);
         hueBridgeSdk.enableHeartbeat(phBridge, PHHueSDK.HB_INTERVAL);
-
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -105,8 +119,10 @@ public class MainActivity extends Activity implements PHSDKListener{
             }
         });
         if(accessPoints != null && accessPoints.size() == 1) {
+            HueSharedPreferences preferences = HueSharedPreferences.getInstance(this.getApplicationContext());
             PHAccessPoint accessPoint = accessPoints.get(0);
-            accessPoint.setUsername("thisisarewreallyallynewuser");
+            accessPoint.setUsername(preferences.getUsername());
+            preferences.setLastConnectedIPAddress(accessPoint.getIpAddress());
             hueBridgeSdk.connect(accessPoints.get(0));
         }
     }

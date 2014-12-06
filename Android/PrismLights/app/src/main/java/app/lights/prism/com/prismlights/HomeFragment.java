@@ -73,7 +73,7 @@ public class HomeFragment extends Fragment {
                 PHLightState lightState = new PHLightState();   // Or get the light state from the PHLight object (e.g. light.getLastKnownLightState())
                 if(currentLights.get(position).getLastKnownLightState().isOn()) {
                     lightState.setOn(false);
-                    currentLights.get(position).setLastKnownLightState(new);
+                   // currentLights.get(position).setLastKnownLightState(new);
                 }
                 else {
                     lightState.setOn(true);

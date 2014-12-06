@@ -3,6 +3,4 @@
     android:layout_height="match_parent"
     tools:context="app.lights.prism.com.prismlights.MusicFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
 </FrameLayout>
