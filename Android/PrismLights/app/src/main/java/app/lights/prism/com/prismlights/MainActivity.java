@@ -56,6 +56,10 @@ public class MainActivity extends Activity implements PHSDKListener{
      * Also it is recommended you store the connected IP Address/ Username in your app here.  This will allow easy automatic connection on subsequent use.
      */
     public void onBridgeConnected(PHBridge phBridge) {
+
+        hueBridgeSdk.setSelectedBridge(phBridge);
+        hueBridgeSdk.enableHeartbeat(phBridge, PHHueSDK.HB_INTERVAL);
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -66,8 +70,6 @@ public class MainActivity extends Activity implements PHSDKListener{
                 toast.show();
             }
         });
-        hueBridgeSdk.setSelectedBridge(phBridge);
-        hueBridgeSdk.enableHeartbeat(phBridge, PHHueSDK.HB_INTERVAL);
     }
 
     @Override
@@ -135,6 +137,12 @@ public class MainActivity extends Activity implements PHSDKListener{
      * Here you would handle the loss of connection to your bridge.
      */
     public void onConnectionLost(PHAccessPoint phAccessPoint) {
-
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast toast = Toast.makeText(MainActivity.this, "connection lost", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
     }
 }

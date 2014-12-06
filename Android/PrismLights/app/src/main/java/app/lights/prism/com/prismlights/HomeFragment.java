@@ -8,15 +8,20 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.philips.lighting.hue.listener.PHLightListener;
 import com.philips.lighting.hue.sdk.PHHueSDK;
+import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHLight;
+import com.philips.lighting.model.PHLightState;
 
 import java.util.List;
 
@@ -34,14 +39,20 @@ public class HomeFragment extends Fragment {
 
     PHHueSDK hueSDK;
 
+    private List<PHLight> currentLights;
+    private String[] lightNames;
+
+
     public HomeFragment() {
         hueSDK = PHHueSDK.getInstance();
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        currentLights = hueSDK.getSelectedBridge().getResourceCache().getAllLights();
+        lightNames = hueSDK.getLightNames(currentLights);
     }
 
     @Override
@@ -51,6 +62,26 @@ public class HomeFragment extends Fragment {
         FrameLayout frame = (FrameLayout) inflater.inflate(R.layout.fragment_home, container, false);
         GridView gridView= (GridView) frame.findViewById(R.id.homeGridView);
         gridView.setAdapter(new HomeGridAdapter());
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
+
+
+                PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
+
+                PHLightState lightState = new PHLightState();   // Or get the light state from the PHLight object (e.g. light.getLastKnownLightState())
+                if(currentLights.get(position).getLastKnownLightState().isOn()) {
+                    lightState.setOn(false);
+                    currentLights.get(position).setLastKnownLightState(new);
+                }
+                else {
+                    lightState.setOn(true);
+                }
+                bridge.updateLightState(currentLights.get(position), lightState);
+            }
+        });
+
         return frame;
     }
 
@@ -92,6 +123,7 @@ public class HomeFragment extends Fragment {
 //        // TODO: Update argument type and name
 //        public void onFragmentInteraction(Uri uri);
 //    }
+
 
     private class HomeGridAdapter extends BaseAdapter {
 
