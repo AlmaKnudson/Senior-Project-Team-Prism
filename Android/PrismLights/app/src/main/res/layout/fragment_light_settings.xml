@@ -13,20 +13,22 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="@string/name_label"
-                android:id="@+id/textView3" />
+                android:id="@+id/textView3"
+                android:textSize="17sp"
+                android:textColor="@android:color/white"
+                android:gravity="center_vertical" />
 
             <EditText
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:id="@+id/nameEditor"
-                android:layout_gravity="center_horizontal"
                 android:inputType="textCapWords" />
         </LinearLayout>
 
@@ -40,7 +42,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/brightness"
-            android:id="@+id/textView4" />
+            android:id="@+id/textView4"
+            android:textSize="17sp"
+            android:textColor="@android:color/white" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -58,7 +62,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:text="0%"
-                android:id="@+id/brightnessLabel" />
+                android:id="@+id/brightnessLabel"
+                android:textSize="17sp"
+                android:textColor="@android:color/white"
+                android:gravity="center_vertical|bottom|end"/>
         </LinearLayout>
 
         <LinearLayout
@@ -71,7 +78,9 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/select_color"
-                android:id="@+id/colorLabel" />
+                android:id="@+id/colorLabel"
+                android:textSize="17sp"
+                android:textColor="@android:color/white" />
 
             <View
                 android:layout_width="70dp"

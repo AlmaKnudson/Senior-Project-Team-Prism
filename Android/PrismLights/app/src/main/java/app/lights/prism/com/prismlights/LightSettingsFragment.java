@@ -1,5 +1,6 @@
 package app.lights.prism.com.prismlights;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -85,7 +86,7 @@ public class LightSettingsFragment extends Fragment {
         bulbOnState.setChecked(state.isOn());
         int currentBrightness = getCurrentBrightness(state.getBrightness());
         brightness.setProgress(currentBrightness);
-        brightnessPercentage.setText(currentBrightness+ "%");
+        brightnessPercentage.setText(currentBrightness + "%");
         currentColor = PHUtilities.colorFromXY(new float[]{state.getX(), state.getY()}, "");
         currentColorView.setBackgroundColor(currentColor);
         nameEditor.setOnKeyListener(new View.OnKeyListener() {
@@ -129,7 +130,13 @@ public class LightSettingsFragment extends Fragment {
                     currentColorView.setBackgroundColor(currentColor);
                     return false;
                 }
-                int color = ((BitmapDrawable) (colorPickerImage.getDrawable())).getBitmap().getPixel(x, y);
+                //the image view coords must be translated to the bitmap coordinates or it will select the wrong color
+                Bitmap bitmap = ((BitmapDrawable) (colorPickerImage.getDrawable())).getBitmap();
+                double yRatio =  (double) bitmap.getHeight() / colorPickerImage.getHeight();
+                double xRatio =  (double) bitmap.getWidth() / colorPickerImage.getWidth();
+                x = (int) Math.round(x * xRatio);
+                y = (int) Math.round(y * yRatio);
+                int color = bitmap.getPixel(x, y);
                 currentColorView.setBackgroundColor(color);
                 if(event.getAction() == MotionEvent.ACTION_UP) {
                     currentColor = color;
@@ -143,7 +150,7 @@ public class LightSettingsFragment extends Fragment {
     }
 
     private int getCurrentBrightness(int phBrightness) {
-        return Math.round((phBrightness / HueBulbChangeUtility.MAX_BRIGHTNESS) * 100);
+        return (int) Math.round((phBrightness * 100.0) / HueBulbChangeUtility.MAX_BRIGHTNESS);
     }
 
 //    // TODO: Rename method, update argument and hook method into UI event

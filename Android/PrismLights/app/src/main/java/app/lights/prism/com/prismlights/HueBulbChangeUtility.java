@@ -73,7 +73,6 @@ public class HueBulbChangeUtility {
         PHLight light = getLightFromPosition(lightPosition, bridge);
         PHLightState lightState = light.getLastKnownLightState();
         int convertedBrightness = (int) Math.round((brightness * 254.0) / 100);
-        System.out.println(convertedBrightness);
         lightState.setBrightness(convertedBrightness);
         bridge.updateLightState(light, lightState);
     }

@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
@@ -167,6 +168,10 @@ public class HomeFragment extends Fragment {
                 currentView = (LinearLayout) LayoutInflater.from(HomeFragment.this.getActivity()).inflate(R.layout.bulb_view, parent, false);
             } else {
                 currentView = (LinearLayout) convertView;
+            }
+            if(!currentLight.isReachable()) {
+                ImageView bulbImage = (ImageView) currentView.findViewById(R.id.bulb);
+                bulbImage.setImageResource(R.drawable.bulb_absent);
             }
             TextView bulbName = (TextView) currentView.findViewById(R.id.bulbName);
             bulbName.setText(lightName);
