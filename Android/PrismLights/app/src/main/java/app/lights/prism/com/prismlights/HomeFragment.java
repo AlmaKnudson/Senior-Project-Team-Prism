@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment {
 //    private OnFragmentInteractionListener mListener;
 
 
-    PHHueSDK hueSDK;
+    private PHHueSDK hueSDK;
 
     private List<PHLight> currentLights;
     private String[] lightNames;
@@ -99,6 +99,7 @@ public class HomeFragment extends Fragment {
                 LightSettingsFragment lightSettingFragment = new LightSettingsFragment();
                 lightSettingFragment.setArguments(bundle);
                 fragmentTransaction.replace(R.id.container, lightSettingFragment);
+                fragmentTransaction.addToBackStack("lightsettings");
                 fragmentTransaction.commit();
 
                 return false;
@@ -150,8 +151,6 @@ public class HomeFragment extends Fragment {
 
     private class HomeGridAdapter extends BaseAdapter {
 
-        private List<PHLight> currentLights;
-        private String[] lightNames;
 
         public HomeGridAdapter() {
             super();

@@ -7,7 +7,20 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.philips.lighting.hue.sdk.PHHueSDK;
+import com.philips.lighting.hue.sdk.utilities.PHUtilities;
+import com.philips.lighting.model.PHLight;
+import com.philips.lighting.model.PHLightState;
+
+import java.util.List;
 
 import app.lights.prism.com.prismlights.R;
 
@@ -24,10 +37,22 @@ public class LightSettingsFragment extends Fragment {
 //    private OnFragmentInteractionListener mListener;
 
     //TODO: I need to change this for group of lights. now it is just for a single light.
-    int position; // The number for the chosen Light
+    private int position; // The number for the chosen Light
+    private EditText nameEditor;
+    private Switch bulbOnState;
+    private SeekBar brightness;
+    private TextView brightnessPercentage;
+    private View currentColor;
+    private ImageView colorPickerImage;
+
+    private PHHueSDK hueSDK;
+
+    private List<PHLight> currentLights;
+    private String[] lightNames;
+
 
     public LightSettingsFragment() {
-        // Required empty public constructor
+        hueSDK = PHHueSDK.getInstance();
     }
 
     @Override
@@ -44,7 +69,24 @@ public class LightSettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_light_settings, container, false);
+        FrameLayout frame = (FrameLayout) inflater.inflate(R.layout.fragment_light_settings, container, false);
+        nameEditor = (EditText) frame.findViewById(R.id.nameEditor);
+        bulbOnState = (Switch) frame.findViewById(R.id.bulbOnState);
+        brightness = (SeekBar) frame.findViewById(R.id.brightness);
+        brightnessPercentage = (TextView) frame.findViewById(R.id.brightnessLabel);
+        currentColor = frame.findViewById(R.id.currentColor);
+        colorPickerImage = (ImageView) frame.findViewById(R.id.colorPickerImage);
+        currentLights = hueSDK.getSelectedBridge().getResourceCache().getAllLights();
+        lightNames = hueSDK.getLightNames(currentLights);
+        PHLight currentLight = currentLights.get(position);
+        PHLightState state = currentLight.getLastKnownLightState();
+        nameEditor.setText(lightNames[position]);
+        bulbOnState.setChecked(state.isOn());
+        brightness.setProgress(state.getBrightness());
+        brightnessPercentage.setText(state.getBrightness() + "%");
+        currentColor.setBackgroundColor(PHUtilities.colorFromXY(new float[]{state.getX(), state.getY()}, ""));
+
+        return frame;
     }
 
 //    // TODO: Rename method, update argument and hook method into UI event

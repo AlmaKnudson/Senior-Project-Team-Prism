@@ -1,7 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="app.lights.prism.com.prismlights.LightSettingsFragment">
+    tools:context="app.lights.prism.com.prismlights.LightSettingsFragment"
+    android:background="@android:color/black">
 
 
     <LinearLayout
@@ -24,15 +25,16 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText"
-                android:layout_gravity="center_horizontal" />
+                android:id="@+id/nameEditor"
+                android:layout_gravity="center_horizontal"
+                android:inputType="textCapWords" />
         </LinearLayout>
 
         <Switch
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/change_state"
-            android:id="@+id/switch1" />
+            android:id="@+id/bulbOnState" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -49,13 +51,14 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:id="@+id/seekBar" />
+                android:id="@+id/brightness" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="40dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
                 android:text="0%"
-                android:id="@+id/textView5" />
+                android:id="@+id/brightnessLabel" />
         </LinearLayout>
 
         <LinearLayout
@@ -68,12 +71,13 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/select_color"
-                android:id="@+id/textView6" />
+                android:id="@+id/colorLabel" />
 
             <View
                 android:layout_width="70dp"
                 android:layout_height="match_parent"
                 android:background="@android:color/white"
+                android:id="@+id/currentColor"
                 />
 
         </LinearLayout>
@@ -81,7 +85,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageView"
+            android:id="@+id/colorPickerImage"
             android:src="@drawable/tempcolorpicker"
             android:adjustViewBounds="true"
             android:layout_gravity="bottom" />
