@@ -69,21 +69,7 @@ public class HomeFragment extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 //                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
-
-
-                PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
-
-                PHLightState lightState = new PHLightState();   // Or get the light state from the PHLight object (e.g. light.getLastKnownLightState())
-                //TODO: only do this when heartbeat is received
-                currentLights = hueSDK.getSelectedBridge().getResourceCache().getAllLights();
-                if(currentLights.get(position).getLastKnownLightState().isOn()) {
-                    lightState.setOn(false);
-                   // currentLights.get(position).setLastKnownLightState(new);
-                }
-                else {
-                    lightState.setOn(true);
-                }
-                bridge.updateLightState(currentLights.get(position), lightState);
+                HueBulbChangeUtility.toggleBulbState(position);
             }
         });
 
