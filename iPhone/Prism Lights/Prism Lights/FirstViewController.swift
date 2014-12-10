@@ -54,19 +54,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     }
     
     
-    /**
-    Lorem ipsum dolor sit amet.
-    
-    :param: bar Consectetur adipisicing elit.
-    
-    :returns: Sed do eiusmod tempor.
-    */ 
-    override func viewDidAppear(animated: Bool) {
-        
-        
-        
-        
-    }
+
     
     
     override func viewDidDisappear(animated: Bool) {
