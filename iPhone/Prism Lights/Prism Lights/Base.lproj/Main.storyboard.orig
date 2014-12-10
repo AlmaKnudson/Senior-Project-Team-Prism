@@ -71,7 +71,11 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Home" image="first" id="acW-dT-cKf"/>
                     <connections>
+<<<<<<< HEAD
                         <segue destination="5xJ-tq-vqj" kind="show" identifier="BulbNav" id="Zij-yb-hZI"/>
+=======
+                        <segue destination="5xJ-tq-vqj" kind="show" identifier="lightSettings" id="Zij-yb-hZI"/>
+>>>>>>> bridge
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
