@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0D0A26D51A3766C70033550D /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D0A26D41A3766C70033550D /* TabViewController.swift */; };
+		0D0A26DB1A38B6E70033550D /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D0A26DA1A38B6E70033550D /* SettingsTableViewController.swift */; };
 		0D3A78FF1A26A70B003AC6D4 /* HueSDK_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3A78FE1A26A70B003AC6D4 /* HueSDK_iOS.framework */; };
 		0D3A79001A26A70B003AC6D4 /* HueSDK_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3A78FE1A26A70B003AC6D4 /* HueSDK_iOS.framework */; };
 		0D3A79111A26A716003AC6D4 /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79031A26A716003AC6D4 /* DDAbstractDatabaseLogger.m */; };
@@ -29,11 +30,11 @@
 		0D9862541A1D2C0B00FAD175 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862531A1D2C0B00FAD175 /* AppDelegate.swift */; };
 		0D9862561A1D2C0B00FAD175 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862551A1D2C0B00FAD175 /* HomeController.swift */; };
 		0D9862581A1D2C0B00FAD175 /* MusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862571A1D2C0B00FAD175 /* MusicViewController.swift */; };
-		0D98625B1A1D2C0B00FAD175 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D9862591A1D2C0B00FAD175 /* Main.storyboard */; };
 		0D98625D1A1D2C0B00FAD175 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0D98625C1A1D2C0B00FAD175 /* Images.xcassets */; };
 		0D9862601A1D2C0B00FAD175 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D98625E1A1D2C0B00FAD175 /* LaunchScreen.xib */; };
 		0D98626C1A1D2C0B00FAD175 /* Prism_LightsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D98626B1A1D2C0B00FAD175 /* Prism_LightsTests.swift */; };
 		0DB347431A2D5BCE00B91EF2 /* PushAuthController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB347421A2D5BCE00B91EF2 /* PushAuthController.swift */; };
+		0DC667971A38BD790070AC4C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D9862591A1D2C0B00FAD175 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,7 @@
 
 /* Begin PBXFileReference section */
 		0D0A26D41A3766C70033550D /* TabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabViewController.swift; sourceTree = "<group>"; };
+		0D0A26DA1A38B6E70033550D /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		0D3A78F61A26A6AA003AC6D4 /* Prism Lights-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Prism Lights-Bridging-Header.h"; sourceTree = "<group>"; };
 		0D3A78FE1A26A70B003AC6D4 /* HueSDK_iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = HueSDK_iOS.framework; sourceTree = "<group>"; };
 		0D3A79021A26A716003AC6D4 /* DDAbstractDatabaseLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDAbstractDatabaseLogger.h; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 			children = (
 				0D4F25441A2AD34A005C61EA /* BridgeConnect.swift */,
 				0DB347421A2D5BCE00B91EF2 /* PushAuthController.swift */,
+				0D0A26DA1A38B6E70033550D /* SettingsTableViewController.swift */,
 			);
 			name = "Main Settings";
 			sourceTree = "<group>";
@@ -305,7 +308,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0D98625B1A1D2C0B00FAD175 /* Main.storyboard in Resources */,
+				0DC667971A38BD790070AC4C /* Main.storyboard in Resources */,
 				0D9862601A1D2C0B00FAD175 /* LaunchScreen.xib in Resources */,
 				0D98625D1A1D2C0B00FAD175 /* Images.xcassets in Resources */,
 			);
@@ -336,6 +339,7 @@
 				0D3A79111A26A716003AC6D4 /* DDAbstractDatabaseLogger.m in Sources */,
 				0D9862561A1D2C0B00FAD175 /* HomeController.swift in Sources */,
 				0D3A79131A26A716003AC6D4 /* DDASLLogger.m in Sources */,
+				0D0A26DB1A38B6E70033550D /* SettingsTableViewController.swift in Sources */,
 				0D4F25451A2AD34A005C61EA /* BridgeConnect.swift in Sources */,
 				0D0A26D51A3766C70033550D /* TabViewController.swift in Sources */,
 				0D3A791B1A26A716003AC6D4 /* ContextFilterLogFormatter.m in Sources */,

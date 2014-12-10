@@ -81,7 +81,8 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     //MARK: - UICollectionView Methods
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int{
-        return lightCount;
+            //return lightCount;
+        return 4;
     }
     
     // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
@@ -91,14 +92,22 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         if( cell == nil){
             cell = BulbCollectionCell()
         }
-        cell!.SetBulbLabel("asjfdas")
+        cell!.SetBulbLabel("Bulb \(indexPath.row)")
         
         //TODO: Return a correct cell for the view
         return cell!
     }
     
-    //TODO: Handle taps and long presses
+    //TODO: Handle taps
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        println("Bulb tapped")
+    }
     
+    
+    //TODO: Handle long presses
+    func ShowBulbSettings(){
+        
+    }
     
     //MARK: Notification Methods
     
