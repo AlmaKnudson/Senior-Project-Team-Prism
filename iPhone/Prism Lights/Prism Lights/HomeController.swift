@@ -9,7 +9,7 @@
 import UIKit
 let MAX_HUE:UInt32 = 65535
 
-class HomeController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class HomeController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var bulbCollectionView: UICollectionView!
     
@@ -20,6 +20,20 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     //MARK: - UIViewController Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        var gesture = UILongPressGestureRecognizer(target: self, action: "ShowBulbSettings:")
+        gesture.minimumPressDuration = 1
+        gesture.delegate = self
+        self.bulbCollectionView.addGestureRecognizer(gesture)
+        /*// attach long press gesture to collectionView
+        UILongPressGestureRecognizer *lpgr
+            = [[UILongPressGestureRecognizer alloc]
+                initWithTarget:self action:@selector(handleLongPress:)];
+        lpgr.minimumPressDuration = .5; //seconds
+        lpgr.delegate = self;
+        [self.collectionView addGestureRecognizer:lpgr];
+        */
+        
         // Do any additional setup after loading the view, typically from a nib.
     }
     
@@ -35,7 +49,11 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         super.init(nibName: nil, bundle: nil)
     }
     
-    
+    /**
+    View Will Appear
+    Registers the controller with the PHManager for bridge connections
+    Then tries to connect to the bridge
+    */
     override func viewWillAppear(animated: Bool) {
         var manager = PHNotificationManager.defaultManager()
         manager!.registerObject(self, withSelector: "HeartBeatReceived", forNotification: "LOCAL_CONNECTION_NOTIFICATION")
@@ -54,17 +72,8 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     }
     
     
-    /**
-    Lorem ipsum dolor sit amet.
     
-    :param: bar Consectetur adipisicing elit.
-    
-    :returns: Sed do eiusmod tempor.
-    */ 
     override func viewDidAppear(animated: Bool) {
-        
-        
-        
         
     }
     
@@ -81,8 +90,8 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     //MARK: - UICollectionView Methods
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int{
-            //return lightCount;
-        return 4;
+        return lightCount;
+//        return 4;
     }
     
     // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
@@ -101,16 +110,51 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     //TODO: Handle taps
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         println("Bulb tapped")
+        var light = cache!.lights["\(indexPath.row+1)"] as PHLight
+        var lightState = PHLightState()
+        if light.lightState.on == 1{
+            light.lightState.on = false
+            lightState.on = false
+        } else{
+            lightState.on = true
+            light.lightState.on = true
+        }
+        light.name = "Bulb 1!"
+        
+        var bridgeSendAPI = PHBridgeSendAPI()
+        bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil)
+        
     }
     
-    
+
     //TODO: Handle long presses
-    func ShowBulbSettings(){
+    func ShowBulbSettings( gestureRecognizer: UILongPressGestureRecognizer){
+        if gestureRecognizer.state != UIGestureRecognizerState.Ended{
+            return
+        }
+        
+        var point = gestureRecognizer.locationInView(self.bulbCollectionView)
+        var indexPath = self.bulbCollectionView.indexPathForItemAtPoint(point)
+        if indexPath == nil{
+            println("Unable to find index")
+        } else{
+            println("indexPath of cell: \(indexPath)")
+            var cell = self.bulbCollectionView.cellForItemAtIndexPath(indexPath!)
+            
+        }
         
     }
     
     //MARK: Notification Methods
     
+    /**
+        Handles the heartbeat event from the PHNotification
+        Updates the Bulbs UI
+    
+    :param:
+    
+    :returns:
+    */
     func HeartBeatReceived(){
         cache = PHBridgeResourcesReader.readBridgeResourcesCache()
         lightCount = (cache?.lights.count)!
@@ -118,6 +162,13 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         self.bulbCollectionView.reloadData()
     }
     
+    /**
+        Handles the unable to connect bridge PHNotification
+    
+    :param: void
+    
+    :returns: void
+    */
     func NetworkConnectionLost(){
         var hueSDK = (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!
         hueSDK.disableLocalConnection()
@@ -125,27 +176,23 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         
     }
     
+    /**
+        Handles the not authorized with the bridge PHNotification
+    
+    :param:
+    
+    :returns:
+    */
     func NotAuthorized(){
         var hueSDK = (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!
         hueSDK.disableLocalConnection()
         //TODO: Notify user of lost Authorization
+        //TODO: Initiate Push Auth
     }
     
     
     
-    /*
     
-    for light in cache!.lights.values{
-    var lightState = PHLightState()
-    
-    lightState.hue = 65535
-    lightState.brightness = 150
-    lightState.saturation = 200
-    
-    var bridgeSendAPI = PHBridgeSendAPI()
-    bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil)
-    }
-    */
 
 
 }

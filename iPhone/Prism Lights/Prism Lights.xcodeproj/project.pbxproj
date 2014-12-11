@@ -183,20 +183,28 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		0D9862451A1D2C0B00FAD175 = {
+		0D799B191A392D8000E9DDF2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0D3A78FE1A26A70B003AC6D4 /* HueSDK_iOS.framework */,
 				0D799B171A3926FD00E9DDF2 /* AVFoundation.framework */,
 				0D799B151A3926F400E9DDF2 /* MobileCoreServices.framework */,
 				0D799B131A3926E800E9DDF2 /* SystemConfiguration.framework */,
 				0D799B111A3926DC00E9DDF2 /* CoreLocation.framework */,
 				0D799B0D1A39260200E9DDF2 /* Wit.bundle */,
 				0D799B0E1A39260200E9DDF2 /* Wit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		0D9862451A1D2C0B00FAD175 = {
+			isa = PBXGroup;
+			children = (
 				0D9862501A1D2C0B00FAD175 /* Prism Lights */,
 				0D9862681A1D2C0B00FAD175 /* Prism LightsTests */,
+				0D799B191A392D8000E9DDF2 /* Frameworks */,
 				0D98624F1A1D2C0B00FAD175 /* Products */,
 				0D3A79011A26A716003AC6D4 /* Lumberjack */,
-				0D3A78FE1A26A70B003AC6D4 /* HueSDK_iOS.framework */,
 			);
 			sourceTree = "<group>";
 		};
@@ -215,12 +223,12 @@
 				0D9862531A1D2C0B00FAD175 /* AppDelegate.swift */,
 				0D0A26D41A3766C70033550D /* TabViewController.swift */,
 				0D9862591A1D2C0B00FAD175 /* Main.storyboard */,
-				0D98625C1A1D2C0B00FAD175 /* Images.xcassets */,
-				0D0A26D81A376D510033550D /* Main Settings */,
-				0D0A26D71A376D4A0033550D /* Music */,
-				0D0A26D61A376D410033550D /* Home */,
 				0D98625E1A1D2C0B00FAD175 /* LaunchScreen.xib */,
 				0D3A78F61A26A6AA003AC6D4 /* Prism Lights-Bridging-Header.h */,
+				0D98625C1A1D2C0B00FAD175 /* Images.xcassets */,
+				0D0A26D81A376D510033550D /* Main Settings */,
+				0D0A26D61A376D410033550D /* Home */,
+				0D0A26D71A376D4A0033550D /* Music */,
 				0D9862511A1D2C0B00FAD175 /* Supporting Files */,
 			);
 			path = "Prism Lights";

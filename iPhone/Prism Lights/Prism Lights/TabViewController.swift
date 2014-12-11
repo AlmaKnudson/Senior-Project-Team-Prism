@@ -11,9 +11,6 @@ import UIKit
 class TabViewController : UITabBarController{
     
     
-    
-    
-    
     override func viewWillAppear(animated: Bool) {
         self.selectedIndex = 1;
         //self.reloadInputViews()
