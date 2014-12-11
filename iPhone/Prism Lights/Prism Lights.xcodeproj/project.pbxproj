@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D0A26D51A3766C70033550D /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D0A26D41A3766C70033550D /* TabViewController.swift */; };
+		0D0A26DB1A38B6E70033550D /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D0A26DA1A38B6E70033550D /* SettingsTableViewController.swift */; };
 		0D3A78FF1A26A70B003AC6D4 /* HueSDK_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3A78FE1A26A70B003AC6D4 /* HueSDK_iOS.framework */; };
 		0D3A79001A26A70B003AC6D4 /* HueSDK_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3A78FE1A26A70B003AC6D4 /* HueSDK_iOS.framework */; };
 		0D3A79111A26A716003AC6D4 /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79031A26A716003AC6D4 /* DDAbstractDatabaseLogger.m */; };
@@ -19,8 +21,12 @@
 		0D3A791D1A26A716003AC6D4 /* DispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79101A26A716003AC6D4 /* DispatchQueueLogFormatter.m */; };
 		0D3A791E1A26A716003AC6D4 /* DispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79101A26A716003AC6D4 /* DispatchQueueLogFormatter.m */; };
 		0D4F25451A2AD34A005C61EA /* BridgeConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D4F25441A2AD34A005C61EA /* BridgeConnect.swift */; };
-		0D799B0B1A3922E400E9DDF2 /* Wit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0D799B091A3922E400E9DDF2 /* Wit.bundle */; };
-		0D799B0C1A3922E400E9DDF2 /* Wit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D799B0A1A3922E400E9DDF2 /* Wit.framework */; };
+		0D799B0F1A39260200E9DDF2 /* Wit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0D799B0D1A39260200E9DDF2 /* Wit.bundle */; };
+		0D799B101A39260200E9DDF2 /* Wit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D799B0E1A39260200E9DDF2 /* Wit.framework */; };
+		0D799B121A3926DC00E9DDF2 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D799B111A3926DC00E9DDF2 /* CoreLocation.framework */; };
+		0D799B141A3926E800E9DDF2 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D799B131A3926E800E9DDF2 /* SystemConfiguration.framework */; };
+		0D799B161A3926F400E9DDF2 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D799B151A3926F400E9DDF2 /* MobileCoreServices.framework */; };
+		0D799B181A3926FD00E9DDF2 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D799B171A3926FD00E9DDF2 /* AVFoundation.framework */; };
 		0D9357E11A2CC48200AAD52D /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A790B1A26A716003AC6D4 /* DDTTYLogger.m */; };
 		0D9357E21A2CC48500AAD52D /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79091A26A716003AC6D4 /* DDLog.m */; };
 		0D9357E31A2CC48800AAD52D /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79071A26A716003AC6D4 /* DDFileLogger.m */; };
@@ -28,17 +34,13 @@
 		0D9357E51A2CC48F00AAD52D /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79031A26A716003AC6D4 /* DDAbstractDatabaseLogger.m */; };
 		0D9357E71A2D4BB100AAD52D /* BulbCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9357E61A2D4BB100AAD52D /* BulbCollectionCell.swift */; };
 		0D9862541A1D2C0B00FAD175 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862531A1D2C0B00FAD175 /* AppDelegate.swift */; };
-		0D9862561A1D2C0B00FAD175 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862551A1D2C0B00FAD175 /* FirstViewController.swift */; };
-		0D9862581A1D2C0B00FAD175 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862571A1D2C0B00FAD175 /* SecondViewController.swift */; };
-		0D98625B1A1D2C0B00FAD175 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D9862591A1D2C0B00FAD175 /* Main.storyboard */; };
+		0D9862561A1D2C0B00FAD175 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862551A1D2C0B00FAD175 /* HomeController.swift */; };
+		0D9862581A1D2C0B00FAD175 /* MusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862571A1D2C0B00FAD175 /* MusicViewController.swift */; };
 		0D98625D1A1D2C0B00FAD175 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0D98625C1A1D2C0B00FAD175 /* Images.xcassets */; };
 		0D9862601A1D2C0B00FAD175 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D98625E1A1D2C0B00FAD175 /* LaunchScreen.xib */; };
 		0D98626C1A1D2C0B00FAD175 /* Prism_LightsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D98626B1A1D2C0B00FAD175 /* Prism_LightsTests.swift */; };
 		0DB347431A2D5BCE00B91EF2 /* PushAuthController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB347421A2D5BCE00B91EF2 /* PushAuthController.swift */; };
-		11267F6D1A2F7F39005B529A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11267F6C1A2F7F39005B529A /* AVFoundation.framework */; };
-		11267F6F1A2F7F40005B529A /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11267F6E1A2F7F40005B529A /* MobileCoreServices.framework */; };
-		11267F711A2F7F46005B529A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11267F701A2F7F46005B529A /* SystemConfiguration.framework */; };
-		11267F731A2F7F4B005B529A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11267F721A2F7F4B005B529A /* CoreLocation.framework */; };
+		0DC667971A38BD790070AC4C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D9862591A1D2C0B00FAD175 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +54,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0D0A26D41A3766C70033550D /* TabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabViewController.swift; sourceTree = "<group>"; };
+		0D0A26DA1A38B6E70033550D /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		0D3A78F61A26A6AA003AC6D4 /* Prism Lights-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Prism Lights-Bridging-Header.h"; sourceTree = "<group>"; };
 		0D3A78FE1A26A70B003AC6D4 /* HueSDK_iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = HueSDK_iOS.framework; sourceTree = "<group>"; };
 		0D3A79021A26A716003AC6D4 /* DDAbstractDatabaseLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDAbstractDatabaseLogger.h; sourceTree = "<group>"; };
@@ -69,14 +73,18 @@
 		0D3A790F1A26A716003AC6D4 /* DispatchQueueLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DispatchQueueLogFormatter.h; sourceTree = "<group>"; };
 		0D3A79101A26A716003AC6D4 /* DispatchQueueLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DispatchQueueLogFormatter.m; sourceTree = "<group>"; };
 		0D4F25441A2AD34A005C61EA /* BridgeConnect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BridgeConnect.swift; sourceTree = "<group>"; };
-		0D799B091A3922E400E9DDF2 /* Wit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Wit.bundle; sourceTree = "<group>"; };
-		0D799B0A1A3922E400E9DDF2 /* Wit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Wit.framework; sourceTree = "<group>"; };
+		0D799B0D1A39260200E9DDF2 /* Wit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Wit.bundle; sourceTree = "<group>"; };
+		0D799B0E1A39260200E9DDF2 /* Wit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Wit.framework; sourceTree = "<group>"; };
+		0D799B111A3926DC00E9DDF2 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		0D799B131A3926E800E9DDF2 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		0D799B151A3926F400E9DDF2 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		0D799B171A3926FD00E9DDF2 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		0D9357E61A2D4BB100AAD52D /* BulbCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BulbCollectionCell.swift; sourceTree = "<group>"; };
 		0D98624E1A1D2C0B00FAD175 /* Prism Lights.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Prism Lights.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D9862521A1D2C0B00FAD175 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0D9862531A1D2C0B00FAD175 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		0D9862551A1D2C0B00FAD175 /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
-		0D9862571A1D2C0B00FAD175 /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
+		0D9862551A1D2C0B00FAD175 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
+		0D9862571A1D2C0B00FAD175 /* MusicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicViewController.swift; sourceTree = "<group>"; };
 		0D98625A1A1D2C0B00FAD175 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0D98625C1A1D2C0B00FAD175 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		0D98625F1A1D2C0B00FAD175 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -84,10 +92,6 @@
 		0D98626A1A1D2C0B00FAD175 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0D98626B1A1D2C0B00FAD175 /* Prism_LightsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prism_LightsTests.swift; sourceTree = "<group>"; };
 		0DB347421A2D5BCE00B91EF2 /* PushAuthController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushAuthController.swift; sourceTree = "<group>"; };
-		11267F6C1A2F7F39005B529A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		11267F6E1A2F7F40005B529A /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
-		11267F701A2F7F46005B529A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		11267F721A2F7F4B005B529A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,12 +99,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				11267F731A2F7F4B005B529A /* CoreLocation.framework in Frameworks */,
-				11267F711A2F7F46005B529A /* SystemConfiguration.framework in Frameworks */,
-				11267F6F1A2F7F40005B529A /* MobileCoreServices.framework in Frameworks */,
-				11267F6D1A2F7F39005B529A /* AVFoundation.framework in Frameworks */,
-				0D799B0C1A3922E400E9DDF2 /* Wit.framework in Frameworks */,
+				0D799B181A3926FD00E9DDF2 /* AVFoundation.framework in Frameworks */,
+				0D799B161A3926F400E9DDF2 /* MobileCoreServices.framework in Frameworks */,
+				0D799B141A3926E800E9DDF2 /* SystemConfiguration.framework in Frameworks */,
+				0D799B121A3926DC00E9DDF2 /* CoreLocation.framework in Frameworks */,
 				0D3A78FF1A26A70B003AC6D4 /* HueSDK_iOS.framework in Frameworks */,
+				0D799B101A39260200E9DDF2 /* Wit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,6 +119,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0D0A26D61A376D410033550D /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				0D0A26D91A38AFA10033550D /* Bulb Settings */,
+				0D9357E61A2D4BB100AAD52D /* BulbCollectionCell.swift */,
+				0D9862551A1D2C0B00FAD175 /* HomeController.swift */,
+			);
+			name = Home;
+			sourceTree = "<group>";
+		};
+		0D0A26D71A376D4A0033550D /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				0D9862571A1D2C0B00FAD175 /* MusicViewController.swift */,
+			);
+			name = Music;
+			sourceTree = "<group>";
+		};
+		0D0A26D81A376D510033550D /* Main Settings */ = {
+			isa = PBXGroup;
+			children = (
+				0D4F25441A2AD34A005C61EA /* BridgeConnect.swift */,
+				0DB347421A2D5BCE00B91EF2 /* PushAuthController.swift */,
+				0D0A26DA1A38B6E70033550D /* SettingsTableViewController.swift */,
+			);
+			name = "Main Settings";
+			sourceTree = "<group>";
+		};
+		0D0A26D91A38AFA10033550D /* Bulb Settings */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Bulb Settings";
+			sourceTree = "<group>";
+		};
 		0D3A79011A26A716003AC6D4 /* Lumberjack */ = {
 			isa = PBXGroup;
 			children = (
@@ -147,12 +186,12 @@
 		0D9862451A1D2C0B00FAD175 = {
 			isa = PBXGroup;
 			children = (
-				0D799B091A3922E400E9DDF2 /* Wit.bundle */,
-				0D799B0A1A3922E400E9DDF2 /* Wit.framework */,
-				11267F721A2F7F4B005B529A /* CoreLocation.framework */,
-				11267F701A2F7F46005B529A /* SystemConfiguration.framework */,
-				11267F6E1A2F7F40005B529A /* MobileCoreServices.framework */,
-				11267F6C1A2F7F39005B529A /* AVFoundation.framework */,
+				0D799B171A3926FD00E9DDF2 /* AVFoundation.framework */,
+				0D799B151A3926F400E9DDF2 /* MobileCoreServices.framework */,
+				0D799B131A3926E800E9DDF2 /* SystemConfiguration.framework */,
+				0D799B111A3926DC00E9DDF2 /* CoreLocation.framework */,
+				0D799B0D1A39260200E9DDF2 /* Wit.bundle */,
+				0D799B0E1A39260200E9DDF2 /* Wit.framework */,
 				0D9862501A1D2C0B00FAD175 /* Prism Lights */,
 				0D9862681A1D2C0B00FAD175 /* Prism LightsTests */,
 				0D98624F1A1D2C0B00FAD175 /* Products */,
@@ -174,16 +213,15 @@
 			isa = PBXGroup;
 			children = (
 				0D9862531A1D2C0B00FAD175 /* AppDelegate.swift */,
-				0D9862551A1D2C0B00FAD175 /* FirstViewController.swift */,
-				0D9862571A1D2C0B00FAD175 /* SecondViewController.swift */,
+				0D0A26D41A3766C70033550D /* TabViewController.swift */,
 				0D9862591A1D2C0B00FAD175 /* Main.storyboard */,
 				0D98625C1A1D2C0B00FAD175 /* Images.xcassets */,
+				0D0A26D81A376D510033550D /* Main Settings */,
+				0D0A26D71A376D4A0033550D /* Music */,
+				0D0A26D61A376D410033550D /* Home */,
 				0D98625E1A1D2C0B00FAD175 /* LaunchScreen.xib */,
 				0D3A78F61A26A6AA003AC6D4 /* Prism Lights-Bridging-Header.h */,
 				0D9862511A1D2C0B00FAD175 /* Supporting Files */,
-				0D4F25441A2AD34A005C61EA /* BridgeConnect.swift */,
-				0D9357E61A2D4BB100AAD52D /* BulbCollectionCell.swift */,
-				0DB347421A2D5BCE00B91EF2 /* PushAuthController.swift */,
 			);
 			path = "Prism Lights";
 			sourceTree = "<group>";
@@ -293,9 +331,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0D799B0B1A3922E400E9DDF2 /* Wit.bundle in Resources */,
-				0D98625B1A1D2C0B00FAD175 /* Main.storyboard in Resources */,
+				0DC667971A38BD790070AC4C /* Main.storyboard in Resources */,
 				0D9862601A1D2C0B00FAD175 /* LaunchScreen.xib in Resources */,
+				0D799B0F1A39260200E9DDF2 /* Wit.bundle in Resources */,
 				0D98625D1A1D2C0B00FAD175 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -317,15 +355,17 @@
 				0D9357E71A2D4BB100AAD52D /* BulbCollectionCell.swift in Sources */,
 				0D3A79171A26A716003AC6D4 /* DDLog.m in Sources */,
 				0D3A79191A26A716003AC6D4 /* DDTTYLogger.m in Sources */,
-				0D9862581A1D2C0B00FAD175 /* SecondViewController.swift in Sources */,
+				0D9862581A1D2C0B00FAD175 /* MusicViewController.swift in Sources */,
 				0D3A79151A26A716003AC6D4 /* DDFileLogger.m in Sources */,
 				0D9862541A1D2C0B00FAD175 /* AppDelegate.swift in Sources */,
 				0D3A791D1A26A716003AC6D4 /* DispatchQueueLogFormatter.m in Sources */,
 				0DB347431A2D5BCE00B91EF2 /* PushAuthController.swift in Sources */,
 				0D3A79111A26A716003AC6D4 /* DDAbstractDatabaseLogger.m in Sources */,
-				0D9862561A1D2C0B00FAD175 /* FirstViewController.swift in Sources */,
+				0D9862561A1D2C0B00FAD175 /* HomeController.swift in Sources */,
 				0D3A79131A26A716003AC6D4 /* DDASLLogger.m in Sources */,
+				0D0A26DB1A38B6E70033550D /* SettingsTableViewController.swift in Sources */,
 				0D4F25451A2AD34A005C61EA /* BridgeConnect.swift in Sources */,
+				0D0A26D51A3766C70033550D /* TabViewController.swift in Sources */,
 				0D3A791B1A26A716003AC6D4 /* ContextFilterLogFormatter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -462,8 +502,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"/Users/AlmaKnudson/Desktop/SeniorProjectTeamPrism/Senior-Project-Team-Prism/3.1.0",
-					/Users/AlmaKnudson/Downloads/3.1.0,
 				);
 				INFOPLIST_FILE = "Prism Lights/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -482,8 +520,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"/Users/AlmaKnudson/Desktop/SeniorProjectTeamPrism/Senior-Project-Team-Prism/3.1.0",
-					/Users/AlmaKnudson/Downloads/3.1.0,
 				);
 				INFOPLIST_FILE = "Prism Lights/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

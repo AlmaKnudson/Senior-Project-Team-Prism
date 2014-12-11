@@ -41,6 +41,14 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
         PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
     }
     
+    override func viewWillAppear(animated: Bool) {
+        var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
+        var hueSDK = (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!
+        if(hueSDK.localConnected()){
+            LoadBridgeValues()
+        }
+    }
+    
     override func viewDidAppear(animated: Bool) {
         var manager = PHNotificationManager.defaultManager()
         manager!.registerObject(self, withSelector: "ConnectedToBridge", forNotification: "LOCAL_CONNECTION_NOTIFICATION")
@@ -55,10 +63,27 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
         // Dispose of any resources that can be recreated.
     }
     
-    func LoadBridgeValues(ip:String, mac:String, lastHeartBeat:String){
-        ipLabel.text = ip
-        macLabel.text = mac
-        heartbeatLabel.text = lastHeartBeat
+    func LoadBridgeValues(){
+        let cache = PHBridgeResourcesReader.readBridgeResourcesCache()
+        
+        if (cache != nil && cache.bridgeConfiguration != nil && cache.bridgeConfiguration.ipaddress != nil){
+            let ip = cache.bridgeConfiguration.ipaddress
+            let mac = cache.bridgeConfiguration.mac
+            var lastHeartbeat :String
+            if (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.localConnected(){
+                let formatter = NSDateFormatter()
+                formatter.dateStyle = NSDateFormatterStyle.NoStyle
+                formatter.timeStyle = NSDateFormatterStyle.MediumStyle
+                lastHeartbeat = formatter.stringFromDate(NSDate())
+            } else{
+                lastHeartbeat = "Waiting..."
+            }
+            ipLabel.text = ip
+            macLabel.text = mac
+            heartbeatLabel.text = lastHeartbeat
+            
+        }
+        
         
     }
 
@@ -92,10 +117,12 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
         let mac = macAddresses[indexPath.row]
         let ip = addresses[mac]!
         let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
         let hueSDK = appDelegate.hueSDK
+        hueSDK!.disableLocalConnection()
         hueSDK!.setBridgeToUseWithIpAddress(ip, macAddress: mac)
         hueSDK!.enableLocalConnection()
         
@@ -105,23 +132,7 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
     
     func ConnectedToBridge(){
         println("Connected to Bridge")
-        let cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-        
-        if (cache != nil && cache.bridgeConfiguration != nil && cache.bridgeConfiguration.ipaddress != nil){
-            let ip = cache.bridgeConfiguration.ipaddress
-            let mac = cache.bridgeConfiguration.mac
-            var lastHeartbeat :String
-            if (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.localConnected(){
-                let formatter = NSDateFormatter()
-                formatter.dateStyle = NSDateFormatterStyle.NoStyle
-                formatter.timeStyle = NSDateFormatterStyle.MediumStyle
-                lastHeartbeat = formatter.stringFromDate(NSDate())
-            } else{
-                lastHeartbeat = "Waiting..."
-            }
-            LoadBridgeValues(ip, mac: mac, lastHeartBeat: lastHeartbeat)
-            
-        }
+        LoadBridgeValues()
     }
     
     func BridgeUnavailable(){
@@ -152,8 +163,6 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
         bridgeSearch.startSearchWithCompletionHandler { (dict:[NSObject : AnyObject]!) -> Void in
             self.addresses = dict as [String:String]
             self.macAddresses = [String](self.addresses.keys)
-            //self.macAddresses.append("00:17:88:0A:6D:13")
-            //self.addresses.updateValue("50.168.199.108", forKey: "00:17:88:0A:6D:13")
             self.bridgesFound.reloadData()
             self.loadingView.stopAnimating()
             self.blur.hidden = true

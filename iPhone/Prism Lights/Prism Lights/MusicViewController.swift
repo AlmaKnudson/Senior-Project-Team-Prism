@@ -9,15 +9,15 @@
 import UIKit
 
 
-class SecondViewController: UIViewController, WitDelegate {
+class MusicViewController: UIViewController, WitDelegate {
     
     var statusView:UILabel = UILabel();
     var intentView:UILabel = UILabel();
     var entitiesView:UITextView = UITextView();
     var witButton:WITMicButton = WITMicButton();
     
-
-
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -25,13 +25,13 @@ class SecondViewController: UIViewController, WitDelegate {
         
         
         Wit.sharedInstance().accessToken = "2UZT7OIHBRHNJTFZLOW222ND5SVNRYM7";
-       // WITVadConfig.DetectSpeechStop;
+        // WITVadConfig.DetectSpeechStop;
         Wit.sharedInstance().detectSpeechStop = WITVadConfig.DetectSpeechStop;
         //WITVadConfig.Full;
-//        [Wit sharedInstance].accessToken = @"xxx"; // replace xxx by your Wit.AI access token
-//        //enabling detectSpeechStop will automatically stop listening the microphone when the user stop talking
-//        [Wit sharedInstance].detectSpeechStop = WITVadConfigDetectSpeechStop;
-//        return YES;
+        //        [Wit sharedInstance].accessToken = @"xxx"; // replace xxx by your Wit.AI access token
+        //        //enabling detectSpeechStop will automatically stop listening the microphone when the user stop talking
+        //        [Wit sharedInstance].detectSpeechStop = WITVadConfigDetectSpeechStop;
+        //        return YES;
         
         self.setupUI();
     }
@@ -61,7 +61,7 @@ class SecondViewController: UIViewController, WitDelegate {
         statusView.textAlignment = NSTextAlignment.Center;
         self.view.addSubview(statusView);
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -83,25 +83,25 @@ class SecondViewController: UIViewController, WitDelegate {
     
     
     //witDidGraspIntent:(NSArray *)outcomes messageId:(NSString *)messageId customData:(id) customData error:(NSError*)e;
-   func witDidGraspIntent(outcomes: [AnyObject]!, messageId: String!, customData: AnyObject!, error e: NSError!) {
+    func witDidGraspIntent(outcomes: [AnyObject]!, messageId: String!, customData: AnyObject!, error e: NSError!) {
         
         intentView.text = "MADE IT";
-    var s = "";
-    
+        var s = "";
+        
         let o = outcomes[0] as NSObject;
-    var intent = o.valueForKey("intent") as NSString;
-//    
-//        var outcome = o.objectAtIndex(0) as NSDictionary;
-//        var intent = outcome.objectForKey("intent") as NSString;
+        var intent = o.valueForKey("intent") as NSString;
+        //
+        //        var outcome = o.objectAtIndex(0) as NSDictionary;
+        //        var intent = outcome.objectForKey("intent") as NSString;
         s = s + intent + " ";
-    
-    intentView.text = s;
-    
-   // intentView.text = NSString(data: outcomes.removeAtIndex(0), NSUTF8StringEncoding
-       /*
+        
+        intentView.text = s;
+        
+        // intentView.text = NSString(data: outcomes.removeAtIndex(0), NSUTF8StringEncoding
+        /*
         if (e.localizedDescription != ""){
-            NSLog("[Wit] error: " + e.localizedDescription);
-            return;
+        NSLog("[Wit] error: " + e.localizedDescription);
+        return;
         }
         
         var firstOutcome:NSDictionary = outcomes.objectAtIndex(0) as NSDictionary;
@@ -115,19 +115,19 @@ class SecondViewController: UIViewController, WitDelegate {
         var error = NSError();
         if (NSJSONSerialization.isValidJSONObject(outcomes))
         {
-            entitiesView.textAlignment = NSTextAlignment.Left;
-            
-            json = NSJSONSerialization.dataWithJSONObject(outcomes, options: NSJSONWritingOptions.PrettyPrinted, error: nil)!;
-            
-            var jsonString = NSString(data: json, encoding: NSUTF8StringEncoding);
-            
-            NSLog("JSON: " + jsonString!);
-            entitiesView.text = jsonString;
+        entitiesView.textAlignment = NSTextAlignment.Left;
+        
+        json = NSJSONSerialization.dataWithJSONObject(outcomes, options: NSJSONWritingOptions.PrettyPrinted, error: nil)!;
+        
+        var jsonString = NSString(data: json, encoding: NSUTF8StringEncoding);
+        
+        NSLog("JSON: " + jsonString!);
+        entitiesView.text = jsonString;
         } 
-*/
+        */
         
     }
-
-
+    
+    
 }
 
