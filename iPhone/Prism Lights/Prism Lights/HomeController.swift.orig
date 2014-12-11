@@ -9,7 +9,11 @@
 import UIKit
 let MAX_HUE:UInt32 = 65535
 
+<<<<<<< HEAD:iPhone/Prism Lights/Prism Lights/HomeController.swift
+class HomeController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+=======
 class FirstViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+>>>>>>> parent of ddcfaac... Merge branch 'c-Home':iPhone/Prism Lights/Prism Lights/FirstViewController.swift
     
     
     //MARK: - UIViewController Methods
@@ -19,6 +23,10 @@ class FirstViewController: UIViewController, UICollectionViewDataSource, UIColle
         
     }
     
+<<<<<<< HEAD:iPhone/Prism Lights/Prism Lights/HomeController.swift
+=======
+    
+>>>>>>> parent of ddcfaac... Merge branch 'c-Home':iPhone/Prism Lights/Prism Lights/FirstViewController.swift
     override func viewDidAppear(animated: Bool) {
         var manager = PHNotificationManager.defaultManager()
         manager!.registerObject(self, withSelector: "HeartBeatReceived", forNotification: "LOCAL_CONNECTION_NOTIFICATION")
@@ -70,10 +78,18 @@ class FirstViewController: UIViewController, UICollectionViewDataSource, UIColle
         //TODO: Return a correct cell for the view
         return BulbCollectionCell()
     }
+<<<<<<< HEAD:iPhone/Prism Lights/Prism Lights/HomeController.swift
+=======
+    
+    //TODO: Handle taps and long presses
+>>>>>>> parent of ddcfaac... Merge branch 'c-Home':iPhone/Prism Lights/Prism Lights/FirstViewController.swift
     
     //TODO: Handle taps and long presses
     
+<<<<<<< HEAD:iPhone/Prism Lights/Prism Lights/HomeController.swift
     
+=======
+>>>>>>> parent of ddcfaac... Merge branch 'c-Home':iPhone/Prism Lights/Prism Lights/FirstViewController.swift
     //MARK: Notification Methods
     
     func HeartBeatReceived(){

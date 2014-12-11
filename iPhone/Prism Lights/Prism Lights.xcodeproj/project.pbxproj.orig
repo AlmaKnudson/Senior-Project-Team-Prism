@@ -26,8 +26,13 @@
 		0D9357E51A2CC48F00AAD52D /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79031A26A716003AC6D4 /* DDAbstractDatabaseLogger.m */; };
 		0D9357E71A2D4BB100AAD52D /* BulbCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9357E61A2D4BB100AAD52D /* BulbCollectionCell.swift */; };
 		0D9862541A1D2C0B00FAD175 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862531A1D2C0B00FAD175 /* AppDelegate.swift */; };
+<<<<<<< HEAD
+		0D9862561A1D2C0B00FAD175 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862551A1D2C0B00FAD175 /* HomeController.swift */; };
+		0D9862581A1D2C0B00FAD175 /* MusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862571A1D2C0B00FAD175 /* MusicViewController.swift */; };
+=======
 		0D9862561A1D2C0B00FAD175 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862551A1D2C0B00FAD175 /* FirstViewController.swift */; };
 		0D9862581A1D2C0B00FAD175 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862571A1D2C0B00FAD175 /* SecondViewController.swift */; };
+>>>>>>> parent of ddcfaac... Merge branch 'c-Home'
 		0D98625B1A1D2C0B00FAD175 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D9862591A1D2C0B00FAD175 /* Main.storyboard */; };
 		0D98625D1A1D2C0B00FAD175 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0D98625C1A1D2C0B00FAD175 /* Images.xcassets */; };
 		0D9862601A1D2C0B00FAD175 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D98625E1A1D2C0B00FAD175 /* LaunchScreen.xib */; };
@@ -151,8 +156,13 @@
 			isa = PBXGroup;
 			children = (
 				0D9862531A1D2C0B00FAD175 /* AppDelegate.swift */,
+<<<<<<< HEAD
+				0D9862551A1D2C0B00FAD175 /* HomeController.swift */,
+				0D9862571A1D2C0B00FAD175 /* MusicViewController.swift */,
+=======
 				0D9862551A1D2C0B00FAD175 /* FirstViewController.swift */,
 				0D9862571A1D2C0B00FAD175 /* SecondViewController.swift */,
+>>>>>>> parent of ddcfaac... Merge branch 'c-Home'
 				0D9862591A1D2C0B00FAD175 /* Main.storyboard */,
 				0D98625C1A1D2C0B00FAD175 /* Images.xcassets */,
 				0D98625E1A1D2C0B00FAD175 /* LaunchScreen.xib */,
