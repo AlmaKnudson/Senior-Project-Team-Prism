@@ -17,6 +17,7 @@ import com.philips.lighting.hue.sdk.PHMessageType;
 import com.philips.lighting.hue.sdk.PHSDKListener;
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 import com.philips.lighting.model.PHBridge;
+import com.philips.lighting.model.PHHueParsingError;
 import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
 
@@ -34,7 +35,7 @@ public class MainActivity extends Activity implements PHSDKListener{
         setContentView(R.layout.activity_main);
 
         hueBridgeSdk = PHHueSDK.getInstance();
-//        hueBridgeSdk.setAppName("Prism Lights");
+        hueBridgeSdk.setAppName("Prism Lights");
         hueBridgeSdk.setDeviceName(Build.MODEL);
         hueBridgeSdk.getNotificationManager().registerSDKListener(this);
         String waitingText = "";
@@ -67,7 +68,7 @@ public class MainActivity extends Activity implements PHSDKListener{
     }
 
     @Override
-    public void onCacheUpdated(int i, com.philips.lighting.model.PHBridge phBridge) {
+    public void onCacheUpdated(List<Integer> integers, PHBridge phBridge) {
 
     }
 
@@ -169,5 +170,10 @@ public class MainActivity extends Activity implements PHSDKListener{
                 toast.show();
             }
         });
+    }
+
+    @Override
+    public void onParsingErrors(List<PHHueParsingError> phHueParsingErrors) {
+
     }
 }

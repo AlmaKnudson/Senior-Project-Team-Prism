@@ -169,7 +169,7 @@ public class HomeFragment extends Fragment {
             } else {
                 currentView = (LinearLayout) convertView;
             }
-            if(!currentLight.isReachable()) {
+            if(!currentLight.getLastKnownLightState().isReachable()) {
                 ImageView bulbImage = (ImageView) currentView.findViewById(R.id.bulb);
                 bulbImage.setImageResource(R.drawable.bulb_absent);
             }
