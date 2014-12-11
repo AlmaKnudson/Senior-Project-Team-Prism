@@ -1,5 +1,5 @@
 //
-//  HomeController.swift
+//  FirstViewController.swift
 //  Prism Lights
 //
 //  Created by Cody Foltz on 11/19/14.
@@ -9,22 +9,14 @@
 import UIKit
 let MAX_HUE:UInt32 = 65535
 
-class HomeController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
-
-    @IBOutlet weak var bulbCollectionView: UICollectionView!
+class FirstViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
-    
-    var cache :PHBridgeResourcesCache? = nil;
-    var lightCount :Int = 0;
     
     //MARK: - UIViewController Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-    }
-    
-    required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        
     }
     
     
@@ -42,19 +34,25 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         manager!.registerObject(self, withSelector: "NetworkConnectionLost", forNotification: "NO_LOCAL_CONNECTION_NOTIFICATION")
         manager!.registerObject(self, withSelector: "NotAuthorized", forNotification: "NO_LOCAL_AUTHENTICATION_NOTIFICATION")
         
-        
-        //Check that we are connected to bridge.
         if !((UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.localConnected()){
-            //Connect to bridge
-            (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.enableLocalConnection()
+            //TODO: Popup notification telling user that there is no connection yet...
         } else{
-            cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-            lightCount = (cache?.lights.count)!
+            //TODO: Grab list of bulbs/lights
+            var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
+            for light in cache.lights.values{
+                var lightState = PHLightState()
+                
+                lightState.hue = 65535
+                lightState.brightness = 150
+                lightState.saturation = 200
+                
+                var bridgeSendAPI = PHBridgeSendAPI()
+                bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil)
+            }
+            
         }
+        
     }
-    
-    
-
     
     
     override func viewDidDisappear(animated: Bool) {
@@ -69,41 +67,26 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     //MARK: - UICollectionView Methods
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int{
-            //return lightCount;
-        return 4;
+        
+        //TODO: Return the correct number of light bulbs
+        return 0;
     }
     
     // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell{
         
-        var cell = bulbCollectionView.dequeueReusableCellWithReuseIdentifier("bulb", forIndexPath: indexPath) as? BulbCollectionCell
-        if( cell == nil){
-            cell = BulbCollectionCell()
-        }
-        cell!.SetBulbLabel("Bulb \(indexPath.row)")
         
         //TODO: Return a correct cell for the view
-        return cell!
+        return BulbCollectionCell()
     }
     
-    //TODO: Handle taps
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        println("Bulb tapped")
-    }
+    //TODO: Handle taps and long presses
     
-    
-    //TODO: Handle long presses
-    func ShowBulbSettings(){
-        
-    }
     
     //MARK: Notification Methods
     
     func HeartBeatReceived(){
-        cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-        lightCount = (cache?.lights.count)!
-                //TODO: Update UI based on new info in the cache.
-        self.bulbCollectionView.reloadData()
+        //TODO: Update UI based on new info in the cache
     }
     
     func NetworkConnectionLost(){
@@ -118,22 +101,6 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         hueSDK.disableLocalConnection()
         //TODO: Notify user of lost Authorization
     }
-    
-    
-    
-    /*
-    
-    for light in cache!.lights.values{
-    var lightState = PHLightState()
-    
-    lightState.hue = 65535
-    lightState.brightness = 150
-    lightState.saturation = 200
-    
-    var bridgeSendAPI = PHBridgeSendAPI()
-    bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil)
-    }
-    */
 
 
 }

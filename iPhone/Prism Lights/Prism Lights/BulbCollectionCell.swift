@@ -18,8 +18,8 @@ class BulbCollectionCell : UICollectionViewCell{
         bulbImageView!.image = UIImage(named: "pushAuth")
     }
     
-    func SetBulbLabel(name :String){
-        bulbLabel!.text = name
+    func SetBulbLabel(){
+        
     }
     
     
