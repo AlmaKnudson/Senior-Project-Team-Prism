@@ -24,7 +24,7 @@ public class HueBulbChangeUtility {
     public static void toggleBulbState(int lightPosition) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
         PHLight light = getLightFromPosition(lightPosition, bridge);
-        PHLightState lightState = light.getLastKnownLightState();
+        PHLightState lightState = new PHLightState();
         if(light.getLastKnownLightState().isOn()) {
             lightState.setOn(false);
         }
@@ -40,7 +40,7 @@ public class HueBulbChangeUtility {
     public static void turnBulbOnOff (int lightPosition, boolean on) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
         PHLight light = getLightFromPosition(lightPosition, bridge);
-        PHLightState lightState = light.getLastKnownLightState();
+        PHLightState lightState = new PHLightState();
         lightState.setOn(on);
         bridge.updateLightState(light, lightState);
     }
@@ -71,7 +71,7 @@ public class HueBulbChangeUtility {
     public static void changeBrightness(int lightPosition, int brightness) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
         PHLight light = getLightFromPosition(lightPosition, bridge);
-        PHLightState lightState = light.getLastKnownLightState();
+        PHLightState lightState = new PHLightState();
         int convertedBrightness = (int) Math.round((brightness * 254.0) / 100);
         lightState.setBrightness(convertedBrightness);
         bridge.updateLightState(light, lightState);
@@ -80,7 +80,7 @@ public class HueBulbChangeUtility {
     public static void changeBulbColor(int lightPosition, int rgbColor) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
         PHLight light = getLightFromPosition(lightPosition, bridge);
-        PHLightState lightState = light.getLastKnownLightState();
+        PHLightState lightState = new PHLightState();
         float[] convertedColor = PHUtilities.calculateXY(rgbColor, "rgb");
         lightState.setX(convertedColor[0]);
         lightState.setY(convertedColor[1]);
