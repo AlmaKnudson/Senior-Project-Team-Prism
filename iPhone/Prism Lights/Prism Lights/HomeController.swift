@@ -9,7 +9,7 @@
 import UIKit
 let MAX_HUE:UInt32 = 65535
 
-class FirstViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class HomeController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
     
     //MARK: - UIViewController Methods
@@ -19,16 +19,7 @@ class FirstViewController: UIViewController, UICollectionViewDataSource, UIColle
         
     }
     
-    
     override func viewDidAppear(animated: Bool) {
-        
-        
-        
-//        [Wit sharedInstance].accessToken = "2UZT7OIHBRHNJTFZLOW222ND5SVNRYM7"; // replace xxx by your Wit.AI access token
-//        //enabling detectSpeechStop will automatically stop listening the microphone when the user stop talking
-//        [Wit sharedInstance].detectSpeechStop = WITVadConfigDetectSpeechStop;
-//        return YES;
-        
         var manager = PHNotificationManager.defaultManager()
         manager!.registerObject(self, withSelector: "HeartBeatReceived", forNotification: "LOCAL_CONNECTION_NOTIFICATION")
         manager!.registerObject(self, withSelector: "NetworkConnectionLost", forNotification: "NO_LOCAL_CONNECTION_NOTIFICATION")
