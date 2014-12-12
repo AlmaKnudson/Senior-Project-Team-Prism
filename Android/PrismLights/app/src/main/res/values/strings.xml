@@ -13,5 +13,6 @@
     <string name="searching">Searching for Bridge...</string>
     <string name="connecting">Connecting to Bridge...</string>
     <string name="apply_rules">Apply Rules</string>
+    <string name="voice">Voice Control</string>
 
 </resources>

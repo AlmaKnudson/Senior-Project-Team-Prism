@@ -7,6 +7,9 @@ import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,14 +29,47 @@ import java.util.List;
 
 public class MainActivity extends Activity implements PHSDKListener{
 
+    public enum CurrentFragments{
+        SETTINGS,
+        HOME,
+        VOICE,
+        LIGHT_SETTINGS
+    }
+
     PHHueSDK hueBridgeSdk;
     Dialog waitingDialog;
+    CurrentFragments currentFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Button homeButton = (Button) findViewById(R.id.homeButton);
+        ImageButton settingsButton = (ImageButton) findViewById(R.id.settingsButton);
+        Button voiceButton = (Button) findViewById(R.id.voiceButton);
+        homeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currentFragment != CurrentFragments.HOME) {
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.container, new HomeFragment());
+                    fragmentTransaction.addToBackStack("home");
+                    fragmentTransaction.commit();
+                }
+            }
+        });
+        voiceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currentFragment != CurrentFragments.VOICE) {
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.container, new VoiceFragment());
+                    fragmentTransaction.addToBackStack("settings");
+                    fragmentTransaction.commit();
+                }
+            }
+        });
         hueBridgeSdk = PHHueSDK.getInstance();
         hueBridgeSdk.setAppName("Prism Lights");
         hueBridgeSdk.setDeviceName(Build.MODEL);
@@ -65,6 +101,10 @@ public class MainActivity extends Activity implements PHSDKListener{
         textView.setTextColor(Color.WHITE);
         waitingDialog.setContentView(textView);
         //end code from example app
+    }
+
+    public void setCurrentFragment(CurrentFragments fragment) {
+        this.currentFragment = fragment;
     }
 
     @Override

@@ -58,10 +58,10 @@
                 android:id="@+id/brightness" />
 
             <TextView
-                android:layout_width="40dp"
+                android:layout_width="45dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:text="0%"
+                android:text="100%"
                 android:id="@+id/brightnessLabel"
                 android:textSize="17sp"
                 android:textColor="@android:color/white"
