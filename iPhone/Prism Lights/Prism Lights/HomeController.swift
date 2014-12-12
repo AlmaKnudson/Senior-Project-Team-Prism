@@ -12,7 +12,6 @@ let MAX_HUE:UInt32 = 65535
 
 
 protocol BulbSettingsProtocol{
-    func CancelSettings()
     /*mutating*/ func ApplySettings()
 }
 
@@ -88,11 +87,20 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     
     override func viewDidDisappear(animated: Bool) {
         PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
+        println("Home disappeared")
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        println("In Prepare For Segue")
+        var dest = segue.destinationViewController as UINavigationController
+        var bulbSettingsController = dest.viewControllers[0] as BulbSettingsController
+        bulbSettingsController.homeDelegate = self
+        bulbSettingsController.bulbId = "\((sender as NSIndexPath).row+1)"
     }
     
     //MARK: - UICollectionView Methods
@@ -152,10 +160,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        println("In Prepare For Segue")
-//      var dest = segue.destinationViewController as xyz
-    }
+    
     
     //MARK: Notification Methods
     
@@ -201,14 +206,10 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         //TODO: Notify user of lost Authorization
         //TODO: Initiate Push Auth
     }
-    
-    
-    func CancelSettings(){
-        self.dismissViewControllerAnimated(true, completion: nil)
-    }
+
     
     func ApplySettings(){
-        
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
 

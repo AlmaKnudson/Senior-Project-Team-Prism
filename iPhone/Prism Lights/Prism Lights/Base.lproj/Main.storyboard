@@ -153,6 +153,7 @@
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="hOD-FU-zih">
                                 <rect key="frame" x="110" y="112" width="422" height="74"/>
                                 <connections>
+                                    <action selector="BrightnessFinished:" destination="jXd-oy-Uyn" eventType="touchUpInside" id="7kC-bF-oL6"/>
                                     <action selector="brightnessChanged:" destination="jXd-oy-Uyn" eventType="valueChanged" id="Yy3-a2-wLA"/>
                                 </connections>
                             </slider>
@@ -164,6 +165,9 @@
                             </label>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="duF-nt-8xG">
                                 <rect key="frame" x="535" y="101" width="51" height="31"/>
+                                <connections>
+                                    <action selector="onSwitchToggle:" destination="jXd-oy-Uyn" eventType="valueChanged" id="mpY-k4-bWm"/>
+                                </connections>
                             </switch>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Brightness:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ES7-7g-mlV">
                                 <rect key="frame" x="16" y="135" width="88" height="27"/>
@@ -223,11 +227,6 @@
                     </view>
                     <navigationItem key="navigationItem" title="Bulb Name" id="XHB-2K-iS2">
                         <barButtonItem key="backBarButtonItem" title="Back" id="g0p-h7-W2B"/>
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="3f6-UV-2kT">
-                            <connections>
-                                <action selector="ExitSettings:" destination="jXd-oy-Uyn" id="BGm-lh-IH5"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="pn7-Fb-HkX">
                             <connections>
                                 <action selector="ApplySettings:" destination="jXd-oy-Uyn" id="SAq-rS-F2a"/>

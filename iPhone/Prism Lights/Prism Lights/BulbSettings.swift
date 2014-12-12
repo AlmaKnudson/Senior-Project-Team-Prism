@@ -15,8 +15,17 @@ class BulbSettingsController : UIViewController{
     @IBOutlet weak var brightnessPercentLabel: UILabel!
     
     var brightness :Int? = nil
+    var homeDelegate :BulbSettingsProtocol?
+    var bulbId :String?
     
     
+
+    @IBAction func onSwitchToggle(sender: UISwitch) {
+        println("On Switch Toggled")
+    }
+    @IBAction func BrightnessFinished(sender: UISlider) {
+        println("Finished")
+    }
     
     @IBAction func brightnessChanged(sender: UISlider) {
         var value = sender.value
@@ -25,9 +34,12 @@ class BulbSettingsController : UIViewController{
     }
     
     @IBAction func ApplySettings(sender: UIBarButtonItem) {
+        homeDelegate?.ApplySettings()
     }
     
-    @IBAction func ExitSettings(sender: UIBarButtonItem) {
+    
+    override func viewWillAppear(animated: Bool) {
+        
     }
     
 }
