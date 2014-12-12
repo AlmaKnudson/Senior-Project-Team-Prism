@@ -27,6 +27,8 @@
 		0D799B141A3926E800E9DDF2 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D799B131A3926E800E9DDF2 /* SystemConfiguration.framework */; };
 		0D799B161A3926F400E9DDF2 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D799B151A3926F400E9DDF2 /* MobileCoreServices.framework */; };
 		0D799B181A3926FD00E9DDF2 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D799B171A3926FD00E9DDF2 /* AVFoundation.framework */; };
+		0D8B27A41A3A0B3A0069372C /* BulbSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D8B27A31A3A0B3A0069372C /* BulbSettings.swift */; };
+		0D8B27A61A3A0B7C0069372C /* ColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D8B27A51A3A0B7C0069372C /* ColorPickerView.swift */; };
 		0D9357E11A2CC48200AAD52D /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A790B1A26A716003AC6D4 /* DDTTYLogger.m */; };
 		0D9357E21A2CC48500AAD52D /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79091A26A716003AC6D4 /* DDLog.m */; };
 		0D9357E31A2CC48800AAD52D /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79071A26A716003AC6D4 /* DDFileLogger.m */; };
@@ -79,6 +81,8 @@
 		0D799B131A3926E800E9DDF2 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		0D799B151A3926F400E9DDF2 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		0D799B171A3926FD00E9DDF2 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		0D8B27A31A3A0B3A0069372C /* BulbSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BulbSettings.swift; sourceTree = "<group>"; };
+		0D8B27A51A3A0B7C0069372C /* ColorPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPickerView.swift; sourceTree = "<group>"; };
 		0D9357E61A2D4BB100AAD52D /* BulbCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BulbCollectionCell.swift; sourceTree = "<group>"; };
 		0D98624E1A1D2C0B00FAD175 /* Prism Lights.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Prism Lights.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D9862521A1D2C0B00FAD175 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -150,6 +154,8 @@
 		0D0A26D91A38AFA10033550D /* Bulb Settings */ = {
 			isa = PBXGroup;
 			children = (
+				0D8B27A31A3A0B3A0069372C /* BulbSettings.swift */,
+				0D8B27A51A3A0B7C0069372C /* ColorPickerView.swift */,
 			);
 			name = "Bulb Settings";
 			sourceTree = "<group>";
@@ -363,6 +369,8 @@
 				0D9357E71A2D4BB100AAD52D /* BulbCollectionCell.swift in Sources */,
 				0D3A79171A26A716003AC6D4 /* DDLog.m in Sources */,
 				0D3A79191A26A716003AC6D4 /* DDTTYLogger.m in Sources */,
+				0D8B27A61A3A0B7C0069372C /* ColorPickerView.swift in Sources */,
+				0D8B27A41A3A0B3A0069372C /* BulbSettings.swift in Sources */,
 				0D9862581A1D2C0B00FAD175 /* MusicViewController.swift in Sources */,
 				0D3A79151A26A716003AC6D4 /* DDFileLogger.m in Sources */,
 				0D9862541A1D2C0B00FAD175 /* AppDelegate.swift in Sources */,

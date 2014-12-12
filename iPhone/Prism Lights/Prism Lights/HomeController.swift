@@ -9,7 +9,15 @@
 import UIKit
 let MAX_HUE:UInt32 = 65535
 
-class HomeController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate {
+
+
+protocol BulbSettingsProtocol{
+    func CancelSettings()
+    /*mutating*/ func ApplySettings()
+}
+
+
+class HomeController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, BulbSettingsProtocol {
 
     @IBOutlet weak var bulbCollectionView: UICollectionView!
     
@@ -90,8 +98,8 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     //MARK: - UICollectionView Methods
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int{
-        return lightCount;
-//        return 4;
+//        return lightCount;
+        return 4;
     }
     
     // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
@@ -119,7 +127,6 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             lightState.on = true
             light.lightState.on = true
         }
-        light.name = "Bulb 1!"
         
         var bridgeSendAPI = PHBridgeSendAPI()
         bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil)
@@ -139,10 +146,15 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             println("Unable to find index")
         } else{
             println("indexPath of cell: \(indexPath)")
-            var cell = self.bulbCollectionView.cellForItemAtIndexPath(indexPath!)
+            self.performSegueWithIdentifier("BulbSettingsNav", sender: indexPath)
             
         }
         
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        println("In Prepare For Segue")
+//      var dest = segue.destinationViewController as xyz
     }
     
     //MARK: Notification Methods
@@ -191,9 +203,14 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     }
     
     
+    func CancelSettings(){
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
     
+    func ApplySettings(){
+        
+    }
     
-
 
 }
 

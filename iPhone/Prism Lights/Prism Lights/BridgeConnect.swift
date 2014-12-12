@@ -153,6 +153,7 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
     
     func NotAuthorized(){
         (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.disableLocalConnection()
+        
         self.performSegueWithIdentifier("pushAuth", sender: self)
 
     }
