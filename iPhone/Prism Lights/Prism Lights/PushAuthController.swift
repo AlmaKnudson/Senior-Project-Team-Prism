@@ -12,7 +12,9 @@ class PushAuthController : UIViewController {
 
     @IBOutlet weak var pushImageView: UIImageView!
     
-    
+    override func viewDidLoad() {
+        self.title = "Authenticate"
+    }
     //MARK: - UIViewController Methods
     
     override func viewDidAppear(animated: Bool) {

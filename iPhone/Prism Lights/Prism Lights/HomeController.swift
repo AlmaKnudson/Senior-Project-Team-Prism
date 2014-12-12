@@ -78,12 +78,9 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         }
     }
     
-    
-    
     override func viewDidAppear(animated: Bool) {
         
     }
-    
     
     override func viewDidDisappear(animated: Bool) {
         PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
@@ -106,8 +103,8 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     //MARK: - UICollectionView Methods
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int{
-//        return lightCount;
-        return 4;
+        return lightCount;
+//        return 4;
     }
     
     // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
@@ -117,7 +114,10 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         if( cell == nil){
             cell = BulbCollectionCell()
         }
-        cell!.SetBulbLabel("Bulb \(indexPath.row)")
+        
+        var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
+        var light = cache?.lights["\(indexPath.row+1)"] as? PHLight
+        cell!.SetBulbLabel(light!.name)
         
         //TODO: Return a correct cell for the view
         return cell!
@@ -135,31 +135,32 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             lightState.on = true
             light.lightState.on = true
         }
+        println("This is the hue: \(light.lightState.hue)")
         
         var bridgeSendAPI = PHBridgeSendAPI()
         bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil)
-        
     }
-    
 
     //TODO: Handle long presses
     func ShowBulbSettings( gestureRecognizer: UILongPressGestureRecognizer){
+        
+        if(gestureRecognizer.state == UIGestureRecognizerState.Began){
+            var point = gestureRecognizer.locationInView(self.bulbCollectionView)
+            var indexPath = self.bulbCollectionView.indexPathForItemAtPoint(point)
+            if indexPath == nil{
+                println("Unable to find index")
+            } else{
+                println("indexPath of cell: \(indexPath)")
+                self.performSegueWithIdentifier("BulbSettingsNav", sender: indexPath)
+            }
+        }
+        
         if gestureRecognizer.state != UIGestureRecognizerState.Ended{
             return
         }
         
-        var point = gestureRecognizer.locationInView(self.bulbCollectionView)
-        var indexPath = self.bulbCollectionView.indexPathForItemAtPoint(point)
-        if indexPath == nil{
-            println("Unable to find index")
-        } else{
-            println("indexPath of cell: \(indexPath)")
-            self.performSegueWithIdentifier("BulbSettingsNav", sender: indexPath)
-            
-        }
         
     }
-    
     
     
     //MARK: Notification Methods
@@ -190,7 +191,6 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         var hueSDK = (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!
         hueSDK.disableLocalConnection()
         //TODO: Notify user of lost network connection
-        
     }
     
     /**

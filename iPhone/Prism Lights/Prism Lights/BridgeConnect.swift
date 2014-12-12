@@ -35,6 +35,7 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        self.title = "Bridge Information"
     }
     
     override func viewDidDisappear(animated: Bool) {
@@ -99,7 +100,7 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
         
         let mac = macAddresses[indexPath.row]
         let ip:String = addresses[mac]!
-        cell!.textLabel.text = mac
+        cell!.textLabel?.text = mac
         cell!.detailTextLabel!.text = ip
         
         return cell!

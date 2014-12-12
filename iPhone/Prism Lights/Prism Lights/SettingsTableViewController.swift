@@ -12,6 +12,7 @@ class SettingsTableViewController: UITableViewController, UITableViewDataSource,
 
     override func viewWillAppear(animated: Bool) {
         println("SettingTableViewController will Appear")
+        self.title = "Settings"
     }
     
     
