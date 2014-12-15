@@ -248,10 +248,10 @@
             </objects>
             <point key="canvasLocation" x="2236" y="-320"/>
         </scene>
-        <!--View Controller-->
+        <!--Color Picker View-->
         <scene sceneID="y1v-a9-bZB">
             <objects>
-                <viewController id="s48-kf-NEl" sceneMemberID="viewController">
+                <viewController id="s48-kf-NEl" customClass="ColorPickerView" customModule="Prism_Lights" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Z1u-FR-VRS"/>
                         <viewControllerLayoutGuide type="bottom" id="6AH-Su-axg"/>
@@ -260,10 +260,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="568" height="291"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8NQ-8l-OCG">
-                                <rect key="frame" x="21" y="57" width="526" height="224"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tLR-p8-Afv">
                                 <rect key="frame" x="482" y="10" width="65" height="40"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -272,42 +268,42 @@
                                     <constraint firstAttribute="height" constant="40" id="zo8-wr-xwL"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Color" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WHY-9A-Nl4">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Select Color" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WHY-9A-Nl4">
                                 <rect key="frame" x="21" y="8" width="95" height="26"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tempcolorpicker" translatesAutoresizingMaskIntoConstraints="NO" id="WhD-Xp-DtT">
+                                <rect key="frame" x="0.0" y="58" width="568" height="233"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="WhD-Xp-DtT" firstAttribute="leading" secondItem="rqn-Ki-nL2" secondAttribute="leading" id="2g7-PZ-sN3"/>
                             <constraint firstItem="tLR-p8-Afv" firstAttribute="trailing" secondItem="rqn-Ki-nL2" secondAttribute="trailingMargin" constant="-5" id="925-Pd-5PK"/>
-                            <constraint firstItem="8NQ-8l-OCG" firstAttribute="top" secondItem="tLR-p8-Afv" secondAttribute="bottom" constant="8" symbolic="YES" id="BuG-uj-qOa"/>
-                            <constraint firstItem="tLR-p8-Afv" firstAttribute="trailing" secondItem="8NQ-8l-OCG" secondAttribute="trailing" id="FPE-tZ-zZQ"/>
+                            <constraint firstAttribute="trailing" secondItem="WhD-Xp-DtT" secondAttribute="trailing" id="Aoh-e0-E3U"/>
+                            <constraint firstItem="WhD-Xp-DtT" firstAttribute="bottom" secondItem="6AH-Su-axg" secondAttribute="top" id="BWJ-cw-baZ"/>
                             <constraint firstItem="tLR-p8-Afv" firstAttribute="trailing" secondItem="rqn-Ki-nL2" secondAttribute="trailingMargin" id="Fbz-6J-dFM"/>
-                            <constraint firstItem="8NQ-8l-OCG" firstAttribute="trailing" secondItem="rqn-Ki-nL2" secondAttribute="trailingMargin" constant="-5" id="IDN-C9-YKD"/>
-                            <constraint firstItem="8NQ-8l-OCG" firstAttribute="top" secondItem="WHY-9A-Nl4" secondAttribute="bottom" constant="23" id="IaO-T5-es9"/>
-                            <constraint firstItem="6AH-Su-axg" firstAttribute="top" secondItem="8NQ-8l-OCG" secondAttribute="bottom" constant="4" id="L14-b6-5Vd"/>
-                            <constraint firstItem="8NQ-8l-OCG" firstAttribute="top" secondItem="rqn-Ki-nL2" secondAttribute="top" constant="57" id="O7X-hC-nfi"/>
                             <constraint firstItem="WHY-9A-Nl4" firstAttribute="top" secondItem="Z1u-FR-VRS" secondAttribute="bottom" constant="8" id="Op8-XN-omH"/>
                             <constraint firstItem="tLR-p8-Afv" firstAttribute="trailing" secondItem="rqn-Ki-nL2" secondAttribute="trailingMargin" constant="4" id="RKy-iA-SIC"/>
                             <constraint firstItem="WHY-9A-Nl4" firstAttribute="leading" secondItem="rqn-Ki-nL2" secondAttribute="leadingMargin" constant="5" id="WQn-9S-NUV"/>
-                            <constraint firstItem="8NQ-8l-OCG" firstAttribute="leading" secondItem="rqn-Ki-nL2" secondAttribute="leadingMargin" constant="5" id="cKK-dS-hDd"/>
-                            <constraint firstItem="6AH-Su-axg" firstAttribute="top" secondItem="8NQ-8l-OCG" secondAttribute="bottom" constant="10" id="nU5-F4-ABF"/>
                             <constraint firstItem="tLR-p8-Afv" firstAttribute="top" secondItem="Z1u-FR-VRS" secondAttribute="bottom" constant="10" id="qVP-C0-XXq"/>
                             <constraint firstItem="tLR-p8-Afv" firstAttribute="top" secondItem="Z1u-FR-VRS" secondAttribute="bottom" constant="8" symbolic="YES" id="sW1-Ci-qQh"/>
+                            <constraint firstItem="WhD-Xp-DtT" firstAttribute="top" secondItem="tLR-p8-Afv" secondAttribute="bottom" constant="8" symbolic="YES" id="skQ-A4-nwz"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="BuG-uj-qOa"/>
-                                <exclude reference="L14-b6-5Vd"/>
-                                <exclude reference="FPE-tZ-zZQ"/>
                                 <exclude reference="Fbz-6J-dFM"/>
                                 <exclude reference="RKy-iA-SIC"/>
                                 <exclude reference="sW1-Ci-qQh"/>
                             </mask>
                         </variation>
                     </view>
+                    <connections>
+                        <outlet property="colorPicker" destination="WhD-Xp-DtT" id="Bv2-II-kEX"/>
+                        <outlet property="colorSelected" destination="tLR-p8-Afv" id="dfo-EG-T7A"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mwe-Xh-2Eh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -788,9 +784,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="bulb" width="80" height="108"/>
+        <image name="bulb" width="86" height="150"/>
         <image name="first" width="30" height="30"/>
         <image name="pushAuth" width="516" height="475"/>
         <image name="second" width="30" height="30"/>
+        <image name="tempcolorpicker" width="613" height="451"/>
     </resources>
 </document>

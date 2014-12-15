@@ -21,6 +21,7 @@
 		0D3A791D1A26A716003AC6D4 /* DispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79101A26A716003AC6D4 /* DispatchQueueLogFormatter.m */; };
 		0D3A791E1A26A716003AC6D4 /* DispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79101A26A716003AC6D4 /* DispatchQueueLogFormatter.m */; };
 		0D4F25451A2AD34A005C61EA /* BridgeConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D4F25441A2AD34A005C61EA /* BridgeConnect.swift */; };
+		0D5980F21A3E9279007C4EF1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D5980F11A3E9279007C4EF1 /* QuartzCore.framework */; };
 		0D799B0F1A39260200E9DDF2 /* Wit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0D799B0D1A39260200E9DDF2 /* Wit.bundle */; };
 		0D799B101A39260200E9DDF2 /* Wit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D799B0E1A39260200E9DDF2 /* Wit.framework */; };
 		0D799B121A3926DC00E9DDF2 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D799B111A3926DC00E9DDF2 /* CoreLocation.framework */; };
@@ -75,6 +76,7 @@
 		0D3A790F1A26A716003AC6D4 /* DispatchQueueLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DispatchQueueLogFormatter.h; sourceTree = "<group>"; };
 		0D3A79101A26A716003AC6D4 /* DispatchQueueLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DispatchQueueLogFormatter.m; sourceTree = "<group>"; };
 		0D4F25441A2AD34A005C61EA /* BridgeConnect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BridgeConnect.swift; sourceTree = "<group>"; };
+		0D5980F11A3E9279007C4EF1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		0D799B0D1A39260200E9DDF2 /* Wit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Wit.bundle; sourceTree = "<group>"; };
 		0D799B0E1A39260200E9DDF2 /* Wit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Wit.framework; sourceTree = "<group>"; };
 		0D799B111A3926DC00E9DDF2 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -103,6 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D5980F21A3E9279007C4EF1 /* QuartzCore.framework in Frameworks */,
 				0D799B181A3926FD00E9DDF2 /* AVFoundation.framework in Frameworks */,
 				0D799B161A3926F400E9DDF2 /* MobileCoreServices.framework in Frameworks */,
 				0D799B141A3926E800E9DDF2 /* SystemConfiguration.framework in Frameworks */,
@@ -192,6 +195,7 @@
 		0D799B191A392D8000E9DDF2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0D5980F11A3E9279007C4EF1 /* QuartzCore.framework */,
 				0D3A78FE1A26A70B003AC6D4 /* HueSDK_iOS.framework */,
 				0D799B171A3926FD00E9DDF2 /* AVFoundation.framework */,
 				0D799B151A3926F400E9DDF2 /* MobileCoreServices.framework */,
