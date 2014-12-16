@@ -8,7 +8,11 @@
 
 import UIKit
 
-class BulbSettingsController : UIViewController{
+protocol ColorSelectedProtocol{
+    func ColorSelected(color :UIColor)
+}
+
+class BulbSettingsController : UIViewController, ColorSelectedProtocol{
     
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var onSwitch: UISwitch!
@@ -19,6 +23,7 @@ class BulbSettingsController : UIViewController{
     var homeDelegate :BulbSettingsProtocol?
     var bulbId :String?
 
+    //MARK - Actions
     @IBAction func onSwitchToggle(sender: UISwitch) {
         println("On Switch Toggled")
         var lightState = PHLightState()
@@ -56,6 +61,7 @@ class BulbSettingsController : UIViewController{
     }
     
     
+    //MARK - UIViewController Methods
     override func viewWillAppear(animated: Bool) {
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
         
@@ -74,6 +80,75 @@ class BulbSettingsController : UIViewController{
         }
         
         self.title = light.name
+        //Set the Delegate of the Child Controller
+        (self.childViewControllers.last as ColorPickerView).delegate = self;
     }
     
+    
+    //MARK - ColorSelectedProtocol Methods
+    
+    func ColorSelected(color: UIColor) {
+        println("Color Selected")
+        
+        // Convert color red to a XY value
+        var point = PHUtilities.calculateXY(color, forModel: "")
+        // Create new light state object
+        var lightState = PHLightState()
+        
+        // Set converted XY value to light state
+        lightState.x = point.x
+        lightState.y = point.y
+        // Update light state
+        var bridgeSend = PHBridgeSendAPI()
+        bridgeSend.updateLightStateForId(self.bulbId, withLightState: lightState, completionHandler: nil)
+        
+        var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
+        var light = (cache.lights?[bulbId!]) as PHLight
+        light.lightState.x = point.x
+        light.lightState.y = point.y
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

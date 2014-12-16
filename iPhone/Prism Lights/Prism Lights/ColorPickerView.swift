@@ -14,33 +14,9 @@ class ColorPickerView: UIViewController {
     @IBOutlet weak var colorSelected: UIView!
     @IBOutlet weak var colorPicker: UIImageView!
     
-    func UIColorAtPixal(image :UIImage, x :Int, y :Int) -> (UIColor){
-        var pixelData = CGDataProviderCopyData(CGImageGetDataProvider(image.CGImage))
-        var pixelPointer = CFDataGetBytePtr(pixelData)
-        var pixelElement = ((Int(image.size.width) * y)+x) * 4
-        var red :UInt8 = (pixelPointer[pixelElement])
-        var green = pixelPointer[(pixelElement+1)]
-        var blue = pixelPointer[(pixelElement+2)]
-        var alpha = pixelPointer[(pixelElement+3)]
-        
-        var rf :CGFloat = CGFloat(Float(red)/255.0)
-        var gf :CGFloat = CGFloat(Float(green)/255.0)
-        var bf :CGFloat = CGFloat(Float(blue)/255.0)
-        var af :CGFloat = CGFloat(Float(alpha)/255.0)
-        
-        var color = UIColor(red:rf, green:gf, blue:bf, alpha:af)
-        
-        
-        println("Image width: \(image.size.width)")
-        println("X: \(x)")
-        println("Image height: \(image.size.height)")
-        println("Y: \(y)")
-        println("red: \(red)")
-        println("green: \(green)")
-        println("blue: \(blue)")
-        
-        return color
-    }
+    var delegate :ColorSelectedProtocol? = nil
+    
+    //MARK - Touch Events
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         touchesMoved(touches, withEvent: event)
@@ -53,10 +29,8 @@ class ColorPickerView: UIViewController {
         if touch.view == self.colorPicker{
             point = touch.locationInView(self.colorPicker)
         }
-        
-        
+
         var color = getPixelColorAtLocation(point)
-//        var color = UIColorAtPixal(colorPicker.image!, x: Int(point.x), y: Int(point.y))
         colorSelected.backgroundColor = color
     }
     
@@ -65,10 +39,15 @@ class ColorPickerView: UIViewController {
         var touch = (touches.allObjects[0]) as UITouch
         var point = touch.locationInView(self.colorPicker)
         var color = getPixelColorAtLocation(point)
-//        var color = UIColorAtPixal(colorPicker.image!, x: Int(point.x), y: Int(point.y))
         colorSelected.backgroundColor = color
+        if color != nil{
+            delegate?.ColorSelected(color!)
+        }
+        
     }
     
+    
+    //MARK - Pixel Methods
     
     func getPixelColorAtLocation(point :CGPoint) -> (UIColor?){
         var color :UIColor? = nil
