@@ -15,7 +15,11 @@ class BulbCollectionCell : UICollectionViewCell{
     
     
     func SetBulbImage(on:Bool){
-        bulbImageView!.image = UIImage(named: "pushAuth")
+        if(on){
+            bulbImageView!.image = UIImage(named: "bulb")
+        } else{
+            bulbImageView!.image = UIImage(named: "bulb_absent")
+        }
     }
     
     func SetBulbLabel(name :String){

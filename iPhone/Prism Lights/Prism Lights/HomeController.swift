@@ -28,20 +28,15 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Add long press Gesture
         var gesture = UILongPressGestureRecognizer(target: self, action: "ShowBulbSettings:")
         gesture.minimumPressDuration = 1
         gesture.delegate = self
         self.bulbCollectionView.addGestureRecognizer(gesture)
-        /*// attach long press gesture to collectionView
-        UILongPressGestureRecognizer *lpgr
-            = [[UILongPressGestureRecognizer alloc]
-                initWithTarget:self action:@selector(handleLongPress:)];
-        lpgr.minimumPressDuration = .5; //seconds
-        lpgr.delegate = self;
-        [self.collectionView addGestureRecognizer:lpgr];
-        */
         
-        // Do any additional setup after loading the view, typically from a nib.
+        //Get the light count
+        cache = PHBridgeResourcesReader.readBridgeResourcesCache()
+        lightCount = (cache?.lights.count)!
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -55,6 +50,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nil, bundle: nil)
     }
+    
     
     /**
     View Will Appear
@@ -73,8 +69,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             //Connect to bridge
             (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.enableLocalConnection()
         } else{
-            cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-            lightCount = (cache?.lights.count)!
+            bulbCollectionView.reloadData()
         }
     }
     
@@ -117,7 +112,17 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
         var light = cache?.lights["\(indexPath.row+1)"] as? PHLight
-        cell!.SetBulbLabel(light!.name)
+//        var sdk = ((UIApplication.sharedApplication().delegate) as AppDelegate).hueSDK!
+        if(light != nil){
+            cell!.SetBulbLabel(light!.name)
+            if(light!.lightState.reachable == 0){
+                cell!.SetBulbImage(false)
+            } else{
+                cell!.SetBulbImage(true)
+            }
+        } else{
+            cell!.SetBulbImage(false)
+        }
         
         //TODO: Return a correct cell for the view
         return cell!
