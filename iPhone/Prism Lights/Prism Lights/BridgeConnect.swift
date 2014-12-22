@@ -161,7 +161,7 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
     
     
     func SearchForBridge(){
-        let bridgeSearch = PHBridgeSearching(upnpSearch: true, andPortalSearch: false, andIpAdressSearch: false)
+        let bridgeSearch = PHBridgeSearching(upnpSearch: true, andPortalSearch: true, andIpAdressSearch: true)
         bridgeSearch.startSearchWithCompletionHandler { (dict:[NSObject : AnyObject]!) -> Void in
             self.addresses = dict as [String:String]
             self.macAddresses = [String](self.addresses.keys)

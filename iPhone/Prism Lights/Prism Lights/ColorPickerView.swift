@@ -77,6 +77,7 @@ class ColorPickerView: UIViewController {
         var xScaler = w/colorPicker.frame.width
         var yScaler = h/colorPicker.frame.height
         if (data != nil) {
+            //TODO: Bound to the pic dimensions
             //offset locates the pixel in the data from x,y.
             //4 for 4 bytes of data per pixel, w is width of one row of data.
             var offset :Int = 4*((Int(w)*Int(round(point.y*yScaler)))+Int(round(point.x*xScaler)))

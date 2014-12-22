@@ -74,7 +74,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     }
     
     override func viewDidAppear(animated: Bool) {
-        
+        bulbCollectionView.reloadData()
     }
     
     override func viewDidDisappear(animated: Bool) {

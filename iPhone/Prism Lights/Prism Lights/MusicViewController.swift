@@ -223,6 +223,7 @@ class MusicViewController: UIViewController, WitDelegate {
         }
         if let text:NSString = firstOutcome.objectForKey("_text") as? NSString{
             println(text);
+            intentView.text = text;
         }
         
         //Criteria for determining what to do with lights.
