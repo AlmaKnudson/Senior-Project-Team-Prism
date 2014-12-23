@@ -115,7 +115,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
 //        var sdk = ((UIApplication.sharedApplication().delegate) as AppDelegate).hueSDK!
         if(light != nil){
             cell!.SetBulbLabel(light!.name)
-            if(light!.lightState.reachable == 0){
+            if(light!.lightState.on == 0){
                 cell!.SetBulbImage(false)
             } else{
                 cell!.SetBulbImage(true)
@@ -133,17 +133,26 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         println("Bulb tapped")
         var light = cache!.lights["\(indexPath.row+1)"] as PHLight
         var lightState = PHLightState()
+        var cell = bulbCollectionView.cellForItemAtIndexPath(indexPath) as BulbCollectionCell
         if light.lightState.on == 1{
             light.lightState.on = false
             lightState.on = false
+            cell.SetBulbImage(false)
         } else{
             lightState.on = true
             light.lightState.on = true
+            cell.SetBulbImage(true)
         }
         println("This is the hue: \(light.lightState.hue)")
         
+        
+        
         var bridgeSendAPI = PHBridgeSendAPI()
         bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil)
+        
+        
+        
+        
     }
 
     //TODO: Handle long presses
