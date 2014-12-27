@@ -118,7 +118,11 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             if(light!.lightState.on == 0){
                 cell!.SetBulbImage(false)
             } else{
-                cell!.SetBulbImage(true)
+                //cell!.SetBulbImage(true)
+                var point = CGPoint(x: Double(light!.lightState.x), y: Double(light!.lightState.y))
+                var color = PHUtilities.colorFromXY(point, forModel: light!.modelNumber)
+//                var color = UIColor(hue: CGFloat(light!.lightState.hue), saturation: CGFloat(light!.lightState.saturation), brightness: CGFloat(light!.lightState.brightness), alpha: 1)
+                cell!.SetBulbColor(color)
             }
         } else{
             cell!.SetBulbImage(false)
@@ -141,7 +145,12 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         } else{
             lightState.on = true
             light.lightState.on = true
-            cell.SetBulbImage(true)
+            //cell.SetBulbImage(true)
+            var point = CGPoint(x: Double(light.lightState.x), y: Double(light.lightState.y))
+            var color = PHUtilities.colorFromXY(point, forModel: light.modelNumber)
+//            var color = UIColor(hue: CGFloat(light!.lightState.hue), saturation: CGFloat(light!.lightState.saturation), brightness: CGFloat(light!.lightState.brightness), alpha: 1)
+            cell.SetBulbColor(color)
+            
         }
         println("This is the hue: \(light.lightState.hue)")
         
