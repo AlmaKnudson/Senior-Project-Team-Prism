@@ -21,7 +21,6 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     @IBOutlet weak var bulbCollectionView: UICollectionView!
     
     
-    var cache :PHBridgeResourcesCache? = nil;
     var lightCount :Int = 0;
     
     //MARK: - UIViewController Methods
@@ -35,7 +34,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         self.bulbCollectionView.addGestureRecognizer(gesture)
         
         //Get the light count
-        cache = PHBridgeResourcesReader.readBridgeResourcesCache()
+        var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
         lightCount = (cache?.lights.count)!
     }
     
@@ -98,7 +97,8 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     //MARK: - UICollectionView Methods
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int{
-        return lightCount;
+        var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
+        return (cache?.lights.count)!;
 //        return 4;
     }
     
@@ -128,13 +128,13 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             cell!.SetBulbImage(false)
         }
         
-        //TODO: Return a correct cell for the view
         return cell!
     }
     
-    //TODO: Handle taps
+
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         println("Bulb tapped")
+        var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
         var light = cache!.lights["\(indexPath.row+1)"] as PHLight
         var lightState = PHLightState()
         var cell = bulbCollectionView.cellForItemAtIndexPath(indexPath) as BulbCollectionCell
@@ -152,19 +152,11 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             cell.SetBulbColor(color)
             
         }
-        println("This is the hue: \(light.lightState.hue)")
-        
-        
-        
         var bridgeSendAPI = PHBridgeSendAPI()
         bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil)
-        
-        
-        
-        
     }
 
-    //TODO: Handle long presses
+
     func ShowBulbSettings( gestureRecognizer: UILongPressGestureRecognizer){
         
         if(gestureRecognizer.state == UIGestureRecognizerState.Began){
@@ -197,9 +189,6 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     :returns:
     */
     func HeartBeatReceived(){
-        cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-        lightCount = (cache?.lights.count)!
-                //TODO: Update UI based on new info in the cache.
         self.bulbCollectionView.reloadData()
     }
     

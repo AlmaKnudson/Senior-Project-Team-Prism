@@ -81,17 +81,25 @@ class BulbSettingsController : UIViewController, ColorSelectedProtocol{
         
         self.title = light.name
         //Set the Delegate of the Child Controller
-        (self.childViewControllers.last as ColorPickerView).delegate = self;
+        var picker = (self.childViewControllers.last) as ColorPickerView
+        picker.delegate = self;
+        
+        //Set previous color
+        var point = CGPoint(x: CGFloat(lightState.x), y: CGFloat(lightState.y))
+        var color = PHUtilities.colorFromXY(point, forModel: light.modelNumber)
+        picker.colorSelected.backgroundColor = color
     }
     
     
     //MARK - ColorSelectedProtocol Methods
     
     func ColorSelected(color: UIColor) {
-        println("Color Selected")
+        
+        var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
+        var light = (cache.lights?[bulbId!]) as PHLight
         
         // Convert color red to a XY value
-        var point = PHUtilities.calculateXY(color, forModel: "")
+        var point = PHUtilities.calculateXY(color, forModel: light.modelNumber)
         // Create new light state object
         var lightState = PHLightState()
         
@@ -102,8 +110,6 @@ class BulbSettingsController : UIViewController, ColorSelectedProtocol{
         var bridgeSend = PHBridgeSendAPI()
         bridgeSend.updateLightStateForId(self.bulbId, withLightState: lightState, completionHandler: nil)
         
-        var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-        var light = (cache.lights?[bulbId!]) as PHLight
         light.lightState.x = point.x
         light.lightState.y = point.y
     }

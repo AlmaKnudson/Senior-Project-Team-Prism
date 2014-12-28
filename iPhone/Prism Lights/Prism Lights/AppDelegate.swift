@@ -13,11 +13,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var hueSDK :PHHueSDK?
-    var x :PHNotificationManager?
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         hueSDK = PHHueSDK()
+        //hueSDK?.setLocalHeartbeatInterval(1.0, forResourceType:RESOURCES_LIGHTS)
         //hueSDK!.enableLogging(true)
         hueSDK!.startUpSDK()
 

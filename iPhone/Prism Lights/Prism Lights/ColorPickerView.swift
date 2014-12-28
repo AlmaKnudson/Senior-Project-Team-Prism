@@ -40,6 +40,7 @@ class ColorPickerView: UIViewController {
         var point = touch.locationInView(self.colorPicker)
         var color = getPixelColorAtLocation(point)
         colorSelected.backgroundColor = color
+        
         if color != nil{
             delegate?.ColorSelected(color!)
         }
