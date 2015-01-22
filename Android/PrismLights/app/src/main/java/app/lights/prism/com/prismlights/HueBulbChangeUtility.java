@@ -90,6 +90,7 @@ public class HueBulbChangeUtility {
         PHLightState lightState = new PHLightState();
         int convertedBrightness = (int) Math.round((brightness * 254.0) / 100);
         lightState.setBrightness(convertedBrightness);
+        lightState.setOn(true);
         bridge.updateLightState(light, lightState);
     }
 
@@ -100,6 +101,7 @@ public class HueBulbChangeUtility {
         float[] convertedColor = PHUtilities.calculateXY(rgbColor, "rgb");
         lightState.setX(convertedColor[0]);
         lightState.setY(convertedColor[1]);
+        lightState.setOn(true);
         bridge.updateLightState(light, lightState);
     }
 }
