@@ -24,6 +24,7 @@ import com.philips.lighting.model.PHHueParsingError;
 import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -39,6 +40,7 @@ public class MainActivity extends Activity implements PHSDKListener{
     PHHueSDK hueBridgeSdk;
     Dialog waitingDialog;
     CurrentFragments currentFragment;
+    ArrayList<ArrayList<Alarm>> alarms; //each bulb has its own ArrayList of Alar
 
 
     @Override
@@ -92,6 +94,7 @@ public class MainActivity extends Activity implements PHSDKListener{
             bridgeSearchManager.search(true, true);
             waitingText = "Searching for Bridge...";
         }
+
         waitingDialog = new ProgressDialog(this);
         waitingDialog.setCanceledOnTouchOutside(false);
         waitingDialog.setCancelable(false);
@@ -101,6 +104,10 @@ public class MainActivity extends Activity implements PHSDKListener{
         textView.setTextColor(Color.WHITE);
         waitingDialog.setContentView(textView);
         //end code from example app
+
+        // for Alarm
+        //TODO: I need to retrieve previous alarm data from saved file.
+        alarms = new ArrayList<ArrayList<Alarm>>();
     }
 
     public void setCurrentFragment(CurrentFragments fragment) {

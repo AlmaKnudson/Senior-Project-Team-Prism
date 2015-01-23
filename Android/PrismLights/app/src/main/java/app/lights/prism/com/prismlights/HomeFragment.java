@@ -80,7 +80,7 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
                 //TODO: I need to change this for group of lights. now it is just for a single light.
                 Bundle bundle = new Bundle();
-                bundle.putInt("POSITION", position);
+                bundle.putInt("CURRENT_BULB_ID", position);
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 LightSettingsFragment lightSettingFragment = new LightSettingsFragment();

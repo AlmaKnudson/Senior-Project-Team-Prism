@@ -1,0 +1,21 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="app.lights.prism.com.prismlights.AdvancedSettingFragment"
+    android:background="@android:color/black"
+    android:weightSum="1">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:text="Alarm "
+        android:id="@+id/alarmText"
+        android:layout_gravity="left|top"
+        android:textSize="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true" />
+
+</LinearLayout>

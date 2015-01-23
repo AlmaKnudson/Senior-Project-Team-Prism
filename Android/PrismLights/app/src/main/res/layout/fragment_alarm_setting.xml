@@ -1,0 +1,32 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="app.lights.prism.com.prismlights.AlarmSettingFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="138dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Set Time For Alarm"
+        android:id="@+id/alarmSettingText"
+        android:gravity="center"
+        android:textSize="30dp" />
+
+    <TimePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/alarmTimePicker" />
+
+    <Button
+        android:layout_width="118dp"
+        android:layout_height="72dp"
+        android:text="Save"
+        android:id="@+id/alarmSettingSaveButton"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal" />
+
+</LinearLayout>

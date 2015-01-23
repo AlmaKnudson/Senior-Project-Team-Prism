@@ -1,5 +1,6 @@
 package app.lights.prism.com.prismlights;
 
+import android.app.FragmentTransaction;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -47,6 +49,8 @@ public class LightSettingsFragment extends Fragment {
     private int currentColor;
     private ImageView colorPickerImage;
 
+    private Button applyRulesButton;
+
     private PHHueSDK hueSDK;
 
     private List<PHLight> currentLights;
@@ -78,6 +82,9 @@ public class LightSettingsFragment extends Fragment {
         brightnessPercentage = (TextView) frame.findViewById(R.id.brightnessLabel);
         currentColorView = frame.findViewById(R.id.currentColor);
         colorPickerImage = (ImageView) frame.findViewById(R.id.colorPickerImage);
+
+        applyRulesButton = (Button)frame.findViewById(R.id.applyRulesButton);
+
         currentLights = hueSDK.getSelectedBridge().getResourceCache().getAllLights();
         lightNames = hueSDK.getLightNames(currentLights);
         PHLight currentLight = currentLights.get(position);
@@ -143,6 +150,21 @@ public class LightSettingsFragment extends Fragment {
                     HueBulbChangeUtility.changeBulbColor(position, color);
                 }
                 return true;
+            }
+        });
+
+        applyRulesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("POSITION", position);
+
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                AdvancedSettingFragment advancedSettingFragment = new AdvancedSettingFragment();
+                advancedSettingFragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.container, advancedSettingFragment);
+                fragmentTransaction.addToBackStack("AdvancedSettings");
+                fragmentTransaction.commit();
             }
         });
 

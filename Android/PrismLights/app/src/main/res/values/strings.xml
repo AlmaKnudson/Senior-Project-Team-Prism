@@ -14,5 +14,9 @@
     <string name="connecting">Connecting to Bridge...</string>
     <string name="apply_rules">Apply Rules</string>
     <string name="voice">Voice Control</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_temp">temp</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

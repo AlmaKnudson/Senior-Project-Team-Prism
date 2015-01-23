@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="app.lights.prism.com.prismlights.AlarmFragment"
+    android:background="@android:color/black">
+
+    <TextView android:id="@+id/creatAlarmText" android:layout_width="match_parent"
+        android:layout_height="63dp"
+        android:text="Creat alarm"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="28dp"
+        android:singleLine="true"
+        android:phoneNumber="true"
+        android:gravity="center_vertical|left"
+        android:layout_toLeftOf="@+id/alarmPlusButton"
+        android:layout_toStartOf="@+id/alarmPlusButton" />
+
+    <ListView android:id="@+id/alarmListView" android:layout_width="match_parent"
+        android:layout_height="506dp"
+        android:layout_gravity="center"
+        android:layout_below="@+id/creatAlarmText"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:choiceMode="singleChoice" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/alarmPlusButton"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:src="@android:drawable/ic_menu_add"
+        android:layout_above="@android:id/list" />
+
+</RelativeLayout>
