@@ -8,6 +8,8 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,7 +33,15 @@ public class SettingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.settings_fragment, container);
+        LinearLayout layout = (LinearLayout)inflater.inflate(R.layout.settings_fragment, container);
+        Button bridgeSearch = (Button) layout.findViewById(R.id.serachBridgeButton);
+        bridgeSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)(SettingsFragment.this.getActivity())).searchForBridge();
+            }
+        });
+        return layout;
     }
 //
 //

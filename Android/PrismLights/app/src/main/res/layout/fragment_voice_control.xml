@@ -5,10 +5,32 @@
     android:weightSum="1"
     android:background="@android:color/black">
 
-    <ImageButton
+    <ImageButton xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/micButton"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/microphone"
+        android:cropToPadding="false"
+        android:clickable="true"
+        android:layout_gravity="center"
+        android:focusable="false"
+        android:adjustViewBounds="false"
+        android:baselineAlignBottom="false"
+        android:background="@drawable/custom_button"/>
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/micButton"
-        android:src="@android:drawable/ic_btn_speak_now"
-        android:layout_gravity="center"/>
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/waiting"
+        android:id="@+id/micText"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text=""
+        android:id="@+id/micResultText"
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>

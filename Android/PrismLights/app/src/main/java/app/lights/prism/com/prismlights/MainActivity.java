@@ -110,6 +110,20 @@ public class MainActivity extends Activity implements PHSDKListener{
         alarms = new ArrayList<ArrayList<Alarm>>();
     }
 
+    public void searchForBridge() {
+        PHBridgeSearchManager bridgeSearchManager = (PHBridgeSearchManager) hueBridgeSdk.getSDKService(PHHueSDK.SEARCH_BRIDGE);
+        bridgeSearchManager.search(true, true);
+        String waitingText = "Searching for Bridge...";
+        waitingDialog = new ProgressDialog(this);
+        waitingDialog.setCanceledOnTouchOutside(false);
+        waitingDialog.setCancelable(false);
+        waitingDialog.show();
+        TextView textView = new TextView(this);
+        textView.setText(waitingText);
+        textView.setTextColor(Color.WHITE);
+        waitingDialog.setContentView(textView);
+    }
+
     public void setCurrentFragment(CurrentFragments fragment) {
         this.currentFragment = fragment;
     }
@@ -154,6 +168,8 @@ public class MainActivity extends Activity implements PHSDKListener{
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.container, new PushButtonFragment());
                 fragmentTransaction.commit();
+                waitingDialog.setCancelable(true);
+                waitingDialog.cancel();
             }
         });
         hueBridgeSdk.startPushlinkAuthentication(accessPoint);
@@ -195,6 +211,8 @@ public class MainActivity extends Activity implements PHSDKListener{
             public void run() {
                 Toast toast = Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT);
                 toast.show();
+                waitingDialog.setCancelable(true);
+                waitingDialog.cancel();
             }
         });
     }
