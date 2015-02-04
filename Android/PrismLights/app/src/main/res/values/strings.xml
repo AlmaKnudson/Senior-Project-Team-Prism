@@ -18,5 +18,6 @@
     <string name="listening">Listening...</string>
     <string name="processing">Processing...</string>
     <string name="search">Search For Bridges</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
