@@ -1,1 +1,7 @@
 Prism Lights is a project that changes the Philips Hue Light experience. Our applications on iOS and Android devices allow users to interact in new ways with their Hue bulbs. From controlling bulbs manually to automating the lights with schedules, room tracking, and interactive music, Prism Lights allows users to interact with their lights in useful and fun ways.
+
+
+
+--REVISION 1.1
+
+The Team Prism project allows Philips Hue Light owners full control over their lights from their iOS and Android phones. Hue Light owners can control their lights manually by turning them on or off and setting their color or brightness. Schedules go beyond manual control of the bulbs by allowing Hue Light owners to define alarms, timers, and color cycles. Hue Light owners can control their bulbs with voice commands as well as having their Hue Lights change to music in real time. Prism Light's key feature is the indoor position tracking with bluetooth beacons which will allow for Hue Light owners to set rules for the bulbs based on their location in their home. This effectively creates a way for Hue Lights to follow their owners as they move through their home. By allowing users to use timers, alarms, music synchronization, and rules based on position, Prism Lights enhances the Hue Light experience. 
