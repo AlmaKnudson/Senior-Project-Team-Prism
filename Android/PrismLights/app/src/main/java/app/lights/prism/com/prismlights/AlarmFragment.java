@@ -21,8 +21,10 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.philips.lighting.hue.listener.PHScheduleListener;
+import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHHueError;
+import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
 import com.philips.lighting.model.PHSchedule;
 
@@ -48,6 +50,7 @@ public class AlarmFragment extends Fragment {
     private static ArrayList<Alarm> currentBulbAlarms;
     private ListView alarmListView;
     static AlarmAdapter adapter;
+    static private PHHueSDK phHueSDK;
     private static PHBridge bridge;
     String delegate;
     //private OnFragmentInteractionListener mListener;
@@ -73,12 +76,13 @@ public class AlarmFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        bridge = ((MainActivity)getActivity()).hueBridgeSdk.getSelectedBridge();
+        phHueSDK = ((MainActivity)getActivity()).hueBridgeSdk;
+        bridge = phHueSDK.getSelectedBridge();
+
         delegate = "hh:mm aaa";
         if (getArguments() != null) {
             currentBulbId = getArguments().getInt(ARG_PARAM1);
         }
-
 
         try{
             currentBulbAlarms = ((MainActivity)getActivity()).alarms.get(currentBulbId);
@@ -205,19 +209,29 @@ public class AlarmFragment extends Fragment {
 
     private static void turnOnAlarm(int alarmPosition, int bulbId) {
         currentBulbAlarms.get(alarmPosition).isOn = true;
-        //TODO: send set alarm to the bridge
+
         String scheduleId = bulbId + "_" + alarmPosition;
         PHSchedule schedule = new PHSchedule(scheduleId);
 
-        PHLightState lightState = new PHLightState();
-        lightState.setOn(true);
+
         Calendar calendar = currentBulbAlarms.get(alarmPosition).cal;
+        schedule.setDate( calendar.getTime());
+        List<PHLight> lights = bridge.getResourceCache().getAllLights();
+        PHLight light = lights.get(currentBulbId);
+        String lightIdentifier = light.getIdentifier();
+
+        schedule.setLightIdentifier(lightIdentifier);
+
+        PHLightState lightState = getNewLightState();
+
+        schedule.setLightState(lightState);
+
+        schedule.setDescription("testing");
 
         schedule.setRecurringDays(PHSchedule.RecurringDay.RECURRING_ALL_DAY.getValue());
-        schedule.setLightState(lightState);
-        schedule.setLightIdentifier(currentBulbId + "");
+
         schedule.setLocalTime(true);
-        schedule.setDate( calendar.getTime());
+
 
         bridge.createSchedule(schedule, new PHScheduleListener() {
             @Override
@@ -330,6 +344,21 @@ public class AlarmFragment extends Fragment {
 
             adapter.notifyDataSetChanged();
         }
+    }
+
+    static private PHLightState getNewLightState() {
+        PHLightState state = new PHLightState();
+
+        state.setOn(true);
+        state.setHue(50);
+        state.setSaturation(50);
+        state.setBrightness(50);
+        state.setX((float)0);
+        state.setY((float)0);
+        state.setEffectMode(PHLight.PHLightEffectMode.EFFECT_NONE);
+        state.setAlertMode(PHLight.PHLightAlertMode.ALERT_NONE);
+        state.setTransitionTime(1);
+        return state;
     }
 
 //    @Override
