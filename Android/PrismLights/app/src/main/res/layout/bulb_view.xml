@@ -3,13 +3,24 @@
     android:orientation="vertical" android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <ImageView
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/bulb"
-        android:src="@drawable/bulb"
-        android:layout_gravity="center"
-        android:adjustViewBounds="true"/>
+        android:layout_gravity="center">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/bulbTop"
+            android:src="@drawable/bulb_top"
+            android:adjustViewBounds="true"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/bulbBottom"
+            android:src="@drawable/bulb_bottom"
+            android:adjustViewBounds="true"/>
+        </FrameLayout>
+
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"

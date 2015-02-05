@@ -57,6 +57,8 @@ public class LightSettingsFragment extends Fragment {
     private String[] lightNames;
 
 
+    public static String positionString = "CURRENT_BULB_ID";
+
     public LightSettingsFragment() {
         hueSDK = PHHueSDK.getInstance();
     }
@@ -65,7 +67,7 @@ public class LightSettingsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        position = getArguments().getInt("POSITION");
+        position = getArguments().getInt(positionString);
 
         Toast.makeText(getActivity(), "SettingFragment opened with light " + position, Toast.LENGTH_SHORT).show();
 

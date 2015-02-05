@@ -80,7 +80,7 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
                 //TODO: I need to change this for group of lights. now it is just for a single light.
                 Bundle bundle = new Bundle();
-                bundle.putInt("CURRENT_BULB_ID", position);
+                bundle.putInt(LightSettingsFragment.positionString, position);
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 LightSettingsFragment lightSettingFragment = new LightSettingsFragment();
@@ -169,10 +169,10 @@ public class HomeFragment extends Fragment {
             } else {
                 currentView = (LinearLayout) convertView;
             }
-            if(!currentLight.getLastKnownLightState().isReachable()) {
-                ImageView bulbImage = (ImageView) currentView.findViewById(R.id.bulb);
-                bulbImage.setImageResource(R.drawable.bulb_absent);
-            }
+//            if(!currentLight.getLastKnownLightState().isReachable()) {
+//                ImageView bulbImage = (ImageView) currentView.findViewById(R.id.bulb);
+//                bulbImage.setImageResource(R.drawable.bulb_absent);
+//            }
             TextView bulbName = (TextView) currentView.findViewById(R.id.bulbName);
             bulbName.setText(lightName);
             return currentView;
