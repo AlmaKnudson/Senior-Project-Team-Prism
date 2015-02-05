@@ -35,7 +35,7 @@ import java.util.List;
  * Use the {@link LightSettingsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LightSettingsFragment extends Fragment {
+public class LightSettingsFragment extends Fragment implements CacheUpdateListener{
 
 //    private OnFragmentInteractionListener mListener;
 
@@ -87,31 +87,23 @@ public class LightSettingsFragment extends Fragment {
 
         applyRulesButton = (Button)frame.findViewById(R.id.applyRulesButton);
 
-        currentLights = hueSDK.getSelectedBridge().getResourceCache().getAllLights();
-        lightNames = hueSDK.getLightNames(currentLights);
-        PHLight currentLight = currentLights.get(position);
-        PHLightState state = currentLight.getLastKnownLightState();
-        nameEditor.setText(lightNames[position]);
-        bulbOnState.setChecked(state.isOn());
-        int currentBrightness = getCurrentBrightness(state.getBrightness());
-        brightness.setProgress(currentBrightness);
-        brightnessPercentage.setText(currentBrightness + "%");
-        currentColor = PHUtilities.colorFromXY(new float[]{state.getX(), state.getY()}, "");
-        currentColorView.setBackgroundColor(currentColor);
+        updateState();
         nameEditor.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
                     //TODO check if name is valid
                     HueBulbChangeUtility.changeLightName(position, nameEditor.getText().toString());
                 }
                 return false;
             }
         });
-        bulbOnState.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        //doesn't used onCheckedChanged to avoid programmatic sending
+        bulbOnState.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                HueBulbChangeUtility.turnBulbOnOff(position, isChecked);
+            public void onClick(View v) {
+                Switch bulbOn = (Switch) v;
+                HueBulbChangeUtility.turnBulbOnOff(position, bulbOn.isChecked());
             }
         });
         brightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -173,8 +165,27 @@ public class LightSettingsFragment extends Fragment {
         return frame;
     }
 
+    private void updateState() {
+        currentLights = hueSDK.getSelectedBridge().getResourceCache().getAllLights();
+        lightNames = hueSDK.getLightNames(currentLights);
+        PHLight currentLight = currentLights.get(position);
+        PHLightState state = currentLight.getLastKnownLightState();
+        nameEditor.setText(lightNames[position]);
+        bulbOnState.setChecked(state.isOn());
+        int currentBrightness = getCurrentBrightness(state.getBrightness());
+        brightness.setProgress(currentBrightness);
+        brightnessPercentage.setText(currentBrightness + "%");
+        currentColor = PHUtilities.colorFromXY(new float[]{state.getX(), state.getY()}, "");
+        currentColorView.setBackgroundColor(currentColor);
+    }
+
     private int getCurrentBrightness(int phBrightness) {
         return (int) Math.round((phBrightness * 100.0) / HueBulbChangeUtility.MAX_BRIGHTNESS);
+    }
+
+    @Override
+    public void cacheUpdated() {
+        updateState();
     }
 
 //    // TODO: Rename method, update argument and hook method into UI event

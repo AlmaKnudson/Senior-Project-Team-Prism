@@ -2,6 +2,7 @@ package app.lights.prism.com.prismlights;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.graphics.Color;
@@ -130,7 +131,16 @@ public class MainActivity extends Activity implements PHSDKListener{
 
     @Override
     public void onCacheUpdated(List<Integer> integers, PHBridge phBridge) {
-
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Fragment currentFragment = getFragmentManager().findFragmentById(R.id.container);
+                if(currentFragment instanceof CacheUpdateListener) {
+                    CacheUpdateListener fragment = (CacheUpdateListener) currentFragment;
+                    fragment.cacheUpdated();
+                }
+            }
+        });
     }
 
     @Override

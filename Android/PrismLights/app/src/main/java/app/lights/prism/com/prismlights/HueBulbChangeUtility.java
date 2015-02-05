@@ -101,6 +101,7 @@ public class HueBulbChangeUtility {
         float[] convertedColor = PHUtilities.calculateXY(rgbColor, "rgb");
         lightState.setX(convertedColor[0]);
         lightState.setY(convertedColor[1]);
+        lightState.setColorMode(PHLight.PHLightColorMode.COLORMODE_XY);
         lightState.setOn(true);
         bridge.updateLightState(light, lightState);
     }

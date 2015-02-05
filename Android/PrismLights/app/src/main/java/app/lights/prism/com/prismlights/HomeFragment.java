@@ -1,9 +1,7 @@
 package app.lights.prism.com.prismlights;
 
-import android.app.Activity;
 import android.app.FragmentTransaction;
-import android.content.Context;
-import android.net.Uri;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,18 +13,13 @@ import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.philips.lighting.hue.listener.PHLightListener;
 import com.philips.lighting.hue.sdk.PHHueSDK;
-import com.philips.lighting.model.PHBridge;
-import com.philips.lighting.model.PHHueError;
+import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 import com.philips.lighting.model.PHLight;
-import com.philips.lighting.model.PHLightState;
 
-import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -37,7 +30,7 @@ import java.util.List;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements CacheUpdateListener{
 //    private OnFragmentInteractionListener mListener;
 
 
@@ -46,6 +39,10 @@ public class HomeFragment extends Fragment {
     private List<PHLight> currentLights;
     private String[] lightNames;
 
+    private GridView gridView;
+
+    private static int disabledOverlay = Color.argb(125, 0, 0, 0);
+    private static int offOverlay = Color.argb(50, 0, 0, 0);
 
     public HomeFragment() {
         hueSDK = PHHueSDK.getInstance();
@@ -64,7 +61,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         FrameLayout frame = (FrameLayout) inflater.inflate(R.layout.fragment_home, container, false);
-        GridView gridView= (GridView) frame.findViewById(R.id.homeGridView);
+        gridView= (GridView) frame.findViewById(R.id.homeGridView);
         gridView.setAdapter(new HomeGridAdapter());
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -94,6 +91,13 @@ public class HomeFragment extends Fragment {
         });
 
         return frame;
+    }
+
+    @Override
+    public void cacheUpdated() {
+        currentLights = hueSDK.getSelectedBridge().getResourceCache().getAllLights();
+        lightNames = hueSDK.getLightNames(currentLights);
+        gridView.invalidateViews();
     }
 
 //    // TODO: Rename method, update argument and hook method into UI event
@@ -169,12 +173,26 @@ public class HomeFragment extends Fragment {
             } else {
                 currentView = (LinearLayout) convertView;
             }
-//            if(!currentLight.getLastKnownLightState().isReachable()) {
-//                ImageView bulbImage = (ImageView) currentView.findViewById(R.id.bulb);
-//                bulbImage.setImageResource(R.drawable.bulb_absent);
-//            }
+            ImageView bulbTop = (ImageView) currentView.findViewById(R.id.bulbTop);
             TextView bulbName = (TextView) currentView.findViewById(R.id.bulbName);
             bulbName.setText(lightName);
+
+            if(!currentLight.getLastKnownLightState().isReachable()) {
+                ImageView bulbBottom = (ImageView) currentView.findViewById(R.id.bulbBottom);
+                bulbBottom.setColorFilter(disabledOverlay);
+                bulbTop.setColorFilter(disabledOverlay);
+                return currentView;
+            }
+            if(!currentLight.getLastKnownLightState().isOn()) {
+                bulbTop.setColorFilter(offOverlay);
+                return currentView;
+            }
+            //TODO make work with alternate color formats
+            Float x = currentLight.getLastKnownLightState().getX();
+            Float y = currentLight.getLastKnownLightState().getY();
+            int currentColor = PHUtilities.colorFromXY(new float[]{x, y}, "");
+            currentColor = Color.argb(100, Color.red(currentColor), Color.green(currentColor), Color.blue(currentColor));
+            bulbTop.setColorFilter(currentColor);
             return currentView;
         }
 
