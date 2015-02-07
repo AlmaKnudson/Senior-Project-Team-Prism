@@ -35,7 +35,15 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         
         //Get the light count
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-        lightCount = (cache?.lights.count)!
+        if(cache != nil){
+            
+            var lights = cache?.lights;
+            if(lights == nil){
+                lightCount = 0;
+            } else{
+                lightCount = (cache?.lights.count)!
+            }
+        }
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -98,7 +106,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int{
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-        return (cache?.lights.count)!;
+        return lightCount;
 //        return 4;
     }
     
@@ -206,11 +214,13 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     }
     
     /**
+    
         Handles the not authorized with the bridge PHNotification
     
-    :param:
+    :param: void
+
+    :returns: void
     
-    :returns:
     */
     func NotAuthorized(){
         var hueSDK = (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!

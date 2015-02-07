@@ -30,6 +30,7 @@ class BulbCollectionCell : UICollectionViewCell{
         bulbLabel!.text = name
     }
     
+
     func SetBulbColor(color:UIColor){
         
         //Load image
