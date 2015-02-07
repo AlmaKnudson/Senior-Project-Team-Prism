@@ -51,11 +51,11 @@ func GetAllLights(ipAddress: String, username: String, dataHandler:(lights:[Ligh
                             if let modelid = lightData["modelid"] as? String{
                                 if let swversion = lightData["swversion"] as? String{
                                     if let state = (light.value["state"] as? Dictionary<String,AnyObject>) {
-                                        if let lightState :LightState = StateDictionaryToLightState(state){
-                                            //Create light bulb
-                                            var lightBulb = Light(type: type, name: name, modelID: modelid, swversion: swversion, state: lightState)
-                                            lights.append(lightBulb);
-                                        }
+//                                        if let lightState :LightState = StateDictionaryToLightState(state){
+//                                            //Create light bulb
+//                                            var lightBulb = Light(type: type, name: name, modelID: modelid, swversion: swversion, state: lightState)
+//                                            lights.append(lightBulb);
+//                                        }
                                     }// End of state
                                 }// End of version
                             }// End of modelid
@@ -91,7 +91,7 @@ func GetNewLights(ipAddress: String, username: String){
         var lights :[Light] = []
         
         if(!responseReceived){
-            return dataHandler(lights: [], error: msg);
+            //return dataHandler(lights: [], error: msg);
         }
         var data = dataNull!
         
@@ -112,11 +112,11 @@ func GetNewLights(ipAddress: String, username: String){
                             if let modelid = lightData["modelid"] as? String{
                                 if let swversion = lightData["swversion"] as? String{
                                     if let state = (light.value["state"] as? Dictionary<String,AnyObject>) {
-                                        if let lightState :LightState = StateDictionaryToLightState(state){
-                                            //Create light bulb
-                                            var lightBulb = Light(type: type, name: name, modelID: modelid, swversion: swversion, state: lightState)
-                                            lights.append(lightBulb);
-                                        }
+//                                        if let lightState :LightState = StateDictionaryToLightState(state){
+//                                            //Create light bulb
+//                                            var lightBulb = Light(type: type, name: name, modelID: modelid, swversion: swversion, state: lightState)
+//                                            lights.append(lightBulb);
+//                                        }
                                     }// End of state
                                 }// End of version
                             }// End of modelid
@@ -126,10 +126,10 @@ func GetNewLights(ipAddress: String, username: String){
             }// End for-in
         }
         
-        return dataHandler(lights: lights, error: nil)
-        
-        
+//        return dataHandler(lights: lights, error: nil)
+    
     }
+}
     /**
     
     Response example
@@ -139,10 +139,7 @@ func GetNewLights(ipAddress: String, username: String){
     "lastscan": "2012-10-29T12:00:00"
     }
     **/
-    
 
-    
-}
 
 
 
