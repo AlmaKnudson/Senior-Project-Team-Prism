@@ -14,15 +14,17 @@ import UIKit
 
 class BulbCollectionCell : UICollectionViewCell{
     
-    @IBOutlet weak var bulbImageView: UIImageView!
+    @IBOutlet weak var top_bulb: UIImageView!
     @IBOutlet weak var bulbLabel: UILabel!
+    @IBOutlet weak var bottom_bulb: UIImageView!
     
     
     func SetBulbImage(on:Bool){
         if(on){
-            bulbImageView!.image = UIImage(named: "bulb")
+            top_bulb!.image = UIImage(named: "bulb_top")
+            bottom_bulb!.image = UIImage(named: "bulb_bottom")
         } else{
-            bulbImageView!.image = UIImage(named: "bulb_absent")
+            top_bulb!.image = UIImage(named: "bulb_absent")
         }
     }
     
@@ -30,11 +32,16 @@ class BulbCollectionCell : UICollectionViewCell{
         bulbLabel!.text = name
     }
     
+    func SetBulbUnreachable(){
+        
+    }
+    
+    
 
     func SetBulbColor(color:UIColor){
         
         //Load image
-        var image = UIImage(named: "bulb")
+        var image = UIImage(named: "bulb_top")
         UIGraphicsBeginImageContextWithOptions(image!.size, false, 0.0)
         var context = UIGraphicsGetCurrentContext()
         color.setFill()
@@ -57,7 +64,7 @@ class BulbCollectionCell : UICollectionViewCell{
         var coloredImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext();
         
-        bulbImageView!.image = coloredImage
+        top_bulb!.image = coloredImage
         }
     
 }
