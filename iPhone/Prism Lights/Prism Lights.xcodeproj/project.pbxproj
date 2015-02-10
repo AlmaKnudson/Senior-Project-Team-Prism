@@ -50,6 +50,7 @@
 		CC4A46E51A8912FD007DC0F2 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A46E41A8912FD007DC0F2 /* Settings.swift */; };
 		CC4A46E71A89130F007DC0F2 /* ModeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A46E61A89130F007DC0F2 /* ModeCell.swift */; };
 		CC9E5ECD1A89A16100B19DF6 /* AlarmsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9E5ECC1A89A16100B19DF6 /* AlarmsTable.swift */; };
+		CC9E5ECF1A89B95300B19DF6 /* AlarmCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9E5ECE1A89B95300B19DF6 /* AlarmCell.swift */; };
 		CCCD59261A7800D6008B209D /* Groups.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD59251A7800D6008B209D /* Groups.swift */; };
 		CCCD59281A7800EA008B209D /* Schedules.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD59271A7800EA008B209D /* Schedules.swift */; };
 		CCCD592A1A7800FE008B209D /* Scenes.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD59291A7800FE008B209D /* Scenes.swift */; };
@@ -117,6 +118,7 @@
 		CC4A46E41A8912FD007DC0F2 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		CC4A46E61A89130F007DC0F2 /* ModeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModeCell.swift; sourceTree = "<group>"; };
 		CC9E5ECC1A89A16100B19DF6 /* AlarmsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmsTable.swift; sourceTree = "<group>"; };
+		CC9E5ECE1A89B95300B19DF6 /* AlarmCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmCell.swift; sourceTree = "<group>"; };
 		CCCD59251A7800D6008B209D /* Groups.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Groups.swift; sourceTree = "<group>"; };
 		CCCD59271A7800EA008B209D /* Schedules.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schedules.swift; sourceTree = "<group>"; };
 		CCCD59291A7800FE008B209D /* Scenes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scenes.swift; sourceTree = "<group>"; };
@@ -173,11 +175,10 @@
 		0D0A26D81A376D510033550D /* Main Settings */ = {
 			isa = PBXGroup;
 			children = (
-				0D4F25441A2AD34A005C61EA /* BridgeConnect.swift */,
-				0DB347421A2D5BCE00B91EF2 /* PushAuthController.swift */,
 				0D0A26DA1A38B6E70033550D /* SettingsTableViewController.swift */,
-				CC4A46E41A8912FD007DC0F2 /* Settings.swift */,
-				CC4A46E61A89130F007DC0F2 /* ModeCell.swift */,
+				CC7DBD9E1A8A8F9E00DDAAAB /* About */,
+				CC7DBD9D1A8A8F7400DDAAAB /* Settings */,
+				CC7DBD9C1A8A8F6600DDAAAB /* Bridge Information */,
 			);
 			name = "Main Settings";
 			sourceTree = "<group>";
@@ -316,10 +317,36 @@
 			name = HueAPI;
 			sourceTree = "<group>";
 		};
+		CC7DBD9C1A8A8F6600DDAAAB /* Bridge Information */ = {
+			isa = PBXGroup;
+			children = (
+				0D4F25441A2AD34A005C61EA /* BridgeConnect.swift */,
+				0DB347421A2D5BCE00B91EF2 /* PushAuthController.swift */,
+			);
+			name = "Bridge Information";
+			sourceTree = "<group>";
+		};
+		CC7DBD9D1A8A8F7400DDAAAB /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				CC4A46E41A8912FD007DC0F2 /* Settings.swift */,
+				CC4A46E61A89130F007DC0F2 /* ModeCell.swift */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
+		CC7DBD9E1A8A8F9E00DDAAAB /* About */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = About;
+			sourceTree = "<group>";
+		};
 		CC9E5ECB1A89A07C00B19DF6 /* Advanced Settings */ = {
 			isa = PBXGroup;
 			children = (
 				CC9E5ECC1A89A16100B19DF6 /* AlarmsTable.swift */,
+				CC9E5ECE1A89B95300B19DF6 /* AlarmCell.swift */,
 			);
 			name = "Advanced Settings";
 			sourceTree = "<group>";
@@ -430,6 +457,7 @@
 				0D3A79171A26A716003AC6D4 /* DDLog.m in Sources */,
 				0D3A79191A26A716003AC6D4 /* DDTTYLogger.m in Sources */,
 				CC391F411A7D91F9004C94B5 /* Networking.swift in Sources */,
+				CC9E5ECF1A89B95300B19DF6 /* AlarmCell.swift in Sources */,
 				CCCD592E1A78011E008B209D /* Rules.swift in Sources */,
 				0D8B27A61A3A0B7C0069372C /* ColorPickerView.swift in Sources */,
 				0D8B27A41A3A0B3A0069372C /* BulbSettings.swift in Sources */,

@@ -7,3 +7,21 @@
 //
 
 import Foundation
+
+
+class ModeCell: UITableViewCell{
+    
+    @IBOutlet weak var modeLabel: UILabel!
+    @IBOutlet weak var enabledLabel: UILabel!
+    
+    
+    func Enabled(enabled:Bool){
+        if(enabled){
+            enabledLabel.text = "On"
+        } else{
+            enabledLabel.text = "Off"
+        }
+        
+    }
+    
+}

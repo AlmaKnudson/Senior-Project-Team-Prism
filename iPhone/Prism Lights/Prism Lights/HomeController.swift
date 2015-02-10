@@ -86,7 +86,9 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     
     override func viewDidDisappear(animated: Bool) {
         PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
-        println("Home disappeared")
+        if(DEBUG){
+            println("Home disappeared")
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -95,7 +97,9 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        println("In Prepare For Segue")
+        if(DEBUG){
+            println("In Prepare For Segue")
+        }
         var dest = segue.destinationViewController as UINavigationController
         var bulbSettingsController = dest.viewControllers[0] as BulbSettingsController
         bulbSettingsController.homeDelegate = self
@@ -106,8 +110,14 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int{
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
+        if(cache.lights != nil){
+            lightCount = cache.lights.count
+        }
+        if(BRIDGELESS){
+            lightCount = 3
+        }
+        
         return lightCount;
-//        return 4;
     }
     
     // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
@@ -142,7 +152,9 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        println("Bulb tapped")
+        if(DEBUG){
+            println("Bulb tapped")
+        }
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
         var light = cache!.lights["\(indexPath.row+1)"] as PHLight
         var lightState = PHLightState()
@@ -172,9 +184,13 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             var point = gestureRecognizer.locationInView(self.bulbCollectionView)
             var indexPath = self.bulbCollectionView.indexPathForItemAtPoint(point)
             if indexPath == nil{
-                println("Unable to find index")
+                if(DEBUG){
+                    println("Unable to find index")
+                }
             } else{
-                println("indexPath of cell: \(indexPath)")
+                if(DEBUG){
+                    println("indexPath of cell: \(indexPath)")
+                }
                 self.performSegueWithIdentifier("BulbSettingsNav", sender: indexPath)
             }
         }

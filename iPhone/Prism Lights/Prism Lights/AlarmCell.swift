@@ -1,5 +1,5 @@
 //
-//  AlarmsTable.swift
+//  AlarmCell.swift
 //  Prism Lights
 //
 //  Created by Cody Foltz on 2/9/15.
@@ -8,6 +8,10 @@
 
 import Foundation
 
-class AlarmTable {
+
+import UIKit
+
+class AlarmCell : UITableViewCell{
+    
     
 }

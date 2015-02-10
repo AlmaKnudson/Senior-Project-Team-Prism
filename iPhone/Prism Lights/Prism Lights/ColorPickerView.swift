@@ -58,13 +58,17 @@ class ColorPickerView: UIViewController {
         var cgctx = createARGBBitmapContextFromImage(inImage)
         if (cgctx == nil) { return nil; /* error */ }
         
-        println("Frame Height: \(self.colorPicker.frame.height)")
+        
         var w :CGFloat = CGFloat(CGImageGetWidth(inImage))
         var h :CGFloat = CGFloat(CGImageGetHeight(inImage))
         var rect = CGRect(x: 0, y: 0, width: w, height: h)
-        println("Scale: \((colorPicker.image?.scale)!) ")
-        println("Point x: \(point.x * (colorPicker.image?.scale)!) y: \(point.y)")
-        println("Width: \(w) Height: \(h)")
+        
+        if(DEBUG){
+            println("Frame Height: \(self.colorPicker.frame.height)")
+            println("Scale: \((colorPicker.image?.scale)!) ")
+            println("Point x: \(point.x * (colorPicker.image?.scale)!) y: \(point.y)")
+            println("Width: \(w) Height: \(h)")
+        }
         // Draw the image to the bitmap context. Once we draw, the memory
         // allocated for the context for rendering will then contain the
         // raw image data in the specified color space.
@@ -86,13 +90,19 @@ class ColorPickerView: UIViewController {
             var red :UInt8 = dataInt[offset+1];
             var green :UInt8 = dataInt[offset+2];
             var blue :UInt8 = dataInt[offset+3];
-            println("offset \(offset) colors: RGB A \(red) \(green) \(blue)   \(alpha)")
+            
+            if(DEBUG){
+                println("offset \(offset) colors: RGB A \(red) \(green) \(blue)   \(alpha)")
+            }
             
             var rf :CGFloat = CGFloat(Float(red)/255.0)
             var gf :CGFloat = CGFloat(Float(green)/255.0)
             var bf :CGFloat = CGFloat(Float(blue)/255.0)
             var af :CGFloat = CGFloat(Float(alpha)/255.0)
-            println("offset 2: \(offset) colors: RGB A \(rf) \(gf) \(bf)   \(af)")
+            
+            if(DEBUG){
+                println("offset 2: \(offset) colors: RGB A \(rf) \(gf) \(bf)   \(af)")
+            }
             color = UIColor(red:rf, green:gf, blue:bf, alpha:af)
         }
 
@@ -124,7 +134,9 @@ class ColorPickerView: UIViewController {
         
         if (colorSpace == nil)
         {
+
             println("Error allocating color space\n")
+
             return nil;
         }
         

@@ -11,7 +11,9 @@ import UIKit
 class MainSettingsTableViewController: UITableViewController, UITableViewDataSource, UITableViewDelegate {
 
     override func viewWillAppear(animated: Bool) {
-        println("SettingTableViewController will Appear")
+        if(DEBUG){
+            println("SettingTableViewController will Appear")
+        }
         self.title = "Settings"
     }
     

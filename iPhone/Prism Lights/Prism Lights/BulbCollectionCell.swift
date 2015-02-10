@@ -7,8 +7,6 @@
 //
 
 
-//TODO: Split the bulb into 2 parts, top and bottom so I can color just the top.
-
 
 import UIKit
 
@@ -33,7 +31,7 @@ class BulbCollectionCell : UICollectionViewCell{
     }
     
     func SetBulbUnreachable(){
-        
+        bottom_bulb!.image = UIImage(named: "bulb_absent")
     }
     
     
