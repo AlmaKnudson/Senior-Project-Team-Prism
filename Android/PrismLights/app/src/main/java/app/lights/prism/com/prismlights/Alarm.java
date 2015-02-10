@@ -2,6 +2,8 @@ package app.lights.prism.com.prismlights;
 
 import android.text.format.Time;
 
+import com.philips.lighting.model.PHSchedule;
+
 import java.util.Calendar;
 
 /**
@@ -9,16 +11,16 @@ import java.util.Calendar;
  */
 public class Alarm {
 
-    public Calendar cal;
+    public PHSchedule schedule;
     public boolean isOn;
 
-    public Alarm(Calendar cal) {
-        this.cal = cal;
+    public Alarm(PHSchedule schedule) {
+        this.schedule = schedule;
         this.isOn = true;
     }
 
     @Override
     public String toString() {
-        return cal.toString();
+        return schedule.getDate().toString();
     }
 }

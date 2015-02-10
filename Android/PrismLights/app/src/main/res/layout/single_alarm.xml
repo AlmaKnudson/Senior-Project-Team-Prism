@@ -12,18 +12,17 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/singleAlarmSwitch"
-        android:layout_toStartOf="@+id/singleAlarmSwitch"
         android:gravity="center_vertical|left"
         android:textSize="28dp" />
 
-    <Switch
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/singleAlarmSwitch"
-        android:layout_alignParentTop="true"
+        android:text="Delete"
+        android:id="@+id/AlarmDeleteText"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:checked="false" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true" />
+
 </RelativeLayout>

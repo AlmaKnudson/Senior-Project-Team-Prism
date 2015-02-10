@@ -1,12 +1,13 @@
 package app.lights.prism.com.prismlights;
 
+import android.app.ActivityManager;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.text.format.DateFormat;
-import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +16,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.philips.lighting.hue.listener.PHScheduleListener;
 import com.philips.lighting.hue.sdk.PHHueSDK;
@@ -30,6 +29,7 @@ import com.philips.lighting.model.PHSchedule;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -45,25 +45,15 @@ public class AlarmFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "CURRENT_BULB_ID";
 
-    private static int currentBulbId; // The chosen Light BULB ID
-    private static int chosenAlarmPosition;
-    private static ArrayList<Alarm> currentBulbAlarms;
+    private int currentBulbId; // The chosen Light BULB ID
+    private int chosenAlarmPosition;
+    private PHLight currentBulb;
     private ListView alarmListView;
     static AlarmAdapter adapter;
     static private PHHueSDK phHueSDK;
     private static PHBridge bridge;
     String delegate;
-    //private OnFragmentInteractionListener mListener;
-
-
-
-//    public static AlarmFragment newInstance(int param1) {
-//        AlarmFragment fragment = new AlarmFragment();
-//        Bundle args = new Bundle();
-//        args.putInt(ARG_PARAM1, param1);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
+    List<PHSchedule> alarmSchedules; // this List of schedules in bridge whose description is Alarm.
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -80,20 +70,32 @@ public class AlarmFragment extends Fragment {
         bridge = phHueSDK.getSelectedBridge();
 
         delegate = "hh:mm aaa";
+
         if (getArguments() != null) {
             currentBulbId = getArguments().getInt(ARG_PARAM1);
         }
 
-        try{
-            currentBulbAlarms = ((MainActivity)getActivity()).alarms.get(currentBulbId);
-        }
-        catch(IndexOutOfBoundsException e) {
-            ((MainActivity) getActivity()).alarms.add(currentBulbId, new ArrayList<Alarm>());
-            currentBulbAlarms = ((MainActivity)getActivity()).alarms.get(currentBulbId);
-        }
+        //get current bulb
+        currentBulb = bridge.getResourceCache().getAllLights().get(currentBulbId);
+        getAlarmSchedules();
+    }
 
-        currentBulbAlarms = ((MainActivity)getActivity()).alarms.get(currentBulbId);
-        chosenAlarmPosition = -1;// default is -1 when user choose an alarm, or add new alarm, it changes appropriately.
+    // this function get list of schedule from the bridge, and return schedules that are alarm schedule and for this bulb
+    private void getAlarmSchedules() {
+        alarmSchedules = new ArrayList<PHSchedule>();
+        // TODO: currently getting just non recurring schedules. to get recurring schedules, param need to be true.
+        List<PHSchedule> nonRecurringSchedules = bridge.getResourceCache().getAllSchedules(false);
+
+        // get schedules from Bridge that are for this bulb and has description "Alarm"
+
+        for (int i=0; i<nonRecurringSchedules.size();i++)
+        {
+            PHSchedule schedule = nonRecurringSchedules.get(i);
+            if(schedule.getLightIdentifier().equals(currentBulb.getIdentifier()) && schedule.getDescription().equals("Alarm"))
+            {
+                alarmSchedules.add(nonRecurringSchedules.get(i));
+            }
+        }
     }
 
     @Override
@@ -110,17 +112,6 @@ public class AlarmFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showTimePickerDialog(-1);
-
-//                Bundle bundle = new Bundle();
-//                bundle.putInt("BULB_POSITION", currentBulbId);
-//                bundle.putInt("ALARM_POSITION", -1); // alarm position -1 means new alarm.
-//
-//                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-//                AlarmSettingFragment alarmSettingFragment = new AlarmSettingFragment();
-//                alarmSettingFragment.setArguments(bundle);
-//                fragmentTransaction.replace(R.id.container, alarmSettingFragment);
-//                fragmentTransaction.addToBackStack("AlarmSettingFragment");
-//                fragmentTransaction.commit();
             }
         });
 
@@ -133,16 +124,6 @@ public class AlarmFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 showTimePickerDialog(position);
-//                Bundle bundle = new Bundle();
-//                bundle.putInt("BULB_POSITION", currentBulbId);
-//                bundle.putInt("ALARM_POSITION", position);
-//
-//                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-//                AlarmSettingFragment alarmSettingFragment = new AlarmSettingFragment();
-//                alarmSettingFragment.setArguments(bundle);
-//                fragmentTransaction.replace(R.id.container, alarmSettingFragment);
-//                fragmentTransaction.addToBackStack("AlarmSettingFragment");
-//                fragmentTransaction.commit();
             }
         });
 
@@ -154,12 +135,12 @@ public class AlarmFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return currentBulbAlarms.size();
+            return alarmSchedules.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return currentBulbAlarms.get(position);
+            return alarmSchedules.get(position);
         }
 
         @Override
@@ -169,11 +150,11 @@ public class AlarmFragment extends Fragment {
 
         @Override
         public View getView(final int position, final View convertView, ViewGroup parent) {
-            final Alarm alarm = currentBulbAlarms.get(position);
+            final PHSchedule alarm = alarmSchedules.get(position);
 
-            Calendar c = alarm.cal;
+            Date d = alarm.getDate();
 
-            String timeString = (String) DateFormat.format(delegate, c.getTime());
+            String timeString = (String) DateFormat.format(delegate, d.getTime());
             RelativeLayout currentView;
             if(convertView == null) {
                 currentView = (RelativeLayout) LayoutInflater.from(AlarmFragment.this.getActivity()).inflate(R.layout.single_alarm, parent, false);
@@ -183,23 +164,12 @@ public class AlarmFragment extends Fragment {
 
             TextView timeView = (TextView) currentView.findViewById(R.id.singleAlarmTimeText);
             timeView.setText(timeString);
+            TextView deleteTextView = (TextView) currentView.findViewById(R.id.AlarmDeleteText);
 
-
-            Switch switchView = (Switch) currentView.findViewById(R.id.singleAlarmSwitch);
-            switchView.setChecked(alarm.isOn);
-
-            switchView.setOnClickListener(new View.OnClickListener() {
+            deleteTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Switch)v).toggle();
-                    if (alarm.isOn) {
-                        turnOffAlarm(position, currentBulbId);
-                    }
-                    else {
-                        turnOnAlarm(position, currentBulbId);
-                    }
-
-                    adapter.notifyDataSetChanged();
+                    deleteAlarm(position);
                 }
             });
 
@@ -207,94 +177,10 @@ public class AlarmFragment extends Fragment {
         }
     }
 
-    private static void turnOnAlarm(int alarmPosition, int bulbId) {
-        currentBulbAlarms.get(alarmPosition).isOn = true;
-
-        String scheduleId = bulbId + "_" + alarmPosition;
-        PHSchedule schedule = new PHSchedule(scheduleId);
-
-
-        Calendar calendar = currentBulbAlarms.get(alarmPosition).cal;
-        schedule.setDate( calendar.getTime());
-        List<PHLight> lights = bridge.getResourceCache().getAllLights();
-        PHLight light = lights.get(currentBulbId);
-        String lightIdentifier = light.getIdentifier();
-
-        schedule.setLightIdentifier(lightIdentifier);
-
-        PHLightState lightState = getNewLightState();
-
-        schedule.setLightState(lightState);
-
-        schedule.setDescription("testing");
-
-        schedule.setRecurringDays(PHSchedule.RecurringDay.RECURRING_ALL_DAY.getValue());
-
-        schedule.setLocalTime(true);
-
-
-        bridge.createSchedule(schedule, new PHScheduleListener() {
-            @Override
-            public void onCreated(PHSchedule phSchedule) {
-                int i = 0;
-                //Toast.makeText(AlarmFragment.this.getActivity(), "Alarm is set up", Toast.LENGTH_LONG);
-            }
-
-            @Override
-            public void onSuccess() {
-
-            }
-
-            @Override
-            public void onError(int i, String s) {
-
-            }
-
-            @Override
-            public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
-
-            }
-        });
-
-    }
-
-    private static void turnOffAlarm(int alarmPosition, int bulbId) {
-        currentBulbAlarms.get(alarmPosition).isOn = false;
-
-        String scheduleId = bulbId + "_" + alarmPosition;
-        bridge.removeSchedule(scheduleId, new PHScheduleListener() {
-            @Override
-            public void onCreated(PHSchedule phSchedule) {
-
-            }
-
-            @Override
-            public void onSuccess() {
-
-            }
-
-            @Override
-            public void onError(int i, String s) {
-
-            }
-
-            @Override
-            public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
-
-            }
-        });
-    }
-
-    //This function gets called when user want to add/change alarm, and this opens the timepicker.
-    public void showTimePickerDialog(int alarmPosition) {
-        chosenAlarmPosition = alarmPosition;
-        DialogFragment newFragment = new TimePickerFragment();
-        newFragment.show(getFragmentManager(), "timePicker");
-    }
-
     // this is TimePickerFragment, showTimePickerDialog create this DialogFragment.
     // when user click "done", onTimeSet get called.
-    public static class TimePickerFragment extends DialogFragment
+    // TODO: is this ok non static? public class in a class.... private-> fragment have to be public,...?
+    private class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {
 
         @Override
@@ -308,9 +194,9 @@ public class AlarmFragment extends Fragment {
                 minute = c.get(Calendar.MINUTE);
             }
             else{
-                Calendar cal = currentBulbAlarms.get(chosenAlarmPosition).cal;
-                hour = cal.HOUR_OF_DAY;
-                minute = cal.MINUTE;
+                Date date = alarmSchedules.get(chosenAlarmPosition).getDate();
+                hour = date.getHours();
+                minute = date.getMinutes();
             }
 
             // Create a new instance of TimePickerDialog and return it
@@ -321,23 +207,20 @@ public class AlarmFragment extends Fragment {
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
             if (view.isShown()) {
+
+                Date alarmTime = Calendar.getInstance().getTime();
+                alarmTime.setHours(hourOfDay);
+                alarmTime.setMinutes(minute);
+
                 // user want to add new Alarm
                 if (chosenAlarmPosition == -1)
                 {
-                    Calendar alarmTime = Calendar.getInstance();
-                    alarmTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                    alarmTime.set(Calendar.MINUTE, minute);
-                    currentBulbAlarms.add(new Alarm(alarmTime));
-                    turnOnAlarm(currentBulbAlarms.size()-1, currentBulbId);
+                    addNewAlarm(alarmTime);
                 }
                 // user wants to change existing alarm
                 else
                 {
-                    turnOffAlarm(chosenAlarmPosition,currentBulbId); // turn off the previous alarm
-                    Calendar alarmTime = currentBulbAlarms.get(chosenAlarmPosition).cal;
-                    alarmTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                    alarmTime.set(Calendar.MINUTE, minute);
-                    turnOnAlarm(chosenAlarmPosition,currentBulbId); // turn on the new alarm
+                    updateAlarm(chosenAlarmPosition, alarmTime);
                 }
 
             }
@@ -346,18 +229,185 @@ public class AlarmFragment extends Fragment {
         }
     }
 
-    static private PHLightState getNewLightState() {
-        PHLightState state = new PHLightState();
+    //This function gets called when user want to add/change alarm, and this opens the timepicker.
+    public void showTimePickerDialog(int alarmPosition) {
+        chosenAlarmPosition = alarmPosition;
+        DialogFragment newFragment = new TimePickerFragment();
+        newFragment.show(getFragmentManager(), "timePicker");
+    }
 
+    private void updateAlarm(int alarmPosition, Date alarmTime) {
+
+       PHSchedule schedule = alarmSchedules.get(alarmPosition);
+       schedule.setDate(alarmTime);
+
+        final PHWizardAlertDialog dialogManager = PHWizardAlertDialog
+                .getInstance();
+        dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
+
+        bridge.updateSchedule(schedule, new PHScheduleListener() {
+            @Override
+            public void onCreated(PHSchedule phSchedule) {
+
+            }
+
+            @Override
+            public void onSuccess() {
+                dialogManager.closeProgressDialog();
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        if (isCurrentActivity()) {
+                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_Alarm_updated), R.string.btn_ok, R.string.txt_result);
+                        }
+                        getAlarmSchedules();
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+
+            }
+
+            @Override
+            public void onError(int i, final String s) {
+                dialogManager.closeProgressDialog();
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        if (isCurrentActivity()) {
+                            PHWizardAlertDialog.showErrorDialog(getActivity(), s,R.string.btn_ok);
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
+
+            }
+        });
+
+    }
+
+    private void addNewAlarm(Date alarmTime) {
+        String scheduleName = (String) DateFormat.format(delegate, alarmTime.getTime());
+        PHSchedule schedule = new PHSchedule(scheduleName);
+        schedule.setDate(alarmTime);
+        schedule.setLightIdentifier(currentBulb.getIdentifier());
+        schedule.setLightState(getLightState());
+        schedule.setDescription("Alarm");
+
+        final PHWizardAlertDialog dialogManager = PHWizardAlertDialog.getInstance();
+        dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
+
+        bridge.createSchedule(schedule, new PHScheduleListener() {
+            @Override
+            public void onCreated(PHSchedule phSchedule) {
+                dialogManager.closeProgressDialog();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (isCurrentActivity()) {
+                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_alarm_created), R.string.btn_ok, R.string.txt_result);
+                        }
+                        getAlarmSchedules();
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+
+                return;
+            }
+
+            @Override
+            public void onSuccess() {
+            }
+
+            @Override
+            public void onError(int i, final String s) {
+                dialogManager.closeProgressDialog();
+
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        if (isCurrentActivity()) {
+                            PHWizardAlertDialog.showErrorDialog(getActivity(), s, R.string.btn_ok);
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
+            }
+        });
+    }
+
+    // delete alarm alarmSchedules.get(position)
+    private void deleteAlarm(int position) {
+        String scheduleID = alarmSchedules.get(position).getIdentifier();
+
+        final PHWizardAlertDialog dialogManager = PHWizardAlertDialog.getInstance();
+        dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
+
+        bridge.removeSchedule(scheduleID, new PHScheduleListener() {
+            @Override
+            public void onCreated(PHSchedule phSchedule) {
+
+            }
+
+            @Override
+            public void onSuccess() {
+                dialogManager.closeProgressDialog();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (isCurrentActivity()) {
+                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_alarm_deleted), R.string.btn_ok, R.string.txt_result);
+                        }
+                        getAlarmSchedules();
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+
+                return;
+            }
+
+            @Override
+            public void onError(int i, final String s) {
+                dialogManager.closeProgressDialog();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (isCurrentActivity()) { PHWizardAlertDialog.showErrorDialog(getActivity(), s, R.string.btn_ok); }
+                    }
+                });
+            }
+
+            @Override
+            public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
+
+            }
+        });
+    }
+
+    private boolean isCurrentActivity() {
+        ActivityManager mActivityManager = (ActivityManager)getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> RunningTask = mActivityManager.getRunningTasks(1);
+        ActivityManager.RunningTaskInfo ar = RunningTask.get(0);
+        String currentClass = "." + this.getClass().getSimpleName();
+        String topActivity =  ar.topActivity.getShortClassName().toString();
+        return topActivity.contains(currentClass);
+    }
+
+    private PHLightState getLightState() {
+        //PHLightState state = phHueSDK.getCurrentLightState();
+        //currentBulb.getLastKnownLightState();
+        PHLightState state = new PHLightState();
         state.setOn(true);
-        state.setHue(50);
-        state.setSaturation(50);
-        state.setBrightness(50);
-        state.setX((float)0);
-        state.setY((float)0);
-        state.setEffectMode(PHLight.PHLightEffectMode.EFFECT_NONE);
-        state.setAlertMode(PHLight.PHLightAlertMode.ALERT_NONE);
-        state.setTransitionTime(1);
+//        state.setHue(50);
+//        state.setSaturation(50);
+//        state.setBrightness(50);
+//        state.setX((float)0);
+//        state.setY((float)0);
+//        state.setEffectMode(PHLight.PHLightEffectMode.EFFECT_NONE);
+//        state.setAlertMode(PHLight.PHLightAlertMode.ALERT_NONE);
+//        state.setTransitionTime(1);
         return state;
     }
 
