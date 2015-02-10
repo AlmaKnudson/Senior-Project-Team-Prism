@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SettingsTableViewController: UITableViewController, UITableViewDataSource, UITableViewDelegate {
+class MainSettingsTableViewController: UITableViewController, UITableViewDataSource, UITableViewDelegate {
 
     override func viewWillAppear(animated: Bool) {
         println("SettingTableViewController will Appear")
