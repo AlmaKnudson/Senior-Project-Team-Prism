@@ -108,8 +108,8 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/apply_rules"
-            android:id="@+id/applyRulesButton"
+            android:text="@string/advanced_setting"
+            android:id="@+id/advancedSettingButton"
             android:layout_gravity="center" />
         <Space
             android:layout_width="match_parent"

@@ -12,7 +12,7 @@
     <string name="brightness">Brightness:</string>
     <string name="searching">Searching for Bridge...</string>
     <string name="connecting">Connecting to Bridge...</string>
-    <string name="apply_rules">Apply Rules</string>
+    <string name="advanced_setting">Advanced Setting</string>
     <string name="voice">Voice Control</string>
     <string name="waiting">Waiting...</string>
     <string name="listening">Listening...</string>

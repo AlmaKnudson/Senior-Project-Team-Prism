@@ -11,7 +11,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -49,7 +48,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
     private int currentColor;
     private ImageView colorPickerImage;
 
-    private Button applyRulesButton;
+    private Button advancedSettingButton;
 
     private PHHueSDK hueSDK;
 
@@ -85,7 +84,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
         currentColorView = frame.findViewById(R.id.currentColor);
         colorPickerImage = (ImageView) frame.findViewById(R.id.colorPickerImage);
 
-        applyRulesButton = (Button)frame.findViewById(R.id.applyRulesButton);
+        advancedSettingButton = (Button)frame.findViewById(R.id.advancedSettingButton);
 
         updateState();
         nameEditor.setOnKeyListener(new View.OnKeyListener() {
@@ -147,7 +146,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
             }
         });
 
-        applyRulesButton.setOnClickListener(new View.OnClickListener() {
+        advancedSettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
