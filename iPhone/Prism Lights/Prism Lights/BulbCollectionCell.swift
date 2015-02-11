@@ -23,6 +23,7 @@ class BulbCollectionCell : UICollectionViewCell{
             bottom_bulb!.image = UIImage(named: "bulb_bottom")
         } else{
             top_bulb!.image = UIImage(named: "bulb_absent")
+            bottom_bulb!.image = UIImage(named: "bulb_bottom")
         }
     }
     
@@ -32,6 +33,7 @@ class BulbCollectionCell : UICollectionViewCell{
     
     func SetBulbUnreachable(){
         bottom_bulb!.image = UIImage(named: "bulb_absent")
+        top_bulb!.image = UIImage(named: "bulb_absent")
     }
     
     

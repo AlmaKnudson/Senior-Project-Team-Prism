@@ -22,6 +22,21 @@ class MusicViewController: UIViewController, WitDelegate {
     var x :PHNotificationManager?
     
     
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    override init() {
+        super.init()
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

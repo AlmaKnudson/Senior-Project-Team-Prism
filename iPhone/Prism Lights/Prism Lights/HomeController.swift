@@ -132,6 +132,8 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         var light = cache?.lights["\(indexPath.row+1)"] as? PHLight
 //        var sdk = ((UIApplication.sharedApplication().delegate) as AppDelegate).hueSDK!
         if(light != nil){
+             
+            
             cell!.SetBulbLabel(light!.name)
             if(light!.lightState.on == 0){
                 cell!.SetBulbImage(false)
@@ -142,9 +144,13 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
 //                var color = UIColor(hue: CGFloat(light!.lightState.hue), saturation: CGFloat(light!.lightState.saturation), brightness: CGFloat(light!.lightState.brightness), alpha: 1)
                 cell!.SetBulbImage(true)
                 cell!.SetBulbColor(color)
+                if (light?.lightState.reachable == 0){
+                 cell!.SetBulbUnreachable()
+                }
             }
         } else{
             cell!.SetBulbImage(false)
+//            cell!.SetBulbUnreachable()
         }
         
         return cell!
@@ -157,24 +163,34 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         }
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
         var light = cache!.lights["\(indexPath.row+1)"] as PHLight
+        
+        if(light.lightState.reachable == 0){
+            return
+        }
         var lightState = PHLightState()
         var cell = bulbCollectionView.cellForItemAtIndexPath(indexPath) as BulbCollectionCell
         if light.lightState.on == 1{
             light.lightState.on = false
             lightState.on = false
-            cell.SetBulbImage(false)
         } else{
             lightState.on = true
             light.lightState.on = true
             //cell.SetBulbImage(true)
-            var point = CGPoint(x: Double(light.lightState.x), y: Double(light.lightState.y))
-            var color = PHUtilities.colorFromXY(point, forModel: light.modelNumber)
-//            var color = UIColor(hue: CGFloat(light!.lightState.hue), saturation: CGFloat(light!.lightState.saturation), brightness: CGFloat(light!.lightState.brightness), alpha: 1)
-            cell.SetBulbColor(color)
             
         }
         var bridgeSendAPI = PHBridgeSendAPI()
         bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil)
+        bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState){
+            NSArray -> Void in
+            if(light.lightState.on == 1){
+                var point = CGPoint(x: Double(light.lightState.x), y: Double(light.lightState.y))
+                var color = PHUtilities.colorFromXY(point, forModel: light.modelNumber)
+                cell.SetBulbColor(color)
+            } else{
+                cell.SetBulbImage(false)
+            }
+            
+        }
     }
 
 

@@ -1287,7 +1287,7 @@
         <scene sceneID="vWs-Ne-Je7">
             <objects>
                 <navigationController id="f97-iB-1xP" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Settings" image="second" id="3dW-Sk-ATN"/>
+                    <tabBarItem key="tabBarItem" enabled="NO" title="Settings" image="first" id="3dW-Sk-ATN"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="bhH-OT-2BT">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
