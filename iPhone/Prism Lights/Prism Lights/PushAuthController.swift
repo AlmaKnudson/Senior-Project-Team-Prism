@@ -46,7 +46,6 @@ class PushAuthController : UIViewController {
         self.dismissViewControllerAnimated(true, completion: { () -> Void in})
     }
     
-    //Dv4wWL9lxCRo5CYe user on Cody's laptop simulator
     
     func AuthFailed(){
         PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)

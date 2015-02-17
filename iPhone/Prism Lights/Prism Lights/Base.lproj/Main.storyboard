@@ -93,19 +93,43 @@
                                     <outlet property="delegate" destination="9pv-A4-QxB" id="pNi-M1-Otw"/>
                                 </connections>
                             </collectionView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hli-fi-QWL">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="566"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connecting..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kML-PA-ce6">
+                                        <rect key="frame" x="247" y="142" width="107" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="107" id="0lU-rN-n0w"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="kML-PA-ce6" firstAttribute="top" secondItem="Hli-fi-QWL" secondAttribute="top" constant="142" id="3ao-6S-o9H"/>
+                                    <constraint firstItem="kML-PA-ce6" firstAttribute="centerX" secondItem="Hli-fi-QWL" secondAttribute="centerX" id="lvg-ww-Jhz"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Bd3-Da-90v" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" id="73k-pi-gv6"/>
-                            <constraint firstItem="Bd3-Da-90v" firstAttribute="bottom" secondItem="4ug-Mw-9AY" secondAttribute="top" id="AO2-1N-0Kw"/>
-                            <constraint firstAttribute="trailing" secondItem="Bd3-Da-90v" secondAttribute="trailing" id="mhb-fd-bUc"/>
-                            <constraint firstItem="Bd3-Da-90v" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leading" id="urF-19-1MW"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="Hli-fi-QWL" secondAttribute="bottom" constant="34" id="4Xe-86-rCJ"/>
+                            <constraint firstItem="Bd3-Da-90v" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" id="4c0-SC-9yG"/>
+                            <constraint firstItem="Bd3-Da-90v" firstAttribute="bottom" secondItem="4ug-Mw-9AY" secondAttribute="top" id="5fh-xh-pKd"/>
+                            <constraint firstAttribute="trailing" secondItem="Bd3-Da-90v" secondAttribute="trailing" id="NaR-gi-pf7"/>
+                            <constraint firstItem="Bd3-Da-90v" firstAttribute="leading" secondItem="Hli-fi-QWL" secondAttribute="leading" id="Uwj-Uh-yio"/>
+                            <constraint firstItem="Hli-fi-QWL" firstAttribute="trailing" secondItem="Bd3-Da-90v" secondAttribute="trailing" id="WCF-jX-Wgo"/>
+                            <constraint firstItem="Hli-fi-QWL" firstAttribute="top" secondItem="tsR-hK-woN" secondAttribute="top" id="i2y-LN-PbT"/>
+                            <constraint firstItem="Bd3-Da-90v" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leading" id="z4u-rd-Xli"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Home" image="first" id="acW-dT-cKf"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
                         <outlet property="bulbCollectionView" destination="Bd3-Da-90v" id="y0C-qx-nfb"/>
+                        <outlet property="loadingView" destination="Hli-fi-QWL" id="EOS-cG-pah"/>
                         <segue destination="5xJ-tq-vqj" kind="show" identifier="BulbSettingsNav" id="Zij-yb-hZI"/>
                     </connections>
                 </viewController>
@@ -987,7 +1011,7 @@
             </objects>
             <point key="canvasLocation" x="-64" y="-74"/>
         </scene>
-        <!--Settings-->
+        <!--Setting-->
         <scene sceneID="N4g-Ve-cUD">
             <objects>
                 <viewController id="Zeu-1g-Fq7" customClass="BridgeConnect" customModule="Prism_Lights" customModuleProvider="target" sceneMemberID="viewController">
@@ -1069,10 +1093,10 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not Connected" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VJp-ld-hH7">
-                                        <rect key="frame" x="193" y="52" width="132" height="21"/>
+                                        <rect key="frame" x="193" y="52" width="174" height="21"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="132" id="FiQ-ld-gxW"/>
-                                            <constraint firstAttribute="width" constant="132" id="R0i-BV-7Vi"/>
+                                            <constraint firstAttribute="width" constant="174" id="R0i-BV-7Vi"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -1084,13 +1108,13 @@
                                         </variation>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not Connected" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WTs-Vk-4ke">
-                                        <rect key="frame" x="193" y="81" width="132" height="21"/>
+                                        <rect key="frame" x="193" y="81" width="174" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not Connected" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kkl-y8-4HZ">
-                                        <rect key="frame" x="193" y="110" width="132" height="21"/>
+                                        <rect key="frame" x="193" y="110" width="174" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
@@ -1239,7 +1263,7 @@
                             </mask>
                         </variation>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Settings" image="second" selectedImage="second" id="Vhm-P8-e48">
+                    <tabBarItem key="tabBarItem" title="Setting" image="first" selectedImage="second" id="Vhm-P8-e48">
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
                     </tabBarItem>
                     <connections>
@@ -1283,11 +1307,11 @@
             </objects>
             <point key="canvasLocation" x="1446" y="2378"/>
         </scene>
-        <!--Settings-->
+        <!--Setting-->
         <scene sceneID="vWs-Ne-Je7">
             <objects>
                 <navigationController id="f97-iB-1xP" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" enabled="NO" title="Settings" image="first" id="3dW-Sk-ATN"/>
+                    <tabBarItem key="tabBarItem" title="Setting" image="first" id="3dW-Sk-ATN"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="bhH-OT-2BT">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1300,7 +1324,7 @@
             </objects>
             <point key="canvasLocation" x="-52" y="1558"/>
         </scene>
-        <!--Settings-->
+        <!--Setting-->
         <scene sceneID="eFX-it-3ku">
             <objects>
                 <tableViewController id="TES-j6-umQ" customClass="MainSettingsTableViewController" customModule="Prism_Lights" customModuleProvider="target" sceneMemberID="viewController">
@@ -1364,7 +1388,7 @@
                             <outlet property="delegate" destination="TES-j6-umQ" id="8eL-7K-esA"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Settings" image="second" selectedImage="second" id="0hC-KH-B4L"/>
+                    <tabBarItem key="tabBarItem" title="Setting" image="first" selectedImage="second" id="0hC-KH-B4L"/>
                     <navigationItem key="navigationItem" id="XeC-5p-RIP"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="i5b-uj-dSx" userLabel="First Responder" sceneMemberID="firstResponder"/>

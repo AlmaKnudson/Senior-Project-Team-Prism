@@ -17,8 +17,11 @@ protocol BulbSettingsProtocol{
 
 
 class HomeController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, BulbSettingsProtocol {
-
+    
     @IBOutlet weak var bulbCollectionView: UICollectionView!
+    var retryConnection = true
+    var beenConnected = false
+    @IBOutlet weak var loadingView: UIView!
     
     
     var lightCount :Int = 0;
@@ -29,7 +32,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         
         //Add long press Gesture
         var gesture = UILongPressGestureRecognizer(target: self, action: "ShowBulbSettings:")
-        gesture.minimumPressDuration = 1
+        gesture.minimumPressDuration = 0.5
         gesture.delegate = self
         self.bulbCollectionView.addGestureRecognizer(gesture)
         
@@ -90,7 +93,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             println("Home disappeared")
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -130,9 +133,9 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
         var light = cache?.lights["\(indexPath.row+1)"] as? PHLight
-//        var sdk = ((UIApplication.sharedApplication().delegate) as AppDelegate).hueSDK!
+        //        var sdk = ((UIApplication.sharedApplication().delegate) as AppDelegate).hueSDK!
         if(light != nil){
-             
+            
             
             cell!.SetBulbLabel(light!.name)
             if(light!.lightState.on == 0){
@@ -141,22 +144,22 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
                 //cell!.SetBulbImage(true)
                 var point = CGPoint(x: Double(light!.lightState.x), y: Double(light!.lightState.y))
                 var color = PHUtilities.colorFromXY(point, forModel: light!.modelNumber)
-//                var color = UIColor(hue: CGFloat(light!.lightState.hue), saturation: CGFloat(light!.lightState.saturation), brightness: CGFloat(light!.lightState.brightness), alpha: 1)
+                //                var color = UIColor(hue: CGFloat(light!.lightState.hue), saturation: CGFloat(light!.lightState.saturation), brightness: CGFloat(light!.lightState.brightness), alpha: 1)
                 cell!.SetBulbImage(true)
                 cell!.SetBulbColor(color)
                 if (light?.lightState.reachable == 0){
-                 cell!.SetBulbUnreachable()
+                    cell!.SetBulbUnreachable()
                 }
             }
         } else{
             cell!.SetBulbImage(false)
-//            cell!.SetBulbUnreachable()
+            //            cell!.SetBulbUnreachable()
         }
         
         return cell!
     }
     
-
+    
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         if(DEBUG){
             println("Bulb tapped")
@@ -180,20 +183,32 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         }
         var bridgeSendAPI = PHBridgeSendAPI()
         bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil)
-        bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState){
-            NSArray -> Void in
-            if(light.lightState.on == 1){
-                var point = CGPoint(x: Double(light.lightState.x), y: Double(light.lightState.y))
-                var color = PHUtilities.colorFromXY(point, forModel: light.modelNumber)
-                cell.SetBulbColor(color)
-            } else{
-                cell.SetBulbImage(false)
-            }
-            
+        if(light.lightState.on == 1){
+            var point = CGPoint(x: Double(light.lightState.x), y: Double(light.lightState.y))
+            var color = PHUtilities.colorFromXY(point, forModel: light.modelNumber)
+            cell.SetBulbColor(color)
+        } else{
+            cell.SetBulbImage(false)
         }
+//        bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState){
+//            error -> Void in
+//            self.other = false
+//            if(light.lightState.on == 1){
+//                var point = CGPoint(x: Double(light.lightState.x), y: Double(light.lightState.y))
+//                var color = PHUtilities.colorFromXY(point, forModel: light.modelNumber)
+//                cell.SetBulbColor(color)
+//            } else{
+//                cell.SetBulbImage(false)
+//            }
+//            
+//        }
     }
-
-
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
+    }
+    
+    
     func ShowBulbSettings( gestureRecognizer: UILongPressGestureRecognizer){
         
         if(gestureRecognizer.state == UIGestureRecognizerState.Began){
@@ -222,36 +237,88 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     //MARK: Notification Methods
     
     /**
-        Handles the heartbeat event from the PHNotification
-        Updates the Bulbs UI
+    Handles the heartbeat event from the PHNotification
+    Updates the Bulbs UI
     
     :param:
     
     :returns:
     */
     func HeartBeatReceived(){
+        loadingView.hidden = true
+        retryConnection = true
+        beenConnected = true
         self.bulbCollectionView.reloadData()
     }
     
     /**
-        Handles the unable to connect bridge PHNotification
+    Handles the unable to connect bridge PHNotification
     
     :param: void
     
     :returns: void
     */
     func NetworkConnectionLost(){
+        
         var hueSDK = (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!
-        hueSDK.disableLocalConnection()
-        //TODO: Notify user of lost network connection
+        
+        if(beenConnected){
+            if(retryConnection){
+                retryConnection = false
+                return
+            }
+            hueSDK.disableLocalConnection()
+            beenConnected = false
+            //Create the alert
+            var alert = UIAlertController(title: "No Connection", message: "Connection to bridge lost. Insure the bridge is available and your network is working", preferredStyle: UIAlertControllerStyle.Alert)
+            let cancelButton = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Cancel) { (cancelButton) -> Void in     }
+            alert.addAction(cancelButton)
+            //TODO: Add retry connection button.
+            //Show the alert to the user
+            self.presentViewController(alert, animated: true) { () -> Void in}
+        } else{
+            hueSDK.disableLocalConnection()
+            let bridgeSearch = PHBridgeSearching(upnpSearch: true, andPortalSearch: false, andIpAdressSearch: false)
+            
+            bridgeSearch.startSearchWithCompletionHandler { (dict:[NSObject : AnyObject]!) -> Void in
+                var addresses = dict as [String:String]
+                var macAddresses = [String](addresses.keys)
+                if(addresses.count == 1){
+                    var mac = macAddresses[0]
+                    var ipaddress = addresses[mac]
+                    hueSDK.setBridgeToUseWithIpAddress(ipaddress, macAddress: mac)
+                    hueSDK.enableLocalConnection()
+                } else if(addresses.count > 1){
+                    //TODO: Present choices
+                    var alert = UIAlertController(title: "1+ Bridges Found", message: "More than 1 bridge has been dectected.", preferredStyle: UIAlertControllerStyle.Alert)
+                    let cancelButton = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Cancel) { (cancelButton) -> Void in     }
+                    alert.addAction(cancelButton)
+                    //TODO: Add retry connection button.
+                    //Show the alert to the user
+                    self.presentViewController(alert, animated: true) { () -> Void in}
+
+                } else{
+                    //TODO: More though search on a different screen
+                    var alert = UIAlertController(title: "No Bridge Found", message: "Please ensure you are connected to the wireless.", preferredStyle: UIAlertControllerStyle.Alert)
+                    let cancelButton = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Cancel) { (cancelButton) -> Void in     }
+                    alert.addAction(cancelButton)
+                    //TODO: Add retry connection button.
+                    //Show the alert to the user
+                    self.presentViewController(alert, animated: true) { () -> Void in}
+
+                }
+            }
+        }
+        
+        
     }
     
     /**
     
-        Handles the not authorized with the bridge PHNotification
+    Handles the not authorized with the bridge PHNotification
     
     :param: void
-
+    
     :returns: void
     
     */
@@ -261,12 +328,12 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         //TODO: Notify user of lost Authorization
         //TODO: Initiate Push Auth
     }
-
+    
     
     func ApplySettings(){
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
-
+    
 }
 
