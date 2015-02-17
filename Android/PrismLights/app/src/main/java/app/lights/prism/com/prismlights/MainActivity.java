@@ -31,29 +31,25 @@ import java.util.List;
 
 public class MainActivity extends Activity implements PHSDKListener{
 
-    public enum CurrentFragments{
-        SETTINGS,
-        HOME,
-        VOICE,
-        LIGHT_SETTINGS
-    }
-
-    PHHueSDK hueBridgeSdk;
-    Dialog waitingDialog;
-    CurrentFragments currentFragment;
+    private PHHueSDK hueBridgeSdk;
+    private Dialog waitingDialog;
+    private Button homeButton;
+    private Button voiceButton;
+    private ImageButton settingsButton;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button homeButton = (Button) findViewById(R.id.homeButton);
-        ImageButton settingsButton = (ImageButton) findViewById(R.id.settingsButton);
-        Button voiceButton = (Button) findViewById(R.id.voiceButton);
+        homeButton = (Button) findViewById(R.id.homeButton);
+        settingsButton = (ImageButton) findViewById(R.id.settingsButton);
+        settingsButton.setEnabled(false);//TODO do this in the xml if possible
+        voiceButton = (Button) findViewById(R.id.voiceButton);
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(currentFragment != CurrentFragments.HOME) {
+                if(!(getFragmentManager().findFragmentById(R.id.container) instanceof HomeFragment)) {
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.container, new HomeFragment());
                     fragmentTransaction.addToBackStack("home");
@@ -64,7 +60,7 @@ public class MainActivity extends Activity implements PHSDKListener{
         voiceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(currentFragment != CurrentFragments.VOICE) {
+                if(!(getFragmentManager().findFragmentById(R.id.container) instanceof VoiceFragment)) {
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.container, new VoiceFragment());
                     fragmentTransaction.addToBackStack("settings");
@@ -76,7 +72,7 @@ public class MainActivity extends Activity implements PHSDKListener{
         hueBridgeSdk.setAppName("Prism Lights");
         hueBridgeSdk.setDeviceName(Build.MODEL);
         hueBridgeSdk.getNotificationManager().registerSDKListener(this);
-        String waitingText = "";
+        CharSequence waitingText = "";
         //code from example app
         HueSharedPreferences prefs = HueSharedPreferences.getInstance(getApplicationContext());
         String lastIpAddress = prefs.getLastConnectedIPAddress();
@@ -87,12 +83,12 @@ public class MainActivity extends Activity implements PHSDKListener{
             lastAccessPoint.setUsername(lastUsername);
             if (!hueBridgeSdk.isAccessPointConnected(lastAccessPoint)) {
                 hueBridgeSdk.connect(lastAccessPoint);
-                waitingText = "Connecting to Bridge...";
+                waitingText = getText(R.string.connecting);
             }
         } else {
             PHBridgeSearchManager bridgeSearchManager = (PHBridgeSearchManager) hueBridgeSdk.getSDKService(PHHueSDK.SEARCH_BRIDGE);
             bridgeSearchManager.search(true, true);
-            waitingText = "Searching for Bridge...";
+            waitingText = getText(R.string.searching);
         }
 
         waitingDialog = new ProgressDialog(this);
@@ -109,7 +105,7 @@ public class MainActivity extends Activity implements PHSDKListener{
     public void searchForBridge() {
         PHBridgeSearchManager bridgeSearchManager = (PHBridgeSearchManager) hueBridgeSdk.getSDKService(PHHueSDK.SEARCH_BRIDGE);
         bridgeSearchManager.search(true, true);
-        String waitingText = "Searching for Bridge...";
+        CharSequence waitingText = getText(R.string.searching);
         waitingDialog = new ProgressDialog(this);
         waitingDialog.setCanceledOnTouchOutside(false);
         waitingDialog.setCancelable(false);
@@ -120,9 +116,6 @@ public class MainActivity extends Activity implements PHSDKListener{
         waitingDialog.setContentView(textView);
     }
 
-    public void setCurrentFragment(CurrentFragments fragment) {
-        this.currentFragment = fragment;
-    }
 
     @Override
     public void onCacheUpdated(List<Integer> integers, PHBridge phBridge) {
@@ -157,6 +150,10 @@ public class MainActivity extends Activity implements PHSDKListener{
                 fragmentTransaction.commit();
                 waitingDialog.setCancelable(true);
                 waitingDialog.cancel();
+                //enable tab buttons so we can use them
+                settingsButton.setEnabled(true);
+                voiceButton.setEnabled(true);
+                homeButton.setEnabled(true);
             }
         });
     }

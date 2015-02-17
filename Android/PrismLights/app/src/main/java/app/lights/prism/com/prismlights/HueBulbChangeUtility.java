@@ -139,7 +139,7 @@ public class HueBulbChangeUtility {
 //        state.setTransitionTime(1);
         return state;
     }
-    
+
     public static boolean colorsEqual(float[] color1, float[] color2) {
         System.out.println("x: " + Math.abs(color1[0] - color2[0]));
         System.out.println("y: " + Math.abs(color1[1] - color2[1]));

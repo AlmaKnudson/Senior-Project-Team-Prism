@@ -71,7 +71,7 @@ public class TimerFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        phHueSDK = ((MainActivity)getActivity()).hueBridgeSdk;
+        phHueSDK = PHHueSDK.getInstance();
         bridge = phHueSDK.getSelectedBridge();
 
         // TODO: need seconds too.   DateFormat.format(delegate, d.getTime());
