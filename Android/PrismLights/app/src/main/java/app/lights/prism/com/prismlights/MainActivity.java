@@ -41,7 +41,6 @@ public class MainActivity extends Activity implements PHSDKListener{
     PHHueSDK hueBridgeSdk;
     Dialog waitingDialog;
     CurrentFragments currentFragment;
-    ArrayList<ArrayList<Alarm>> alarms; //each bulb has its own ArrayList of Alar
 
 
     @Override
@@ -105,10 +104,6 @@ public class MainActivity extends Activity implements PHSDKListener{
         textView.setTextColor(Color.WHITE);
         waitingDialog.setContentView(textView);
         //end code from example app
-
-        // for Alarm
-        //TODO: I need to retrieve previous alarm data from saved file.
-        alarms = new ArrayList<ArrayList<Alarm>>();
     }
 
     public void searchForBridge() {
