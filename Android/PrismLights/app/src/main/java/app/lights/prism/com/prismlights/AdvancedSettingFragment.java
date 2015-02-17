@@ -19,6 +19,7 @@ public class AdvancedSettingFragment extends Fragment {
 
     private int currentBulbId; // ID of the chosen Light
     private TextView alarmText;
+    private TextView timerText;
 
 
     public AdvancedSettingFragment() {
@@ -45,6 +46,7 @@ public class AdvancedSettingFragment extends Fragment {
         Toast.makeText(getActivity(), currentBulbId +"'s advanced setting opened", Toast.LENGTH_SHORT).show();
 
         alarmText = (TextView)view.findViewById(R.id.alarmText);
+        timerText = (TextView)view.findViewById(R.id.timerText);
 
         alarmText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,6 +59,21 @@ public class AdvancedSettingFragment extends Fragment {
                 alarmFragment.setArguments(bundle);
                 fragmentTransaction.replace(R.id.container, alarmFragment);
                 fragmentTransaction.addToBackStack("AlarmFragment");
+                fragmentTransaction.commit();
+            }
+        });
+
+        timerText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putInt(ARG_PARAM1, currentBulbId);
+
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                TimerFragment timerFragment = new TimerFragment();
+                timerFragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.container, timerFragment);
+                fragmentTransaction.addToBackStack("TimerFragment");
                 fragmentTransaction.commit();
             }
         });

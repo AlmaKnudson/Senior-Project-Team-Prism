@@ -3,10 +3,11 @@ package app.lights.prism.com.prismlights;
 import android.app.ActivityManager;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.os.CountDownTimer;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,34 +34,37 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-//TODO: I need to add repeat option showing Mon~Sun
-//TODO: need to add option on, off, alert option
+
+// TODO: need to change timer picker. 00 hour 00 min
+
+//TODO: need to change the format of time showing.
+
+//TODO: need to fix the left time to show correctly.
+
+
 /**
- * A fragment representing a list of currentBulbAlarms.
- * <p/>
- * Large screen devices (such as tablets) are supported by replacing the ListView
- * with a GridView.
- * <p/>
+ * Created by Brian_Oh on 2/10/15.
  */
-public class AlarmFragment extends Fragment {
+public class TimerFragment extends Fragment{
 
     private static final String ARG_PARAM1 = "CURRENT_BULB_ID";
 
     private int currentBulbId; // The chosen Light BULB ID
-    private int chosenAlarmPosition;
+    private int chosenTimerPosition;
     private PHLight currentBulb;
-    private ListView alarmListView;
-    static AlarmAdapter adapter;
+    private ListView timerListView;
+    static TimerAdapter adapter;
     static private PHHueSDK phHueSDK;
     private static PHBridge bridge;
     String delegate;
-    List<PHSchedule> alarmSchedules; // this List of schedules in bridge whose description is Alarm.
+    List<PHSchedule> currentTimers; // this List of Timer schedules in bridge.
+    private List<CountDownTimer> countDownTimers; // List of the Countdown for timers.
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public AlarmFragment() {
+    public TimerFragment() {
     }
 
     @Override
@@ -70,6 +74,7 @@ public class AlarmFragment extends Fragment {
         phHueSDK = ((MainActivity)getActivity()).hueBridgeSdk;
         bridge = phHueSDK.getSelectedBridge();
 
+        // TODO: need seconds too.   DateFormat.format(delegate, d.getTime());
         delegate = "hh:mm aaa";
 
         if (getArguments() != null) {
@@ -78,25 +83,26 @@ public class AlarmFragment extends Fragment {
 
         //get current bulb
         currentBulb = bridge.getResourceCache().getAllLights().get(currentBulbId);
-        getAlarmSchedules();
+        getCurrentTimers();
+        countDownTimers = new ArrayList<>();
     }
 
-    // this function get list of schedule from the bridge, and return schedules that are alarm schedule and for this bulb
-    private void getAlarmSchedules() {
-        alarmSchedules = new ArrayList<PHSchedule>();
-        // TODO: currently getting just non recurring schedules. to get recurring schedules, param need to be true.
-        List<PHSchedule> nonRecurringSchedules = bridge.getResourceCache().getAllSchedules(false);
+    // this function get list of schedule from the bridge, and return schedules that are timer schedule and for this bulb
+    private void getCurrentTimers() {
+        currentTimers = new ArrayList<PHSchedule>();
 
-        // get schedules from Bridge that are for this bulb and has description "Alarm"
+        List<PHSchedule> allTimers = bridge.getResourceCache().getAllTimers(false);
+
+        // get schedules from Bridge those are for this bulb
 
         String currentBulbIdentity = currentBulb.getIdentifier();
 
-        for (int i=0; i<nonRecurringSchedules.size();i++)
+        for (int i=0; i< allTimers.size();i++)
         {
-            PHSchedule schedule = nonRecurringSchedules.get(i);
-            if(schedule.getLightIdentifier().equals(currentBulbIdentity) && schedule.getDescription().equals("Alarm"))
+            PHSchedule schedule = allTimers.get(i);
+            if(schedule.getIdentifier() != null && schedule.getLightIdentifier().equals(currentBulbIdentity))
             {
-                alarmSchedules.add(nonRecurringSchedules.get(i));
+                currentTimers.add(allTimers.get(i));
             }
         }
     }
@@ -104,13 +110,13 @@ public class AlarmFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_alarm, container, false);
+        View view = inflater.inflate(R.layout.fragment_timer, container, false);
 
-        ImageView addButton = (ImageView)view.findViewById(R.id.alarmPlusButton);
+        ImageView addButton = (ImageView)view.findViewById(R.id.timerPlusButton);
 
-        alarmListView = (ListView)view.findViewById(R.id.alarmListView);
+        timerListView = (ListView)view.findViewById(R.id.timerListView);
 
-        // When + image is click, open a time picker to create new alarm.
+        // When + image is click, open a time picker to create new timer.
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,23 +124,23 @@ public class AlarmFragment extends Fragment {
             }
         });
 
-        adapter = new AlarmAdapter();
-        alarmListView.setAdapter(adapter);
+        adapter = new TimerAdapter();
+        timerListView.setAdapter(adapter);
 
         return view;
     }
 
 
-    private class AlarmAdapter extends BaseAdapter{
+    private class TimerAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
-            return alarmSchedules.size();
+            return currentTimers.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return alarmSchedules.get(position);
+            return currentTimers.get(position);
         }
 
         @Override
@@ -144,22 +150,18 @@ public class AlarmFragment extends Fragment {
 
         @Override
         public View getView(final int position, final View convertView, ViewGroup parent) {
-            final PHSchedule alarm = alarmSchedules.get(position);
+            final PHSchedule timer = currentTimers.get(position);
 
-            Date d = alarm.getDate();
-
-            String timeString = (String) DateFormat.format(delegate, d.getTime());
             RelativeLayout currentView;
             if(convertView == null) {
-                currentView = (RelativeLayout) LayoutInflater.from(AlarmFragment.this.getActivity()).inflate(R.layout.single_alarm, parent, false);
+                currentView = (RelativeLayout) LayoutInflater.from(TimerFragment.this.getActivity()).inflate(R.layout.single_timer, parent, false);
             } else {
                 currentView = (RelativeLayout) convertView;
             }
 
-            TextView timeView = (TextView) currentView.findViewById(R.id.singleAlarmTimeText);
-            timeView.setText(timeString);
+            final TextView timeView = (TextView) currentView.findViewById(R.id.singleTimerTimeText);
 
-            // When individual Alarm is clicked, open a time picker to change the Alarm
+            // When individual timer is clicked, open a time picker to change the timer
             timeView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -167,17 +169,68 @@ public class AlarmFragment extends Fragment {
                 }
             });
 
-            TextView deleteTextView = (TextView) currentView.findViewById(R.id.alarmDeleteText);
+            final TextView deleteTextView = (TextView) currentView.findViewById(R.id.TimerDeleteText);
 
             deleteTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deleteAlarm(position);
+                    deleteTimer(position);
                 }
             });
 
+            Date startTimer = timer.getCreated();
+            startTimer.setTime(startTimer.getTime()+(long)(timer.getTimer()*1000)); //add duration of the timer to current time.
+            Date currentTime = new Date();
+            long timeLeft = startTimer.getTime() - currentTime.getTime(); // calculate the difference between current time and timer time
+
+
+
+            CountDownTimer countDownTimer = new CountDownTimer(timeLeft,1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    //changer time left text
+                    String timerString = getTimerString((int)millisUntilFinished/1000);
+                    timeView.setText(timerString);
+                }
+
+                @Override
+                public void onFinish() {
+                    // clean currentTimers and countDownTimers and refresh the adapter
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            getCurrentTimers();
+                            refreshCountDown();
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+            };
+
+            countDownTimer.start();
+
+            countDownTimers.add(position,countDownTimer);
+
             return currentView;
         }
+    }
+
+    private void refreshCountDown() {
+        for (int i = 0; i < countDownTimers.size();i++)
+        {
+            countDownTimers.get(i).cancel();
+        }
+        countDownTimers.clear();
+        countDownTimers = new ArrayList<CountDownTimer>(); //TODO: do I need this?
+    }
+
+    private String getTimerString(int timerTime) {
+        int hours = timerTime / 3600;
+        int minutes = (timerTime % 3600) / 60;
+        int seconds = timerTime % 60;
+
+        String timerString = hours+":"+minutes+":"+seconds;
+
+        return timerString;
     }
 
     // this is TimePickerFragment, showTimePickerDialog create this DialogFragment.
@@ -190,46 +243,40 @@ public class AlarmFragment extends Fragment {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             int hour;
             int minute;
-            if (chosenAlarmPosition == -1) {
-                // Use the current time as the default values for the picker
-                final Calendar c = Calendar.getInstance();
-                hour = c.get(Calendar.HOUR_OF_DAY);
-                minute = c.get(Calendar.MINUTE);
-            }
-            else{
-                Date date = alarmSchedules.get(chosenAlarmPosition).getDate();
-                hour = date.getHours();
-                minute = date.getMinutes();
-            }
+
+//            if (chosenTimerPosition == -1) {
+//                // Use the current time as the default values for the picker
+//
+                hour = 0;
+                minute = 0;
+
+//            }
+//            else{
+//                Date date = currentTimers.get(chosenTimerPosition).getDate();
+//                hour = date.getHours();
+//                minute = date.getMinutes();
+//            }
 
             // Create a new instance of TimePickerDialog and return it
             return new TimePickerDialog(getActivity(), this, hour, minute,
-                    DateFormat.is24HourFormat(getActivity()));
+                    true);
         }
 
-        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        public void onTimeSet(TimePicker view, int hour, int minute) {
 
             if (view.isShown()) {
 
-                Date alarmTime = new Date();
-                alarmTime.setHours(hourOfDay);
-                alarmTime.setMinutes(minute);
+                int time = hour * 3600 + minute * 60;
 
-                Date currentTime = new Date();
-                if(alarmTime.getTime() < currentTime.getTime()) {
-                    alarmTime = new Date(alarmTime.getTime()+86400000); //adding 24 hours in milliseconds
-                }
-
-
-                // user want to add new Alarm
-                if (chosenAlarmPosition == -1)
+                // user want to add new Timer
+                if (chosenTimerPosition == -1)
                 {
-                    addNewAlarm(alarmTime);
+                    addNewTimer(time);
                 }
-                // user wants to change existing alarm
+                // user wants to change existing Timer
                 else
                 {
-                    updateAlarm(chosenAlarmPosition, alarmTime);
+                    updateTimer(chosenTimerPosition, time);
                 }
 
             }
@@ -238,17 +285,17 @@ public class AlarmFragment extends Fragment {
         }
     }
 
-    //This function gets called when user want to add/change alarm, and this opens the timepicker.
-    public void showTimePickerDialog(int alarmPosition) {
-        chosenAlarmPosition = alarmPosition;
+    //This function gets called when user want to add/change timer, and this opens the timepicker.
+    public void showTimePickerDialog(int timerPosition) {
+        chosenTimerPosition = timerPosition;
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(getFragmentManager(), "timePicker");
     }
 
-    private void updateAlarm(int alarmPosition, Date alarmTime) {
+    private void updateTimer(int timerPosition, int time) {
 
-       PHSchedule schedule = alarmSchedules.get(alarmPosition);
-       schedule.setDate(alarmTime);
+        PHSchedule schedule = currentTimers.get(timerPosition);
+        schedule.setTimer(time);
 
         final PHWizardAlertDialog dialogManager = PHWizardAlertDialog
                 .getInstance();
@@ -266,13 +313,13 @@ public class AlarmFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_alarm_updated), R.string.btn_ok, R.string.txt_result);
+                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_timer_updated), R.string.btn_ok, R.string.txt_result);
                         }
-                        getAlarmSchedules();
+                        getCurrentTimers();
+                        refreshCountDown();
                         adapter.notifyDataSetChanged();
                     }
                 });
-
             }
 
             @Override
@@ -292,16 +339,18 @@ public class AlarmFragment extends Fragment {
 
             }
         });
-
     }
 
-    private void addNewAlarm(Date alarmTime) {
-        String scheduleName = (String) DateFormat.format(delegate, alarmTime.getTime());
+    private void addNewTimer(int time) {
+        String scheduleName = ""+ time;
         PHSchedule schedule = new PHSchedule(scheduleName);
-        schedule.setDate(alarmTime);
+        schedule.setTimer(time);
         schedule.setLightIdentifier(currentBulb.getIdentifier());
         schedule.setLightState(getLightState());
-        schedule.setDescription("Alarm");
+        schedule.setDescription("Timer");
+        Date startTime = new Date();
+//        schedule.setStartTime(startTime);
+        schedule.setCreated(startTime);
 
         final PHWizardAlertDialog dialogManager = PHWizardAlertDialog.getInstance();
         dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
@@ -314,9 +363,10 @@ public class AlarmFragment extends Fragment {
                     @Override
                     public void run() {
                         if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_alarm_created), R.string.btn_ok, R.string.txt_result);
+                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_timer_created), R.string.btn_ok, R.string.txt_result);
                         }
-                        getAlarmSchedules();
+                        getCurrentTimers();
+                        refreshCountDown();
                         adapter.notifyDataSetChanged();
                     }
                 });
@@ -347,8 +397,8 @@ public class AlarmFragment extends Fragment {
         });
     }
 
-    private void deleteAlarm(int position) {
-        String scheduleID = alarmSchedules.get(position).getIdentifier();
+    private void deleteTimer(int position) {
+        String scheduleID = currentTimers.get(position).getIdentifier();
 
         final PHWizardAlertDialog dialogManager = PHWizardAlertDialog.getInstance();
         dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
@@ -366,9 +416,10 @@ public class AlarmFragment extends Fragment {
                     @Override
                     public void run() {
                         if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_alarm_deleted), R.string.btn_ok, R.string.txt_result);
+                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_timer_deleted), R.string.btn_ok, R.string.txt_result);
                         }
-                        getAlarmSchedules();
+                        getCurrentTimers();
+                        refreshCountDown();
                         adapter.notifyDataSetChanged();
                     }
                 });
@@ -437,27 +488,6 @@ public class AlarmFragment extends Fragment {
 //    }
 //
 //
-//    @Override
-//    public void onItemClick(AdapterView<?> parent, View view, int currentBulbId, long id) {
-//        if (null != mListener) {
-//            // Notify the active callbacks interface (the activity, if the
-//            // fragment is attached to one) that an item has been selected.
-//            mListener.onFragmentInteraction(AlarmList.currentBulbAlarms.get(currentBulbId).name);
-//        }
-//    }
-//
-//    /**
-//     * The default content for this Fragment has a TextView that is shown when
-//     * the list is empty. If you would like to change the text, call this method
-//     * to supply the text it should use.
-//     */
-//    public void setEmptyText(CharSequence emptyText) {
-//        View emptyView = alarmListView.getEmptyView();
-//
-//        if (emptyView instanceof TextView) {
-//            ((TextView) emptyView).setText(emptyText);
-//        }
-//    }
 //
 //    /**
 //     * This interface must be implemented by activities that contain this

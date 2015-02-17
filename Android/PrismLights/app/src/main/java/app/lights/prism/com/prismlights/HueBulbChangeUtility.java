@@ -1,5 +1,7 @@
 package app.lights.prism.com.prismlights;
 
+import android.text.format.DateFormat;
+
 import com.philips.lighting.hue.listener.PHLightListener;
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
@@ -8,7 +10,9 @@ import com.philips.lighting.model.PHBridgeResource;
 import com.philips.lighting.model.PHHueError;
 import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
+import com.philips.lighting.model.PHSchedule;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -104,5 +108,31 @@ public class HueBulbChangeUtility {
         lightState.setColorMode(PHLight.PHLightColorMode.COLORMODE_XY);
         lightState.setOn(true);
         bridge.updateLightState(light, lightState);
+    }
+
+
+    public static void setAlarm(String lightIdentifier, Date date){
+        String scheduleName = (String) DateFormat.format("hh:mm aaa", date.getTime());
+        PHSchedule schedule = new PHSchedule(scheduleName);
+        schedule.setDate(date);
+        schedule.setLightIdentifier(lightIdentifier);
+        schedule.setLightState(getLightState());
+        schedule.setDescription("Alarm");
+    }
+
+    private static PHLightState getLightState() {
+        //PHLightState state = phHueSDK.getCurrentLightState();
+        //currentBulb.getLastKnownLightState();
+        PHLightState state = new PHLightState();
+        state.setOn(true);
+//        state.setHue(50);
+//        state.setSaturation(50);
+//        state.setBrightness(50);
+//        state.setX((float)0);
+//        state.setY((float)0);
+//        state.setEffectMode(PHLight.PHLightEffectMode.EFFECT_NONE);
+//        state.setAlertMode(PHLight.PHLightAlertMode.ALERT_NONE);
+//        state.setTransitionTime(1);
+        return state;
     }
 }

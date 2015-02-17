@@ -24,7 +24,10 @@
     <string name="sending_progress">Sending to Bridge...</string>
     <string name="txt_alarm_deleted">Alarm removed successfully</string>
     <string name="txt_alarm_created">Alarm created successfully</string>
-    <string name="txt_Alarm_updated">Alarm updated successfully</string>
+    <string name="txt_alarm_updated">Alarm updated successfully</string>
+    <string name="txt_timer_deleted">Timer removed successfully</string>
+    <string name="txt_timer_created">Timer created successfully</string>
+    <string name="txt_timer_updated">Timer updated successfully</string>
     <string name="txt_result">Result</string>
     <string name="txt_alarm_description">Alarm</string>
 

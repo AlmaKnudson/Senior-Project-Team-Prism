@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="app.lights.prism.com.prismlights.AlarmFragment"
     android:background="@android:color/black">
 
-    <TextView android:id="@+id/alarmText" android:layout_width="match_parent"
+    <TextView android:id="@+id/TimerText" android:layout_width="match_parent"
         android:layout_height="63dp"
-        android:text="Alarms"
+        android:text="Timers"
         android:layout_gravity="center_horizontal|top"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -16,13 +17,13 @@
         android:singleLine="true"
         android:phoneNumber="true"
         android:gravity="center_vertical|left"
-        android:layout_toLeftOf="@+id/alarmPlusButton"
-        android:layout_toStartOf="@+id/alarmPlusButton" />
+        android:layout_toLeftOf="@+id/timerPlusButton"
+        android:layout_toStartOf="@+id/timerPlusButton" />
 
-    <ListView android:id="@+id/alarmListView" android:layout_width="match_parent"
+    <ListView android:id="@+id/timerListView" android:layout_width="match_parent"
         android:layout_height="506dp"
         android:layout_gravity="center"
-        android:layout_below="@+id/alarmText"
+        android:layout_below="@+id/TimerText"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
@@ -33,11 +34,10 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/alarmPlusButton"
+        android:id="@+id/timerPlusButton"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:src="@android:drawable/ic_menu_add"
-        android:layout_alignBottom="@+id/alarmText" />
-
+        android:layout_alignBottom="@+id/TimerText" />
 </RelativeLayout>

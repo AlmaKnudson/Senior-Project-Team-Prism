@@ -13,16 +13,19 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
         android:gravity="center_vertical|left"
-        android:textSize="28dp" />
+        android:textSize="28dp"
+        android:layout_toLeftOf="@+id/alarmDeleteText"
+        android:layout_toStartOf="@+id/alarmDeleteText" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Delete"
-        android:id="@+id/AlarmDeleteText"
+        android:id="@+id/alarmDeleteText"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical|center_horizontal" />
 
 </RelativeLayout>
