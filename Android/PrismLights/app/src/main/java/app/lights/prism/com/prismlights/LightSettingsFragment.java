@@ -44,9 +44,8 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
     private Switch bulbOnState;
     private SeekBar brightness;
     private TextView brightnessPercentage;
-    private View currentColorView;
-    private int currentColor;
-    private ImageView colorPickerImage;
+    private float[] currentColor;
+    private ColorPickerView colorPicker;
 
     private Button advancedSettingButton;
 
@@ -81,8 +80,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
         bulbOnState = (Switch) frame.findViewById(R.id.bulbOnState);
         brightness = (SeekBar) frame.findViewById(R.id.brightness);
         brightnessPercentage = (TextView) frame.findViewById(R.id.brightnessLabel);
-        currentColorView = frame.findViewById(R.id.currentColor);
-        colorPickerImage = (ImageView) frame.findViewById(R.id.colorPickerImage);
+        colorPicker = (ColorPickerView) frame.findViewById(R.id.colorPickerView);
 
         advancedSettingButton = (Button)frame.findViewById(R.id.advancedSettingButton);
 
@@ -120,29 +118,11 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
                 HueBulbChangeUtility.changeBrightness(position, seekBar.getProgress());
             }
         });
-        colorPickerImage.setOnTouchListener(new View.OnTouchListener() {
+        colorPicker.setColorChangedListener(new ColorChangedListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                int x = (int) event.getX();
-                int y = (int) event.getY();
-                //I though ACTION_OUTSIDE would cover this but it doesn't seem to
-                if(x < 0 || y < 0 || y > colorPickerImage.getHeight() || x > colorPickerImage.getWidth()) {
-                    currentColorView.setBackgroundColor(currentColor);
-                    return false;
-                }
-                //the image view coords must be translated to the bitmap coordinates or it will select the wrong color
-                Bitmap bitmap = ((BitmapDrawable) (colorPickerImage.getDrawable())).getBitmap();
-                double yRatio =  (double) bitmap.getHeight() / colorPickerImage.getHeight();
-                double xRatio =  (double) bitmap.getWidth() / colorPickerImage.getWidth();
-                x = (int) Math.round(x * xRatio);
-                y = (int) Math.round(y * yRatio);
-                int color = bitmap.getPixel(x, y);
-                currentColorView.setBackgroundColor(color);
-                if(event.getAction() == MotionEvent.ACTION_UP) {
-                    currentColor = color;
-                    HueBulbChangeUtility.changeBulbColor(position, color);
-                }
-                return true;
+            public void onColorChanged(float[] newColor) {
+                currentColor = newColor;
+                HueBulbChangeUtility.changeBulbColor(position, newColor);
             }
         });
 
@@ -174,8 +154,8 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
         int currentBrightness = getCurrentBrightness(state.getBrightness());
         brightness.setProgress(currentBrightness);
         brightnessPercentage.setText(currentBrightness + "%");
-        currentColor = PHUtilities.colorFromXY(new float[]{state.getX(), state.getY()}, "");
-        currentColorView.setBackgroundColor(currentColor);
+        currentColor = new float[]{state.getX(), state.getY()};
+        colorPicker.setColor(currentColor);
     }
 
     private int getCurrentBrightness(int phBrightness) {

@@ -28,5 +28,6 @@
         android:layout_gravity="center"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:id="@+id/bulbName"
-        android:gravity="center" />
+        android:gravity="center"
+        android:textColor="#ffffffff"/>
 </LinearLayout>

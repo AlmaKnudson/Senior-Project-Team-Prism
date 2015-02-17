@@ -82,27 +82,16 @@
                 android:textSize="17sp"
                 android:textColor="@android:color/white" />
 
-            <View
-                android:layout_width="70dp"
-                android:layout_height="match_parent"
-                android:background="@android:color/white"
-                android:id="@+id/currentColor"
-                />
-
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/colorPickerImage"
-            android:src="@drawable/tempcolorpicker"
-            android:adjustViewBounds="true"
-            android:layout_gravity="bottom" />
-
-        <Space
+        <app.lights.prism.com.prismlights.ColorPickerView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:id="@+id/colorPickerView"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
             android:layout_gravity="center_horizontal" />
 
         <Button
@@ -113,8 +102,7 @@
             android:layout_gravity="center" />
         <Space
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="8dp"
             android:layout_gravity="center_horizontal" />
 
     </LinearLayout>

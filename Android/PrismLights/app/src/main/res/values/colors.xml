@@ -2,4 +2,5 @@
 <resources>
     <color name="darkPurple">#9999ff</color>
     <color name="lightPurple">#ccccff</color>
+    <color name="darkGray">#333333</color>
 </resources>

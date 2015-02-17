@@ -13,5 +13,6 @@
         android:numColumns="auto_fit"
         android:verticalSpacing="10dp"
         android:horizontalSpacing="10dp"
-        android:stretchMode="columnWidth"/>
+        android:stretchMode="columnWidth"
+        android:listSelector="@drawable/grid_background" />
 </FrameLayout>

@@ -190,8 +190,8 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
             //TODO make work with alternate color formats
             Float x = currentLight.getLastKnownLightState().getX();
             Float y = currentLight.getLastKnownLightState().getY();
-            int currentColor = PHUtilities.colorFromXY(new float[]{x, y}, "");
-            currentColor = Color.argb(100, Color.red(currentColor), Color.green(currentColor), Color.blue(currentColor));
+            int currentColor = PHUtilities.colorFromXY(new float[]{x, y}, HueBulbChangeUtility.colorXYModelForHue);
+            currentColor = Color.argb(300, Color.red(currentColor), Color.green(currentColor), Color.blue(currentColor));
             bulbTop.setColorFilter(currentColor);
             return currentView;
         }

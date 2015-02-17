@@ -21,6 +21,8 @@ public class HueBulbChangeUtility {
 
     public static int MAX_BRIGHTNESS = 254;
 
+    public static String colorXYModelForHue = "LCT001";
+
     public static PHLight getLightFromPosition(int position, PHBridge bridge) {
         List<PHLight> currentLights = bridge.getResourceCache().getAllLights();
         return currentLights.get(position);
@@ -98,15 +100,17 @@ public class HueBulbChangeUtility {
         bridge.updateLightState(light, lightState);
     }
 
-    public static void changeBulbColor(int lightPosition, int rgbColor) {
+    public static void changeBulbColor(int lightPosition, float[] xY) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
         PHLight light = getLightFromPosition(lightPosition, bridge);
         PHLightState lightState = new PHLightState();
-        float[] convertedColor = PHUtilities.calculateXY(rgbColor, "rgb");
-        lightState.setX(convertedColor[0]);
-        lightState.setY(convertedColor[1]);
+//        float[] convertedColor = PHUtilities.calculateXY(rgbColor, "rgb");
+        lightState.setX(xY[0]);
+        lightState.setY(xY[1]);
         lightState.setColorMode(PHLight.PHLightColorMode.COLORMODE_XY);
-        lightState.setOn(true);
+        if(!light.getLastKnownLightState().isOn()) {
+            lightState.setOn(true);
+        }
         bridge.updateLightState(light, lightState);
     }
 
@@ -134,5 +138,17 @@ public class HueBulbChangeUtility {
 //        state.setAlertMode(PHLight.PHLightAlertMode.ALERT_NONE);
 //        state.setTransitionTime(1);
         return state;
+    }
+    
+    public static boolean colorsEqual(float[] color1, float[] color2) {
+        System.out.println("x: " + Math.abs(color1[0] - color2[0]));
+        System.out.println("y: " + Math.abs(color1[1] - color2[1]));
+        if(Math.abs(color1[0] - color2[0])  > 0.001) {
+            return false;
+        }
+        if(Math.abs(color1[1] - color2[1]) > 0.001) {
+            return false;
+        }
+        return true;
     }
 }
