@@ -33,7 +33,7 @@ class MusicViewController: UIViewController, WitDelegate {
         }
         
         
-        Wit.sharedInstance().accessToken = "2UZT7OIHBRHNJTFZLOW222ND5SVNRYM7";
+        Wit.sharedInstance().accessToken = "SAIGZN56HURQBH5PSTPPQQ545ZNVBSSF";
         Wit.sharedInstance().detectSpeechStop = WITVadConfig.DetectSpeechStop;
 
         
@@ -102,6 +102,7 @@ class MusicViewController: UIViewController, WitDelegate {
         //default color
         var onOffVal = "off"
         var colorVal = "white";
+        var hueVal = "";
         //change all bulbs by default
         var bulb = "all lights"
         var message_subject = "";
@@ -130,34 +131,87 @@ class MusicViewController: UIViewController, WitDelegate {
         
         
         var firstOutcome:NSDictionary = outcomes[0] as NSDictionary;
+//        intentView.text = firstOutcome as NSString;
+        
         if let intent:NSString = firstOutcome.objectForKey("intent") as? NSString{
             println(intent);
         }
+//        if(intent.equals("alarm")){
+//            
+//            if (entities.containsKey("datetime") ){
+//                JsonElement datetime =  entities.get("datetime");
+//                String dateString = datetime.getAsJsonArray().get(0).getAsJsonObject().get("value").getAsJsonObject().get("from").getAsString();
+//                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+//                try {
+//                    Date myDate = sdf.parse(dateString);
+//                    witResponse.setText("Setting alarm for:\n" + myDate.toString());
+//                    
+//                } catch (Exception e){
+//                    witResponse.setText("Error parsing the date: " + dateString);
+//                }
+//            }
+//            //                witResponse.setText();
+//        }
+        
         if let entities:NSDictionary = firstOutcome.objectForKey("entities") as? NSDictionary{
-            
-            if let color:NSArray = entities.objectForKey("color") as? NSArray{
-                for el in color{
-                    if let value:NSString = el["value"] as? NSString{
-                        println("Color is: " + value);
-                        colorVal = value.uppercaseString;
-                    }
-                }
-            }
             
             if let on_off:NSArray = entities.objectForKey("on_off") as? NSArray{
                 for el in on_off{
                     if let value:NSString = el["value"] as? NSString{
                         println("on_of value is:" + value);
+                        entitiesView.text = entitiesView.text + "TURNING BULB(S): " + value + "\n";
                         onOffVal = value;
                         onOff = true;
+                        if(onOffVal == "off"){
+                            if(cache != nil) {
+                                for light in cache!.lights.values{
+                                    if(light.reachable != 0){
+//                                        //println("Light \(light.identifier)  \(light.lightState.description)");
+//                                        var lightState = PHLightState();
+//                                        if onOffVal == "off"{
+//                                            lightState.on = false;
+//                                        } else if(onOffVal == "on"){
+//                                            lightState.on = true;
+//                                        }
+//                                        lightState.hue = hueVal.toInt();
+//                                        lightState.on = false;
+//                                        var bridgeSendAPI = PHBridgeSendAPI();
+//                                        bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil);
+                                        var lightState = PHLightState()
+                                        lightState.on = false;
+                                        var bridgeSend = PHBridgeSendAPI()
+                                        bridgeSend.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil)
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
+            
+            if let color:NSArray = entities.objectForKey("color") as? NSArray{
+                for el in color{
+                    if let value:NSString = el["value"] as? NSString{
+                        println("Color is: " + value);
+                        entitiesView.text = entitiesView.text + "COLOR: " + value + "\n";
+                        colorVal = value.uppercaseString;
+                    }
+                    if let tempHueVal:NSString = el["metadata"] as? NSString{
+                        println("Hue value is: " + tempHueVal);
+                        entitiesView.text = entitiesView.text + "HUE VALUE: " + tempHueVal + "\n";
+                        hueVal = tempHueVal;
+                        //colorVal = value.uppercaseString;
+                    }
+                }
+            }
+            
+            
             
             if let alarm:NSArray = entities.objectForKey("alarm") as? NSArray{
                 for el in alarm{
                     if let value:NSString = el["value"] as? NSString{
                         println("alarm is: " + value);
+                        entitiesView.text = entitiesView.text + "SETTING AN: " + value + "\n";
                         setAlarm = true;
                     }
                 }
@@ -167,6 +221,7 @@ class MusicViewController: UIViewController, WitDelegate {
                 for el in timer{
                     if let value:NSString = el["value"] as? NSString{
                         println("timer is: " + value);
+                        entitiesView.text = entitiesView.text + "SETTING A: " + value + "\n";
                         setTimer = true;
                     }
                 }
@@ -177,10 +232,12 @@ class MusicViewController: UIViewController, WitDelegate {
                 if let norm:NSDictionary = duration[0].objectForKey("normalized") as? NSDictionary{
                     if let val:NSInteger = norm.objectForKey("value") as? NSInteger{
                         println("duration value: \(val)")
+                        entitiesView.text = entitiesView.text + "DURATION:  \(val)" + "\n";
                         durationVal = val;
                     }
                     if let unit:NSString = norm.objectForKey("unit") as? NSString{
                         println("duration unit: \(unit)")
+                        entitiesView.text = entitiesView.text + "DURATION UNIT:  \(unit)" + "\n";
                         durationUnit = unit;
                     }
                 }
@@ -190,7 +247,78 @@ class MusicViewController: UIViewController, WitDelegate {
                 for el in b{
                     if let value:NSString = el["value"] as? NSString{
                         println("bulb is: " + value);
+                        entitiesView.text = entitiesView.text + "BULB NAME: " + value + "\n";
                         bulb = value;
+                    }
+                }
+            }
+            
+            if let dim:NSArray = entities.objectForKey("dim") as? NSArray{
+                entitiesView.text = entitiesView.text + "DIMMING BULBS\n";
+                if (cache == nil){
+                    return;
+                }
+                for light in cache!.lights.values{
+                    if((light.reachable) != nil){
+                    //println("Light \(light.identifier)  \(light.lightState.description)");
+                    
+//                    var convertedBrightness = ((light.brightness * 254.0) / 100);
+//                    var currentBrightness = light.brightness;
+                    var currentBrightness = light.brightness - 85;
+                    var lightState = PHLightState();
+                    if onOffVal == "off"{
+                        lightState.on = false;
+                    } else if(onOffVal == "on"){
+                        lightState.on = true;
+                    }
+//                    lightState.hue = hueVal.toInt();
+                    lightState.on = true;
+                    lightState.saturation = 254;
+                    
+                    lightState.brightness = (currentBrightness - 85);
+                    
+                    
+                    var bridgeSendAPI = PHBridgeSendAPI();
+                    bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil);
+                    }
+                }
+//                var lightState = PHLightState()
+//                lightState.brightness = Int(254)
+//                var bridgeSend = PHBridgeSendAPI()
+//                bridgeSend.updateLightStateForId(self.bulbId, withLightState: lightState, completionHandler: nil)
+//                
+//                var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
+//                var light = (cache.lights?[bulbId!]) as PHLight
+//                light.lightState.brightness = Int(254*sender.value)
+            }
+            
+            if let brighter:NSArray = entities.objectForKey("brighter") as? NSArray{
+                entitiesView.text = entitiesView.text + "MAKING BULBS BRIGHTER\n";
+                if (cache == nil){
+                    return;
+                }
+                for light in cache!.lights.values{
+                    if((light.reachable) != nil){
+                    //println("Light \(light.identifier)  \(light.lightState.description)");
+                    
+//                    var convertedBrightness = ((light.brightness * 254.0) / 100);
+                    //                    var currentBrightness = light.brightness;
+                    var currentBrightness = light.brightness + 85;
+                    var lightState = PHLightState();
+                    if onOffVal == "off"{
+                        lightState.on = false;
+                    } else if(onOffVal == "on"){
+                        lightState.on = true;
+                    }
+                    //                    lightState.hue = hueVal.toInt();
+                    lightState.on = true;
+                    lightState.saturation = 254;
+                    
+                    lightState.brightness = currentBrightness;
+                    
+                    
+                    var bridgeSendAPI = PHBridgeSendAPI();
+                    bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil);
                     }
                 }
             }
@@ -199,10 +327,12 @@ class MusicViewController: UIViewController, WitDelegate {
                 for el in date_time{
                     if let value:NSString = el["grain"] as? NSString{
                         println("grain of datetime is: " + value);
+//                        entitiesView.text = entitiesView.text + "DATETIME GRAIN: " + value + "\n";
                         datetimegrain = value;
                     }
                     if let value:NSString = el["value"] as? NSString{
                         println("datetime is: " + value);
+                        entitiesView.text = entitiesView.text + "DATETIME: \n" + value + "\n";
                         datetimeval = value;
                     }
                 }
@@ -212,6 +342,7 @@ class MusicViewController: UIViewController, WitDelegate {
                 for el in ms{
                     if let value:NSString = el["value"] as? NSString{
                         println("message_subject is: " + value);
+                        entitiesView.text = entitiesView.text + "MESSAGE_SUBJECT: " + value + "\n";
                         message_subject = value;
                     }
                 }
@@ -220,6 +351,7 @@ class MusicViewController: UIViewController, WitDelegate {
         }
         if let confidence:NSString = firstOutcome.objectForKey("confidence") as? NSString{
             println(confidence);
+            entitiesView.text = entitiesView.text + "CONFIDENCE: " + confidence + "\n";
         }
         if let text:NSString = firstOutcome.objectForKey("_text") as? NSString{
             println(text);
@@ -241,10 +373,10 @@ class MusicViewController: UIViewController, WitDelegate {
         println("Will send-- on_off: \(onOffVal). Color: \(colorVal). Bulb: \(bulb). Message_subject: \(message_subject)." );
         
 
-        var COLORDIC:NSDictionary = ["RED":65280, "YELLOW":12950, "WHITE":36210, "BLUE":46920, "PURPLE":56100, "PINK":53505, "ORANGE":10000, "GREEN": 25500];
-        
+        //var COLORDIC:NSDictionary = ["RED":65280, "YELLOW":12950, "WHITE":36210, "BLUE":46920, "PURPLE":56100, "PINK":53505, "ORANGE":10000, "GREEN": 25500];
+        if(cache != nil) {
         for light in cache!.lights.values{
-            
+            if(light.reachable != 0){
             //println("Light \(light.identifier)  \(light.lightState.description)");
             var lightState = PHLightState();
             if onOffVal == "off"{
@@ -252,22 +384,17 @@ class MusicViewController: UIViewController, WitDelegate {
             } else if(onOffVal == "on"){
                 lightState.on = true;
             }
-            if let hue:NSInteger = COLORDIC[colorVal] as? NSInteger{
-                lightState.hue = hue;
+                lightState.hue = hueVal.toInt();
                 lightState.on = true;
                 lightState.saturation = 254;
-            }
+            
             lightState.brightness = 254;
             
-//            if light.lightState.on == 1{
-//                light.lightState.on = false
-//                lightState.on = false
-//            } else{
-//                lightState.on = true
-//                light.lightState.on = true
-//            }
+
             var bridgeSendAPI = PHBridgeSendAPI();
             bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil);
+            }
+        }
         }
     
     }
