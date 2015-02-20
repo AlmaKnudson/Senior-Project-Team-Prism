@@ -9,10 +9,12 @@
 import UIKit
 
 
-class MusicViewController: UIViewController, WitDelegate {
+class MusicViewController: UIViewController {
     
     
     /*
+    class MusicViewController: UIViewController, WitDelegate {
+    
     var statusView:UILabel = UILabel();
     var intentView:UILabel = UILabel();
     var entitiesView:UITextView = UITextView();
