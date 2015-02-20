@@ -44,12 +44,14 @@
 		0D98626C1A1D2C0B00FAD175 /* Prism_LightsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D98626B1A1D2C0B00FAD175 /* Prism_LightsTests.swift */; };
 		0DB347431A2D5BCE00B91EF2 /* PushAuthController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB347421A2D5BCE00B91EF2 /* PushAuthController.swift */; };
 		0DC667971A38BD790070AC4C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D9862591A1D2C0B00FAD175 /* Main.storyboard */; };
+		117F49351A96D98800A31746 /* EZAudio in Resources */ = {isa = PBXBuildFile; fileRef = 117F49341A96D98800A31746 /* EZAudio */; };
 		118314EF1A96D228004E6425 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118314EE1A96D228004E6425 /* Accelerate.framework */; };
 		118314F11A96D235004E6425 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118314F01A96D235004E6425 /* GLKit.framework */; };
 		118314F31A96D24B004E6425 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118314F21A96D24B004E6425 /* AudioToolbox.framework */; };
 		118314F51A96D259004E6425 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118314F41A96D259004E6425 /* Foundation.framework */; };
 		118314F71A96D265004E6425 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118314F61A96D265004E6425 /* CoreGraphics.framework */; };
 		118314F91A96D272004E6425 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118314F81A96D272004E6425 /* UIKit.framework */; };
+		118315261A96D7D9004E6425 /* MusicController.m in Sources */ = {isa = PBXBuildFile; fileRef = 118315251A96D7D9004E6425 /* MusicController.m */; };
 		CC24AE701A77EFEA003316FD /* Lights.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC24AE6F1A77EFEA003316FD /* Lights.swift */; };
 		CC27D7FF1A802E9C00346F47 /* PrismSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC27D7FE1A802E9C00346F47 /* PrismSDK.swift */; };
 		CC391F411A7D91F9004C94B5 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC391F401A7D91F9004C94B5 /* Networking.swift */; };
@@ -114,12 +116,15 @@
 		0D98626A1A1D2C0B00FAD175 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0D98626B1A1D2C0B00FAD175 /* Prism_LightsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prism_LightsTests.swift; sourceTree = "<group>"; };
 		0DB347421A2D5BCE00B91EF2 /* PushAuthController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushAuthController.swift; sourceTree = "<group>"; };
+		117F49341A96D98800A31746 /* EZAudio */ = {isa = PBXFileReference; lastKnownFileType = folder; path = EZAudio; sourceTree = "<group>"; };
 		118314EE1A96D228004E6425 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		118314F01A96D235004E6425 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		118314F21A96D24B004E6425 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		118314F41A96D259004E6425 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		118314F61A96D265004E6425 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		118314F81A96D272004E6425 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		118315241A96D7C9004E6425 /* MusicController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MusicController.h; sourceTree = "<group>"; };
+		118315251A96D7D9004E6425 /* MusicController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicController.m; sourceTree = "<group>"; };
 		CC24AE6F1A77EFEA003316FD /* Lights.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lights.swift; sourceTree = "<group>"; };
 		CC27D7FE1A802E9C00346F47 /* PrismSDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrismSDK.swift; sourceTree = "<group>"; };
 		CC391F401A7D91F9004C94B5 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
@@ -274,6 +279,7 @@
 		0D9862501A1D2C0B00FAD175 /* Prism Lights */ = {
 			isa = PBXGroup;
 			children = (
+				117F49341A96D98800A31746 /* EZAudio */,
 				CC24AE6E1A77EFC2003316FD /* HueAPI */,
 				0D9862531A1D2C0B00FAD175 /* AppDelegate.swift */,
 				0D0A26D41A3766C70033550D /* TabViewController.swift */,
@@ -285,6 +291,8 @@
 				0D0A26D61A376D410033550D /* Home */,
 				0D0A26D71A376D4A0033550D /* Music */,
 				0D9862511A1D2C0B00FAD175 /* Supporting Files */,
+				118315241A96D7C9004E6425 /* MusicController.h */,
+				118315251A96D7D9004E6425 /* MusicController.m */,
 			);
 			path = "Prism Lights";
 			sourceTree = "<group>";
@@ -414,6 +422,7 @@
 			files = (
 				0DC667971A38BD790070AC4C /* Main.storyboard in Resources */,
 				0D9862601A1D2C0B00FAD175 /* LaunchScreen.xib in Resources */,
+				117F49351A96D98800A31746 /* EZAudio in Resources */,
 				0D799B0F1A39260200E9DDF2 /* Wit.bundle in Resources */,
 				0D98625D1A1D2C0B00FAD175 /* Images.xcassets in Resources */,
 			);
@@ -442,6 +451,7 @@
 				0D8B27A41A3A0B3A0069372C /* BulbSettings.swift in Sources */,
 				CCCD59301A78012F008B209D /* Configuration.swift in Sources */,
 				0D9862581A1D2C0B00FAD175 /* MusicViewController.swift in Sources */,
+				118315261A96D7D9004E6425 /* MusicController.m in Sources */,
 				CC24AE701A77EFEA003316FD /* Lights.swift in Sources */,
 				0D3A79151A26A716003AC6D4 /* DDFileLogger.m in Sources */,
 				0D9862541A1D2C0B00FAD175 /* AppDelegate.swift in Sources */,
