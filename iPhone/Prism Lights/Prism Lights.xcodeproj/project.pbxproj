@@ -58,13 +58,13 @@
 		117F495E1A96DA4500A31746 /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 117F494E1A96DA4500A31746 /* TPCircularBuffer.c */; };
 		117F495F1A96DA4500A31746 /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 117F49511A96DA4500A31746 /* CHANGELOG */; };
 		117F49601A96DA4500A31746 /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 117F49521A96DA4500A31746 /* VERSION */; };
+		117F49631A96DAFE00A31746 /* MusicController.m in Sources */ = {isa = PBXBuildFile; fileRef = 117F49621A96DAFE00A31746 /* MusicController.m */; };
 		118314EF1A96D228004E6425 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118314EE1A96D228004E6425 /* Accelerate.framework */; };
 		118314F11A96D235004E6425 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118314F01A96D235004E6425 /* GLKit.framework */; };
 		118314F31A96D24B004E6425 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118314F21A96D24B004E6425 /* AudioToolbox.framework */; };
 		118314F51A96D259004E6425 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118314F41A96D259004E6425 /* Foundation.framework */; };
 		118314F71A96D265004E6425 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118314F61A96D265004E6425 /* CoreGraphics.framework */; };
 		118314F91A96D272004E6425 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118314F81A96D272004E6425 /* UIKit.framework */; };
-		118315261A96D7D9004E6425 /* MusicController.m in Sources */ = {isa = PBXBuildFile; fileRef = 118315251A96D7D9004E6425 /* MusicController.m */; };
 		CC24AE701A77EFEA003316FD /* Lights.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC24AE6F1A77EFEA003316FD /* Lights.swift */; };
 		CC27D7FF1A802E9C00346F47 /* PrismSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC27D7FE1A802E9C00346F47 /* PrismSDK.swift */; };
 		CC391F411A7D91F9004C94B5 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC391F401A7D91F9004C94B5 /* Networking.swift */; };
@@ -155,14 +155,15 @@
 		117F494F1A96DA4500A31746 /* TPCircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPCircularBuffer.h; sourceTree = "<group>"; };
 		117F49511A96DA4500A31746 /* CHANGELOG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG; sourceTree = "<group>"; };
 		117F49521A96DA4500A31746 /* VERSION */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VERSION; sourceTree = "<group>"; };
+		117F49621A96DAFE00A31746 /* MusicController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MusicController.m; path = ../MusicController.m; sourceTree = "<group>"; };
+		117F49641A96DB2500A31746 /* MusicController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MusicController.h; path = ../MusicController.h; sourceTree = "<group>"; };
+		117F49651A96DB8B00A31746 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		118314EE1A96D228004E6425 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		118314F01A96D235004E6425 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		118314F21A96D24B004E6425 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		118314F41A96D259004E6425 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		118314F61A96D265004E6425 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		118314F81A96D272004E6425 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		118315241A96D7C9004E6425 /* MusicController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MusicController.h; sourceTree = "<group>"; };
-		118315251A96D7D9004E6425 /* MusicController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicController.m; sourceTree = "<group>"; };
 		CC24AE6F1A77EFEA003316FD /* Lights.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lights.swift; sourceTree = "<group>"; };
 		CC27D7FE1A802E9C00346F47 /* PrismSDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrismSDK.swift; sourceTree = "<group>"; };
 		CC391F401A7D91F9004C94B5 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
@@ -329,8 +330,9 @@
 				0D0A26D61A376D410033550D /* Home */,
 				0D0A26D71A376D4A0033550D /* Music */,
 				0D9862511A1D2C0B00FAD175 /* Supporting Files */,
-				118315241A96D7C9004E6425 /* MusicController.h */,
-				118315251A96D7D9004E6425 /* MusicController.m */,
+				117F49621A96DAFE00A31746 /* MusicController.m */,
+				117F49651A96DB8B00A31746 /* PrefixHeader.pch */,
+				117F49641A96DB2500A31746 /* MusicController.h */,
 			);
 			path = "Prism Lights";
 			sourceTree = "<group>";
@@ -523,6 +525,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0D9357E71A2D4BB100AAD52D /* BulbCollectionCell.swift in Sources */,
+				117F49631A96DAFE00A31746 /* MusicController.m in Sources */,
 				0D3A79171A26A716003AC6D4 /* DDLog.m in Sources */,
 				0D3A79191A26A716003AC6D4 /* DDTTYLogger.m in Sources */,
 				CC391F411A7D91F9004C94B5 /* Networking.swift in Sources */,
@@ -534,7 +537,6 @@
 				117F49561A96DA4500A31746 /* EZAudioPlayer.m in Sources */,
 				0D9862581A1D2C0B00FAD175 /* MusicViewController.swift in Sources */,
 				117F49541A96DA4500A31746 /* EZAudio.m in Sources */,
-				118315261A96D7D9004E6425 /* MusicController.m in Sources */,
 				CC24AE701A77EFEA003316FD /* Lights.swift in Sources */,
 				0D3A79151A26A716003AC6D4 /* DDFileLogger.m in Sources */,
 				117F49551A96DA4500A31746 /* EZAudioFile.m in Sources */,
@@ -700,6 +702,8 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Prism Lights/PrefixHeader.pch";
 				INFOPLIST_FILE = "Prism Lights/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
@@ -721,6 +725,8 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Prism Lights/PrefixHeader.pch";
 				INFOPLIST_FILE = "Prism Lights/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
