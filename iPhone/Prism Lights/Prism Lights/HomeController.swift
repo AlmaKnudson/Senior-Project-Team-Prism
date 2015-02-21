@@ -21,6 +21,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     @IBOutlet weak var bulbCollectionView: UICollectionView!
     var retryConnection = true
     var beenConnected = false
+    var skipNextHeartbeat = false
     @IBOutlet weak var loadingView: UIView!
     
     
@@ -107,6 +108,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         var bulbSettingsController = dest.viewControllers[0] as BulbSettingsController
         bulbSettingsController.homeDelegate = self
         bulbSettingsController.bulbId = "\((sender as NSIndexPath).row+1)"
+        bulbSettingsController.isGroup = false
     }
     
     //MARK: - UICollectionView Methods
@@ -190,18 +192,24 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         } else{
             cell.SetBulbImage(false)
         }
-//        bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState){
-//            error -> Void in
-//            self.other = false
-//            if(light.lightState.on == 1){
-//                var point = CGPoint(x: Double(light.lightState.x), y: Double(light.lightState.y))
-//                var color = PHUtilities.colorFromXY(point, forModel: light.modelNumber)
-//                cell.SetBulbColor(color)
-//            } else{
-//                cell.SetBulbImage(false)
-//            }
-//            
-//        }
+        bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState){
+            error -> Void in
+            if error != nil {
+                if(DEBUG){
+                    println("Error updating light state.")
+                }
+                return
+            }
+            
+            if(light.lightState.on == 1){
+                var point = CGPoint(x: Double(light.lightState.x), y: Double(light.lightState.y))
+                var color = PHUtilities.colorFromXY(point, forModel: light.modelNumber)
+                cell.SetBulbColor(color)
+            } else{
+                cell.SetBulbImage(false)
+            }
+            self.skipNextHeartbeat = true
+        }
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -245,6 +253,10 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     :returns:
     */
     func HeartBeatReceived(){
+        if skipNextHeartbeat{
+            skipNextHeartbeat = false;
+            return
+        }
         loadingView.hidden = true
         retryConnection = true
         beenConnected = true

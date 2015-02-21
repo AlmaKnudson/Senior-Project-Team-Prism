@@ -8,15 +8,27 @@
 
 import Foundation
 
-class AlarmTable: UITableViewController, UITableViewDataSource, UITableViewDelegate {
+class AlarmsTable: UITableViewController, UITableViewDataSource, UITableViewDelegate {
     
-    
+    var bulbId :String?
+    var isGroup :Bool?
+    var alarms:[PHSchedule]?
     
     //MARK: - UITableViewDataSource Methods
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         
-        return 0
+        if( isGroup!) {
+            alarms = AlarmsWithGroupIdentifier(bulbId!)
+        } else{
+            alarms = AlarmsWithLightIdentifier(bulbId!)
+        }
+        
+        if alarms != nil{
+            return alarms!.count
+        } else{
+            return 0
+        }
     }
     
     // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
@@ -37,6 +49,8 @@ class AlarmTable: UITableViewController, UITableViewDataSource, UITableViewDeleg
 
     
     //MARK: - UITableViewDataSource Methods
+    
+    //MARK: - Segue
     
     
 }

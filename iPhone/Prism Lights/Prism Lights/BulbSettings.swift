@@ -22,6 +22,7 @@ class BulbSettingsController : UIViewController, ColorSelectedProtocol{
     var brightnessInt :Int? = nil
     var homeDelegate :BulbSettingsProtocol?
     var bulbId :String?
+    var isGroup :Bool?
 
     //MARK - Actions
     @IBAction func onSwitchToggle(sender: UISwitch) {
@@ -124,6 +125,17 @@ class BulbSettingsController : UIViewController, ColorSelectedProtocol{
     
     
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if segue.identifier == "AlarmsTable" {
+            var alarmTable:AlarmsTable = sender as AlarmsTable
+            alarmTable.bulbId = self.bulbId
+            alarmTable.isGroup = isGroup
+        } else if segue.identifier == "CycleColorsTable" {
+            
+        }
+        
+    }
     
     
     
