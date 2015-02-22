@@ -34,6 +34,52 @@ float runningMaxSound = 0;
 
 bool sendChange;
 
+//["RED":65280, "YELLOW":12950, "WHITE":36210, "BLUE":46920, "PURPLE":56100, "PINK":53505, "ORANGE":10000, "GREEN": 25500];
+
+NSInteger highs[3] = {65280, 36210, 53505};
+NSInteger mids[3] = {46920, 56100, 51000};
+NSInteger lows[3] = {12950, 25500, 10000};
+int highsIndex = 0;
+int midsIndex = 0;
+int lowsIndex = 0;
+
+
+- (void)updateHighBulbs:(float)intensity withMagnitude:(float)magnitude
+{
+    NSInteger hueVal = highs[highsIndex];
+    if(highsIndex + 1 > 3){
+        highsIndex = 0;
+    } else{
+        highsIndex = highsIndex + 1;
+    }
+    NSLog(@"HIGHS-->Brightness: %f \t Color: %li \t Magnitude: %f", intensity, (long)hueVal, magnitude);
+    
+}
+
+- (void)updateMidBulbs:(float)intensity withMagnitude:(float)magnitude
+{
+    NSInteger hueVal = mids[midsIndex];
+    if(midsIndex + 1 > 3){
+        midsIndex = 0;
+    } else{
+        midsIndex = midsIndex + 1;
+    }
+   NSLog(@"MIDS-->Brightness: %f \t Color: %li \t Magnitude: %f", intensity, (long)hueVal, magnitude);
+}
+
+- (void)updateLowBulbs:(float)intensity withMagnitude:(float)magnitude
+{
+    NSInteger hueVal = lows[lowsIndex];
+    if(lowsIndex + 1 > 3){
+        lowsIndex = 0;
+    } else{
+        lowsIndex = lowsIndex + 1;
+    }
+    NSLog(@"LOWS-->Brightness: %f \t Color: %li \t Magnitude: %f", intensity, (long)hueVal, magnitude);
+}
+
+
+
 #pragma mark - Customize the Audio Plot
 - (void)viewDidLoad
 {
@@ -168,13 +214,17 @@ bool sendChange;
             if(sendChange){
                 if(currentRangeBin == 1){
                     //SEND CHANGE TO BIN 1
-                    NSLog(@"HIGH");
+//                    NSLog(@"HIGH");
+                    //[self createFFTWithBufferSize:bufferSize withAudioData:buffer[0]];
+                    [self updateHighBulbs:(maxSound / runningMaxSound) withMagnitude:maxMag];
                 } else if(currentRangeBin == 2) {
                     //SEND CHANGE TO BIN 2
-                     NSLog(@"MID");
+//                     NSLog(@"MID");
+                    [self updateMidBulbs:(maxSound / runningMaxSound) withMagnitude:maxMag];
                 } else if(currentRangeBin == 3){
                     //SNED CHANGE TO BIN 3
-                     NSLog(@"LOW");
+//                     NSLog(@"LOW");
+                    [self updateLowBulbs:(maxSound / runningMaxSound) withMagnitude:maxMag];
                 }
                 
                 sendChange = false;
