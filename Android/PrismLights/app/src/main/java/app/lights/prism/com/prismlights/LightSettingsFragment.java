@@ -1,26 +1,21 @@
 package app.lights.prism.com.prismlights;
 
 import android.app.FragmentTransaction;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.philips.lighting.hue.sdk.PHHueSDK;
-import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
 
@@ -45,7 +40,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
     private SeekBar brightness;
     private TextView brightnessPercentage;
     private float[] currentColor;
-    private ColorPickerView colorPicker;
+    private ColorPickerViewGroup colorPicker;
 
     private Button advancedSettingButton;
 
@@ -80,7 +75,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
         bulbOnState = (Switch) frame.findViewById(R.id.bulbOnState);
         brightness = (SeekBar) frame.findViewById(R.id.brightness);
         brightnessPercentage = (TextView) frame.findViewById(R.id.brightnessLabel);
-        colorPicker = (ColorPickerView) frame.findViewById(R.id.colorPickerView);
+        colorPicker = (ColorPickerViewGroup) frame.findViewById(R.id.colorPickerView);
 
         advancedSettingButton = (Button)frame.findViewById(R.id.advancedSettingButton);
 
