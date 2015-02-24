@@ -329,16 +329,26 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ijk-EJ-ddu" customClass="EZAudioPlotGL">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ijk-EJ-ddu" customClass="EZAudioPlotGL">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="297"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cIz-tb-u7B" customClass="EZAudioPlot">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cIz-tb-u7B" customClass="EZAudioPlot">
                                 <rect key="frame" x="0.0" y="294" width="600" height="306"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="cIz-tb-u7B" firstAttribute="top" secondItem="L7p-HK-0SC" secondAttribute="bottom" constant="274" id="8aA-6W-HXC"/>
+                            <constraint firstItem="ijk-EJ-ddu" firstAttribute="top" secondItem="QS5-Rx-YEW" secondAttribute="top" id="Hhb-Ok-MZF"/>
+                            <constraint firstItem="Djb-ko-YwX" firstAttribute="top" secondItem="ijk-EJ-ddu" secondAttribute="bottom" constant="254" id="IPZ-CN-YN6"/>
+                            <constraint firstItem="ijk-EJ-ddu" firstAttribute="trailing" secondItem="cIz-tb-u7B" secondAttribute="trailing" id="emi-l9-yfi"/>
+                            <constraint firstItem="ijk-EJ-ddu" firstAttribute="leading" secondItem="QS5-Rx-YEW" secondAttribute="leading" id="iU0-7v-Rxw"/>
+                            <constraint firstItem="ijk-EJ-ddu" firstAttribute="leading" secondItem="cIz-tb-u7B" secondAttribute="leading" id="kgz-hn-uBA"/>
+                            <constraint firstAttribute="trailing" secondItem="ijk-EJ-ddu" secondAttribute="trailing" id="koa-Fw-NSj"/>
+                            <constraint firstAttribute="bottom" secondItem="cIz-tb-u7B" secondAttribute="bottom" id="vz0-V9-5BT"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Music" image="second" id="cPa-gy-q4n"/>
                     <connections>

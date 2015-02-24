@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         hueSDK = PHHueSDK()
         //hueSDK?.setLocalHeartbeatInterval(1.0, forResourceType:RESOURCES_LIGHTS)
-        hueSDK!.enableLogging(true)
+        //hueSDK!.enableLogging(true)
         hueSDK!.startUpSDK()
 
         return true
