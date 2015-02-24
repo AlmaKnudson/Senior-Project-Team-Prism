@@ -4,7 +4,8 @@
     android:layout_height="fill_parent"
     android:layout_marginBottom="5dp"
     android:layout_weight="10"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:layout_width="wrap_content">
 
  <!--    <RadioButton
         android:id="@+id/rbTimerRecurringDay"

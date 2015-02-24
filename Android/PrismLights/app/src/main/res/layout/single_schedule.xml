@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Time"
+        android:id="@+id/scheduleTime"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Turn on/off"
+        android:id="@+id/scheduleOnOff"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/scheduleTime"
+        android:layout_toEndOf="@+id/scheduleTime"
+        android:layout_alignBottom="@+id/scheduleTime" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scheduleColor"
+        android:layout_alignBottom="@+id/scheduleOnOff"
+        android:layout_toLeftOf="@+id/scheduleDelete"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/scheduleBrightness"
+        android:layout_toEndOf="@+id/scheduleBrightness" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Name"
+        android:id="@+id/scheduleName"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/scheduleTime" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Mon,Tue,Wed"
+        android:id="@+id/scheduleRecurringDay"
+        android:layout_alignBottom="@+id/scheduleName"
+        android:layout_toRightOf="@+id/scheduleName"
+        android:layout_alignTop="@+id/scheduleName"
+        android:layout_alignRight="@+id/scheduleColor"
+        android:layout_alignEnd="@+id/scheduleColor" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Delete"
+        android:id="@+id/scheduleDelete"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Brightness"
+        android:id="@+id/scheduleBrightness"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/scheduleOnOff"
+        android:layout_toEndOf="@+id/scheduleOnOff"
+        android:layout_above="@+id/scheduleRecurringDay" />
+
+</RelativeLayout>

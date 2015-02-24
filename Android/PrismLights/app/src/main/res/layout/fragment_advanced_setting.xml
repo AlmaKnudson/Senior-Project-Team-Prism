@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Alarm "
-        android:id="@+id/alarmText"
+        android:id="@+id/alarmTextAdvancedSetting"
         android:layout_gravity="left|top"
         android:textSize="40dp"
         android:layout_alignParentBottom="true"
@@ -22,7 +22,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Timer"
-        android:id="@+id/timerText"
+        android:id="@+id/timerTextAdvancedSetting"
+        android:layout_gravity="center_horizontal"
+        android:textSize="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Schedule"
+        android:id="@+id/scheduleTextAdvancedSetting"
         android:layout_gravity="center_horizontal"
         android:textSize="40dp"
         android:layout_alignParentBottom="true"

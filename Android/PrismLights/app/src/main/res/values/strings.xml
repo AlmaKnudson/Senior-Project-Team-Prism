@@ -28,8 +28,22 @@
     <string name="txt_timer_deleted">Timer removed successfully</string>
     <string name="txt_timer_created">Timer created successfully</string>
     <string name="txt_timer_updated">Timer updated successfully</string>
+    <string name="txt_schedule_deleted">Schedule removed successfully</string>
+    <string name="txt_schedule_created">Schedule created successfully</string>
+    <string name="txt_schedule_updated">Schedule updated successfully</string>
     <string name="txt_result">Result</string>
     <string name="txt_alarm_description">Alarm</string>
+    <string name="txt_button_sun">S</string>
+    <string name="txt_button_mon">M</string>
+    <string name="txt_button_tue">T</string>
+    <string name="txt_button_wed">W</string>
+    <string name="txt_button_thu">T</string>
+    <string name="txt_button_fri">F</string>
+    <string name="txt_button_sat">S</string>
+    <string name="btn_timer_time">Choose Time</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 
