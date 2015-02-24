@@ -195,6 +195,7 @@ public class MainActivity extends Activity implements PHSDKListener{
         if(accessPoints != null && accessPoints.size() == 1) {
             HueSharedPreferences preferences = HueSharedPreferences.getInstance(this.getApplicationContext());
             PHAccessPoint accessPoint = accessPoints.get(0);
+            //TODO use last username if connecting to a different bridge after installing 
             accessPoint.setUsername(preferences.getUsername());
             preferences.setLastConnectedIPAddress(accessPoint.getIpAddress());
             hueBridgeSdk.connect(accessPoints.get(0));
