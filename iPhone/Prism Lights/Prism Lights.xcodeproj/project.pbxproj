@@ -29,7 +29,7 @@
 		0D799B161A3926F400E9DDF2 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D799B151A3926F400E9DDF2 /* MobileCoreServices.framework */; };
 		0D799B181A3926FD00E9DDF2 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D799B171A3926FD00E9DDF2 /* AVFoundation.framework */; };
 		0D8B27A41A3A0B3A0069372C /* BulbSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D8B27A31A3A0B3A0069372C /* BulbSettings.swift */; };
-		0D8B27A61A3A0B7C0069372C /* ColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D8B27A51A3A0B7C0069372C /* ColorPickerView.swift */; };
+		0D8B27A61A3A0B7C0069372C /* OldColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D8B27A51A3A0B7C0069372C /* OldColorPickerView.swift */; };
 		0D9357E11A2CC48200AAD52D /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A790B1A26A716003AC6D4 /* DDTTYLogger.m */; };
 		0D9357E21A2CC48500AAD52D /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79091A26A716003AC6D4 /* DDLog.m */; };
 		0D9357E31A2CC48800AAD52D /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79071A26A716003AC6D4 /* DDFileLogger.m */; };
@@ -44,6 +44,10 @@
 		0D98626C1A1D2C0B00FAD175 /* Prism_LightsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D98626B1A1D2C0B00FAD175 /* Prism_LightsTests.swift */; };
 		0DB347431A2D5BCE00B91EF2 /* PushAuthController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB347421A2D5BCE00B91EF2 /* PushAuthController.swift */; };
 		0DC667971A38BD790070AC4C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D9862591A1D2C0B00FAD175 /* Main.storyboard */; };
+		612078771A93F9CE0095C6BA /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612078761A93F9CE0095C6BA /* ColorPicker.swift */; };
+		612078791A93FC480095C6BA /* NewColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612078781A93FC480095C6BA /* NewColorPickerView.swift */; };
+		614477741A9C28FF00778B00 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 614477731A9C28FF00778B00 /* Default-568h@2x.png */; };
+		614477761A9C358100778B00 /* ColorSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614477751A9C358100778B00 /* ColorSelectorView.swift */; };
 		CC24AE701A77EFEA003316FD /* Lights.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC24AE6F1A77EFEA003316FD /* Lights.swift */; };
 		CC27D7FF1A802E9C00346F47 /* PrismSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC27D7FE1A802E9C00346F47 /* PrismSDK.swift */; };
 		CC391F411A7D91F9004C94B5 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC391F401A7D91F9004C94B5 /* Networking.swift */; };
@@ -94,7 +98,7 @@
 		0D799B151A3926F400E9DDF2 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		0D799B171A3926FD00E9DDF2 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		0D8B27A31A3A0B3A0069372C /* BulbSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BulbSettings.swift; sourceTree = "<group>"; };
-		0D8B27A51A3A0B7C0069372C /* ColorPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPickerView.swift; sourceTree = "<group>"; };
+		0D8B27A51A3A0B7C0069372C /* OldColorPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OldColorPickerView.swift; sourceTree = "<group>"; };
 		0D9357E61A2D4BB100AAD52D /* BulbCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BulbCollectionCell.swift; sourceTree = "<group>"; };
 		0D98624E1A1D2C0B00FAD175 /* Prism Lights.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Prism Lights.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D9862521A1D2C0B00FAD175 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -108,6 +112,10 @@
 		0D98626A1A1D2C0B00FAD175 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0D98626B1A1D2C0B00FAD175 /* Prism_LightsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prism_LightsTests.swift; sourceTree = "<group>"; };
 		0DB347421A2D5BCE00B91EF2 /* PushAuthController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushAuthController.swift; sourceTree = "<group>"; };
+		612078761A93F9CE0095C6BA /* ColorPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPicker.swift; sourceTree = "<group>"; };
+		612078781A93FC480095C6BA /* NewColorPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewColorPickerView.swift; sourceTree = "<group>"; };
+		614477731A9C28FF00778B00 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		614477751A9C358100778B00 /* ColorSelectorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorSelectorView.swift; sourceTree = "<group>"; };
 		CC24AE6F1A77EFEA003316FD /* Lights.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lights.swift; sourceTree = "<group>"; };
 		CC27D7FE1A802E9C00346F47 /* PrismSDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrismSDK.swift; sourceTree = "<group>"; };
 		CC391F401A7D91F9004C94B5 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
@@ -178,7 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				0D8B27A31A3A0B3A0069372C /* BulbSettings.swift */,
-				0D8B27A51A3A0B7C0069372C /* ColorPickerView.swift */,
+				0D8B27A51A3A0B7C0069372C /* OldColorPickerView.swift */,
 			);
 			name = "Bulb Settings";
 			sourceTree = "<group>";
@@ -230,6 +238,7 @@
 		0D9862451A1D2C0B00FAD175 = {
 			isa = PBXGroup;
 			children = (
+				614477731A9C28FF00778B00 /* Default-568h@2x.png */,
 				0D9862501A1D2C0B00FAD175 /* Prism Lights */,
 				0D9862681A1D2C0B00FAD175 /* Prism LightsTests */,
 				0D799B191A392D8000E9DDF2 /* Frameworks */,
@@ -261,6 +270,9 @@
 				0D0A26D61A376D410033550D /* Home */,
 				0D0A26D71A376D4A0033550D /* Music */,
 				0D9862511A1D2C0B00FAD175 /* Supporting Files */,
+				612078761A93F9CE0095C6BA /* ColorPicker.swift */,
+				612078781A93FC480095C6BA /* NewColorPickerView.swift */,
+				614477751A9C358100778B00 /* ColorSelectorView.swift */,
 			);
 			path = "Prism Lights";
 			sourceTree = "<group>";
@@ -391,6 +403,7 @@
 				0DC667971A38BD790070AC4C /* Main.storyboard in Resources */,
 				0D9862601A1D2C0B00FAD175 /* LaunchScreen.xib in Resources */,
 				0D799B0F1A39260200E9DDF2 /* Wit.bundle in Resources */,
+				614477741A9C28FF00778B00 /* Default-568h@2x.png in Resources */,
 				0D98625D1A1D2C0B00FAD175 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -414,11 +427,13 @@
 				0D3A79191A26A716003AC6D4 /* DDTTYLogger.m in Sources */,
 				CC391F411A7D91F9004C94B5 /* Networking.swift in Sources */,
 				CCCD592E1A78011E008B209D /* Rules.swift in Sources */,
-				0D8B27A61A3A0B7C0069372C /* ColorPickerView.swift in Sources */,
+				0D8B27A61A3A0B7C0069372C /* OldColorPickerView.swift in Sources */,
 				0D8B27A41A3A0B3A0069372C /* BulbSettings.swift in Sources */,
 				CCCD59301A78012F008B209D /* Configuration.swift in Sources */,
 				0D9862581A1D2C0B00FAD175 /* MusicViewController.swift in Sources */,
+				612078771A93F9CE0095C6BA /* ColorPicker.swift in Sources */,
 				CC24AE701A77EFEA003316FD /* Lights.swift in Sources */,
+				612078791A93FC480095C6BA /* NewColorPickerView.swift in Sources */,
 				0D3A79151A26A716003AC6D4 /* DDFileLogger.m in Sources */,
 				0D9862541A1D2C0B00FAD175 /* AppDelegate.swift in Sources */,
 				0D3A791D1A26A716003AC6D4 /* DispatchQueueLogFormatter.m in Sources */,
@@ -428,6 +443,7 @@
 				CCCD59261A7800D6008B209D /* Groups.swift in Sources */,
 				CCCD592A1A7800FE008B209D /* Scenes.swift in Sources */,
 				CC27D7FF1A802E9C00346F47 /* PrismSDK.swift in Sources */,
+				614477761A9C358100778B00 /* ColorSelectorView.swift in Sources */,
 				CCCD592C1A78010F008B209D /* Sensors.swift in Sources */,
 				CCCD59281A7800EA008B209D /* Schedules.swift in Sources */,
 				0D3A79131A26A716003AC6D4 /* DDASLLogger.m in Sources */,

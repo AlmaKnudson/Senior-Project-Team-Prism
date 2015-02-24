@@ -20,7 +20,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //hueSDK?.setLocalHeartbeatInterval(1.0, forResourceType:RESOURCES_LIGHTS)
         hueSDK!.enableLogging(true)
         hueSDK!.startUpSDK()
-
+        window = UIWindow(frame: UIScreen.mainScreen().bounds)
+//        window?.rootViewController = PaintViewController()
+        window!.makeKeyAndVisible()
+        window?.backgroundColor = UIColor.blackColor()
+        var windowRect = UIScreen.mainScreen().bounds
+        windowRect.inset(dx: 40, dy: 40)
+        var colorPickerView = ColorPicker(frame: windowRect)
+        colorPickerView.backgroundColor = UIColor.grayColor();
+        window!.addSubview(colorPickerView)
         return true
     }
 
