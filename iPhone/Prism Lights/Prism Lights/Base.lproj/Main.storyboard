@@ -23,7 +23,7 @@
                                 <rect key="frame" x="0.0" y="20" width="600" height="531"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="wC6-Ri-d4w">
                                     <size key="itemSize" width="80" height="140"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="headerReferenceSize" width="50" height="50"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
@@ -82,6 +82,10 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="K8y-NP-4T9">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </collectionReusableView>
                                 <variation key="heightClass=compact-widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="0.0" y="0.0" width="0.0" height="0.0"/>
                                 </variation>
@@ -221,7 +225,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="feZ-09-n0z" kind="show" id="usp-VR-wmz"/>
+                                    <segue destination="feZ-09-n0z" kind="show" identifier="advancedSettings" id="usp-VR-wmz"/>
                                 </connections>
                             </button>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zWJ-Qs-Tnj">
@@ -294,7 +298,7 @@
         <!--Advanced Settings-->
         <scene sceneID="3DH-a6-L36">
             <objects>
-                <tableViewController title="Advanced Settings" id="feZ-09-n0z" sceneMemberID="viewController">
+                <tableViewController title="Advanced Settings" id="feZ-09-n0z" customClass="AdvancedSettingsController" customModule="Prism_Lights" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="63" sectionHeaderHeight="22" sectionFooterHeight="22" id="zwx-UD-8ra">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -304,7 +308,7 @@
                         <sections>
                             <tableViewSection id="IxM-BC-VCF">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="gos-WM-LbG" rowHeight="63" style="IBUITableViewCellStyleDefault" id="SaJ-ac-wU0">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" textLabel="gos-WM-LbG" rowHeight="63" style="IBUITableViewCellStyleDefault" id="SaJ-ac-wU0">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SaJ-ac-wU0" id="KAq-o2-dT5">
                                             <autoresizingMask key="autoresizingMask"/>
@@ -322,7 +326,7 @@
                                             <segue destination="XkD-Kp-Ang" kind="show" identifier="AlarmsTable" id="er6-Er-8zy"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="goJ-rB-r2F" rowHeight="63" style="IBUITableViewCellStyleDefault" id="16b-PQ-qwm">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" textLabel="goJ-rB-r2F" rowHeight="63" style="IBUITableViewCellStyleDefault" id="16b-PQ-qwm">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="16b-PQ-qwm" id="1jE-71-Zyi">
                                             <autoresizingMask key="autoresizingMask"/>
@@ -367,7 +371,7 @@
                         <color key="sectionIndexBackgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="sectionIndexTrackingBackgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="AlarmCell" rowHeight="107" id="U9H-fW-MvS" customClass="AlarmCell" customModule="Prism_Lights" customModuleProvider="target">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="AlarmCell" rowHeight="107" id="U9H-fW-MvS" customClass="AlarmCell" customModule="Prism_Lights" customModuleProvider="target">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="U9H-fW-MvS" id="ylC-4K-r3l">
                                     <autoresizingMask key="autoresizingMask"/>
@@ -441,7 +445,7 @@
         <!--New Alarm-->
         <scene sceneID="IVH-Hw-Fnd">
             <objects>
-                <tableViewController id="x2R-WH-Oz0" sceneMemberID="viewController">
+                <tableViewController id="x2R-WH-Oz0" customClass="AlarmDetail" customModule="Prism_Lights" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="gPF-b2-grj">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -452,7 +456,7 @@
                         <sections>
                             <tableViewSection headerTitle="Alarm Info" id="6ye-tC-kA0">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="ku6-19-6cc">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="ku6-19-6cc">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ku6-19-6cc" id="1gO-qV-w89">
                                             <autoresizingMask key="autoresizingMask"/>
@@ -478,7 +482,7 @@
                             </tableViewSection>
                             <tableViewSection headerTitle="Light State" id="Rtu-U5-qB9">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="RTD-mA-9mE">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="RTD-mA-9mE">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RTD-mA-9mE" id="Uja-Ws-Xy2">
                                             <autoresizingMask key="autoresizingMask"/>
@@ -502,7 +506,7 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="7Dw-XL-3JU">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="7Dw-XL-3JU">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7Dw-XL-3JU" id="JuD-jC-AjF">
                                             <autoresizingMask key="autoresizingMask"/>
@@ -520,7 +524,7 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="vTU-xx-PLW">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="vTU-xx-PLW">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vTU-xx-PLW" id="Mdy-iq-mHw">
                                             <autoresizingMask key="autoresizingMask"/>
@@ -533,7 +537,7 @@
                                                 </label>
                                                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R1w-FF-CqR">
                                                     <rect key="frame" x="79" y="9" width="50" height="25"/>
-                                                    <color key="backgroundColor" red="1" green="0.036118559238993986" blue="0.92075689204355482" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </view>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -543,7 +547,7 @@
                             </tableViewSection>
                             <tableViewSection headerTitle="Time Info" id="7p6-pR-onM">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="k50-vu-7U9">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="k50-vu-7U9">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="k50-vu-7U9" id="faw-lc-gAy">
                                             <autoresizingMask key="autoresizingMask"/>
@@ -564,7 +568,7 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="EoK-lM-U3O">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="EoK-lM-U3O">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EoK-lM-U3O" id="dvo-jC-jB9">
                                             <autoresizingMask key="autoresizingMask"/>
@@ -585,7 +589,7 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="zJE-dd-NeO">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="zJE-dd-NeO">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zJE-dd-NeO" id="4Bl-Oz-bsj">
                                             <autoresizingMask key="autoresizingMask"/>
@@ -614,7 +618,10 @@
                             <outlet property="delegate" destination="x2R-WH-Oz0" id="A7p-NN-0Qt"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="New Alarm" id="SSI-8t-UMQ"/>
+                    <navigationItem key="navigationItem" title="New Alarm" id="SSI-8t-UMQ">
+                        <barButtonItem key="backBarButtonItem" title="Cancel" id="RCZ-ak-bao"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="V8c-4k-6jB"/>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="238-rr-3ut" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1468,7 +1475,7 @@
         <image name="tempcolorpicker" width="613" height="451"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="MV1-5L-hp4"/>
+        <segue reference="rfj-Vt-Lo5"/>
         <segue reference="agp-MF-nMt"/>
     </inferredMetricsTieBreakers>
 </document>

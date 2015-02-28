@@ -26,6 +26,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     
     
     var lightCount :Int = 0;
+    var groupCount :Int = 1;
     
     //MARK: - UIViewController Methods
     override func viewDidLoad() {
@@ -38,7 +39,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         self.bulbCollectionView.addGestureRecognizer(gesture)
         
         //Get the light count
-        var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
+        var cache:PHBridgeResourcesCache? = PHBridgeResourcesReader.readBridgeResourcesCache()
         if(cache != nil){
             
             var lights = cache?.lights;
@@ -82,6 +83,12 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         } else{
             bulbCollectionView.reloadData()
         }
+        
+        
+        if(BRIDGELESS){
+            HideConnectingView()
+        }
+        
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -113,17 +120,41 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     
     //MARK: - UICollectionView Methods
     
+    
+    
+    
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int{
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-        if(cache.lights != nil){
-            lightCount = cache.lights.count
-        }
-        if(BRIDGELESS){
-            lightCount = 3
+        
+        
+        if(section == 1){
+            
+            if(cache.lights != nil){
+                lightCount = cache.lights.count
+            }
+            if(BRIDGELESS){
+                lightCount = 3
+            }
+            
+            return lightCount;
         }
         
-        return lightCount;
+        if section == 0 {
+            if(cache.lights != nil){
+                groupCount = cache.groups.count
+            }
+            if(BRIDGELESS){
+                groupCount = 1
+            }
+            return groupCount
+        }
+        return 0
     }
+    
+    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+        return 2
+    }
+    
     
     // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell{
@@ -257,10 +288,23 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             skipNextHeartbeat = false;
             return
         }
-        loadingView.hidden = true
+        
         retryConnection = true
         beenConnected = true
+        if(beenConnected){
+            if(loadingView.hidden != true){
+                HideConnectingView()
+            }
+        }
         self.bulbCollectionView.reloadData()
+    }
+    
+    func HideConnectingView(){
+        loadingView.hidden = true
+    }
+    
+    func ShowConnectingView(){
+        loadingView.hidden = false
     }
     
     /**
@@ -290,6 +334,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             self.presentViewController(alert, animated: true) { () -> Void in}
         } else{
             hueSDK.disableLocalConnection()
+            beenConnected = false
             let bridgeSearch = PHBridgeSearching(upnpSearch: true, andPortalSearch: false, andIpAdressSearch: false)
             
             bridgeSearch.startSearchWithCompletionHandler { (dict:[NSObject : AnyObject]!) -> Void in
@@ -308,7 +353,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
                     //TODO: Add retry connection button.
                     //Show the alert to the user
                     self.presentViewController(alert, animated: true) { () -> Void in}
-
+                    
                 } else{
                     //TODO: More though search on a different screen
                     var alert = UIAlertController(title: "No Bridge Found", message: "Please ensure you are connected to the wireless.", preferredStyle: UIAlertControllerStyle.Alert)
@@ -317,7 +362,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
                     //TODO: Add retry connection button.
                     //Show the alert to the user
                     self.presentViewController(alert, animated: true) { () -> Void in}
-
+                    
                 }
             }
         }

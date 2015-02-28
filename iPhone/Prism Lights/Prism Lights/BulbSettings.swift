@@ -127,8 +127,8 @@ class BulbSettingsController : UIViewController, ColorSelectedProtocol{
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        if segue.identifier == "AlarmsTable" {
-            var alarmTable:AlarmsTable = sender as AlarmsTable
+        if segue.identifier == "advancedSettings" {
+            var alarmTable:AdvancedSettingsController = segue.destinationViewController as AdvancedSettingsController
             alarmTable.bulbId = self.bulbId
             alarmTable.isGroup = isGroup
         } else if segue.identifier == "CycleColorsTable" {

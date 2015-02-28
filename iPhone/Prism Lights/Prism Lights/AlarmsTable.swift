@@ -36,7 +36,6 @@ class AlarmsTable: UITableViewController, UITableViewDataSource, UITableViewDele
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
         
-//        var cell = tableView.dequeueReusableCellWithReuseIdentifier("bulb", forIndexPath: indexPath) as? AlarmCell
         var cell = tableView.dequeueReusableCellWithIdentifier("AlarmCell", forIndexPath: indexPath) as? AlarmCell
         if( cell == nil){
             cell = AlarmCell()
