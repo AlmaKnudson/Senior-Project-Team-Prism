@@ -17,15 +17,11 @@ import android.widget.Toast;
 import com.philips.lighting.hue.sdk.PHAccessPoint;
 import com.philips.lighting.hue.sdk.PHBridgeSearchManager;
 import com.philips.lighting.hue.sdk.PHHueSDK;
-import com.philips.lighting.hue.sdk.PHMessageType;
 import com.philips.lighting.hue.sdk.PHSDKListener;
-import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 import com.philips.lighting.model.PHBridge;
+import com.philips.lighting.model.PHHueError;
 import com.philips.lighting.model.PHHueParsingError;
-import com.philips.lighting.model.PHLight;
-import com.philips.lighting.model.PHLightState;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -106,7 +102,6 @@ public class MainActivity extends Activity implements PHSDKListener{
         PHBridgeSearchManager bridgeSearchManager = (PHBridgeSearchManager) hueBridgeSdk.getSDKService(PHHueSDK.SEARCH_BRIDGE);
         bridgeSearchManager.search(true, true);
         CharSequence waitingText = getText(R.string.searching);
-        waitingDialog = new ProgressDialog(this);
         waitingDialog.setCanceledOnTouchOutside(false);
         waitingDialog.setCancelable(false);
         waitingDialog.show();
@@ -195,7 +190,6 @@ public class MainActivity extends Activity implements PHSDKListener{
         if(accessPoints != null && accessPoints.size() == 1) {
             HueSharedPreferences preferences = HueSharedPreferences.getInstance(this.getApplicationContext());
             PHAccessPoint accessPoint = accessPoints.get(0);
-            //TODO use last username if connecting to a different bridge after installing 
             accessPoint.setUsername(preferences.getUsername());
             preferences.setLastConnectedIPAddress(accessPoint.getIpAddress());
             hueBridgeSdk.connect(accessPoints.get(0));
@@ -209,14 +203,24 @@ public class MainActivity extends Activity implements PHSDKListener{
      * From API:
      * Here you can handle events such as Bridge Not Responding, Authentication Failed and Bridge Not Found
      */
-    public void onError(int code, final String message) {
+    public void onError(final int code, final String message) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                if(code == PHHueError.BRIDGE_NOT_RESPONDING) {
+                    searchForBridge();
+                    return;
+                }
+                //TODO use code rather than message
+                if(message.equals("No bridge found")) {
+                    waitingDialog.setCancelable(true);
+                    waitingDialog.setCanceledOnTouchOutside(true);
+                    waitingDialog.setContentView(R.layout.dialog_warning);
+                    return;
+                }
                 Toast toast = Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT);
                 toast.show();
-                waitingDialog.setCancelable(true);
-                waitingDialog.cancel();
+
             }
         });
     }

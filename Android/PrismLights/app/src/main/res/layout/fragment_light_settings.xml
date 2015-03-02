@@ -99,7 +99,9 @@
             android:layout_height="wrap_content"
             android:text="@string/advanced_setting"
             android:id="@+id/advancedSettingButton"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:background="@drawable/buttons"
+            android:padding="15dp"/>
         <Space
             android:layout_width="match_parent"
             android:layout_height="8dp"
