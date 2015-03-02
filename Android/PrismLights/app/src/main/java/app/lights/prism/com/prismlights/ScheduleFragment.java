@@ -69,7 +69,7 @@ public class ScheduleFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        phHueSDK = ((MainActivity)getActivity()).hueBridgeSdk;
+        phHueSDK = PHHueSDK.getInstance();
         bridge = phHueSDK.getSelectedBridge();
 
         delegate = "hh:mm aaa";
