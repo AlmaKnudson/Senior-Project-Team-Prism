@@ -30,7 +30,7 @@ import java.util.List;
 
 public class MainActivity extends Activity implements PHSDKListener{
 
-    protected PHHueSDK hueBridgeSdk;
+    private PHHueSDK hueBridgeSdk;
     private Dialog waitingDialog;
     private Button homeButton;
     private Button voiceButton;
