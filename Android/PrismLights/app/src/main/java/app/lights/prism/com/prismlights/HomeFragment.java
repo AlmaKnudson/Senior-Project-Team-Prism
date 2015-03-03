@@ -177,11 +177,13 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
             TextView bulbName = (TextView) currentView.findViewById(R.id.bulbName);
             bulbName.setText(lightName);
 
+            ImageView bulbBottom = (ImageView) currentView.findViewById(R.id.bulbBottom);
             if(!currentLight.getLastKnownLightState().isReachable()) {
-                ImageView bulbBottom = (ImageView) currentView.findViewById(R.id.bulbBottom);
                 bulbBottom.setColorFilter(disabledOverlay);
                 bulbTop.setColorFilter(disabledOverlay);
                 return currentView;
+            } else {
+                bulbBottom.clearColorFilter();
             }
             if(!currentLight.getLastKnownLightState().isOn()) {
                 bulbTop.setColorFilter(offOverlay);
