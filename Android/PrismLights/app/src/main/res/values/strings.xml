@@ -14,6 +14,10 @@
     <string name="connecting">Connecting to Bridge...</string>
     <string name="no_bridge_found">No Bridge Found</string>
     <string name="no_bridge_message">Please make sure you are on a local network with the bridge properly connected to the router.</string>
+    <string name="connection_lost">Connection to Bridge Lost</string>
+    <string name="connection_lost_message">Your connection to the bridge was lost. Any changes you make will not be sent to the bridge. Please make sure you are on a local network with the bridge properly connected to the router.</string>
+    <string name="connection_found">Connection to Bridge Reestablished</string>
+    <string name="connection_found_message">Your connection has been reestablished. Changes will now be sent to the bridge.</string>
     <string name="advanced_setting">Advanced Settings</string>
     <string name="voice">Voice Control</string>
     <string name="waiting">Waiting...</string>
