@@ -12,6 +12,8 @@
     <string name="brightness">Brightness:</string>
     <string name="searching">Searching for Bridge...</string>
     <string name="connecting">Connecting to Bridge...</string>
+    <string name="no_bridge_found">No Bridge Found</string>
+    <string name="no_bridge_message">Please make sure you are on a local network with the bridge properly connected to the router.</string>
     <string name="advanced_setting">Advanced Settings</string>
     <string name="voice">Voice Control</string>
     <string name="waiting">Waiting...</string>
