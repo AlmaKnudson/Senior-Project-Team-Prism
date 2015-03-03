@@ -114,7 +114,7 @@ public class ScheduleConfigFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        phHueSDK = ((MainActivity)getActivity()).hueBridgeSdk;
+        phHueSDK = PHHueSDK.getInstance();
         bridge = phHueSDK.getSelectedBridge();
 
         currentSchedule = ((MainActivity)getActivity()).currentSchedule;
