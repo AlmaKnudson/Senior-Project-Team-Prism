@@ -10,7 +10,8 @@
         android:id="@+id/scheduleTime"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:padding="4dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -21,7 +22,8 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/scheduleTime"
         android:layout_toEndOf="@+id/scheduleTime"
-        android:layout_alignBottom="@+id/scheduleTime" />
+        android:layout_alignBottom="@+id/scheduleTime"
+        android:padding="4dp" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -31,7 +33,8 @@
         android:layout_toLeftOf="@+id/scheduleDelete"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/scheduleBrightness"
-        android:layout_toEndOf="@+id/scheduleBrightness" />
+        android:layout_toEndOf="@+id/scheduleBrightness"
+        android:padding="4dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -42,7 +45,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/scheduleTime" />
+        android:layout_below="@+id/scheduleTime"
+        android:padding="4dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -54,7 +58,8 @@
         android:layout_toRightOf="@+id/scheduleName"
         android:layout_alignTop="@+id/scheduleName"
         android:layout_alignRight="@+id/scheduleColor"
-        android:layout_alignEnd="@+id/scheduleColor" />
+        android:layout_alignEnd="@+id/scheduleColor"
+        android:padding="4dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -62,11 +67,12 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Delete"
         android:id="@+id/scheduleDelete"
-        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        />
+        android:padding="4dp"
+        android:layout_alignParentTop="true"
+        android:gravity="center" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -77,6 +83,7 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/scheduleOnOff"
         android:layout_toEndOf="@+id/scheduleOnOff"
-        android:layout_above="@+id/scheduleRecurringDay" />
+        android:layout_above="@+id/scheduleRecurringDay"
+        android:padding="4dp" />
 
 </RelativeLayout>

@@ -30,6 +30,7 @@ import com.philips.lighting.model.PHLightState;
 import com.philips.lighting.model.PHSchedule;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -117,6 +118,7 @@ public class ScheduleFragment extends Fragment {
                 //need to open new fragment with BulbID argument.
                 Bundle bundle = new Bundle();
                 bundle.putInt(ARG_PARAM1, currentBulbId);
+                ((MainActivity)getActivity()).currentSchedule = null;
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 ScheduleConfigFragment scheduleConfigFragment = new ScheduleConfigFragment();
@@ -137,7 +139,7 @@ public class ScheduleFragment extends Fragment {
                 //need to open new fragment with BulbID and scheduleID arguments.
                 Bundle bundle = new Bundle();
                 bundle.putInt(ARG_PARAM1, currentBulbId);
-                bundle.putSerializable(ARG_PARAM2, (Serializable)phSchedules.get(position));
+                ((MainActivity)getActivity()).currentSchedule = phSchedules.get(position);
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 ScheduleConfigFragment scheduleConfigFragment = new ScheduleConfigFragment();
@@ -218,9 +220,77 @@ public class ScheduleFragment extends Fragment {
             TextView nameText = (TextView) currentView.findViewById(R.id.scheduleName);
             nameText.setText(phSchedule.getName());
 
-            //TODO: I need to get correct recurring day string.
             TextView recurringDayText = (TextView) currentView.findViewById(R.id.scheduleRecurringDay);
-            recurringDayText.setText(phSchedule.getRecurringDays()+"");
+
+            String recurringDaysBitStr = String.format("%07d", new BigInteger(
+                    Integer.toBinaryString(phSchedule.getRecurringDays())));
+
+            String recurringDays = "";
+
+            for (int i = 0; i < recurringDaysBitStr.length(); i++) {
+                switch (i) {
+                    case 0:
+                        if (recurringDaysBitStr.charAt(0) == '1') {
+
+                            recurringDays = recurringDays + "Mon";
+                        }
+
+                        break;
+                    case 1:
+                        if (recurringDaysBitStr.charAt(1) == '1') {
+                            if (recurringDays != "")
+                                recurringDays = recurringDays+ ", ";
+
+                            recurringDays = recurringDays + "Tue";
+                        }
+                        break;
+                    case 2:
+                        if (recurringDaysBitStr.charAt(2) == '1') {
+                            if (recurringDays != "")
+                                recurringDays = recurringDays+ ", ";
+
+                            recurringDays = recurringDays + "Wed";
+                        }
+                        break;
+                    case 3:
+                        if (recurringDaysBitStr.charAt(3) == '1') {
+                            if (recurringDays != "")
+                                recurringDays = recurringDays+ ", ";
+
+                            recurringDays = recurringDays + "Thur";
+                        }
+                        break;
+                    case 4:
+                        if (recurringDaysBitStr.charAt(4) == '1') {
+                            if (recurringDays != "")
+                                recurringDays = recurringDays+ ", ";
+
+                            recurringDays = recurringDays + "Fri";
+                        }
+                        break;
+                    case 5:
+                        if (recurringDaysBitStr.charAt(5) == '1') {
+                            if (recurringDays != "")
+                                recurringDays = recurringDays+ ", ";
+
+                            recurringDays = recurringDays + "Sat";
+                        }
+                        break;
+                    case 6:
+                        if (recurringDaysBitStr.charAt(6) == '1') {
+                            if (recurringDays != "")
+                                recurringDays = recurringDays+ ", ";
+
+                            recurringDays = recurringDays + "Sun";
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+
+            recurringDayText.setText(recurringDays);
 
             TextView deleteTextView = (TextView) currentView.findViewById(R.id.scheduleDelete);
 

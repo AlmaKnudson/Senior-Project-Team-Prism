@@ -45,7 +45,7 @@
             android:background="@drawable/bottom_button"
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
-            android:enabled="false" />
+            android:enabled="true" />
 
         <Button
             android:layout_width="0dp"

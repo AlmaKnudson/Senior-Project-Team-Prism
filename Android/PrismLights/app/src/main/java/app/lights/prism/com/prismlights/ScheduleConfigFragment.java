@@ -27,6 +27,7 @@ import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHHueError;
+import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
 import com.philips.lighting.model.PHSchedule;
 
@@ -49,6 +50,7 @@ public class ScheduleConfigFragment extends Fragment {
     private int bulbID; // The number for the chosen Light
     static private PHHueSDK phHueSDK;
     private static PHBridge bridge;
+    private PHLight currentBulb;
 
     private PHSchedule currentSchedule;
     private EditText nameEditor;
@@ -112,13 +114,19 @@ public class ScheduleConfigFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        currentSchedule = null;
+        phHueSDK = ((MainActivity)getActivity()).hueBridgeSdk;
+        bridge = phHueSDK.getSelectedBridge();
+
+        currentSchedule = ((MainActivity)getActivity()).currentSchedule;
+        ((MainActivity)getActivity()).currentSchedule = null;
 
         if (getArguments() != null) {
             bulbID = getArguments().getInt(ARG_PARAM1);
-            if(getArguments().containsKey(ARG_PARAM2))
-                currentSchedule = (PHSchedule)getArguments().getSerializable(ARG_PARAM2);
         }
+
+        currentBulb = bridge.getResourceCache().getAllLights().get(bulbID);
+
+        recurringDays = 0; //default value
     }
 
     @Override
@@ -182,18 +190,18 @@ public class ScheduleConfigFragment extends Fragment {
         btnFri = (ToggleButton) frame.findViewById(R.id.btnFri);
         btnSat = (ToggleButton) frame.findViewById(R.id.btnSat);
 
-        btnSun.setOnClickListener(rucurringHandler);
-        btnMon.setOnClickListener(rucurringHandler);
-        btnTue.setOnClickListener(rucurringHandler);
-        btnWed.setOnClickListener(rucurringHandler);
-        btnThur.setOnClickListener(rucurringHandler);
-        btnFri.setOnClickListener(rucurringHandler);
-        btnSat.setOnClickListener(rucurringHandler);
+        btnSun.setOnClickListener(recurringHandler);
+        btnMon.setOnClickListener(recurringHandler);
+        btnTue.setOnClickListener(recurringHandler);
+        btnWed.setOnClickListener(recurringHandler);
+        btnThur.setOnClickListener(recurringHandler);
+        btnFri.setOnClickListener(recurringHandler);
+        btnSat.setOnClickListener(recurringHandler);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentSchedule == null)
+                if (currentSchedule != null)
                     updateSchedule();
                 else
                     addNewSchedule();
@@ -232,7 +240,7 @@ public class ScheduleConfigFragment extends Fragment {
             PHLightState state = currentSchedule.getLightState();
             nameEditor.setText(currentSchedule.getName());
             bulbOnState.setChecked(state.isOn());
-            int currentBrightness = getCurrentBrightness(state.getBrightness());
+            int currentBrightness = state.getBrightness();
             brightness.setProgress(currentBrightness);
             brightnessPercentage.setText(currentBrightness + "%");
             currentColor = PHUtilities.colorFromXY(new float[]{state.getX(), state.getY()}, "");
@@ -316,10 +324,12 @@ public class ScheduleConfigFragment extends Fragment {
 
     private void updateSchedule() {
 
-        currentSchedule.setName(nameEditor.getText().toString());
+        currentSchedule.setName(nameEditor.getText().toString().trim());
         currentSchedule.setDate(timeToSend);
         currentSchedule.setRecurringDays(recurringDays);
         currentSchedule.setLightState(getLightState());
+        currentSchedule.setDescription("Prism");
+        currentSchedule.setLightIdentifier(currentBulb.getIdentifier());
 
         final PHWizardAlertDialog dialogManager = PHWizardAlertDialog
                 .getInstance();
@@ -328,7 +338,7 @@ public class ScheduleConfigFragment extends Fragment {
         bridge.updateSchedule(currentSchedule, new PHScheduleListener() {
             @Override
             public void onCreated(PHSchedule phSchedule) {
-
+            ;
             }
 
             @Override
@@ -358,17 +368,20 @@ public class ScheduleConfigFragment extends Fragment {
 
             @Override
             public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
-
+            ;
             }
         });
 
     }
 
     private void addNewSchedule() {
-        currentSchedule.setName(nameEditor.getText().toString());
+        currentSchedule = new PHSchedule(nameEditor.getText().toString().trim());
+        //currentSchedule.setName(nameEditor.getText().toString());
         currentSchedule.setDate(timeToSend);
         currentSchedule.setRecurringDays(recurringDays);
         currentSchedule.setLightState(getLightState());
+        currentSchedule.setDescription("Prism");
+        currentSchedule.setLightIdentifier(currentBulb.getIdentifier());
 
         final PHWizardAlertDialog dialogManager = PHWizardAlertDialog.getInstance();
         dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
@@ -443,6 +456,7 @@ public class ScheduleConfigFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
+    //TODO: do I need this?
     private int getCurrentBrightness(int phBrightness) {
         return (int) Math.round((phBrightness * 100.0) / HueBulbChangeUtility.MAX_BRIGHTNESS);
     }
@@ -459,10 +473,12 @@ public class ScheduleConfigFragment extends Fragment {
     /**
      * Listener for ToggleButton for recurring days.
      */
-    private View.OnClickListener rucurringHandler = new View.OnClickListener() {
+    private View.OnClickListener recurringHandler = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
+            recurringDaysBitStr = String.format("%07d", new BigInteger(
+                    Integer.toBinaryString(recurringDays)));
             StringBuffer sb = new StringBuffer(recurringDaysBitStr);
             switch (v.getId()) {
                 case R.id.btnSun:

@@ -24,6 +24,7 @@ import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHHueParsingError;
 import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
+import com.philips.lighting.model.PHSchedule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,16 +32,22 @@ import java.util.List;
 
 public class MainActivity extends Activity implements PHSDKListener{
 
-    private PHHueSDK hueBridgeSdk;
+    protected PHHueSDK hueBridgeSdk;
     private Dialog waitingDialog;
     private Button homeButton;
     private Button voiceButton;
     private ImageButton settingsButton;
 
+    //TODO: I might need to find better way...
+    protected PHSchedule currentSchedule; // this is for passing schedule from fragment to fragment.
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        currentSchedule = null;
+
         setContentView(R.layout.activity_main);
         homeButton = (Button) findViewById(R.id.homeButton);
         settingsButton = (ImageButton) findViewById(R.id.settingsButton);
