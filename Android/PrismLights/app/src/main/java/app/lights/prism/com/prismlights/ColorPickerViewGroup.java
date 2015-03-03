@@ -22,7 +22,7 @@ public class ColorPickerViewGroup extends ViewGroup {
     private ColorPickerBackgroundView colorBackgroundView;
     private SelectorView selectorView;
 
-    public static final int halfSelectorWidth = 70;
+    public static final int halfSelectorWidth = 50;
 
     public ColorPickerViewGroup(Context context) {
         super(context);
