@@ -81,22 +81,13 @@
                 android:textSize="17sp"
                 android:textColor="@android:color/white" />
 
-            <View
-                android:layout_width="70dp"
-                android:layout_height="match_parent"
-                android:background="@android:color/white"
-                android:id="@+id/currentColor"
-                />
-
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="288dp"
-            android:layout_height="207dp"
-            android:id="@+id/colorPickerImage"
-            android:src="@drawable/tempcolorpicker"
-            android:adjustViewBounds="true"
-            android:layout_gravity="bottom" />
+        <app.lights.prism.com.prismlights.ColorPickerViewGroup
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/scheduleColorPicker"/>
 
         <LinearLayout
             android:id="@+id/linearLayRecurringDays"
