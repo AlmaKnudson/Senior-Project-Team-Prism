@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_background">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/no_bridge_found"
-        android:id="@+id/textView5" />
+        android:id="@+id/dialogTitle" />
 
     <Space
         android:layout_width="match_parent"
@@ -22,7 +23,7 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="5dp"
         android:layout_gravity="center_horizontal" />
 
     <TextView
@@ -30,5 +31,5 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/no_bridge_message"
-        android:id="@+id/textView6" />
+        android:id="@+id/textExplanation" />
 </LinearLayout>

@@ -31,10 +31,12 @@ import java.util.List;
 public class MainActivity extends Activity implements PHSDKListener{
 
     private PHHueSDK hueBridgeSdk;
-    private Dialog waitingDialog;
+    private Dialog dialog;
     private Button homeButton;
     private Button voiceButton;
     private ImageButton settingsButton;
+    private int connectionLostCount = 0;
+    public static int MIN_CONNECTION_LOST_COUNT=1;
 
     //TODO: I might need to find better way...
     protected PHSchedule currentSchedule; // this is for passing schedule from fragment to fragment.
@@ -96,14 +98,14 @@ public class MainActivity extends Activity implements PHSDKListener{
             waitingText = getText(R.string.searching);
         }
 
-        waitingDialog = new ProgressDialog(this);
-        waitingDialog.setCanceledOnTouchOutside(false);
-        waitingDialog.setCancelable(false);
-        waitingDialog.show();
+        dialog = new ProgressDialog(this);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
         TextView textView = new TextView(this);
         textView.setText(waitingText);
         textView.setTextColor(Color.WHITE);
-        waitingDialog.setContentView(textView);
+        dialog.setContentView(textView);
         //end code from example app
     }
 
@@ -111,13 +113,13 @@ public class MainActivity extends Activity implements PHSDKListener{
         PHBridgeSearchManager bridgeSearchManager = (PHBridgeSearchManager) hueBridgeSdk.getSDKService(PHHueSDK.SEARCH_BRIDGE);
         bridgeSearchManager.search(true, true);
         CharSequence waitingText = getText(R.string.searching);
-        waitingDialog.setCanceledOnTouchOutside(false);
-        waitingDialog.setCancelable(false);
-        waitingDialog.show();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
         TextView textView = new TextView(this);
         textView.setText(waitingText);
         textView.setTextColor(Color.WHITE);
-        waitingDialog.setContentView(textView);
+        dialog.setContentView(textView);
     }
 
 
@@ -146,14 +148,15 @@ public class MainActivity extends Activity implements PHSDKListener{
         hueBridgeSdk.setSelectedBridge(phBridge);
         hueBridgeSdk.enableHeartbeat(phBridge, PHHueSDK.HB_INTERVAL);
         hueBridgeSdk.getHeartbeatManager().enableLightsHeartbeat(phBridge, 1000);
+        connectionLostCount = 0;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.container, new HomeFragment());
                 fragmentTransaction.commit();
-                waitingDialog.setCancelable(true);
-                waitingDialog.cancel();
+                dialog.setCancelable(true);
+                dialog.cancel();
                 //enable tab buttons so we can use them
                 settingsButton.setEnabled(true);
                 voiceButton.setEnabled(true);
@@ -175,8 +178,8 @@ public class MainActivity extends Activity implements PHSDKListener{
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.container, new PushButtonFragment());
                 fragmentTransaction.commit();
-                waitingDialog.setCancelable(true);
-                waitingDialog.cancel();
+                dialog.setCancelable(true);
+                dialog.cancel();
             }
         });
         hueBridgeSdk.startPushlinkAuthentication(accessPoint);
@@ -202,8 +205,8 @@ public class MainActivity extends Activity implements PHSDKListener{
             accessPoint.setUsername(preferences.getUsername());
             preferences.setLastConnectedIPAddress(accessPoint.getIpAddress());
             hueBridgeSdk.connect(accessPoints.get(0));
-            waitingDialog.setCancelable(true);
-            waitingDialog.cancel();
+            dialog.setCancelable(true);
+            dialog.cancel();
         }
     }
 
@@ -222,9 +225,12 @@ public class MainActivity extends Activity implements PHSDKListener{
                 }
                 //TODO use code rather than message
                 if(message.equals("No bridge found")) {
-                    waitingDialog.setCancelable(true);
-                    waitingDialog.setCanceledOnTouchOutside(true);
-                    waitingDialog.setContentView(R.layout.dialog_warning);
+                    dialog.setCancelable(true);
+                    dialog.setCanceledOnTouchOutside(true);
+                    dialog.setContentView(R.layout.dialog_warning);
+                    return;
+                }
+                if(code == PHHueError.NO_CONNECTION) {
                     return;
                 }
                 Toast toast = Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT);
@@ -236,7 +242,26 @@ public class MainActivity extends Activity implements PHSDKListener{
 
     @Override
     public void onConnectionResumed(PHBridge bridge) {
-
+        if(connectionLostCount > 0) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (dialog.isShowing()) {
+                        dialog.cancel();
+                    } else {
+                        dialog.setCancelable(true);
+                        dialog.setCanceledOnTouchOutside(true);
+                        dialog.setContentView(R.layout.dialog_warning);
+                        TextView dialogTitle = (TextView) (dialog.findViewById(R.id.dialogTitle));
+                        dialogTitle.setText(getText(R.string.connection_found));
+                        TextView dialogText = (TextView) (dialog.findViewById(R.id.textExplanation));
+                        dialogText.setText(getText(R.string.connection_found_message));
+                        dialog.show();
+                    }
+                }
+            });
+        }
+        connectionLostCount = 0;
     }
 
     @Override
@@ -245,13 +270,23 @@ public class MainActivity extends Activity implements PHSDKListener{
      * Here you would handle the loss of connection to your bridge.
      */
     public void onConnectionLost(PHAccessPoint phAccessPoint) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast toast = Toast.makeText(MainActivity.this, "connection lost", Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        });
+        connectionLostCount++;
+        if(connectionLostCount == MIN_CONNECTION_LOST_COUNT) {
+            //TODO make it stop searching for the bridge
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dialog.setCancelable(true);
+                    dialog.setCanceledOnTouchOutside(true);
+                    dialog.setContentView(R.layout.dialog_warning);
+                    TextView dialogTitle = (TextView) (dialog.findViewById(R.id.dialogTitle));
+                    dialogTitle.setText(getText(R.string.connection_lost));
+                    TextView dialogText = (TextView) (dialog.findViewById(R.id.textExplanation));
+                    dialogText.setText(getText(R.string.connection_lost_message));
+                    dialog.show();
+                }
+            });
+        }
     }
 
     @Override
