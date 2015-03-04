@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
@@ -264,54 +264,11 @@
                         <viewControllerLayoutGuide type="top" id="Z1u-FR-VRS"/>
                         <viewControllerLayoutGuide type="bottom" id="6AH-Su-axg"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="rqn-Ki-nL2">
+                    <view key="view" contentMode="scaleToFill" id="rqn-Ki-nL2" customClass="ColorPicker" customModule="Prism_Lights" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="568" height="291"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tLR-p8-Afv">
-                                <rect key="frame" x="482" y="10" width="65" height="40"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="65" id="DRn-TP-pqw"/>
-                                    <constraint firstAttribute="height" constant="40" id="zo8-wr-xwL"/>
-                                </constraints>
-                            </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Color" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WHY-9A-Nl4">
-                                <rect key="frame" x="21" y="8" width="95" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tempcolorpicker" translatesAutoresizingMaskIntoConstraints="NO" id="WhD-Xp-DtT">
-                                <rect key="frame" x="0.0" y="58" width="568" height="233"/>
-                            </imageView>
-                        </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="WhD-Xp-DtT" firstAttribute="leading" secondItem="rqn-Ki-nL2" secondAttribute="leading" id="2g7-PZ-sN3"/>
-                            <constraint firstItem="tLR-p8-Afv" firstAttribute="trailing" secondItem="rqn-Ki-nL2" secondAttribute="trailingMargin" constant="-5" id="925-Pd-5PK"/>
-                            <constraint firstAttribute="trailing" secondItem="WhD-Xp-DtT" secondAttribute="trailing" id="Aoh-e0-E3U"/>
-                            <constraint firstItem="WhD-Xp-DtT" firstAttribute="bottom" secondItem="6AH-Su-axg" secondAttribute="top" id="BWJ-cw-baZ"/>
-                            <constraint firstItem="tLR-p8-Afv" firstAttribute="trailing" secondItem="rqn-Ki-nL2" secondAttribute="trailingMargin" id="Fbz-6J-dFM"/>
-                            <constraint firstItem="WHY-9A-Nl4" firstAttribute="top" secondItem="Z1u-FR-VRS" secondAttribute="bottom" constant="8" id="Op8-XN-omH"/>
-                            <constraint firstItem="tLR-p8-Afv" firstAttribute="trailing" secondItem="rqn-Ki-nL2" secondAttribute="trailingMargin" constant="4" id="RKy-iA-SIC"/>
-                            <constraint firstItem="WHY-9A-Nl4" firstAttribute="leading" secondItem="rqn-Ki-nL2" secondAttribute="leadingMargin" constant="5" id="WQn-9S-NUV"/>
-                            <constraint firstItem="tLR-p8-Afv" firstAttribute="top" secondItem="Z1u-FR-VRS" secondAttribute="bottom" constant="10" id="qVP-C0-XXq"/>
-                            <constraint firstItem="tLR-p8-Afv" firstAttribute="top" secondItem="Z1u-FR-VRS" secondAttribute="bottom" constant="8" symbolic="YES" id="sW1-Ci-qQh"/>
-                            <constraint firstItem="WhD-Xp-DtT" firstAttribute="top" secondItem="tLR-p8-Afv" secondAttribute="bottom" constant="8" symbolic="YES" id="skQ-A4-nwz"/>
-                        </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="Fbz-6J-dFM"/>
-                                <exclude reference="RKy-iA-SIC"/>
-                                <exclude reference="sW1-Ci-qQh"/>
-                            </mask>
-                        </variation>
                     </view>
-                    <connections>
-                        <outlet property="colorPicker" destination="WhD-Xp-DtT" id="Bv2-II-kEX"/>
-                        <outlet property="colorSelected" destination="tLR-p8-Afv" id="dfo-EG-T7A"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mwe-Xh-2Eh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -800,6 +757,5 @@
         <image name="first" width="30" height="30"/>
         <image name="pushAuth" width="516" height="475"/>
         <image name="second" width="30" height="30"/>
-        <image name="tempcolorpicker" width="613" height="451"/>
     </resources>
 </document>
