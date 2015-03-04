@@ -330,6 +330,7 @@ public class ScheduleConfigFragment extends Fragment {
         currentSchedule.setLightState(getLightState());
         currentSchedule.setDescription("Prism");
         currentSchedule.setLightIdentifier(currentBulb.getIdentifier());
+        currentSchedule.setAutoDelete(true);
 
         final PHWizardAlertDialog dialogManager = PHWizardAlertDialog
                 .getInstance();
@@ -382,6 +383,7 @@ public class ScheduleConfigFragment extends Fragment {
         currentSchedule.setLightState(getLightState());
         currentSchedule.setDescription("Prism");
         currentSchedule.setLightIdentifier(currentBulb.getIdentifier());
+        currentSchedule.setAutoDelete(true);
 
         final PHWizardAlertDialog dialogManager = PHWizardAlertDialog.getInstance();
         dialogManager.showProgressDialog(R.string.sending_progress, getActivity());

@@ -97,7 +97,7 @@ public class ScheduleFragment extends Fragment {
         for (int i=0; i<recurringSchedules.size();i++)
         {
             PHSchedule schedule = recurringSchedules.get(i);
-            if(schedule.getLightIdentifier().equals(currentBulbIdentity))
+            if(schedule.getLightIdentifier() != null && schedule.getLightIdentifier().equals(currentBulbIdentity))
             {
                 phSchedules.add(recurringSchedules.get(i));
             }
