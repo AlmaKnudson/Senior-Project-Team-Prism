@@ -12,7 +12,7 @@ protocol ColorSelectedProtocol{
     func ColorSelected(color :UIColor)
 }
 
-class BulbSettingsController : UIViewController, ColorSelectedProtocol{
+class BulbSettingsController : UIViewController, ColorChangedDelegate{
     
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var onSwitch: UISwitch!
@@ -63,6 +63,11 @@ class BulbSettingsController : UIViewController, ColorSelectedProtocol{
     
     //MARK - UIViewController Methods
     override func viewWillAppear(animated: Bool) {
+        
+
+    }
+    
+    override func viewDidAppear(animated: Bool) {
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
         
         //Sets the slider to current brightness
@@ -71,7 +76,7 @@ class BulbSettingsController : UIViewController, ColorSelectedProtocol{
         var brightness = Float(lightState.brightness) / 255
         brightnessSlider.value = brightness
         self.brightnessPercentLabel.text = "\(Int(brightnessSlider.value*100))%"
-
+        
         //Sets the on-off switch
         if lightState.on == 1{
             onSwitch.on = true
@@ -81,37 +86,37 @@ class BulbSettingsController : UIViewController, ColorSelectedProtocol{
         
         self.title = light.name
         //Set the Delegate of the Child Controller
-        var picker = (self.childViewControllers.last) as ColorPickerView
-        picker.delegate = self;
+        var picker = ((self.childViewControllers.last)?.view) as ColorPicker
+        picker.colorChangedDelegate = self
+        
         
         //Set previous color
         var point = CGPoint(x: CGFloat(lightState.x), y: CGFloat(lightState.y))
-        var color = PHUtilities.colorFromXY(point, forModel: light.modelNumber)
-        picker.colorSelected.backgroundColor = color
+        picker.color = point
     }
     
     
     //MARK - ColorSelectedProtocol Methods
     
-    func ColorSelected(color: UIColor) {
+    func onColorChanged(color: CGPoint) {
         
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
         var light = (cache.lights?[bulbId!]) as PHLight
         
-        // Convert color red to a XY value
-        var point = PHUtilities.calculateXY(color, forModel: light.modelNumber)
+        
+        
         // Create new light state object
         var lightState = PHLightState()
         
         // Set converted XY value to light state
-        lightState.x = point.x
-        lightState.y = point.y
+        lightState.x = color.x
+        lightState.y = color.y
         // Update light state
         var bridgeSend = PHBridgeSendAPI()
         bridgeSend.updateLightStateForId(self.bulbId, withLightState: lightState, completionHandler: nil)
         
-        light.lightState.x = point.x
-        light.lightState.y = point.y
+        light.lightState.x = color.x
+        light.lightState.y = color.y
     }
     
     

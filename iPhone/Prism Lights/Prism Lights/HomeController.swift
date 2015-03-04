@@ -16,7 +16,7 @@ protocol BulbSettingsProtocol{
 }
 
 
-class HomeController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, BulbSettingsProtocol {
+class HomeController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, BulbSettingsProtocol{
 
     @IBOutlet weak var bulbCollectionView: UICollectionView!
     
