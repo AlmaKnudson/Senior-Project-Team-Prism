@@ -106,7 +106,7 @@
 }
 
 - (IBAction)sensitivitySliderValueChanged :(UISlider *)sender{
-    label.text = [NSString stringWithFormat:@"%f", sender.value];
+//    label.text = [NSString stringWithFormat:@"%f", sender.value];
     //Sender.value between [0-1]... 0 being SLOW 1 being FAST/SENSITIVE
     float b = 2.1;
     float M = 1.0/50.0;
