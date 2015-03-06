@@ -87,6 +87,7 @@
         [lowTimer invalidate];
         [midTimer invalidate];
         [highTimer invalidate];
+        self.audioPlotTime.backgroundColor = [UIColor colorWithRed: 0.0904 green: 0.0901 blue: 0.105 alpha: 1];
         
 //        self.audioPlotTime.backgroundColor = nil;
 //        self.audioPlotTime.color           = nil;
@@ -355,6 +356,7 @@ bool throttleSkip = true;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.audioPlotTime.backgroundColor = [UIColor colorWithRed: 0.0904 green: 0.0901 blue: 0.105 alpha: 1];
     
     //TODO--REFACTOR what needs to be here.
     

@@ -122,7 +122,7 @@
   _copiedBuffer = NULL;
 #endif
   // Set the default properties
-  self.gain       = 1.0;
+  self.gain       = 10.0;
   self.plotType   = EZPlotTypeBuffer;
 #if TARGET_OS_IPHONE
   self.backgroundColor = [UIColor colorWithRed:0.796 green:0.749 blue:0.663 alpha:1];

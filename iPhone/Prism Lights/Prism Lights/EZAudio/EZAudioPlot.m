@@ -85,7 +85,7 @@
   self.backgroundColor = [NSColor blackColor];
   self.color           = [NSColor colorWithCalibratedHue:0 saturation:1.0 brightness:1.0 alpha:1.0];
 #endif
-  self.gain            = 1.0;
+  self.gain            = 10.0;
   self.plotType        = EZPlotTypeRolling;
   self.shouldMirror    = NO;
   self.shouldFill      = NO;
