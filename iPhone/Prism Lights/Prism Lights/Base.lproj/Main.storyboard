@@ -200,6 +200,9 @@
                                 <state key="normal" title="Advanced Settings">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <segue destination="i2M-1k-HSN" kind="show" id="L3A-8p-OLU"/>
+                                </connections>
                             </button>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zWJ-Qs-Tnj">
                                 <rect key="frame" x="16" y="129" width="568" height="291"/>
@@ -255,6 +258,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1mL-at-upl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2236" y="-320"/>
+        </scene>
+        <!--Est View Controller-->
+        <scene sceneID="5eh-ie-aDD">
+            <objects>
+                <viewController id="i2M-1k-HSN" customClass="EstViewController" customModule="Prism_Lights" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="qDI-fk-f2b"/>
+                        <viewControllerLayoutGuide type="bottom" id="nVs-qA-gOG"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="FLg-OP-gHr">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="koR-e1-vYK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3082" y="-128"/>
         </scene>
         <!--Color Picker View-->
         <scene sceneID="y1v-a9-bZB">
