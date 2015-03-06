@@ -65,6 +65,8 @@
 		118314F51A96D259004E6425 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118314F41A96D259004E6425 /* Foundation.framework */; };
 		118314F71A96D265004E6425 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118314F61A96D265004E6425 /* CoreGraphics.framework */; };
 		118314F91A96D272004E6425 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118314F81A96D272004E6425 /* UIKit.framework */; };
+		11AF010D1AA95C6000122F24 /* EstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11AF010C1AA95C6000122F24 /* EstViewController.swift */; };
+		11AF01291AA95D6800122F24 /* libEstimoteSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11AF01281AA95D6800122F24 /* libEstimoteSDK.a */; };
 		CC24AE701A77EFEA003316FD /* Lights.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC24AE6F1A77EFEA003316FD /* Lights.swift */; };
 		CC27D7FF1A802E9C00346F47 /* PrismSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC27D7FE1A802E9C00346F47 /* PrismSDK.swift */; };
 		CC391F411A7D91F9004C94B5 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC391F401A7D91F9004C94B5 /* Networking.swift */; };
@@ -167,6 +169,32 @@
 		118314F41A96D259004E6425 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		118314F61A96D265004E6425 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		118314F81A96D272004E6425 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		11AF010C1AA95C6000122F24 /* EstViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EstViewController.swift; sourceTree = "<group>"; };
+		11AF01101AA95D6800122F24 /* ESTBeacon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTBeacon.h; sourceTree = "<group>"; };
+		11AF01111AA95D6800122F24 /* ESTBeaconDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTBeaconDefinitions.h; sourceTree = "<group>"; };
+		11AF01121AA95D6800122F24 /* ESTBeaconFirmwareVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTBeaconFirmwareVO.h; sourceTree = "<group>"; };
+		11AF01131AA95D6800122F24 /* ESTBeaconManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTBeaconManager.h; sourceTree = "<group>"; };
+		11AF01141AA95D6800122F24 /* ESTBeaconRegion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTBeaconRegion.h; sourceTree = "<group>"; };
+		11AF01151AA95D6800122F24 /* ESTBeaconUpdateConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTBeaconUpdateConfig.h; sourceTree = "<group>"; };
+		11AF01161AA95D6800122F24 /* ESTBeaconUpdateInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTBeaconUpdateInfo.h; sourceTree = "<group>"; };
+		11AF01171AA95D6800122F24 /* ESTBeaconVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTBeaconVO.h; sourceTree = "<group>"; };
+		11AF01181AA95D6800122F24 /* ESTBulkUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTBulkUpdater.h; sourceTree = "<group>"; };
+		11AF01191AA95D6800122F24 /* ESTConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTConfig.h; sourceTree = "<group>"; };
+		11AF011A1AA95D6800122F24 /* ESTDateRule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTDateRule.h; sourceTree = "<group>"; };
+		11AF011B1AA95D6800122F24 /* ESTDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTDefinitions.h; sourceTree = "<group>"; };
+		11AF011C1AA95D6800122F24 /* ESTFirmwareInfoVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTFirmwareInfoVO.h; sourceTree = "<group>"; };
+		11AF011D1AA95D6800122F24 /* ESTMotionRule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTMotionRule.h; sourceTree = "<group>"; };
+		11AF011E1AA95D6800122F24 /* ESTNearable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTNearable.h; sourceTree = "<group>"; };
+		11AF011F1AA95D6800122F24 /* ESTNearableDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTNearableDefinitions.h; sourceTree = "<group>"; };
+		11AF01201AA95D6800122F24 /* ESTNearableManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTNearableManager.h; sourceTree = "<group>"; };
+		11AF01211AA95D6800122F24 /* ESTNearableRule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTNearableRule.h; sourceTree = "<group>"; };
+		11AF01221AA95D6800122F24 /* ESTOrientationRule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTOrientationRule.h; sourceTree = "<group>"; };
+		11AF01231AA95D6800122F24 /* ESTProximityRule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTProximityRule.h; sourceTree = "<group>"; };
+		11AF01241AA95D6800122F24 /* ESTRule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTRule.h; sourceTree = "<group>"; };
+		11AF01251AA95D6800122F24 /* ESTTemperatureRule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTTemperatureRule.h; sourceTree = "<group>"; };
+		11AF01261AA95D6800122F24 /* ESTTrigger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTTrigger.h; sourceTree = "<group>"; };
+		11AF01271AA95D6800122F24 /* ESTTriggerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTTriggerManager.h; sourceTree = "<group>"; };
+		11AF01281AA95D6800122F24 /* libEstimoteSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libEstimoteSDK.a; sourceTree = "<group>"; };
 		CC24AE6F1A77EFEA003316FD /* Lights.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lights.swift; sourceTree = "<group>"; };
 		CC27D7FE1A802E9C00346F47 /* PrismSDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrismSDK.swift; sourceTree = "<group>"; };
 		CC391F401A7D91F9004C94B5 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
@@ -193,6 +221,7 @@
 				118314F31A96D24B004E6425 /* AudioToolbox.framework in Frameworks */,
 				118314F71A96D265004E6425 /* CoreGraphics.framework in Frameworks */,
 				118314F91A96D272004E6425 /* UIKit.framework in Frameworks */,
+				11AF01291AA95D6800122F24 /* libEstimoteSDK.a in Frameworks */,
 				118314F51A96D259004E6425 /* Foundation.framework in Frameworks */,
 				0D5980F21A3E9279007C4EF1 /* QuartzCore.framework in Frameworks */,
 				0D799B161A3926F400E9DDF2 /* MobileCoreServices.framework in Frameworks */,
@@ -324,6 +353,7 @@
 		0D9862501A1D2C0B00FAD175 /* Prism Lights */ = {
 			isa = PBXGroup;
 			children = (
+				11AF010E1AA95D6800122F24 /* EstimoteSDK */,
 				CCB707821AA68A73002BF12B /* ColorPicker.swift */,
 				CCB707831AA68A73002BF12B /* ColorSelectorView.swift */,
 				CCB707841AA68A73002BF12B /* NewColorPickerView.swift */,
@@ -342,6 +372,7 @@
 				117F49621A96DAFE00A31746 /* MusicController.m */,
 				117F49651A96DB8B00A31746 /* PrefixHeader.pch */,
 				117F49641A96DB2500A31746 /* MusicController.h */,
+				11AF010C1AA95C6000122F24 /* EstViewController.swift */,
 			);
 			path = "Prism Lights";
 			sourceTree = "<group>";
@@ -410,6 +441,46 @@
 				117F49521A96DA4500A31746 /* VERSION */,
 			);
 			path = VERSION;
+			sourceTree = "<group>";
+		};
+		11AF010E1AA95D6800122F24 /* EstimoteSDK */ = {
+			isa = PBXGroup;
+			children = (
+				11AF010F1AA95D6800122F24 /* Headers */,
+				11AF01281AA95D6800122F24 /* libEstimoteSDK.a */,
+			);
+			path = EstimoteSDK;
+			sourceTree = "<group>";
+		};
+		11AF010F1AA95D6800122F24 /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				11AF01101AA95D6800122F24 /* ESTBeacon.h */,
+				11AF01111AA95D6800122F24 /* ESTBeaconDefinitions.h */,
+				11AF01121AA95D6800122F24 /* ESTBeaconFirmwareVO.h */,
+				11AF01131AA95D6800122F24 /* ESTBeaconManager.h */,
+				11AF01141AA95D6800122F24 /* ESTBeaconRegion.h */,
+				11AF01151AA95D6800122F24 /* ESTBeaconUpdateConfig.h */,
+				11AF01161AA95D6800122F24 /* ESTBeaconUpdateInfo.h */,
+				11AF01171AA95D6800122F24 /* ESTBeaconVO.h */,
+				11AF01181AA95D6800122F24 /* ESTBulkUpdater.h */,
+				11AF01191AA95D6800122F24 /* ESTConfig.h */,
+				11AF011A1AA95D6800122F24 /* ESTDateRule.h */,
+				11AF011B1AA95D6800122F24 /* ESTDefinitions.h */,
+				11AF011C1AA95D6800122F24 /* ESTFirmwareInfoVO.h */,
+				11AF011D1AA95D6800122F24 /* ESTMotionRule.h */,
+				11AF011E1AA95D6800122F24 /* ESTNearable.h */,
+				11AF011F1AA95D6800122F24 /* ESTNearableDefinitions.h */,
+				11AF01201AA95D6800122F24 /* ESTNearableManager.h */,
+				11AF01211AA95D6800122F24 /* ESTNearableRule.h */,
+				11AF01221AA95D6800122F24 /* ESTOrientationRule.h */,
+				11AF01231AA95D6800122F24 /* ESTProximityRule.h */,
+				11AF01241AA95D6800122F24 /* ESTRule.h */,
+				11AF01251AA95D6800122F24 /* ESTTemperatureRule.h */,
+				11AF01261AA95D6800122F24 /* ESTTrigger.h */,
+				11AF01271AA95D6800122F24 /* ESTTriggerManager.h */,
+			);
+			path = Headers;
 			sourceTree = "<group>";
 		};
 		CC24AE6E1A77EFC2003316FD /* HueAPI */ = {
@@ -558,6 +629,7 @@
 				0D9862561A1D2C0B00FAD175 /* HomeController.swift in Sources */,
 				117F495A1A96DA4500A31746 /* EZMicrophone.m in Sources */,
 				CCCD59261A7800D6008B209D /* Groups.swift in Sources */,
+				11AF010D1AA95C6000122F24 /* EstViewController.swift in Sources */,
 				CCB707851AA68A73002BF12B /* ColorPicker.swift in Sources */,
 				117F495D1A96DA4500A31746 /* EZRecorder.m in Sources */,
 				CCCD592A1A7800FE008B209D /* Scenes.swift in Sources */,
@@ -718,6 +790,11 @@
 				GCC_PREFIX_HEADER = "Prism Lights/PrefixHeader.pch";
 				INFOPLIST_FILE = "Prism Lights/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Prism",
+					Lights/EstimoteSDK,
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -741,6 +818,11 @@
 				GCC_PREFIX_HEADER = "Prism Lights/PrefixHeader.pch";
 				INFOPLIST_FILE = "Prism Lights/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Prism",
+					Lights/EstimoteSDK,
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
