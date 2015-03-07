@@ -192,9 +192,9 @@ public class ScheduleFragment extends Fragment {
 
             String isOnText;
             if (state.isOn())
-                isOnText = "Turn On";
+                isOnText = "On";
             else
-                isOnText = "Turn Off";
+                isOnText = "Off";
 
             TextView onOffText = (TextView) currentView.findViewById(R.id.scheduleOnOff);
             onOffText.setText(isOnText);
