@@ -18,12 +18,29 @@
         android:stretchMode="columnWidth"
         android:listSelector="@drawable/grid_background" />
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/homeTrashImage"
-        android:src="@android:drawable/ic_menu_delete"
-        android:layout_gravity="end"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/homeTrashImage"
+            android:src="@android:drawable/ic_menu_delete"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
 
-
+        <Button
+            android:id="@+id/addFavoriteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/buttons"
+            android:padding="15dp"
+            android:text="@string/addFavorite"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
 </LinearLayout>
