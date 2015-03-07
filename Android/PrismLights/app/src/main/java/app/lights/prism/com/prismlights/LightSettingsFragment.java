@@ -86,6 +86,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
                     //TODO check if name is valid
                     HueBulbChangeUtility.changeLightName(position, nameEditor.getText().toString());
+                    nameEditor.clearFocus();
                 }
                 return false;
             }
@@ -144,7 +145,9 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
         lightNames = hueSDK.getLightNames(currentLights);
         PHLight currentLight = currentLights.get(position);
         PHLightState state = currentLight.getLastKnownLightState();
-        nameEditor.setText(lightNames[position]);
+        if(!nameEditor.hasFocus()) {
+            nameEditor.setText(lightNames[position]);
+        }
         bulbOnState.setChecked(state.isOn());
         int currentBrightness = getCurrentBrightness(state.getBrightness());
         brightness.setProgress(currentBrightness);
