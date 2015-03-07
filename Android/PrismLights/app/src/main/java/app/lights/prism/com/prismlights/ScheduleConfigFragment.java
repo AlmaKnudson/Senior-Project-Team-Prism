@@ -223,8 +223,9 @@ public class ScheduleConfigFragment extends Fragment {
             int currentBrightness = state.getBrightness();
             brightness.setProgress(currentBrightness);
             brightnessPercentage.setText(currentBrightness + "%");
-            currentColor = PHUtilities.colorFromXY(new float[]{state.getX(), state.getY()}, "");
-
+            float[] currentXYColor = new float[]{state.getX(), state.getY()};
+            currentColor = PHUtilities.colorFromXY(currentXYColor, HueBulbChangeUtility.colorXYModelForHue);
+            colorPicker.setColor(currentXYColor);
             recurringDays = currentSchedule.getRecurringDays();
             recurringDaysBitStr = String.format("%07d", new BigInteger(
                     Integer.toBinaryString(recurringDays)));

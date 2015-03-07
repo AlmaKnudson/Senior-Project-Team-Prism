@@ -5,4 +5,6 @@
     <color name="darkGray">#333333</color>
     <color name="lightGray">#c8b7b7</color>
     <color name="mediumGray">#916f6f</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
 </resources>

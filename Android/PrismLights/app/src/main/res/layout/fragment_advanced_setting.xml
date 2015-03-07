@@ -11,12 +11,30 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Advanced Light Settings"
+        android:id="@+id/textView5"
+        android:textSize="30sp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:textColor="@color/white"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@color/darkPurple"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Alarm "
         android:id="@+id/alarmTextAdvancedSetting"
-        android:layout_gravity="left|top"
-        android:textSize="40dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true" />
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:background="@drawable/grid_background"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/darkGray"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -24,9 +42,15 @@
         android:text="Timer"
         android:id="@+id/timerTextAdvancedSetting"
         android:layout_gravity="center_horizontal"
-        android:textSize="40dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true" />
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:background="@drawable/grid_background"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/darkGray"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -34,8 +58,14 @@
         android:text="Schedule"
         android:id="@+id/scheduleTextAdvancedSetting"
         android:layout_gravity="center_horizontal"
-        android:textSize="40dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true" />
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:background="@drawable/grid_background"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/darkGray"/>
 
 </LinearLayout>

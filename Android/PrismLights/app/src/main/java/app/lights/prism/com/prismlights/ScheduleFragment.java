@@ -178,11 +178,11 @@ public class ScheduleFragment extends Fragment {
             Date d = phSchedule.getDate();
 
             String timeString = (String) DateFormat.format(delegate, d.getTime());
-            RelativeLayout currentView;
+            View currentView;
             if(convertView == null) {
-                currentView = (RelativeLayout) LayoutInflater.from(ScheduleFragment.this.getActivity()).inflate(R.layout.single_schedule, parent, false);
+                currentView = LayoutInflater.from(ScheduleFragment.this.getActivity()).inflate(R.layout.single_schedule, parent, false);
             } else {
-                currentView = (RelativeLayout) convertView;
+                currentView = convertView;
             }
 
             TextView timeText = (TextView) currentView.findViewById(R.id.scheduleTime);
@@ -192,9 +192,9 @@ public class ScheduleFragment extends Fragment {
 
             String isOnText;
             if (state.isOn())
-                isOnText = "On";
+                isOnText = "Turn On";
             else
-                isOnText = "Off";
+                isOnText = "Turn Off";
 
             TextView onOffText = (TextView) currentView.findViewById(R.id.scheduleOnOff);
             onOffText.setText(isOnText);
@@ -203,7 +203,7 @@ public class ScheduleFragment extends Fragment {
             if (state.getBrightness() == null)
                 brightness = "";
             else
-                brightness = state.getBrightness() + "";
+                brightness = state.getBrightness() + "%";
 
             TextView brightnessText = (TextView) currentView.findViewById(R.id.scheduleBrightness);
             brightnessText.setText(brightness);
@@ -214,7 +214,7 @@ public class ScheduleFragment extends Fragment {
             else
                 color = PHUtilities.colorFromXY(new float[]{state.getX(), state.getY()}, "");
 
-            ImageView colorImage = (ImageView) currentView.findViewById(R.id.scheduleColor);
+            View colorImage =  currentView.findViewById(R.id.scheduleColor);
             colorImage.setBackgroundColor(color);
 
             TextView nameText = (TextView) currentView.findViewById(R.id.scheduleName);
