@@ -11,7 +11,7 @@ import UIKit
 var DEBUG :Bool = false
 var BRIDGELESS :Bool = false
 var DEMO :Bool = false
-var BRIDGELOGGING :Bool = false;
+var BRIDGELOGGING :Bool = true;
 
 
 @UIApplicationMain
@@ -28,6 +28,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         hueSDK = PHHueSDK()
         hueSDK!.startUpSDK()
         hueSDK!.setLocalHeartbeatInterval(1.0, forResourceType:RESOURCES_ALL)
+        
+        if(BRIDGELOGGING){
+            hueSDK?.enableLogging(true)
+        }
 
 
         return true

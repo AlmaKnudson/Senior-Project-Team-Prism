@@ -166,7 +166,8 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         }
         
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-        var light = cache?.lights["\(indexPath.row+1)"] as? PHLight
+
+        var light = cache?.lights?["\(indexPath.row+1)"] as? PHLight
         //        var sdk = ((UIApplication.sharedApplication().delegate) as AppDelegate).hueSDK!
         if(light != nil){
             
@@ -178,7 +179,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
                 //cell!.SetBulbImage(true)
                 var point = CGPoint(x: Double(light!.lightState.x), y: Double(light!.lightState.y))
                 var color = PHUtilities.colorFromXY(point, forModel: light!.modelNumber)
-                //                var color = UIColor(hue: CGFloat(light!.lightState.hue), saturation: CGFloat(light!.lightState.saturation), brightness: CGFloat(light!.lightState.brightness), alpha: 1)
+                //var color = UIColor(hue: CGFloat(light!.lightState.hue), saturation: CGFloat(light!.lightState.saturation), brightness: CGFloat(light!.lightState.brightness), alpha: 1)
                 cell!.SetBulbImage(true)
                 cell!.SetBulbColor(color)
                 if (light?.lightState.reachable == 0){
