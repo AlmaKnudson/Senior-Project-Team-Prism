@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:padding="4dp"
                 android:text="Time"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="20sp"
                 android:textColor="@color/white"/>
             <View
                 android:layout_width="3dp"
@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:padding="4dp"
                 android:text="Turn On"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="20sp"
                 android:textColor="@color/white"/>
             <View
                 android:layout_width="3dp"
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:padding="4dp"
                 android:text="100%"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="20sp"
                 android:textColor="@color/white"/>
 
 
