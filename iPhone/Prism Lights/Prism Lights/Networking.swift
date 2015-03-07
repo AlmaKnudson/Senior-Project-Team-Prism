@@ -41,42 +41,42 @@ func HttpGet(url: String, requestCompleted : (responseReceived: Bool, msg: Strin
         }
         return
         
-//        
-//        println("Response: \(response)")
-//        var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
-//        println("Body: \(strData)")
-//        var err: NSError?
-//        var json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as? NSDictionary
-//        
-//        
-//        // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
-//        if(err != nil) {
-//            println(err!.localizedDescription)
-//            let jsonStr = NSString(data: data, encoding: NSUTF8StringEncoding)
-//            requestCompleted(responseReceived: true, msg: "Error could not parse JSON: '\(jsonStr)'", data: nil)
-//        }else {
-//            // The JSONObjectWithData constructor didn't return an error. But, we should still
-//            // check and make sure that json has a value using optional binding.
-//            if let parseJSON = json {
-//                // Okay, the parsedJSON is here, let's get the value for 'success' out of it
-//                requestCompleted(responseReceived: true, msg: "", data: data)
-//                return
-//            }
-//            else {
-//                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
-//                let jsonStr = NSString(data: data, encoding: NSUTF8StringEncoding)
-//                println("Error could not parse JSON: \(jsonStr)")
-//                requestCompleted(responseReceived: true, msg: "Parsed JSON but received nil", data: nil)
-//            }
-//        }
-
+        //
+        //        println("Response: \(response)")
+        //        var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
+        //        println("Body: \(strData)")
+        //        var err: NSError?
+        //        var json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as? NSDictionary
+        //
+        //
+        //        // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+        //        if(err != nil) {
+        //            println(err!.localizedDescription)
+        //            let jsonStr = NSString(data: data, encoding: NSUTF8StringEncoding)
+        //            requestCompleted(responseReceived: true, msg: "Error could not parse JSON: '\(jsonStr)'", data: nil)
+        //        }else {
+        //            // The JSONObjectWithData constructor didn't return an error. But, we should still
+        //            // check and make sure that json has a value using optional binding.
+        //            if let parseJSON = json {
+        //                // Okay, the parsedJSON is here, let's get the value for 'success' out of it
+        //                requestCompleted(responseReceived: true, msg: "", data: data)
+        //                return
+        //            }
+        //            else {
+        //                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
+        //                let jsonStr = NSString(data: data, encoding: NSUTF8StringEncoding)
+        //                println("Error could not parse JSON: \(jsonStr)")
+        //                requestCompleted(responseReceived: true, msg: "Parsed JSON but received nil", data: nil)
+        //            }
+        //        }
+        
     }
     task.resume()
 }
 
 
 
-func HttpPost(params : NSData, url : String, postCompleted : (succeeded: Bool, msg: String, JSONDict :NSDictionary?) -> ()) {
+func HttpPost(params : NSData, url : String, postCompleted : (succeeded: Bool, msg: String, data :NSData?) -> ()) {
     
     //Setup the request object
     var request = NSMutableURLRequest(URL: NSURL(string: url)!)
@@ -106,27 +106,16 @@ func HttpPost(params : NSData, url : String, postCompleted : (succeeded: Bool, m
         
         
         // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
-        if(err != nil) {
-            println(err!.localizedDescription)
-            let jsonStr = NSString(data: data, encoding: NSUTF8StringEncoding)
-            postCompleted(succeeded: false, msg: "Error could not parse JSON: '\(jsonStr)'", JSONDict: nil)
+        if(error != nil) {
+            if(DEBUG){
+                println(err!.localizedDescription)
+            }
+            postCompleted(succeeded: false, msg: "Network timeout", data: nil)
         }
         else {
-            // The JSONObjectWithData constructor didn't return an error. But, we should still
-            // check and make sure that json has a value using optional binding.
-            if let parseJSON = json {
-                // Okay, the parsedJSON is here, let's get the value for 'success' out of it
-                    postCompleted(succeeded: true, msg: "", JSONDict: parseJSON)
-                return
-            }
-            else {
-                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
-                let jsonStr = NSString(data: data, encoding: NSUTF8StringEncoding)
-                println("Error could not parse JSON: \(jsonStr)")
-                postCompleted(succeeded: false, msg: "Parsed JSON but received nil", JSONDict: nil)
-            }
+            postCompleted(succeeded: true, msg: "", data: data)
         }
+        
     })
-    
     task.resume()
 }

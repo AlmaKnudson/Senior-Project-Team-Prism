@@ -8,10 +8,30 @@
 
 import UIKit
 
-class SettingsTableViewController: UITableViewController, UITableViewDataSource, UITableViewDelegate {
+class MainSettingsTableViewController: UITableViewController, UITableViewDataSource, UITableViewDelegate {
 
+    
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    override init() {
+        super.init()
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    
+    
+    
+    
+    
     override func viewWillAppear(animated: Bool) {
-        println("SettingTableViewController will Appear")
+        if(DEBUG){
+            println("SettingTableViewController will Appear")
+        }
         self.title = "Settings"
     }
     

@@ -22,17 +22,22 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate{
     var brightnessInt :Int? = nil
     var homeDelegate :BulbSettingsProtocol?
     var bulbId :String?
+    var isGroup :Bool?
 
     //MARK - Actions
     @IBAction func onSwitchToggle(sender: UISwitch) {
-        println("On Switch Toggled")
+        if(DEBUG){
+            println("On Switch Toggled")
+        }
         var lightState = PHLightState()
         lightState.on = sender.on
         var bridgeSend = PHBridgeSendAPI()
         bridgeSend.updateLightStateForId(self.bulbId, withLightState: lightState, completionHandler: nil)
     }
     @IBAction func BrightnessFinished(sender: UISlider) {
-        println("Finished")
+        if(DEBUG){
+            println("Finished")
+        }
         var lightState = PHLightState()
         lightState.brightness = Int(254*sender.value)
         var bridgeSend = PHBridgeSendAPI()
@@ -46,14 +51,18 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate{
     }
     
     @IBAction func BrightnessFinishedOutside(sender: UISlider) {
-        println("Outside")
+        if(DEBUG){
+            println("Outside")
+        }
         BrightnessFinished(sender)
     }
     @IBAction func brightnessChanged(sender: UISlider) {
         var value = sender.value
         self.brightnessPercentLabel.text = "\(Int(value*100))%"
         brightnessInt = Int(254*value)
-        println("Changing: \(Int(254*sender.value)) ")
+        if(DEBUG){
+            println("Changing: \(Int(254*sender.value)) ")
+        }
     }
     
     @IBAction func ApplySettings(sender: UIBarButtonItem) {
@@ -121,6 +130,17 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate{
     
     
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if segue.identifier == "advancedSettings" {
+            var alarmTable:AdvancedSettingsController = segue.destinationViewController as AdvancedSettingsController
+            alarmTable.bulbId = self.bulbId
+            alarmTable.isGroup = isGroup
+        } else if segue.identifier == "CycleColorsTable" {
+            
+        }
+        
+    }
     
     
     

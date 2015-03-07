@@ -8,18 +8,27 @@
 
 import UIKit
 
+var DEBUG :Bool = false
+var BRIDGELESS :Bool = false
+var DEMO :Bool = false
+var BRIDGELOGGING :Bool = false;
+
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var hueSDK :PHHueSDK?
     
+    
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
         // Override point for customization after application launch.
         hueSDK = PHHueSDK()
-        //hueSDK?.setLocalHeartbeatInterval(1.0, forResourceType:RESOURCES_LIGHTS)
-        //hueSDK!.enableLogging(true)
         hueSDK!.startUpSDK()
+        hueSDK!.setLocalHeartbeatInterval(1.0, forResourceType:RESOURCES_ALL)
+
 
         return true
     }

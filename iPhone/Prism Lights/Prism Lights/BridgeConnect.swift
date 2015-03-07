@@ -132,7 +132,7 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
     //MARK: - HueSDK Methods
     
     func ConnectedToBridge(){
-        println("Connected to Bridge")
+
         LoadBridgeValues()
     }
     
@@ -141,14 +141,6 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
         ipLabel.text = "Not Connected"
         macLabel.text = "Not Connected"
         heartbeatLabel.text = "Not Connected"
-        
-        //TODO: No alert when starting for first time
-        
-        var alert = UIAlertController(title: "No Connection", message: "Unable to connect to bridge. Insure the bridge is available and your network is working", preferredStyle: UIAlertControllerStyle.Alert)
-        let cancelButton = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Cancel) { (cancelButton) -> Void in     }
-        alert.addAction(cancelButton)
-        self.presentViewController(alert, animated: true) { () -> Void in}
-        
         
     }
     
@@ -161,13 +153,25 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
     
     
     func SearchForBridge(){
+        
+         
         let bridgeSearch = PHBridgeSearching(upnpSearch: true, andPortalSearch: true, andIpAdressSearch: true)
+        
         bridgeSearch.startSearchWithCompletionHandler { (dict:[NSObject : AnyObject]!) -> Void in
             self.addresses = dict as [String:String]
             self.macAddresses = [String](self.addresses.keys)
             self.bridgesFound.reloadData()
             self.loadingView.stopAnimating()
             self.blur.hidden = true
+            
+            if(self.addresses.count == 1){
+                var mac = self.macAddresses[0]
+                var ipaddress = self.addresses[mac]
+                var hueSDK = (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!
+                hueSDK.setBridgeToUseWithIpAddress(ipaddress, macAddress: mac)
+                hueSDK.enableLocalConnection()
+            }
+            
         }
 
     }

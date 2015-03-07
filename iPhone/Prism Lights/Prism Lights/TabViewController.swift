@@ -10,6 +10,19 @@ import UIKit
 
 class TabViewController : UITabBarController{
     
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    override init() {
+        super.init()
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    
     
     override func viewWillAppear(animated: Bool) {
         self.selectedIndex = 1;
