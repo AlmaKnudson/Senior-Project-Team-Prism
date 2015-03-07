@@ -50,7 +50,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
     private String[] lightNames;
 
 
-    public static String positionString = "CURRENT_BULB_ID";
+    public static String lightPositionString = "CURRENT_BULB_POSITION";
 
     public LightSettingsFragment() {
         hueSDK = PHHueSDK.getInstance();
@@ -60,7 +60,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        position = getArguments().getInt(positionString);
+        position = getArguments().getInt(lightPositionString);
 
         Toast.makeText(getActivity(), "SettingFragment opened with light " + position, Toast.LENGTH_SHORT).show();
 
@@ -125,7 +125,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putInt("POSITION", position);
+                bundle.putInt(lightPositionString, position);
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 AdvancedSettingFragment advancedSettingFragment = new AdvancedSettingFragment();

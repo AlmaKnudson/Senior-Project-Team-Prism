@@ -46,7 +46,7 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class ScheduleFragment extends Fragment {
-    private static final String ARG_PARAM1 = "CURRENT_BULB_ID";
+    public static String lightPositionString = "CURRENT_BULB_POSITION";
     private static final String ARG_PARAM2 = "CURRENT_SCHEDULE";
 
     private int currentBulbId; // The chosen Light BULB ID
@@ -76,7 +76,7 @@ public class ScheduleFragment extends Fragment {
         delegate = "hh:mm aaa";
 
         if (getArguments() != null) {
-            currentBulbId = getArguments().getInt(ARG_PARAM1);
+            currentBulbId = getArguments().getInt(lightPositionString);
         }
 
         //get current bulb
@@ -117,7 +117,7 @@ public class ScheduleFragment extends Fragment {
             public void onClick(View v) {
                 //need to open new fragment with BulbID argument.
                 Bundle bundle = new Bundle();
-                bundle.putInt(ARG_PARAM1, currentBulbId);
+                bundle.putInt(lightPositionString, currentBulbId);
                 ((MainActivity)getActivity()).currentSchedule = null;
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -138,7 +138,7 @@ public class ScheduleFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //need to open new fragment with BulbID and scheduleID arguments.
                 Bundle bundle = new Bundle();
-                bundle.putInt(ARG_PARAM1, currentBulbId);
+                bundle.putInt(lightPositionString, currentBulbId);
                 ((MainActivity)getActivity()).currentSchedule = phSchedules.get(position);
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();

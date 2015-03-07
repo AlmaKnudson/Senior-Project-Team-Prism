@@ -47,7 +47,7 @@ import java.util.Map;
  */
 public class TimerFragment extends Fragment{
 
-    private static final String ARG_PARAM1 = "CURRENT_BULB_ID";
+    public static String lightPositionString = "CURRENT_BULB_POSITION";
 
     private int currentBulbId; // The chosen Light BULB ID
     private int chosenTimerPosition;
@@ -78,7 +78,7 @@ public class TimerFragment extends Fragment{
         delegate = "hh:mm aaa";
 
         if (getArguments() != null) {
-            currentBulbId = getArguments().getInt(ARG_PARAM1);
+            currentBulbId = getArguments().getInt(lightPositionString);
         }
 
         //get current bulb
@@ -100,7 +100,7 @@ public class TimerFragment extends Fragment{
         for (int i=0; i< allTimers.size();i++)
         {
             PHSchedule schedule = allTimers.get(i);
-            if(schedule.getIdentifier() != null && schedule.getLightIdentifier().equals(currentBulbIdentity))
+            if(schedule.getLightIdentifier() != null && schedule.getLightIdentifier().equals(currentBulbIdentity))
             {
                 currentTimers.add(allTimers.get(i));
             }
