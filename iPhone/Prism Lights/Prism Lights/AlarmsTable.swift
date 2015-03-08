@@ -16,6 +16,14 @@ class AlarmsTable: UITableViewController, UITableViewDataSource, UITableViewDele
     
     //MARK: - UITableViewDataSource Methods
     
+    /**
+    Gets the number of alarms
+    
+    :param: tableView Tableview for the alarms
+    :param: section   The section
+    
+    :returns: The number of alarms for that section
+    */
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         
         if( isGroup!) {
@@ -24,11 +32,8 @@ class AlarmsTable: UITableViewController, UITableViewDataSource, UITableViewDele
             alarms = AlarmsWithLightIdentifier(bulbId!)
         }
         
-        if alarms != nil{
-            return alarms!.count
-        } else{
-            return 0
-        }
+        return alarms!.count
+        
     }
     
     // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
@@ -40,6 +45,8 @@ class AlarmsTable: UITableViewController, UITableViewDataSource, UITableViewDele
         if( cell == nil){
             cell = AlarmCell()
         }
+        var x = alarms![indexPath.row]
+        cell!.setupView(x)
         
         
         return cell!

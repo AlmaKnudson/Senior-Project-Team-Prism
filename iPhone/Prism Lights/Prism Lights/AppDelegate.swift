@@ -11,7 +11,7 @@ import UIKit
 var DEBUG :Bool = false
 var BRIDGELESS :Bool = false
 var DEMO :Bool = false
-var BRIDGELOGGING :Bool = true;
+var BRIDGELOGGING :Bool = false;
 
 
 @UIApplicationMain
@@ -32,8 +32,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if(BRIDGELOGGING){
             hueSDK?.enableLogging(true)
         }
-
-
         return true
     }
 

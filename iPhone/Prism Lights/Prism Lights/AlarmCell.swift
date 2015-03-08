@@ -27,15 +27,32 @@ class AlarmCell : UITableViewCell{
         } else{
             enabledLabel.text = "Off"
         }
-        
-        
-        
     }
     
     
     func setupView(schedule :PHSchedule){
         alarmTitle.text = schedule.name
-        alarmState.text = alarmState.text! + " hello"
+        
+        alarmState.text = ""
+        var powerState = ""
+        var lightState = schedule.state
+        if(lightState.on! == 1){
+            powerState = "On @ "
+        } else{
+            powerState = "Off @ "
+        }
+        
+        var time = "Time"
+        var date = schedule.date
+        
+        var dateFormatter = NSDateFormatter()
+        var string = "yyyy-MM-dd 'at' HH:mm"
+        dateFormatter.dateFormat = string
+        time = dateFormatter.stringFromDate(date)
+      
+        alarmState.text = powerState + time
+        
+        
     }
     
     
