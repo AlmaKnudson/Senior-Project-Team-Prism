@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:id="@+id/homeGridView"
         android:layout_gravity="start|top"
-        android:columnWidth="70dp"
+        android:columnWidth="100dp"
         android:numColumns="auto_fit"
         android:verticalSpacing="10dp"
         android:horizontalSpacing="10dp"

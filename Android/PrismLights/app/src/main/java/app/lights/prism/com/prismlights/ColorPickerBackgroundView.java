@@ -19,6 +19,7 @@ public class ColorPickerBackgroundView extends View{
     private static final double MAX_Y = 0.5157895;
     private static final double MID_Y = 0.3210526;
 
+    private final double colorIncrement = PHUtilities.dpToPx(getResources().getDisplayMetrics().densityDpi, 8);
     public ColorPickerBackgroundView(Context context) {
         super(context);
         construct();
@@ -62,19 +63,19 @@ public class ColorPickerBackgroundView extends View{
         //(0.4089552, 0.5157895)
         //(0.1661765, 0.0503509)
         //(0.6731343, 0.3210526)
-        for(int y = currentBounds.top; y < currentBounds.bottom; y+=5) {
+        for(int y = currentBounds.top; y < currentBounds.bottom; y+=colorIncrement) {
             double yPercentage =(double)(y - currentBounds.top)/ currentBounds.height();
             double currentY = (MAX_Y - MIN_Y) * yPercentage + MIN_Y;
             double minX = getMinXFromY(currentY);
             double maxX = getMaxXFromY(currentY);
-            for(int x = currentBounds.left; x < currentBounds.right; x+=5) {
+            for(int x = currentBounds.left; x < currentBounds.right; x+=colorIncrement) {
                 double xPercentage = (double) (x - currentBounds.left) / currentBounds.width();
                 float[] xYColor = new float[2];
                 double currentX = (maxX - minX) * xPercentage + minX;
                 xYColor[0] = (float) currentX;
                 xYColor[1] = (float) currentY;
                 currentColor.setColor(PHUtilities.colorFromXY(xYColor, HueBulbChangeUtility.colorXYModelForHue));
-                canvas.drawRect(x, y, x + 5, y + 5, currentColor);
+                canvas.drawRect(x, y, (int) (x + colorIncrement), (int) (y + colorIncrement), currentColor);
             }
         }
     }

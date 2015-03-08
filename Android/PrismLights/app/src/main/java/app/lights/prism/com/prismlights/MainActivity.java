@@ -147,7 +147,7 @@ public class MainActivity extends Activity implements PHSDKListener{
     public void onBridgeConnected(PHBridge phBridge) {
         hueBridgeSdk.setSelectedBridge(phBridge);
         hueBridgeSdk.enableHeartbeat(phBridge, PHHueSDK.HB_INTERVAL);
-        hueBridgeSdk.getHeartbeatManager().enableLightsHeartbeat(phBridge, 1000);
+        hueBridgeSdk.getHeartbeatManager().enableLightsHeartbeat(phBridge, 2000);
         connectionLostCount = 0;
         runOnUiThread(new Runnable() {
             @Override
