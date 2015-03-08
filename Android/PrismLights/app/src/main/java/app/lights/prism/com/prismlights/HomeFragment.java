@@ -44,6 +44,8 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
     private static int disabledOverlay = Color.argb(125, 0, 0, 0);
     private static int offOverlay = Color.argb(50, 0, 0, 0);
 
+    public static String lightPositionString = "CURRENT_BULB_POSITION";
+
     public HomeFragment() {
         hueSDK = PHHueSDK.getInstance();
     }
@@ -77,7 +79,7 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
                 Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
                 //TODO: I need to change this for group of lights. now it is just for a single light.
                 Bundle bundle = new Bundle();
-                bundle.putInt(LightSettingsFragment.positionString, position);
+                bundle.putInt(lightPositionString, position);
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 LightSettingsFragment lightSettingFragment = new LightSettingsFragment();

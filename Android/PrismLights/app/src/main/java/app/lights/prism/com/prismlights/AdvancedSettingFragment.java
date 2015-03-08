@@ -13,7 +13,7 @@ import android.widget.Toast;
 public class AdvancedSettingFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "CURRENT_BULB_ID";
+    public static String lightPositionString = "CURRENT_BULB_POSITION";
 
 
 
@@ -27,13 +27,11 @@ public class AdvancedSettingFragment extends Fragment {
         // Required empty public constructor
     }
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            currentBulbId = getArguments().getInt(ARG_PARAM1);
+            currentBulbId = getArguments().getInt(lightPositionString);
         }
     }
 
@@ -44,8 +42,6 @@ public class AdvancedSettingFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_advanced_setting, container, false);
 
-        Toast.makeText(getActivity(), currentBulbId +"'s advanced setting opened", Toast.LENGTH_SHORT).show();
-
         alarmText = (TextView)view.findViewById(R.id.alarmTextAdvancedSetting);
         timerText = (TextView)view.findViewById(R.id.timerTextAdvancedSetting);
         scheduleText = (TextView)view.findViewById(R.id.scheduleTextAdvancedSetting);
@@ -54,7 +50,7 @@ public class AdvancedSettingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putInt(ARG_PARAM1, currentBulbId);
+                bundle.putInt(lightPositionString, currentBulbId);
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 AlarmFragment alarmFragment = new AlarmFragment();
@@ -69,7 +65,7 @@ public class AdvancedSettingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putInt(ARG_PARAM1, currentBulbId);
+                bundle.putInt(lightPositionString, currentBulbId);
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 TimerFragment timerFragment = new TimerFragment();
@@ -84,7 +80,7 @@ public class AdvancedSettingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putInt(ARG_PARAM1, currentBulbId);
+                bundle.putInt(lightPositionString, currentBulbId);
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 ScheduleFragment scheduleFragment = new ScheduleFragment();

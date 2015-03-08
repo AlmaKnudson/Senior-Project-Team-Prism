@@ -19,7 +19,16 @@
 }
 
 
+@property (weak, nonatomic) IBOutlet UILabel *maxBrightnessLabel;
 
+@property (weak, nonatomic) IBOutlet UILabel *bpmLabel;
+@property (weak, nonatomic) IBOutlet UILabel *lowRangeMax;
+@property (weak, nonatomic) IBOutlet UILabel *midRangeMin;
+@property (weak, nonatomic) IBOutlet UILabel *midRangeMax;
+@property (weak, nonatomic) IBOutlet UISlider *lowFrequencyRangeSlider;
+@property (weak, nonatomic) IBOutlet UISlider *midFrequencyRangeSlider;
+@property (weak, nonatomic) IBOutlet UILabel *highRangeMin;
+@property (weak, nonatomic) IBOutlet UISlider *highFrequencyRangeSlider;
 
 @end
 
@@ -27,6 +36,34 @@
 @synthesize audioPlotFreq;
 @synthesize audioPlotTime;
 @synthesize microphone;
+
+//@property (weak) IBOutlet UILabel *bpmLabel;
+- (IBAction)lowFrequencyRangeSlider:(UISlider *)sender{
+    lowFrequencyRangeMax = sender.value;
+    _lowRangeMax.text = [NSString stringWithFormat:@"%dhz", (int)sender.value];
+    _midRangeMin.text = [NSString stringWithFormat:@"%dhz", (int)sender.value + 1];
+    _midFrequencyRangeSlider.minimumValue = (int)sender.value + 1;
+    //    slider.minimumValue = (int)sender.value;
+    //    slider.maximumValue = 3.0f;
+}
+
+- (IBAction)midFrequencyRangeSlider:(UISlider *)sender {
+    midFrequencyRangeMax = sender.value;
+    
+    if((int)_lowFrequencyRangeSlider.value >= sender.value){
+        _lowFrequencyRangeSlider.value = (int)sender.value - 1;
+        _lowRangeMax.text = [NSString stringWithFormat:@"%dhz", (int)sender.value - 1];
+    }
+    _midRangeMax.text = [NSString stringWithFormat:@"%dhz", (int)sender.value];
+    _highRangeMin.text = [NSString stringWithFormat:@"%dhz", (int)sender.value + 1];
+    
+}
+
+- (IBAction)highFrequencyRangeSlider:(UISlider *)sender {
+    
+    
+}
+
 
 
 - (IBAction)startListening :(UISlider *)sender{
@@ -89,11 +126,11 @@
         [highTimer invalidate];
         self.audioPlotTime.backgroundColor = [UIColor colorWithRed: 0.0904 green: 0.0901 blue: 0.105 alpha: 1];
         
-//        self.audioPlotTime.backgroundColor = nil;
-//        self.audioPlotTime.color           = nil;
-//        self.audioPlotTime.shouldFill      = nil;
-//        self.audioPlotTime.shouldMirror    = nil;
-//        self.audioPlotTime.plotType        = nil;
+        //        self.audioPlotTime.backgroundColor = nil;
+        //        self.audioPlotTime.color           = nil;
+        //        self.audioPlotTime.shouldFill      = nil;
+        //        self.audioPlotTime.shouldMirror    = nil;
+        //        self.audioPlotTime.plotType        = nil;
         self.microphone.stopFetchingAudio;
         
         
@@ -101,18 +138,26 @@
     
 }
 
+
+
+
 - (IBAction)maxBrightnessSliderValueChanged :(UISlider *)sender{
     maxBrightness = sender.value;
+    NSString* formattedNumber = [NSString stringWithFormat:@"%i%@", (int) ((((float)1.0*sender.value)/254.0)*100), @"%"];
+    _maxBrightnessLabel.text = formattedNumber;
     NSLog(@"maxBrightess:%i", maxBrightness);
 }
 
+
+//This is Beats Per Minute Slide Handler:
 - (IBAction)sensitivitySliderValueChanged :(UISlider *)sender{
-//    label.text = [NSString stringWithFormat:@"%f", sender.value];
+    //    label.text = [NSString stringWithFormat:@"%f", sender.value];
     //Sender.value between [0-1]... 0 being SLOW 1 being FAST/SENSITIVE
-    float b = 2.1;
-    float M = 1.0/50.0;
+    float b = 1.33;
+    float M = 0.66/120;
     float y = b - (M * sender.value);
     NSLog(@"%f", y);
+    _bpmLabel.text = [NSString stringWithFormat:@"%d",(int)sender.value];
     sensitivity = y;
     
     [lowTimer invalidate];
@@ -166,12 +211,19 @@ NSTimer *overloadedHitsTimer;
 
 
 //Sensitivity is how often can a bulb change... 1 means once per second. .25 means 4 times per second and 5 means 1 time in every 5 seconds.
+
+int lowFrequencyRangeMax = 1500;
+int midFrequencyRangeMax = 2700;
 int maxBrightness = 254;
 float sensitivity = 1;
-
+float previousLoudness = 100000;
+bool canSend = true;
 float lastHigh = 0;
 float lastMid = 0;
 float lastLow = 0;
+int lastHighHue = 30000;
+int lastMidHue = 0;
+int lastLowHue = 46000;
 int highsIndex = 0;
 int midsIndex = 0;
 int lowsIndex = 0;
@@ -181,7 +233,7 @@ bool lowsFlag = false;
 PHBridgeSendAPI *bridgeSendAPI;
 
 
-int maxHitsPerSecond = 15;
+int maxHitsPerSecond = 10;
 int currentHitsPerSecond = 0;
 bool throttleHits = false;
 bool throttleSkip = true;
@@ -191,7 +243,7 @@ bool throttleSkip = true;
 -(void)setBulb:(NSString*)identifier withSaturation:(NSNumber*)saturation withBrightness:(NSNumber*)brightness withHue:(NSNumber*)hue
 {
     if(currentHitsPerSecond > maxHitsPerSecond){
-        NSLog(@"OVERLOADED");
+        //        NSLog(@"OVERLOADED");
         throttleHits = true;
         overloadedHitsTimer = [NSTimer scheduledTimerWithTimeInterval:1
                                                                target:self
@@ -250,9 +302,9 @@ bool throttleSkip = true;
 
 - (void)updateHighBulbs:(int)intensity withFrequency:(float)frequency
 {
-    if(fabsf( (frequency-lastHigh) ) < 10)
-        if(!highsFlag)
-            return;
+    //    if(fabsf( (frequency-lastHigh) ) < 10)
+    //        if(!highsFlag)
+    //            return;
     if(highsFlag){
         NSInteger temp = highs[highsIndex];
         if(highsIndex + 1 > 3){
@@ -261,6 +313,10 @@ bool throttleSkip = true;
             highsIndex = highsIndex + 1;
         }
         int r = arc4random() % 18180 + temp;
+        while(fabs((double) r - lastHighHue) < 2000){
+            r = arc4random() % 18180 + temp;
+        }
+        lastHighHue = r;
         NSInteger hueVal = r;
         NSNumber *b = [NSNumber numberWithInteger:intensity];
         
@@ -272,9 +328,9 @@ bool throttleSkip = true;
 
 - (void)updateMidBulbs:(int)intensity withFrequency:(float)frequency
 {
-    if(fabsf( (frequency-lastMid) ) < 10)
-        if(!midsFlag)
-            return;
+    //    if(fabsf( (frequency-lastMid) ) < 10)
+    //        if(!midsFlag)
+    //            return;
     if(midsFlag)
     {
         NSInteger temp = mids[midsIndex];
@@ -284,6 +340,10 @@ bool throttleSkip = true;
             midsIndex = midsIndex + 1;
         }
         int r = arc4random() % 18180 + temp;
+        while(fabs((double) r - lastMidHue) < 2000){
+            r = arc4random() % 18180 + temp;
+        }
+        lastMidHue = r;
         NSInteger hueVal = r;
         NSNumber *b = [NSNumber numberWithInteger:intensity];
         
@@ -295,11 +355,11 @@ bool throttleSkip = true;
 
 - (void)updateLowBulbs:(int)intensity withFrequency:(float)frequency
 {
-    if(fabsf( (frequency-lastLow) ) < 10)
-    {
-        if(!lowsFlag)
-            return;
-    }
+    //    if(fabsf( (frequency-lastLow) ) < 10)
+    //    {
+    //        if(!lowsFlag)
+    //            return;
+    //    }
     if(lowsFlag)
     {
         NSInteger temp = lows[lowsIndex];
@@ -309,6 +369,10 @@ bool throttleSkip = true;
             lowsIndex = lowsIndex + 1;
         }
         int r = arc4random() % 18180 + temp;
+        while(fabs((double) r - lastLowHue) < 2000){
+            r = arc4random() % 18180 + temp;
+        }
+        lastLowHue = r;
         NSInteger hueVal = r;
         //        NSLog(@"LOWS-->Brightness: %f \t Color: %li \t frequency: %f", intensity, (long)hueVal, frequency);
         bool f = (((int)intensity % 2) == 0);
@@ -424,9 +488,9 @@ bool throttleSkip = true;
     int mMaxMagIndex = 0;
     float hMaxMag = 0;
     int hMaxMagIndex = 0;
-    int lowIndex = 0;
-    int midIndex = 0;
-    int highIndex = 0;
+    //    int lowIndex = 0;
+    //    int midIndex = 0;
+    //    int highIndex = 0;
     
     int maxIndex = 0;
     
@@ -462,6 +526,12 @@ bool throttleSkip = true;
         //        maxMag = mag > maxMag ? mag : maxMag;
         
         //END OF SOME RANDOM GOBBLYGOOP
+    }
+    if( (maxMag/previousLoudness) < .33){
+        previousLoudness = maxMag;
+        return;
+    } else{
+        previousLoudness = maxMag;
     }
     if(index > maxIndex){
         maxIndex = index;
@@ -533,9 +603,9 @@ bool throttleSkip = true;
     /* Plotting the time domain plot takes around 50-60% CPU... HOLY MOSES */
     
     //        int magScalar = 2;
-    if(frequency < 1500){
+    if(frequency < lowFrequencyRangeMax){
         currentRangeBin = 3;
-    } else if(frequency < 2700){
+    } else if(frequency < midFrequencyRangeMax){
         currentRangeBin = 2;
     } else {
         currentRangeBin = 1;

@@ -46,7 +46,7 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class ScheduleFragment extends Fragment {
-    private static final String ARG_PARAM1 = "CURRENT_BULB_ID";
+    public static String lightPositionString = "CURRENT_BULB_POSITION";
     private static final String ARG_PARAM2 = "CURRENT_SCHEDULE";
 
     private int currentBulbId; // The chosen Light BULB ID
@@ -66,6 +66,8 @@ public class ScheduleFragment extends Fragment {
     public ScheduleFragment() {
     }
 
+
+    //TODO: add on/off switch for each schedule. schedule.setStatus("Enabled" or "Disabled")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +78,7 @@ public class ScheduleFragment extends Fragment {
         delegate = "hh:mm aaa";
 
         if (getArguments() != null) {
-            currentBulbId = getArguments().getInt(ARG_PARAM1);
+            currentBulbId = getArguments().getInt(lightPositionString);
         }
 
         //get current bulb
@@ -117,7 +119,7 @@ public class ScheduleFragment extends Fragment {
             public void onClick(View v) {
                 //need to open new fragment with BulbID argument.
                 Bundle bundle = new Bundle();
-                bundle.putInt(ARG_PARAM1, currentBulbId);
+                bundle.putInt(lightPositionString, currentBulbId);
                 ((MainActivity)getActivity()).currentSchedule = null;
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -138,7 +140,7 @@ public class ScheduleFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //need to open new fragment with BulbID and scheduleID arguments.
                 Bundle bundle = new Bundle();
-                bundle.putInt(ARG_PARAM1, currentBulbId);
+                bundle.putInt(lightPositionString, currentBulbId);
                 ((MainActivity)getActivity()).currentSchedule = phSchedules.get(position);
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -178,11 +180,11 @@ public class ScheduleFragment extends Fragment {
             Date d = phSchedule.getDate();
 
             String timeString = (String) DateFormat.format(delegate, d.getTime());
-            RelativeLayout currentView;
+            View currentView;
             if(convertView == null) {
-                currentView = (RelativeLayout) LayoutInflater.from(ScheduleFragment.this.getActivity()).inflate(R.layout.single_schedule, parent, false);
+                currentView = LayoutInflater.from(ScheduleFragment.this.getActivity()).inflate(R.layout.single_schedule, parent, false);
             } else {
-                currentView = (RelativeLayout) convertView;
+                currentView = convertView;
             }
 
             TextView timeText = (TextView) currentView.findViewById(R.id.scheduleTime);
@@ -203,7 +205,7 @@ public class ScheduleFragment extends Fragment {
             if (state.getBrightness() == null)
                 brightness = "";
             else
-                brightness = state.getBrightness() + "";
+                brightness = state.getBrightness() + "%";
 
             TextView brightnessText = (TextView) currentView.findViewById(R.id.scheduleBrightness);
             brightnessText.setText(brightness);
@@ -214,7 +216,7 @@ public class ScheduleFragment extends Fragment {
             else
                 color = PHUtilities.colorFromXY(new float[]{state.getX(), state.getY()}, "");
 
-            ImageView colorImage = (ImageView) currentView.findViewById(R.id.scheduleColor);
+            View colorImage =  currentView.findViewById(R.id.scheduleColor);
             colorImage.setBackgroundColor(color);
 
             TextView nameText = (TextView) currentView.findViewById(R.id.scheduleName);

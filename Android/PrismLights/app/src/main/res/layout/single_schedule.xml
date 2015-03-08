@@ -1,89 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="3dp">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/scheduleTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:text="Time"
+                android:textSize="20sp"
+                android:textColor="@color/white"/>
+            <View
+                android:layout_width="3dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="6dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/white"/>
+
+            <TextView
+                android:id="@+id/scheduleOnOff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:text="Turn On"
+                android:textSize="20sp"
+                android:textColor="@color/white"/>
+            <View
+                android:layout_width="3dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="6dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/white"/>
+
+            <TextView
+                android:id="@+id/scheduleBrightness"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:text="100%"
+                android:textSize="20sp"
+                android:textColor="@color/white"/>
+
+
+            <View
+                android:id="@+id/scheduleColor"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:background="@color/white"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/scheduleName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:text="Name"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:gravity="center"/>
+
+            <View
+                android:layout_width="3dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="6dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/white"/>
+
+            <TextView
+                android:id="@+id/scheduleRecurringDay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:text="Mon,Tue,Wed"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:gravity="center"/>
+        </LinearLayout>
+    </LinearLayout>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Time"
-        android:id="@+id/scheduleTime"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:padding="4dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Turn on/off"
-        android:id="@+id/scheduleOnOff"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/scheduleTime"
-        android:layout_toEndOf="@+id/scheduleTime"
-        android:layout_alignBottom="@+id/scheduleTime"
-        android:padding="4dp" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/scheduleColor"
-        android:layout_alignBottom="@+id/scheduleOnOff"
-        android:layout_toLeftOf="@+id/scheduleDelete"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/scheduleBrightness"
-        android:layout_toEndOf="@+id/scheduleBrightness"
-        android:padding="4dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Name"
-        android:id="@+id/scheduleName"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/scheduleTime"
-        android:padding="4dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Mon,Tue,Wed"
-        android:id="@+id/scheduleRecurringDay"
-        android:layout_alignBottom="@+id/scheduleName"
-        android:layout_toRightOf="@+id/scheduleName"
-        android:layout_alignTop="@+id/scheduleName"
-        android:layout_alignRight="@+id/scheduleColor"
-        android:layout_alignEnd="@+id/scheduleColor"
-        android:padding="4dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Delete"
         android:id="@+id/scheduleDelete"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:padding="4dp"
-        android:layout_alignParentTop="true"
-        android:gravity="center" />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Brightness"
-        android:id="@+id/scheduleBrightness"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/scheduleOnOff"
-        android:layout_toEndOf="@+id/scheduleOnOff"
-        android:layout_above="@+id/scheduleRecurringDay"
-        android:padding="4dp" />
-
-</RelativeLayout>
+        android:gravity="center"
+        android:padding="4dp"
+        android:text="Delete"
+        android:textColor="@color/white"
+        android:textColorHighlight="@color/lightGray"
+        android:layout_gravity="center"/>
+</LinearLayout>

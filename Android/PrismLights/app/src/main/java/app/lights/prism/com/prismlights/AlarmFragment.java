@@ -44,7 +44,7 @@ import java.util.Map;
  */
 public class AlarmFragment extends Fragment {
 
-    private static final String ARG_PARAM1 = "CURRENT_BULB_ID";
+    public static String lightPositionString = "CURRENT_BULB_POSITION";
 
     private int currentBulbId; // The chosen Light BULB ID
     private int chosenAlarmPosition;
@@ -73,7 +73,7 @@ public class AlarmFragment extends Fragment {
         delegate = "hh:mm aaa";
 
         if (getArguments() != null) {
-            currentBulbId = getArguments().getInt(ARG_PARAM1);
+            currentBulbId = getArguments().getInt(lightPositionString);
         }
 
         //get current bulb
@@ -94,7 +94,7 @@ public class AlarmFragment extends Fragment {
         for (int i=0; i<nonRecurringSchedules.size();i++)
         {
             PHSchedule schedule = nonRecurringSchedules.get(i);
-            if(schedule.getLightIdentifier().equals(currentBulbIdentity) && schedule.getDescription().equals("Alarm"))
+            if(schedule.getLightIdentifier()!=null && schedule.getLightIdentifier().equals(currentBulbIdentity) && schedule.getDescription().equals("Alarm"))
             {
                 alarmSchedules.add(nonRecurringSchedules.get(i));
             }

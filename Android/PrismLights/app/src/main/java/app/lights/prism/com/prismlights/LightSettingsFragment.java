@@ -50,7 +50,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
     private String[] lightNames;
 
 
-    public static String positionString = "CURRENT_BULB_ID";
+    public static String lightPositionString = "CURRENT_BULB_POSITION";
 
     public LightSettingsFragment() {
         hueSDK = PHHueSDK.getInstance();
@@ -60,7 +60,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        position = getArguments().getInt(positionString);
+        position = getArguments().getInt(lightPositionString);
 
         Toast.makeText(getActivity(), "SettingFragment opened with light " + position, Toast.LENGTH_SHORT).show();
 
@@ -86,6 +86,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
                     //TODO check if name is valid
                     HueBulbChangeUtility.changeLightName(position, nameEditor.getText().toString());
+                    nameEditor.clearFocus();
                 }
                 return false;
             }
@@ -125,7 +126,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putInt("POSITION", position);
+                bundle.putInt(lightPositionString, position);
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 AdvancedSettingFragment advancedSettingFragment = new AdvancedSettingFragment();
@@ -144,7 +145,9 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
         lightNames = hueSDK.getLightNames(currentLights);
         PHLight currentLight = currentLights.get(position);
         PHLightState state = currentLight.getLastKnownLightState();
-        nameEditor.setText(lightNames[position]);
+        if(!nameEditor.hasFocus()) {
+            nameEditor.setText(lightNames[position]);
+        }
         bulbOnState.setChecked(state.isOn());
         int currentBrightness = getCurrentBrightness(state.getBrightness());
         brightness.setProgress(currentBrightness);

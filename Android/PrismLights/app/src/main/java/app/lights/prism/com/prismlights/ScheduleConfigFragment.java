@@ -79,9 +79,9 @@ public class ScheduleConfigFragment extends Fragment {
 
 
 
+    //TODO: validate name length, show error message when update or create schedule fails.
 
-    private static final String ARG_PARAM1 = "CURRENT_BULB_ID";
-    private static final String ARG_PARAM2 = "CURRENT_SCHEDULE";
+    public static String lightPositionString = "CURRENT_BULB_POSITION";
 
 
 
@@ -120,7 +120,7 @@ public class ScheduleConfigFragment extends Fragment {
         ((MainActivity)getActivity()).currentSchedule = null;
 
         if (getArguments() != null) {
-            bulbID = getArguments().getInt(ARG_PARAM1);
+            bulbID = getArguments().getInt(lightPositionString);
         }
 
         currentBulb = bridge.getResourceCache().getAllLights().get(bulbID);
@@ -223,8 +223,9 @@ public class ScheduleConfigFragment extends Fragment {
             int currentBrightness = state.getBrightness();
             brightness.setProgress(currentBrightness);
             brightnessPercentage.setText(currentBrightness + "%");
-            currentColor = PHUtilities.colorFromXY(new float[]{state.getX(), state.getY()}, "");
-
+            float[] currentXYColor = new float[]{state.getX(), state.getY()};
+            currentColor = PHUtilities.colorFromXY(currentXYColor, HueBulbChangeUtility.colorXYModelForHue);
+            colorPicker.setColor(currentXYColor);
             recurringDays = currentSchedule.getRecurringDays();
             recurringDaysBitStr = String.format("%07d", new BigInteger(
                     Integer.toBinaryString(recurringDays)));
@@ -427,7 +428,7 @@ public class ScheduleConfigFragment extends Fragment {
     private void goToScheduleFragment() {
 
         Bundle bundle = new Bundle();
-        bundle.putInt(ARG_PARAM1, bulbID);
+        bundle.putInt(lightPositionString, bulbID);
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         ScheduleFragment scheduleFragment = new ScheduleFragment();
