@@ -66,6 +66,7 @@
 		118314F71A96D265004E6425 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118314F61A96D265004E6425 /* CoreGraphics.framework */; };
 		118314F91A96D272004E6425 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118314F81A96D272004E6425 /* UIKit.framework */; };
 		11AF010D1AA95C6000122F24 /* EstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11AF010C1AA95C6000122F24 /* EstViewController.swift */; };
+		11FDAB4C1AACD2A20055C2AD /* MusicSelectBulbsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDAB4B1AACD2A20055C2AD /* MusicSelectBulbsViewController.swift */; };
 		CC24AE701A77EFEA003316FD /* Lights.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC24AE6F1A77EFEA003316FD /* Lights.swift */; };
 		CC27D7FF1A802E9C00346F47 /* PrismSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC27D7FE1A802E9C00346F47 /* PrismSDK.swift */; };
 		CC391F411A7D91F9004C94B5 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC391F401A7D91F9004C94B5 /* Networking.swift */; };
@@ -201,6 +202,7 @@
 		11AF01261AA95D6800122F24 /* ESTTrigger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTTrigger.h; sourceTree = "<group>"; };
 		11AF01271AA95D6800122F24 /* ESTTriggerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTTriggerManager.h; sourceTree = "<group>"; };
 		11AF01281AA95D6800122F24 /* libEstimoteSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libEstimoteSDK.a; sourceTree = "<group>"; };
+		11FDAB4B1AACD2A20055C2AD /* MusicSelectBulbsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicSelectBulbsViewController.swift; sourceTree = "<group>"; };
 		CC24AE6F1A77EFEA003316FD /* Lights.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lights.swift; sourceTree = "<group>"; };
 		CC27D7FE1A802E9C00346F47 /* PrismSDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrismSDK.swift; sourceTree = "<group>"; };
 		CC391F401A7D91F9004C94B5 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
@@ -373,6 +375,7 @@
 		0D9862501A1D2C0B00FAD175 /* Prism Lights */ = {
 			isa = PBXGroup;
 			children = (
+				11FDAB4B1AACD2A20055C2AD /* MusicSelectBulbsViewController.swift */,
 				CCB135A21AAB8261006E464F /* HueSDK_API */,
 				0D9862531A1D2C0B00FAD175 /* AppDelegate.swift */,
 				0D0A26D41A3766C70033550D /* TabViewController.swift */,
@@ -646,11 +649,11 @@
 				TargetAttributes = {
 					0D98624D1A1D2C0B00FAD175 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = HD79G6T428;
+						DevelopmentTeam = N7UB2ADRTE;
 					};
 					0D9862641A1D2C0B00FAD175 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = HD79G6T428;
+						DevelopmentTeam = N7UB2ADRTE;
 						TestTargetID = 0D98624D1A1D2C0B00FAD175;
 					};
 				};
@@ -735,6 +738,7 @@
 				11AF010D1AA95C6000122F24 /* EstViewController.swift in Sources */,
 				CCB707851AA68A73002BF12B /* ColorPicker.swift in Sources */,
 				117F495D1A96DA4500A31746 /* EZRecorder.m in Sources */,
+				11FDAB4C1AACD2A20055C2AD /* MusicSelectBulbsViewController.swift in Sources */,
 				CCCD592A1A7800FE008B209D /* Scenes.swift in Sources */,
 				CCB707861AA68A73002BF12B /* ColorSelectorView.swift in Sources */,
 				CC4A46E71A89130F007DC0F2 /* ModeCell.swift in Sources */,
