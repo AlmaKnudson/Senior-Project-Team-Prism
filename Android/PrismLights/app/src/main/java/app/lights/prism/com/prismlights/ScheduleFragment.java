@@ -66,6 +66,8 @@ public class ScheduleFragment extends Fragment {
     public ScheduleFragment() {
     }
 
+
+    //TODO: add on/off switch for each schedule. schedule.setStatus("Enabled" or "Disabled")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

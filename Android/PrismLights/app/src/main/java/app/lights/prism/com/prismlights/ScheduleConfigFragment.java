@@ -79,6 +79,7 @@ public class ScheduleConfigFragment extends Fragment {
 
 
 
+    //TODO: validate name length, show error message when update or create schedule fails.
 
     public static String lightPositionString = "CURRENT_BULB_POSITION";
 
