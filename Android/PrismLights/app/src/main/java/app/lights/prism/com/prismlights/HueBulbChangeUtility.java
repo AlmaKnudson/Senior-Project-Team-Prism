@@ -7,11 +7,13 @@ import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHBridgeResource;
+import com.philips.lighting.model.PHGroup;
 import com.philips.lighting.model.PHHueError;
 import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
 import com.philips.lighting.model.PHSchedule;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +48,12 @@ public class HueBulbChangeUtility {
 
     public static void turnBulbOnOff (int lightPosition, boolean on) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
-        PHLight light = getLightFromPosition(lightPosition, bridge);
+        turnBulbOnOff(getLightFromPosition(lightPosition, bridge), on);
+
+    }
+
+    public static void turnBulbOnOff(PHLight light, boolean on) {
+        PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
         PHLightState lightState = new PHLightState();
         lightState.setOn(on);
         bridge.updateLightState(light, lightState);
@@ -150,5 +157,66 @@ public class HueBulbChangeUtility {
             return false;
         }
         return true;
+    }
+
+    private static Map<String, PHLight> getAllLights() {
+        return PHHueSDK.getInstance().getSelectedBridge().getResourceCache().getLights();
+    }
+
+    public static boolean isGroupReachable(PHGroup currentGroup) {
+        Map<String, PHLight> lights = getAllLights();
+        List<String> lightIds = currentGroup.getLightIdentifiers();
+
+        for(String id : lightIds) {
+            if(lights.get(id).getLastKnownLightState().isReachable()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isGroupOff(PHGroup currentGroup) {
+        Map<String, PHLight> lights = getAllLights();
+        List<String> lightIds = currentGroup.getLightIdentifiers();
+        for(String id : lightIds) {
+            if(lights.get(id).getLastKnownLightState().isOn()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static Integer getGroupColor(PHGroup currentGroup) {
+        Map<String, PHLight> lights = getAllLights();
+        List<String> lightIds = currentGroup.getLightIdentifiers();
+        float[] previousColor = null;
+
+        for(String id: lightIds) {
+            PHLightState lightState =  lights.get(id).getLastKnownLightState();
+            float[] currentColor = new float[]{lightState.getX(), lightState.getY()};
+            if(previousColor == null) {
+                previousColor = currentColor;
+            } else {
+                if(!colorsEqual(previousColor, currentColor)) {
+                    return null;
+                }
+            }
+        }
+        return PHUtilities.colorFromXY(previousColor, colorXYModelForHue);
+    }
+
+    public static void toggleBulbGroupState(PHGroup group) {
+        Map<String, PHLight> lights = getAllLights();
+        List<String> lightIds = group.getLightIdentifiers();
+        boolean shouldSetOn = false;
+        for(String id : lightIds) {
+            if(!lights.get(id).getLastKnownLightState().isOn()) {
+                shouldSetOn = true;
+                break;
+            }
+        }
+        for(String id : lightIds) {
+            turnBulbOnOff(lights.get(id), shouldSetOn);
+        }
     }
 }

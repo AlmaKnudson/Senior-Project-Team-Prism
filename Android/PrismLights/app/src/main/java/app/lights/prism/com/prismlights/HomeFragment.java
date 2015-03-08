@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
+import com.philips.lighting.model.PHGroup;
 import com.philips.lighting.model.PHLight;
 
 import java.util.List;
@@ -38,6 +39,8 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
 
     private List<PHLight> currentLights;
     private String[] lightNames;
+    private List<PHGroup> currentGroups;
+    private String[] groupNames;
 
     private GridView gridView;
 
@@ -54,8 +57,7 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentLights = hueSDK.getSelectedBridge().getResourceCache().getAllLights();
-        lightNames = hueSDK.getLightNames(currentLights);
+        updateFromCache();
     }
 
     @Override
@@ -69,7 +71,11 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 //                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
-                HueBulbChangeUtility.toggleBulbState(position);
+                if(position < currentLights.size()) {
+                    HueBulbChangeUtility.toggleBulbState(position);
+                } else {
+                    HueBulbChangeUtility.toggleBulbGroupState((PHGroup) gridView.getAdapter().getItem(position));
+                }
             }
         });
 
@@ -97,49 +103,16 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
 
     @Override
     public void cacheUpdated() {
-        currentLights = hueSDK.getSelectedBridge().getResourceCache().getAllLights();
-        lightNames = hueSDK.getLightNames(currentLights);
-        gridView.invalidateViews();
+        updateFromCache();
+        ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
     }
 
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
-//
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-//
-//    /**
-//     * This interface must be implemented by activities that contain this
-//     * fragment to allow an interaction in this fragment to be communicated
-//     * to the activity and potentially other fragments contained in that
-//     * activity.
-//     * <p/>
-//     * See the Android Training lesson <a href=
-//     * "http://developer.android.com/training/basics/fragments/communicating.html"
-//     * >Communicating with Other Fragments</a> for more information.
-//     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        public void onFragmentInteraction(Uri uri);
-//    }
+    private void updateFromCache() {
+        currentLights = hueSDK.getSelectedBridge().getResourceCache().getAllLights();
+        lightNames = hueSDK.getLightNames(currentLights);
+        currentGroups = hueSDK.getSelectedBridge().getResourceCache().getAllGroups();
+        groupNames = hueSDK.getGroupNames(currentGroups);
+    }
 
 
     private class HomeGridAdapter extends BaseAdapter {
@@ -147,17 +120,20 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
 
         public HomeGridAdapter() {
             super();
-            currentLights = hueSDK.getSelectedBridge().getResourceCache().getAllLights();
-            lightNames = hueSDK.getLightNames(currentLights);
+            updateFromCache();
         }
         @Override
         public int getCount() {
-            return currentLights.size();
+            return currentLights.size() + currentGroups.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return currentLights.get(position);
+            if(position < currentLights.size()) {
+                return currentLights.get(position);
+            } else {
+                return currentGroups.get(position - currentLights.size());
+            }
         }
 
         @Override
@@ -167,19 +143,32 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            PHLight currentLight = (PHLight) getItem(position);
-            String lightName = lightNames[position];
             LinearLayout currentView;
             if(convertView == null) {
                 currentView = (LinearLayout) LayoutInflater.from(HomeFragment.this.getActivity()).inflate(R.layout.bulb_view, parent, false);
             } else {
                 currentView = (LinearLayout) convertView;
             }
+            Object currentLight = getItem(position);
+            if(currentLight instanceof PHLight) {
+                return getLightView(position, currentView, (PHLight) currentLight);
+            } else {
+                return getGroupView(position - currentLights.size(), currentView, (PHGroup) currentLight);
+            }
+
+        }
+
+
+        private View getLightView(int position, View currentView, PHLight currentLight) {
+            String lightName = lightNames[position];
+
             ImageView bulbTop = (ImageView) currentView.findViewById(R.id.bulbTop);
             TextView bulbName = (TextView) currentView.findViewById(R.id.bulbName);
             bulbName.setText(lightName);
 
             ImageView bulbBottom = (ImageView) currentView.findViewById(R.id.bulbBottom);
+            bulbTop.setImageResource(R.drawable.bulb_top);
+            bulbBottom.setImageResource(R.drawable.bulb_bottom);
             if(!currentLight.getLastKnownLightState().isReachable()) {
                 bulbBottom.setColorFilter(disabledOverlay);
                 bulbTop.setColorFilter(disabledOverlay);
@@ -200,7 +189,36 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
             return currentView;
         }
 
+        private View getGroupView(int position, View currentView, PHGroup currentGroup) {
+            String groupName = groupNames[position];
+            ImageView bulbTop = (ImageView) currentView.findViewById(R.id.bulbTop);
+            TextView bulbName = (TextView) currentView.findViewById(R.id.bulbName);
+            bulbName.setText(groupName);
 
+            ImageView bulbBottom = (ImageView) currentView.findViewById(R.id.bulbBottom);
+            bulbTop.setImageResource(R.drawable.group_top);
+            bulbBottom.setImageResource(R.drawable.group_bottom);
+            if(!HueBulbChangeUtility.isGroupReachable(currentGroup)) {
+                bulbBottom.setColorFilter(disabledOverlay);
+                bulbTop.setColorFilter(disabledOverlay);
+                return currentView;
+            } else {
+                bulbBottom.clearColorFilter();
+            }
+            if(HueBulbChangeUtility.isGroupOff(currentGroup)) {
+                bulbTop.setColorFilter(offOverlay);
+                return currentView;
+            }
+            Integer currentColor = HueBulbChangeUtility.getGroupColor(currentGroup);
+            if(currentColor != null) {
+                currentColor = Color.argb(300, Color.red(currentColor), Color.green(currentColor), Color.blue(currentColor));
+                System.out.println(currentColor);
+                bulbTop.setColorFilter(currentColor);
+            } else {
+                bulbTop.clearColorFilter();
+            }
+            return currentView;
+        }
     }
 
 }
