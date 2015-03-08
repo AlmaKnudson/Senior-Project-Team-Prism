@@ -23,14 +23,6 @@ import com.philips.lighting.model.PHLight;
 
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link HomeFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class HomeFragment extends Fragment implements CacheUpdateListener{
 //    private OnFragmentInteractionListener mListener;
 
@@ -47,7 +39,8 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
     private static int disabledOverlay = Color.argb(125, 0, 0, 0);
     private static int offOverlay = Color.argb(50, 0, 0, 0);
 
-    public static String lightPositionString = "CURRENT_BULB_POSITION";
+    public static final String lightPositionString = "CURRENT_BULB_POSITION";
+    public static final String groupOrLightString = "GROUP_OR_LIGHT";
 
     public HomeFragment() {
         hueSDK = PHHueSDK.getInstance();
@@ -85,7 +78,13 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
                 Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
                 //TODO: I need to change this for group of lights. now it is just for a single light.
                 Bundle bundle = new Bundle();
-                bundle.putInt(lightPositionString, position);
+                if(position < currentLights.size()) {
+                    bundle.putInt(lightPositionString, position);
+                    bundle.putBoolean(groupOrLightString, false);
+                } else {
+                    bundle.putInt(lightPositionString, position - currentLights.size());
+                    bundle.putBoolean(groupOrLightString, true);
+                }
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 LightSettingsFragment lightSettingFragment = new LightSettingsFragment();
