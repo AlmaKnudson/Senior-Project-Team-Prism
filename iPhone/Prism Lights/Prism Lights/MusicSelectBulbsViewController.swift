@@ -9,10 +9,18 @@
 import Foundation
 
 
-class MusicSelectBulbsViewController: UITableViewController{
+protocol BulbRangeSelectionDelegate: class {
+    func onBulbRangeChange(identifier: NSString, range:NSNumber)
+}
 
+class MusicSelectBulbsViewController: UITableViewController{
+//    var delegate :BulbRangeSelectionDelegate? = nil
+//    weak var bulbRangeSelectionDelegate: BulbRangeSelectionDelegate?
+    weak var bulbRangeSelectionDelegate: BulbRangeSelectionDelegate?
+    
     
     var lights: Array<AnyObject> = []
+    
     //    var cache:PHBridgeResourcesCache
     var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
     

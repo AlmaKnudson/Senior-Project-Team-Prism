@@ -44,3 +44,12 @@
 @property (nonatomic,strong) EZMicrophone *microphone;
 
 @end
+
+//@protocol BulbRangeSelectionDelegate <NSObject>
+//
+//-(void)onBulbRangeChange:(NSString*) identifier withRange: (NSNumber *)range;
+////- (void)signalStop;
+////- (void)signalLeftTurn;
+////- (void)signalRightTurn;
+//
+//@end

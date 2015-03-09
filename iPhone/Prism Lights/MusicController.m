@@ -10,6 +10,8 @@
 
 #import "MusicController.h"
 #import <HueSDK_iOS/HueSDK.h>
+#import "Prism Lights-Bridging-Header.h"
+
 
 @interface MusicController(){
     COMPLEX_SPLIT _A;
@@ -17,6 +19,8 @@
     BOOL          _isFFTSetup;
     vDSP_Length   _log2n;
 }
+
+
 
 
 @property (weak, nonatomic) IBOutlet UILabel *maxBrightnessLabel;
@@ -32,10 +36,13 @@
 
 @end
 
+
 @implementation MusicController
 @synthesize audioPlotFreq;
 @synthesize audioPlotTime;
 @synthesize microphone;
+
+
 
 //@property (weak) IBOutlet UILabel *bpmLabel;
 - (IBAction)lowFrequencyRangeSlider:(UISlider *)sender{
@@ -423,6 +430,14 @@ bool throttleSkip = true;
     self.audioPlotTime.backgroundColor = [UIColor colorWithRed: 0.0904 green: 0.0901 blue: 0.105 alpha: 1];
     
     //TODO--REFACTOR what needs to be here.
+//    BulbRangeSelectionDelegate *selectBulbs = [[[self.childViewControllers lastObject] ] bulbRangeSelectionDelegate];
+//    selectBulbs.BulbRangeSelectionDelegate = self;
+//    
+    
+//    selectBulbs.
+//    selectBulb
+//    var picker = ((self.childViewControllers.last)?.view) as ColorPicker
+//    picker.colorChangedDelegate = self
     
 }
 
@@ -749,6 +764,21 @@ bool throttleSkip = true;
         [self updateFFTWithBufferSize:bufferSize withAudioData:buffer[0]];
         
     });
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"MusicSelectBulbsViewController"]) {
+        NSLog(@"FUCK");
+//        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        MusicSelectBulbsViewController *destViewController = segue.destinationViewController;
+        destViewController.lights = @[@"Alfred"];
+//        destViewController.recipeName = [recipes objectAtIndex:indexPath.row];
+//        destViewController.test = @[@"Alpaca", @"Llama", @"Kangaroo", @"4", @"5"];
+    }
+}
+
+-(void)onBulbRangeChange:(NSString*) identifier withRange: (NSNumber *)range {
+    NSLog(@"BulbRangeChanged");
 }
 
 @end
