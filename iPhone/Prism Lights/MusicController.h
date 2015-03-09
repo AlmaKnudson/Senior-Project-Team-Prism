@@ -18,6 +18,8 @@
  */
 #import <Accelerate/Accelerate.h>
 
+#import "Prism_Lights-Swift.h"
+
 
 
 /**
