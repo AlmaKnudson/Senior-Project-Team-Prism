@@ -2,9 +2,13 @@ package app.lights.prism.com.prismlights;
 
 import android.app.FragmentTransaction;
 import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.PointF;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -33,6 +37,8 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
     private String[] lightNames;
     private List<PHGroup> currentGroups;
     private String[] groupNames;
+    private Integer dragPosition;
+    private boolean dragging = false;
 
     private GridView gridView;
 
@@ -76,7 +82,6 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
-                //TODO: I need to change this for group of lights. now it is just for a single light.
                 Bundle bundle = new Bundle();
                 if(position < currentLights.size()) {
                     bundle.putInt(lightPositionString, position);
@@ -85,6 +90,7 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
                     bundle.putInt(lightPositionString, position - currentLights.size());
                     bundle.putBoolean(groupOrLightString, true);
                 }
+                dragPosition = null;
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 LightSettingsFragment lightSettingFragment = new LightSettingsFragment();
@@ -94,6 +100,54 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
                 fragmentTransaction.commit();
 
                 return false;
+            }
+        });
+
+        gridView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int newPosition = gridView.pointToPosition((int) event.getX(), (int) event.getY());
+                if(event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_POINTER_DOWN) {
+                    if(newPosition < currentLights.size() + currentGroups.size()) {
+                        dragPosition = newPosition;
+                    } else {
+                        dragPosition = null;
+                    }
+                }
+                else if(dragPosition != null && newPosition != dragPosition && !dragging) {
+                    if(gridView.getChildAt(dragPosition) == null) {
+                        dragPosition = null;
+                        return false;
+                    }
+                    View bulbImage = gridView.getChildAt(dragPosition).findViewById(R.id.bulbImage);
+                    View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(bulbImage);
+                    bulbImage.startDrag(null, shadowBuilder, null, 0);
+                    dragging = true;
+                }
+                return false;
+            }
+        });
+        gridView.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                if(event.getAction() == DragEvent.ACTION_DROP) {
+                    dragging = false;
+                    int position = gridView.pointToPosition((int) event.getX(), (int) event.getY());
+                    if(position != dragPosition && position >= 0 && position < currentLights.size() + currentGroups.size()) {
+                        if(position < currentLights.size() && dragPosition < currentLights.size()) {
+                            HueBulbChangeUtility.createGroup(currentLights.get(position), currentLights.get(dragPosition));
+                        } else if(position >= currentLights.size() && dragPosition >= currentLights.size()) {
+                            HueBulbChangeUtility.createGroup(currentGroups.get(position - currentLights.size()), currentGroups.get(dragPosition - currentLights.size()));
+                        } else {
+                            if(position >= currentLights.size()) {
+                                HueBulbChangeUtility.createGroup(currentLights.get(dragPosition), currentGroups.get(position - currentLights.size()));
+                            } else {
+                                HueBulbChangeUtility.createGroup(currentLights.get(position), currentGroups.get(dragPosition - currentLights.size()));
+                            }
+                        }
+                    }
+                }
+                return true;
             }
         });
 
