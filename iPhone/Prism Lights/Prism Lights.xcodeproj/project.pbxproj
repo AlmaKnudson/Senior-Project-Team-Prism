@@ -76,6 +76,7 @@
 		CC9E5ECD1A89A16100B19DF6 /* AlarmsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9E5ECC1A89A16100B19DF6 /* AlarmsTable.swift */; };
 		CC9E5ECF1A89B95300B19DF6 /* AlarmCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9E5ECE1A89B95300B19DF6 /* AlarmCell.swift */; };
 		CCB135A41AAB9601006E464F /* libEstimoteSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CCB135A31AAB9601006E464F /* libEstimoteSDK.a */; };
+		CCB135A71AAD03C2006E464F /* datething.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB135A61AAD03C2006E464F /* datething.swift */; };
 		CCB707851AA68A73002BF12B /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB707821AA68A73002BF12B /* ColorPicker.swift */; };
 		CCB707861AA68A73002BF12B /* ColorSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB707831AA68A73002BF12B /* ColorSelectorView.swift */; };
 		CCB707871AA68A73002BF12B /* NewColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB707841AA68A73002BF12B /* NewColorPickerView.swift */; };
@@ -213,6 +214,7 @@
 		CC9E5ECC1A89A16100B19DF6 /* AlarmsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmsTable.swift; sourceTree = "<group>"; };
 		CC9E5ECE1A89B95300B19DF6 /* AlarmCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmCell.swift; sourceTree = "<group>"; };
 		CCB135A31AAB9601006E464F /* libEstimoteSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libEstimoteSDK.a; path = EstimoteSDK/libEstimoteSDK.a; sourceTree = "<group>"; };
+		CCB135A61AAD03C2006E464F /* datething.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = datething.swift; sourceTree = "<group>"; };
 		CCB707821AA68A73002BF12B /* ColorPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPicker.swift; sourceTree = "<group>"; };
 		CCB707831AA68A73002BF12B /* ColorSelectorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorSelectorView.swift; sourceTree = "<group>"; };
 		CCB707841AA68A73002BF12B /* NewColorPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewColorPickerView.swift; sourceTree = "<group>"; };
@@ -585,6 +587,7 @@
 				CC9E5ECC1A89A16100B19DF6 /* AlarmsTable.swift */,
 				CC9E5ECE1A89B95300B19DF6 /* AlarmCell.swift */,
 				CCCB88DB1A9BAAD8003D68F4 /* AlarmDetail.swift */,
+				CCB135A61AAD03C2006E464F /* datething.swift */,
 			);
 			name = Alarm;
 			sourceTree = "<group>";
@@ -599,6 +602,7 @@
 		CCCB88DA1A9BA266003D68F4 /* Beacons */ = {
 			isa = PBXGroup;
 			children = (
+				11AF010C1AA95C6000122F24 /* EstViewController.swift */,
 			);
 			name = Beacons;
 			sourceTree = "<group>";
@@ -709,6 +713,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0D9357E71A2D4BB100AAD52D /* BulbCollectionCell.swift in Sources */,
+				CCB135A71AAD03C2006E464F /* datething.swift in Sources */,
 				117F49631A96DAFE00A31746 /* MusicController.m in Sources */,
 				0D3A79171A26A716003AC6D4 /* DDLog.m in Sources */,
 				0D3A79191A26A716003AC6D4 /* DDTTYLogger.m in Sources */,
