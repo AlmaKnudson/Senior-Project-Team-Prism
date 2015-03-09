@@ -2,6 +2,7 @@ package app.lights.prism.com.prismlights;
 
 import android.text.format.DateFormat;
 
+import com.philips.lighting.hue.listener.PHGroupListener;
 import com.philips.lighting.hue.listener.PHLightListener;
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
@@ -13,6 +14,7 @@ import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
 import com.philips.lighting.model.PHSchedule;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -240,6 +242,37 @@ public class HueBulbChangeUtility {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
         PHGroup group = getGroupFromPosition(position, bridge);
         group.setName(groupName);
+        bridge.updateGroup(group, new PHGroupListener() {
+            @Override
+            public void onCreated(PHGroup phGroup) {
+
+            }
+
+            @Override
+            public void onReceivingGroupDetails(PHGroup phGroup) {
+
+            }
+
+            @Override
+            public void onReceivingAllGroups(List<PHBridgeResource> phBridgeResources) {
+
+            }
+
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onError(int i, String s) {
+
+            }
+
+            @Override
+            public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
+
+            }
+        });
     }
 
 
@@ -269,9 +302,122 @@ public class HueBulbChangeUtility {
         PHGroup group = getGroupFromPosition(position, bridge);
         Map<String, PHLight> lights = getAllLights();
         List<String> lightIds = group.getLightIdentifiers();
-        boolean shouldSetOn = false;
         for(String id : lightIds) {
             changeBulbColor(lights.get(id), newColor);
         }
+    }
+
+    public static void createGroup(PHLight light, PHGroup group) {
+        if(!group.getLightIdentifiers().contains(light.getIdentifier())) {
+            group.getLightIdentifiers().add(light.getIdentifier());
+            PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
+            bridge.updateGroup(group, new PHGroupListener() {
+                @Override
+                public void onCreated(PHGroup phGroup) {
+
+                }
+
+                @Override
+                public void onReceivingGroupDetails(PHGroup phGroup) {
+
+                }
+
+                @Override
+                public void onReceivingAllGroups(List<PHBridgeResource> phBridgeResources) {
+
+                }
+
+                @Override
+                public void onSuccess() {
+                    System.out.println("succeeded in adding light to group");
+                }
+
+                @Override
+                public void onError(int i, String s) {
+                    System.out.println(s);
+                }
+
+                @Override
+                public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
+
+                }
+            });
+        }
+    }
+
+    public static void createGroup(PHLight light, PHLight light2) {
+        PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
+        List<String> lightList = new ArrayList<String>();
+        lightList.add(light.getIdentifier());
+        lightList.add(light2.getIdentifier());
+        bridge.createGroup("Group " + (1 + bridge.getResourceCache().getGroups().size()), lightList, new PHGroupListener() {
+            @Override
+            public void onCreated(PHGroup phGroup) {
+
+            }
+
+            @Override
+            public void onReceivingGroupDetails(PHGroup phGroup) {
+
+            }
+
+            @Override
+            public void onReceivingAllGroups(List<PHBridgeResource> phBridgeResources) {
+
+            }
+
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onError(int i, String s) {
+
+            }
+
+            @Override
+            public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
+
+            }
+        });
+    }
+
+    public static void createGroup(PHGroup group, PHGroup group2) {
+        PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
+        List<String> lightList = new ArrayList<String>();
+        lightList.addAll(group.getLightIdentifiers());
+        lightList.addAll(group2.getLightIdentifiers());
+        bridge.createGroup("Group "+ (1 + bridge.getResourceCache().getGroups().size()), lightList, new PHGroupListener() {
+            @Override
+            public void onCreated(PHGroup phGroup) {
+
+            }
+
+            @Override
+            public void onReceivingGroupDetails(PHGroup phGroup) {
+
+            }
+
+            @Override
+            public void onReceivingAllGroups(List<PHBridgeResource> phBridgeResources) {
+
+            }
+
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onError(int i, String s) {
+
+            }
+
+            @Override
+            public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
+
+            }
+        });
     }
 }
