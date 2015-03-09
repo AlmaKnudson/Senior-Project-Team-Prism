@@ -395,7 +395,6 @@
 				0D0A26D71A376D4A0033550D /* Music */,
 				0D9862511A1D2C0B00FAD175 /* Supporting Files */,
 				117F49651A96DB8B00A31746 /* PrefixHeader.pch */,
-				11AF010C1AA95C6000122F24 /* EstViewController.swift */,
 				CCB135A11AAB8095006E464F /* ColorPicker */,
 			);
 			path = "Prism Lights";
