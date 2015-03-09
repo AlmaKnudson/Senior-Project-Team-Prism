@@ -38,9 +38,9 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
     private List<PHGroup> currentGroups;
     private String[] groupNames;
     private Integer dragPosition;
-    private boolean dragging = false;
 
     private GridView gridView;
+    private ImageView trash;
 
     private static int disabledOverlay = Color.argb(125, 0, 0, 0);
     private static int offOverlay = Color.argb(50, 0, 0, 0);
@@ -63,9 +63,10 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        FrameLayout frame = (FrameLayout) inflater.inflate(R.layout.fragment_home, container, false);
+        View frame = inflater.inflate(R.layout.fragment_home, container, false);
         gridView= (GridView) frame.findViewById(R.id.homeGridView);
         gridView.setAdapter(new HomeGridAdapter());
+        trash = (ImageView) frame.findViewById(R.id.homeTrashImage);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -114,7 +115,7 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
                         dragPosition = null;
                     }
                 }
-                else if(dragPosition != null && newPosition != dragPosition && !dragging) {
+                else if(dragPosition != null && newPosition != dragPosition) {
                     if(gridView.getChildAt(dragPosition) == null) {
                         dragPosition = null;
                         return false;
@@ -122,7 +123,7 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
                     View bulbImage = gridView.getChildAt(dragPosition).findViewById(R.id.bulbImage);
                     View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(bulbImage);
                     bulbImage.startDrag(null, shadowBuilder, null, 0);
-                    dragging = true;
+                    return false;
                 }
                 return false;
             }
@@ -131,7 +132,6 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
             @Override
             public boolean onDrag(View v, DragEvent event) {
                 if(event.getAction() == DragEvent.ACTION_DROP) {
-                    dragging = false;
                     int position = gridView.pointToPosition((int) event.getX(), (int) event.getY());
                     if(position != dragPosition && position >= 0 && position < currentLights.size() + currentGroups.size()) {
                         if(position < currentLights.size() && dragPosition < currentLights.size()) {
@@ -145,6 +145,23 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
                                 HueBulbChangeUtility.createGroup(currentLights.get(position), currentGroups.get(dragPosition - currentLights.size()));
                             }
                         }
+                    }
+                } else if(gridView.getBottom() - event.getY() < 50) {
+                    gridView.smoothScrollByOffset(50);
+                } else if(event.getY() - gridView.getTop() < 50) {
+                    gridView.smoothScrollByOffset(-50);
+                }
+                return true;
+            }
+        });
+        trash.setOnDragListener(new View.OnDragListener(){
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                if(event.getAction() == DragEvent.ACTION_DROP) {
+                    if(dragPosition < currentLights.size()) {
+                        HueBulbChangeUtility.deleteLight(currentLights.get(dragPosition));
+                    } else {
+                        HueBulbChangeUtility.deleteGroup(currentGroups.get(dragPosition - currentLights.size()));
                     }
                 }
                 return true;
