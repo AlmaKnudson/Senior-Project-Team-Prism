@@ -141,7 +141,7 @@ public class ScheduleFragment extends Fragment {
                 //need to open new fragment with BulbID and scheduleID arguments.
                 Bundle bundle = new Bundle();
                 bundle.putInt(lightPositionString, currentBulbId);
-                ((MainActivity)getActivity()).currentSchedule = phSchedules.get(position);
+                ((MainActivity) getActivity()).currentSchedule = phSchedules.get(position);
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 ScheduleConfigFragment scheduleConfigFragment = new ScheduleConfigFragment();
@@ -149,6 +149,16 @@ public class ScheduleFragment extends Fragment {
                 fragmentTransaction.replace(R.id.container, scheduleConfigFragment);
                 fragmentTransaction.addToBackStack("ScheduleConfigFragment");
                 fragmentTransaction.commit();
+            }
+        });
+
+        ImageView refreshButton = (ImageView)view.findViewById(R.id.refreshButton);
+
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getPhSchedules();
+                adapter.notifyDataSetChanged();
             }
         });
 
@@ -364,7 +374,14 @@ public class ScheduleFragment extends Fragment {
         return topActivity.contains(currentClass);
     }
 
-//    // this is TimePickerFragment, showTimePickerDialog create this DialogFragment.
+    @Override
+    public void onResume() {
+        super.onResume();
+        getPhSchedules();
+        adapter.notifyDataSetChanged();
+    }
+
+    //    // this is TimePickerFragment, showTimePickerDialog create this DialogFragment.
 //    // when user click "done", onTimeSet get called.
 //    // TODO: is this ok non static? public class in a class.... private-> fragment have to be public,...?
 //    private class TimePickerFragment extends DialogFragment

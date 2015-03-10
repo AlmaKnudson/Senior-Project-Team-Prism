@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -427,15 +428,17 @@ public class ScheduleConfigFragment extends Fragment {
 
     private void goToScheduleFragment() {
 
-        Bundle bundle = new Bundle();
-        bundle.putInt(lightPositionString, bulbID);
-
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        ScheduleFragment scheduleFragment = new ScheduleFragment();
-        scheduleFragment.setArguments(bundle);
-        fragmentTransaction.replace(R.id.container, scheduleFragment);
-        fragmentTransaction.addToBackStack("ScheduleFragment");
-        fragmentTransaction.commit();
+        android.app.FragmentManager fm = getActivity().getFragmentManager();
+        fm.popBackStack();
+//        Bundle bundle = new Bundle();
+//        bundle.putInt(lightPositionString, bulbID);
+//
+//        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+//        ScheduleFragment scheduleFragment = new ScheduleFragment();
+//        scheduleFragment.setArguments(bundle);
+//        fragmentTransaction.replace(R.id.container, scheduleFragment);
+//        fragmentTransaction.addToBackStack("ScheduleFragment");
+//        fragmentTransaction.commit();
     }
 
     //TODO: do I need this?

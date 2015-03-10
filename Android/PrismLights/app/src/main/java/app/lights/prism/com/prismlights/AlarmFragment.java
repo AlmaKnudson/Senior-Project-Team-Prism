@@ -1,10 +1,12 @@
 package app.lights.prism.com.prismlights;
 
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.text.format.DateFormat;
@@ -53,6 +55,10 @@ public class AlarmFragment extends Fragment {
     static AlarmAdapter adapter;
     static private PHHueSDK phHueSDK;
     private static PHBridge bridge;
+    private Date timeToSend;
+    int alarmMode;
+    AlertDialog modeDialog;
+    TimePickerFragment timePickerDialog;
     String delegate;
     List<PHSchedule> alarmSchedules; // this List of schedules in bridge whose description is Alarm.
 
@@ -71,6 +77,10 @@ public class AlarmFragment extends Fragment {
         bridge = phHueSDK.getSelectedBridge();
 
         delegate = "hh:mm aaa";
+        timeToSend = null;
+        alarmMode = 0;
+        modeDialog = null;
+        timePickerDialog = null;
 
         if (getArguments() != null) {
             currentBulbId = getArguments().getInt(lightPositionString);
@@ -121,9 +131,25 @@ public class AlarmFragment extends Fragment {
         adapter = new AlarmAdapter();
         alarmListView.setAdapter(adapter);
 
+        ImageView refreshButton = (ImageView)view.findViewById(R.id.refreshButton);
+
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getAlarmSchedules();
+                adapter.notifyDataSetChanged();
+            }
+        });
+
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getAlarmSchedules();
+        adapter.notifyDataSetChanged();
+    }
 
     private class AlarmAdapter extends BaseAdapter{
 
@@ -146,9 +172,6 @@ public class AlarmFragment extends Fragment {
         public View getView(final int position, final View convertView, ViewGroup parent) {
             final PHSchedule alarm = alarmSchedules.get(position);
 
-            Date d = alarm.getDate();
-
-            String timeString = (String) DateFormat.format(delegate, d.getTime());
             RelativeLayout currentView;
             if(convertView == null) {
                 currentView = (RelativeLayout) LayoutInflater.from(AlarmFragment.this.getActivity()).inflate(R.layout.single_alarm, parent, false);
@@ -157,7 +180,21 @@ public class AlarmFragment extends Fragment {
             }
 
             TextView timeView = (TextView) currentView.findViewById(R.id.singleAlarmTimeText);
+            Date d = alarm.getDate();
+            String timeString = (String) DateFormat.format(delegate, d.getTime());
             timeView.setText(timeString);
+
+            TextView modeView = (TextView) currentView.findViewById(R.id.textMode);
+            String modeString = null;
+            PHLightState state = alarm.getLightState();
+            if (!state.isOn())
+                modeString = "Off";
+            else if (state.getAlertMode() == PHLight.PHLightAlertMode.ALERT_SELECT)
+                modeString = "Alert";
+            else
+                modeString = "On";
+
+            modeView.setText(modeString);
 
             // When individual Alarm is clicked, open a time picker to change the Alarm
             timeView.setOnClickListener(new View.OnClickListener() {
@@ -220,35 +257,66 @@ public class AlarmFragment extends Fragment {
                     alarmTime = new Date(alarmTime.getTime()+86400000); //adding 24 hours in milliseconds
                 }
 
+                timeToSend = alarmTime;
 
-                // user want to add new Alarm
-                if (chosenAlarmPosition == -1)
-                {
-                    addNewAlarm(alarmTime);
-                }
-                // user wants to change existing alarm
-                else
-                {
-                    updateAlarm(chosenAlarmPosition, alarmTime);
-                }
+                // Strings to Show In Dialog with Radio Buttons
+                final CharSequence[] items = {" On "," Off "," Alert "};
 
+                // Creating and Building the Dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                builder.setTitle("Select The Alarm Mode");
+                builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+
+
+                        switch (item) {
+                            case 0:
+                                alarmMode = 0; //on
+                                break;
+                            case 1:
+                                alarmMode = 1; //off
+                                break;
+                            case 2:
+                                alarmMode = 2; //alert
+                                break;
+
+                        }
+
+                        // user want to add new Alarm
+                        if (chosenAlarmPosition == -1) {
+                            addNewAlarm(timeToSend);
+                        }
+                        // user wants to change existing alarm
+                        else {
+                            updateAlarm(chosenAlarmPosition, timeToSend);
+                        }
+
+                        modeDialog.dismiss();
+                        getAlarmSchedules();
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+                modeDialog = builder.create();
+                timePickerDialog.dismiss();
+                timePickerDialog = null;
+                modeDialog.show();
             }
-
-            adapter.notifyDataSetChanged();
         }
     }
 
     //This function gets called when user want to add/change alarm, and this opens the timepicker.
     public void showTimePickerDialog(int alarmPosition) {
         chosenAlarmPosition = alarmPosition;
-        DialogFragment newFragment = new TimePickerFragment();
-        newFragment.show(getFragmentManager(), "timePicker");
+        timePickerDialog = new TimePickerFragment();
+        timePickerDialog.show(getFragmentManager(), "timePicker");
     }
 
     private void updateAlarm(int alarmPosition, Date alarmTime) {
 
        PHSchedule schedule = alarmSchedules.get(alarmPosition);
        schedule.setDate(alarmTime);
+       schedule.setLightState(getLightState());
 
         final PHWizardAlertDialog dialogManager = PHWizardAlertDialog
                 .getInstance();
@@ -407,7 +475,21 @@ public class AlarmFragment extends Fragment {
         //PHLightState state = phHueSDK.getCurrentLightState();
         //currentBulb.getLastKnownLightState();
         PHLightState state = new PHLightState();
-        state.setOn(true);
+
+        switch(alarmMode)
+        {
+            case 0:
+                state.setOn(true); //on
+                break;
+            case 1:
+                state.setOn(false); //off
+                break;
+            case 2:
+                state.setOn(true);
+                state.setAlertMode(PHLight.PHLightAlertMode.ALERT_SELECT); //alert
+                break;
+
+        }
 //        state.setHue(50);
 //        state.setSaturation(50);
 //        state.setBrightness(50);

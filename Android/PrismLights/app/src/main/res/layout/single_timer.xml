@@ -23,6 +23,17 @@
 <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:text="mode"
+    android:id="@+id/textMode"
+    android:gravity="center"
+    android:layout_alignParentTop="true"
+    android:layout_toStartOf="@+id/TimerDeleteText"
+    android:layout_alignParentBottom="true"
+    android:layout_toLeftOf="@+id/TimerDeleteText" />
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:text="Delete"
     android:id="@+id/TimerDeleteText"
     android:layout_alignParentRight="true"
