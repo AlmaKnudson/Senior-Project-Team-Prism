@@ -22,10 +22,17 @@ class MusicCell : UITableViewCell{
     
     func SetBulbRange(range:NSInteger){
         bulbRange = range;
+        bulbRangeSegment.selectedSegmentIndex = range;
+    }
+    
+    func getSelectedSegmentIndex() -> Int{
+        return bulbRangeSegment.selectedSegmentIndex;
     }
     
     @IBAction func onRangeChanged(sender: UISegmentedControl) {
         bulbRange = sender.selectedSegmentIndex;
+        self.SetBulbRange(bulbRange);
+        NSLog("NEW Range:\(bulbRange) For bulb:\(bulbName)--Identifier \(bulbIdentifier)")
         /* 1-->Low
          * 2-->Mid
          * 3-->High

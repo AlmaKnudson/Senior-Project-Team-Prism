@@ -31,8 +31,11 @@ class MusicSelectBulbsViewController: UITableViewController{
     @IBOutlet weak var light: UIView!
     
     @IBAction func onRangeChanged(sender: MusicCell) {
+//        NSLog("NEW INDEX:\(sender.getSelectedSegmentIndex())")
         
-//        if (rangeSelectionDelegate != nil) {
+//        sender.SetBulbRange(sender.getSelectedSegmentIndex());
+        
+        //        if (rangeSelectionDelegate != nil) {
 //            rangeSelectionDelegate!.onBulbRangeChange(sender.bulbIdentifier, range: sender.bulbRange)
 //        }
     }
@@ -61,8 +64,12 @@ class MusicSelectBulbsViewController: UITableViewController{
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
         let cellId:String = "MyCell"
-        var cell:UITableViewCell = tableView.dequeueReusableCellWithIdentifier(cellId, forIndexPath:indexPath) as UITableViewCell
+        var cell:MusicCell = tableView.dequeueReusableCellWithIdentifier(cellId, forIndexPath:indexPath) as MusicCell
         cell.textLabel?.textColor = UIColor.whiteColor()
+        cell.bulbIdentifier = (lights[indexPath.row].identifier as String)
+        cell.bulbName = (lights[indexPath.row].name as String)
+//        cell.bulbRange = 2
+        cell.SetBulbRange(2)
         cell.textLabel?.text = (lights[indexPath.row].name as String)
         cell.backgroundColor = UIColor.blackColor()
         cell.selectionStyle = UITableViewCellSelectionStyle.None
