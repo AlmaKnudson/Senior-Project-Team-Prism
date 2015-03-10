@@ -22,14 +22,12 @@
 #import "Prism_Lights-Swift.h"
 
 
-@protocol BulbRangeSelectionDelegate <NSObject>
-    -(void)onBulbRangeChange:(NSString*) identifier withRange: (NSNumber *)range;
-@end
 
 /**
  The FFTViewController demonstrates how to use the Accelerate framework to calculate the real-time FFT of audio data provided by an EZAudioMicrophone.
  */
 @interface MusicController : UIViewController <EZMicrophoneDelegate, BulbRangeSelectionDelegate>
+
 
 
 

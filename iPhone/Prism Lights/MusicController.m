@@ -766,18 +766,19 @@ bool throttleSkip = true;
     });
 }
 
+-(void)onBulbRangeChange:(NSString*) identifier withRange: (NSNumber *)range {
+    NSLog(@"SHIT YASS-BulbRangeChanged");
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"musicLights"]) {
 //        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         MusicSelectBulbsViewController *destViewController = segue.destinationViewController;
 //        destViewController.ligh
-        
-        
+        destViewController.rangeSelectionDelegate = self;
     }
 }
 
--(void)onBulbRangeChange:(NSString*) identifier withRange: (NSNumber *)range {
-    NSLog(@"BulbRangeChanged");
-}
+
 
 @end

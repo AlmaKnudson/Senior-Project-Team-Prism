@@ -9,15 +9,15 @@
 import Foundation
 
 
-protocol BulbRangeSelectionDelegate: class {
+@objc protocol BulbRangeSelectionDelegate: class {
     func onBulbRangeChange(identifier: NSString, range:NSNumber)
 }
 
 
 
-class MusicSelectBulbsViewController: UITableViewController, BulbRangeSelectionDelegate{
+class MusicSelectBulbsViewController: UITableViewController{
     
-    var rangeSelectionDelegate: BulbRangeSelectionDelegate?
+    var rangeSelectionDelegate: BulbRangeSelectionDelegate? = nil
     
     
     var lightCells: Array<MusicCell> = [];
@@ -29,18 +29,13 @@ class MusicSelectBulbsViewController: UITableViewController, BulbRangeSelectionD
     @IBOutlet weak var light: UIView!
     
     @IBAction func onRangeChanged(sender: MusicCell) {
-//        NSLog("NEW INDEX:\(sender.getSelectedSegmentIndex())")
-        
-//        sender.SetBulbRange(sender.getSelectedSegmentIndex());
-        
-        //        if (rangeSelectionDelegate != nil) {
-//            rangeSelectionDelegate!.onBulbRangeChange(sender.bulbIdentifier, range: sender.bulbRange)
-//        }
+        NSLog("UMMM--onRangeChanged---TableView");
+        if(rangeSelectionDelegate != nil) {
+            NSLog("UMMM--onRangeChanged---TableView");
+            rangeSelectionDelegate?.onBulbRangeChange("test" as NSString, range: 0 as NSNumber)
+        }
     }
     
-    func onBulbRangeChange(identifier: NSString, range: NSNumber) {
-        
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad();
@@ -70,7 +65,7 @@ class MusicSelectBulbsViewController: UITableViewController, BulbRangeSelectionD
         cell.textLabel?.textColor = UIColor.whiteColor()
         cell.bulbIdentifier = (lights[indexPath.row].identifier as String)
         cell.bulbName = (lights[indexPath.row].name as String)
-//        cell.bulbRange = 2
+        //        cell.bulbRange = 2
         cell.SetBulbRange(2)
         cell.textLabel?.text = (lights[indexPath.row].name as String)
         cell.backgroundColor = UIColor.blackColor()
@@ -86,7 +81,7 @@ class MusicSelectBulbsViewController: UITableViewController, BulbRangeSelectionD
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         
         if editingStyle == .Delete {
-//            lights.removeAtIndex([indexPath]);
+            //            lights.removeAtIndex([indexPath]);
             lights.removeAtIndex(indexPath.row);
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         } else if editingStyle == .Insert {
@@ -96,7 +91,7 @@ class MusicSelectBulbsViewController: UITableViewController, BulbRangeSelectionD
         
         
     }
-
+    
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
