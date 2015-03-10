@@ -16,13 +16,17 @@ protocol BulbRangeSelectionDelegate: class {
 class MusicSelectBulbsViewController: UITableViewController{
 //    var delegate :BulbRangeSelectionDelegate? = nil
 //    weak var bulbRangeSelectionDelegate: BulbRangeSelectionDelegate?
-    weak var bulbRangeSelectionDelegate: BulbRangeSelectionDelegate?
+    weak var rangeSelectionDelegate: BulbRangeSelectionDelegate? = nil
+    
     
     
     var lights: Array<AnyObject> = []
     
     //    var cache:PHBridgeResourcesCache
     var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
+    
+    @IBOutlet weak var light: UIView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad();

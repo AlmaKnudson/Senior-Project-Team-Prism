@@ -767,11 +767,11 @@ bool throttleSkip = true;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"MusicSelectBulbsViewController"]) {
+    if ([segue.identifier isEqualToString:@"musicLights"]) {
         NSLog(@"FUCK");
 //        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         MusicSelectBulbsViewController *destViewController = segue.destinationViewController;
-        destViewController.lights = @[@"Alfred"];
+//        destViewController.lights = @[@"Alfred"];
 //        destViewController.recipeName = [recipes objectAtIndex:indexPath.row];
 //        destViewController.test = @[@"Alpaca", @"Llama", @"Kangaroo", @"4", @"5"];
     }
