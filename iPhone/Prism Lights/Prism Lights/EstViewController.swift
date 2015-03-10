@@ -10,7 +10,7 @@ import Foundation
 
 import UIKit
 
-class EstViewController:UIViewController, ESTBeaconManagerDelegate{
+class EstViewController:UITableViewController, ESTBeaconManagerDelegate{
     
     //Create beacon manager instance
     let beaconManager : ESTBeaconManager = ESTBeaconManager()
@@ -22,7 +22,13 @@ class EstViewController:UIViewController, ESTBeaconManagerDelegate{
         beaconManager.delegate = self
         var beaconRegion : ESTBeaconRegion = ESTBeaconRegion(proximityUUID: NSUUID(UUIDString:"B9407F30-F5F8-466E-AFF9-25556B57FE6D"), identifier: "regionName")
         
+        
+        beaconManager.requestWhenInUseAuthorization();
+        
+        
         beaconManager.startRangingBeaconsInRegion(beaconRegion);
+    
+        println("Starting ranging...")
         //TODO--Additional setup
     }
     
