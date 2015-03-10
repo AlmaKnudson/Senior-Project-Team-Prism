@@ -11,7 +11,10 @@ import Foundation
 import UIKit
 
 
-class MusicCell : UICollectionViewCell{
+class MusicCell : UITableViewCell{
+    
+    @IBOutlet weak var bulbRangeSegment: UISegmentedControl!
+    
     
     var bulbName: NSString = "noname"
     var bulbIdentifier: NSString = "-1"
@@ -21,6 +24,16 @@ class MusicCell : UICollectionViewCell{
         bulbRange = range;
     }
     
+    @IBAction func onRangeChanged(sender: UISegmentedControl) {
+        bulbRange = sender.selectedSegmentIndex;
+        /* 1-->Low
+         * 2-->Mid
+         * 3-->High
+         */
+    }
     
     
 }
+
+
+

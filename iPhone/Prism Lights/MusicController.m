@@ -10,8 +10,8 @@
 
 #import "MusicController.h"
 #import <HueSDK_iOS/HueSDK.h>
-#import "Prism Lights-Bridging-Header.h"
 
+#import "Prism Lights-Bridging-Header.h"
 
 @interface MusicController(){
     COMPLEX_SPLIT _A;
@@ -771,9 +771,8 @@ bool throttleSkip = true;
         NSLog(@"FUCK");
 //        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         MusicSelectBulbsViewController *destViewController = segue.destinationViewController;
-//        destViewController.lights = @[@"Alfred"];
-//        destViewController.recipeName = [recipes objectAtIndex:indexPath.row];
-//        destViewController.test = @[@"Alpaca", @"Llama", @"Kangaroo", @"4", @"5"];
+//        destViewController.ligh
+        
     }
 }
 

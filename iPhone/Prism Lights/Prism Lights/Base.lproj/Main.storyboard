@@ -383,12 +383,6 @@
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Alarm State, Time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zoe-Ye-IcY">
-                                            <rect key="frame" x="8" y="38" width="282" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Color:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bqg-lS-MKc">
                                             <rect key="frame" x="8" y="69" width="57" height="25"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -411,6 +405,12 @@
                                                 <action selector="enableAlarm" destination="U9H-fW-MvS" eventType="valueChanged" id="P0N-c1-xqW"/>
                                             </connections>
                                         </switch>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Alarm State, Time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zoe-Ye-IcY">
+                                            <rect key="frame" x="8" y="38" width="282" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -1694,9 +1694,6 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
-                                                <variation key="widthClass=compact" misplaced="YES">
-                                                    <rect key="frame" x="273" y="115" width="50" height="21"/>
-                                                </variation>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="High Range" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ec7-lK-1g5">
                                                 <rect key="frame" x="119" y="216" width="94" height="21"/>
@@ -1905,9 +1902,6 @@
                                     <constraint firstItem="afB-JD-ms5" firstAttribute="centerY" secondItem="oRH-cO-GdM" secondAttribute="centerY" id="57j-4A-nxT"/>
                                     <constraint firstItem="afB-JD-ms5" firstAttribute="centerX" secondItem="oRH-cO-GdM" secondAttribute="centerX" id="Bku-Lo-Xwc"/>
                                 </constraints>
-                                <variation key="widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="33" y="255" width="335" height="249"/>
-                                </variation>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LTR-UT-yRB">
                                 <rect key="frame" x="133" y="123" width="335" height="124"/>
@@ -2231,7 +2225,7 @@
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="sectionIndexBackgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MyCell" id="viy-r9-msy">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MyCell" id="viy-r9-msy" customClass="MusicCell" customModule="Prism_Lights" customModuleProvider="target">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="viy-r9-msy" id="WA1-gX-Dxq">
                                     <autoresizingMask key="autoresizingMask"/>
@@ -2244,6 +2238,10 @@
                                                 <segment title="High"/>
                                             </segments>
                                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <connections>
+                                                <action selector="onRangeChanged:" destination="viy-r9-msy" eventType="valueChanged" id="BjV-ad-5pT"/>
+                                                <action selector="onRangeChanged:" destination="ihc-Nw-KsL" eventType="valueChanged" id="pGg-dL-Fn0"/>
+                                            </connections>
                                         </segmentedControl>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -2271,6 +2269,9 @@
                                     </variation>
                                 </tableViewCellContentView>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="bulbRangeSegment" destination="Snw-08-qdC" id="vOj-QL-SR6"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
