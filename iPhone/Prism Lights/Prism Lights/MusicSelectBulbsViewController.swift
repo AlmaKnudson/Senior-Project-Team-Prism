@@ -86,23 +86,7 @@ class MusicSelectBulbsViewController: UITableViewController{
         
         
     }
-    
-    /*
-    - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"musicLights"]) {
-    NSLog(@"FUCK");
-    //        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-    MusicSelectBulbsViewController *destViewController = segue.destinationViewController;
-    
-    //        destViewController
-    //    BulbRangeSelectionDelegate *selectBulbs = [[[self.childViewControllers lastObject] ] bulbRangeSelectionDelegate];
-    //    selectBulbs.BulbRangeSelectionDelegate = self;
-    //        destViewController.lights = @[@"Alfred"];
-    //        destViewController.recipeName = [recipes objectAtIndex:indexPath.row];
-    destViewController.lights = @[@"Alpaca", @"Llama", @"Kangaroo", @"4", @"5"];
-    }
-    }
-*/
+
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         

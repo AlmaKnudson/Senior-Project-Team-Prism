@@ -768,7 +768,6 @@ bool throttleSkip = true;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"musicLights"]) {
-        NSLog(@"FUCK");
 //        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         MusicSelectBulbsViewController *destViewController = segue.destinationViewController;
 //        destViewController.ligh
