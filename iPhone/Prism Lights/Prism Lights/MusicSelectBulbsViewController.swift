@@ -15,14 +15,12 @@ protocol BulbRangeSelectionDelegate: class {
 
 
 
-class MusicSelectBulbsViewController: UITableViewController{
-    var delegate :BulbRangeSelectionDelegate? = nil
-//    weak var bulbRangeSelectionDelegate: BulbRangeSelectionDelegate?
+class MusicSelectBulbsViewController: UITableViewController, BulbRangeSelectionDelegate{
     
-    var rangeSelectionDelegate: BulbRangeSelectionDelegate? = nil
+    var rangeSelectionDelegate: BulbRangeSelectionDelegate?
     
     
-    
+    var lightCells: Array<MusicCell> = [];
     var lights: Array<AnyObject> = []
     
     //    var cache:PHBridgeResourcesCache
@@ -38,6 +36,10 @@ class MusicSelectBulbsViewController: UITableViewController{
         //        if (rangeSelectionDelegate != nil) {
 //            rangeSelectionDelegate!.onBulbRangeChange(sender.bulbIdentifier, range: sender.bulbRange)
 //        }
+    }
+    
+    func onBulbRangeChange(identifier: NSString, range: NSNumber) {
+        
     }
     
     override func viewDidLoad() {
@@ -73,6 +75,7 @@ class MusicSelectBulbsViewController: UITableViewController{
         cell.textLabel?.text = (lights[indexPath.row].name as String)
         cell.backgroundColor = UIColor.blackColor()
         cell.selectionStyle = UITableViewCellSelectionStyle.None
+        lightCells.insert(cell, atIndex: 0)
         return cell
     }
     
@@ -97,7 +100,6 @@ class MusicSelectBulbsViewController: UITableViewController{
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        //NOt so sure I need this.
     }
     
     

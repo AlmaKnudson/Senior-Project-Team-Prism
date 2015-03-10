@@ -11,7 +11,7 @@
 #import "MusicController.h"
 #import <HueSDK_iOS/HueSDK.h>
 
-#import "Prism Lights-Bridging-Header.h"
+//#import "Prism Lights-Bridging-Header.h"
 
 @interface MusicController(){
     COMPLEX_SPLIT _A;
@@ -771,6 +771,7 @@ bool throttleSkip = true;
 //        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         MusicSelectBulbsViewController *destViewController = segue.destinationViewController;
 //        destViewController.ligh
+        
         
     }
 }

@@ -18,17 +18,12 @@
  */
 #import <Accelerate/Accelerate.h>
 
+#import "Prism Lights-Bridging-Header.h"
 #import "Prism_Lights-Swift.h"
 
 
 @protocol BulbRangeSelectionDelegate <NSObject>
-
-//
-//-(void)onBulbRangeChange:(NSString*) identifier withRange: (NSNumber *)range;
-//- (void)signalStop;
-//- (void)signalLeftTurn;
-//- (void)signalRightTurn;
-
+    -(void)onBulbRangeChange:(NSString*) identifier withRange: (NSNumber *)range;
 @end
 
 /**
