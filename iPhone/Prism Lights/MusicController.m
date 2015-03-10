@@ -126,6 +126,24 @@
         
         
         bridgeSendAPI = [[PHBridgeSendAPI alloc] init];
+        
+        //Range selection code:
+//        PHBridgeResourcesCache *cache = [PHBridgeResourcesReader readBridgeResourcesCache];
+//        if (cache != nil && cache.bridgeConfiguration != nil && cache.bridgeConfiguration.ipaddress != nil){
+//            NSArray *myLights = [cache.lights allValues];
+//            if(musicCells != nil) {
+//                for (PHLight *light in myLights) {
+//                    for(MusicCell *cell in musicCells){
+////                        if (light.identifier ==)
+//                        if([light.identifier isEqualToString:cell.bulbIdentifier]){
+//                            
+//                        }
+//                    }
+//                }
+//                
+//            }
+//        }
+        
     } else {
         //Clean up.
         [lowTimer invalidate];
@@ -214,6 +232,10 @@ NSTimer *lowTimer;
 NSTimer *midTimer;
 NSTimer *highTimer;
 NSTimer *overloadedHitsTimer;
+
+//NSDictionary *musicCells = [NSDictionary dictionaryWithObject:MusicCell forKeys:]
+NSArray *musicCells;
+MusicCell *allBulbs[3];
 
 
 
@@ -429,15 +451,16 @@ bool throttleSkip = true;
     [super viewDidLoad];
     self.audioPlotTime.backgroundColor = [UIColor colorWithRed: 0.0904 green: 0.0901 blue: 0.105 alpha: 1];
     
-    //TODO--REFACTOR what needs to be here.
-//    BulbRangeSelectionDelegate *selectBulbs = [[[self.childViewControllers lastObject] ] bulbRangeSelectionDelegate];
-//    selectBulbs.BulbRangeSelectionDelegate = self;
-//    
     
-//    selectBulbs.
-//    selectBulb
-//    var picker = ((self.childViewControllers.last)?.view) as ColorPicker
-//    picker.colorChangedDelegate = self
+    //TODO--REFACTOR what needs to be here.
+    //    BulbRangeSelectionDelegate *selectBulbs = [[[self.childViewControllers lastObject] ] bulbRangeSelectionDelegate];
+    //    selectBulbs.BulbRangeSelectionDelegate = self;
+    //
+    
+    //    selectBulbs.
+    //    selectBulb
+    //    var picker = ((self.childViewControllers.last)?.view) as ColorPicker
+    //    picker.colorChangedDelegate = self
     
 }
 
@@ -766,15 +789,25 @@ bool throttleSkip = true;
     });
 }
 
--(void)onBulbRangeChange:(NSString*) identifier withRange: (NSNumber *)range {
+-(void)onBulbRangeChange:(NSString *) identifier withRange: (int *)range {
     NSLog(@"SHIT YASS-BulbRangeChanged");
+}
+
+-(void)onBulbRangeChange:(MusicCell *) cell {
+     NSLog(@"SHIT YASS-BulbRangeChangedzzzzzzzzzzzzzzz%@--%i", cell.bulbIdentifier, cell.bulbRange);
+    
+}
+
+-(void)thisIsATest{
+    NSLog(@"SHIT YASS-BulbRangeChanged--TEST");
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"musicLights"]) {
-//        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        MusicSelectBulbsViewController *destViewController = segue.destinationViewController;
-//        destViewController.ligh
+        NSLog(@"@WTF");
+        //        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        MusicSelectBulbsViewController *destViewController = (MusicSelectBulbsViewController *)segue.destinationViewController;
+        //        destViewController.ligh
         destViewController.rangeSelectionDelegate = self;
     }
 }

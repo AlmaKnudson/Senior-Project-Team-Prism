@@ -10,12 +10,14 @@ import Foundation
 
 
 @objc protocol BulbRangeSelectionDelegate: class {
-    func onBulbRangeChange(identifier: NSString, range:NSNumber)
+//    func onBulbRangeChange(identifier: NSString?, range:Int?)
+    func onBulbRangeChange(cell:MusicCell)
+    func thisIsATest()
 }
 
 
 
-class MusicSelectBulbsViewController: UITableViewController{
+class MusicSelectBulbsViewController: UITableViewController, CellRangeChangeDelegate{
     
     var rangeSelectionDelegate: BulbRangeSelectionDelegate? = nil
     
@@ -28,13 +30,17 @@ class MusicSelectBulbsViewController: UITableViewController{
     
     @IBOutlet weak var light: UIView!
     
-    @IBAction func onRangeChanged(sender: MusicCell) {
-        NSLog("UMMM--onRangeChanged---TableView");
-        if(rangeSelectionDelegate != nil) {
-            NSLog("UMMM--onRangeChanged---TableView");
-            rangeSelectionDelegate?.onBulbRangeChange("test" as NSString, range: 0 as NSNumber)
-        }
-    }
+//    @IBAction func onRangeChanged(sender: UISegmentedControl) {
+//        
+//        sender.
+//        NSLog("UMMM--onRangeChanged---TableView");
+//        if(rangeSelectionDelegate != nil) {
+//            NSLog("UMMM--onRangeChanged---TableView");
+////            rangeSelectionDelegate?.onBulbRangeChange("test" as NSString, range: 0 as NSNumber)
+//            rangeSelectionDelegate?.thisIsATest()
+////            rangeSelectionDelegate?.onBulbRangeChange(sender.bulbIdentifier, range: sender.bulbRange)
+//        }
+//    }
     
     
     override func viewDidLoad() {
@@ -71,6 +77,7 @@ class MusicSelectBulbsViewController: UITableViewController{
         cell.backgroundColor = UIColor.blackColor()
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         lightCells.insert(cell, atIndex: 0)
+        cell.cellDelegate = self
         return cell
     }
     
@@ -97,5 +104,12 @@ class MusicSelectBulbsViewController: UITableViewController{
         
     }
     
+    
+    
+    func onCellRangeChanged(cell: MusicCell) {
+        NSLog("On Cell Range Changed--This is interesting");
+//        rangeSelectionDelegate?.onBulbRangeChange(cell.bulbIdentifier, range: cell.bulbRange)
+        rangeSelectionDelegate?.onBulbRangeChange(cell)
+    }
     
 }

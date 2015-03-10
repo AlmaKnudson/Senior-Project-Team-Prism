@@ -2194,7 +2194,7 @@
                     <navigationItem key="navigationItem" title="Music Synchronization" id="rHu-9n-JNv">
                         <barButtonItem key="rightBarButtonItem" title="Select Bulbs" id="qEB-9K-vIY">
                             <connections>
-                                <segue destination="ihc-Nw-KsL" kind="show" id="FKc-R1-Ysm"/>
+                                <segue destination="ihc-Nw-KsL" kind="show" identifier="musicLights" id="FKc-R1-Ysm"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -2239,8 +2239,7 @@
                                             </segments>
                                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <connections>
-                                                <action selector="onRangeChanged:" destination="viy-r9-msy" eventType="valueChanged" id="BjV-ad-5pT"/>
-                                                <action selector="onRangeChanged:" destination="ihc-Nw-KsL" eventType="valueChanged" id="pGg-dL-Fn0"/>
+                                                <action selector="onRangeChanged:" destination="viy-r9-msy" eventType="valueChanged" id="A0f-RR-3gv"/>
                                             </connections>
                                         </segmentedControl>
                                     </subviews>
@@ -2270,7 +2269,7 @@
                                 </tableViewCellContentView>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
-                                    <outlet property="bulbRangeSegment" destination="Snw-08-qdC" id="vOj-QL-SR6"/>
+                                    <outlet property="bulbRangeSegment" destination="Snw-08-qdC" id="MNo-Ks-jmT"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
