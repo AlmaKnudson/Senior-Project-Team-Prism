@@ -68,6 +68,7 @@
 		11FDAB4C1AACD2A20055C2AD /* MusicSelectBulbsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDAB4B1AACD2A20055C2AD /* MusicSelectBulbsViewController.swift */; };
 		11FDAB501AACDA5F0055C2AD /* MusicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDAB4F1AACDA5F0055C2AD /* MusicCell.swift */; };
 		11FDAB541AAFF2460055C2AD /* MusicBulbRangeSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDAB531AAFF2460055C2AD /* MusicBulbRangeSelection.swift */; };
+		11FDAB581AB109510055C2AD /* BeaconBulbTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDAB571AB109510055C2AD /* BeaconBulbTracking.swift */; };
 		CC24AE701A77EFEA003316FD /* Lights.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC24AE6F1A77EFEA003316FD /* Lights.swift */; };
 		CC27D7FF1A802E9C00346F47 /* PrismSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC27D7FE1A802E9C00346F47 /* PrismSDK.swift */; };
 		CC391F411A7D91F9004C94B5 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC391F401A7D91F9004C94B5 /* Networking.swift */; };
@@ -208,6 +209,7 @@
 		11FDAB4B1AACD2A20055C2AD /* MusicSelectBulbsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicSelectBulbsViewController.swift; sourceTree = "<group>"; };
 		11FDAB4F1AACDA5F0055C2AD /* MusicCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicCell.swift; sourceTree = "<group>"; };
 		11FDAB531AAFF2460055C2AD /* MusicBulbRangeSelection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicBulbRangeSelection.swift; sourceTree = "<group>"; };
+		11FDAB571AB109510055C2AD /* BeaconBulbTracking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeaconBulbTracking.swift; sourceTree = "<group>"; };
 		CC24AE6F1A77EFEA003316FD /* Lights.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lights.swift; sourceTree = "<group>"; };
 		CC27D7FE1A802E9C00346F47 /* PrismSDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrismSDK.swift; sourceTree = "<group>"; };
 		CC391F401A7D91F9004C94B5 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
@@ -607,6 +609,7 @@
 		CCCB88DA1A9BA266003D68F4 /* Beacons */ = {
 			isa = PBXGroup;
 			children = (
+				11FDAB571AB109510055C2AD /* BeaconBulbTracking.swift */,
 				11AF010C1AA95C6000122F24 /* EstViewController.swift */,
 			);
 			name = Beacons;
@@ -744,6 +747,7 @@
 				117F495C1A96DA4500A31746 /* EZPlot.m in Sources */,
 				0D3A791D1A26A716003AC6D4 /* DispatchQueueLogFormatter.m in Sources */,
 				0DB347431A2D5BCE00B91EF2 /* PushAuthController.swift in Sources */,
+				11FDAB581AB109510055C2AD /* BeaconBulbTracking.swift in Sources */,
 				0D3A79111A26A716003AC6D4 /* DDAbstractDatabaseLogger.m in Sources */,
 				11FDAB501AACDA5F0055C2AD /* MusicCell.swift in Sources */,
 				0D9862561A1D2C0B00FAD175 /* HomeController.swift in Sources */,
