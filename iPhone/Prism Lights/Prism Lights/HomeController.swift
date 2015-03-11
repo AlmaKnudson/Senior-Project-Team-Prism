@@ -96,8 +96,14 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         bulbCollectionView.reloadData()
     }
     
-    override func viewDidDisappear(animated: Bool) {
+    override func viewWillDisappear(animated: Bool) {
         PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
+        if(DEBUG){
+            println("Home Controller will disappeared")
+        }
+    }
+    override func viewDidDisappear(animated: Bool) {
+        
         if(DEBUG){
             println("Home disappeared")
         }

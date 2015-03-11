@@ -76,6 +76,7 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate{
 
     }
     
+
     override func viewDidAppear(animated: Bool) {
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
         
@@ -141,14 +142,7 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate{
         }
         
     }
-    
-    
-    
-    
-    
-    
-    
-    
+
     
     
     
