@@ -192,7 +192,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
     @Override
     public void cacheUpdated() {
 //        if(shouldUpdateFromCache != 1) {
-          updateState();
+//          updateState();
 //        } else {
 //            shouldUpdateFromCache--;
 //        }
