@@ -18,17 +18,15 @@ import Foundation
 
 
 
-class MusicSelectBulbsViewController: UITableViewController, CellRangeChangeDelegate{
+@objc class MusicSelectBulbsViewController: UITableViewController, CellRangeChangeDelegate{
     
     var rangeSelectionDelegate: BulbRangeSelectionDelegate? = nil
 
-    var lights: Array<AnyObject> = []
+    var lights: Array<MusicBulbRangeSelection> = []
     
-    var holyMoses: NSMutableArray? = nil
+    var moses: NSMutableArray = []
     
-    func setHolyMoses(hM: NSMutableArray){
-        self.holyMoses = hM;
-    }
+
     
 
     
@@ -53,16 +51,22 @@ class MusicSelectBulbsViewController: UITableViewController, CellRangeChangeDele
     override func viewDidLoad() {
         super.viewDidLoad();
         var index = 0;
-        for light in cache.lights.values{
-            //            lights.append(light)
-            //            println(light.lightState.description)
-            
-            if (light.lightState.description.rangeOfString("reachable = 1;") != nil){
-                //                println("Reachable...")
-                lights.insert(light, atIndex: index++)
-            }
-//            lights.insert(light, atIndex: index++)
+        for holy in moses {
+            lights.insert(holy as MusicBulbRangeSelection, atIndex: index++)
         }
+        
+   
+        
+//        for light in cache.lights.values{
+//            //            lights.append(light)
+//            //            println(light.lightState.description)
+//            
+//            if (light.lightState.description.rangeOfString("reachable = 1;") != nil){
+//                //                println("Reachable...")
+//                lights.insert(light, atIndex: index++)
+//            }
+////            lights.insert(light, atIndex: index++)
+//        }
         
         //        lights = {}
     }
@@ -77,11 +81,11 @@ class MusicSelectBulbsViewController: UITableViewController, CellRangeChangeDele
         let cellId:String = "MyCell"
         var cell:MusicCell = tableView.dequeueReusableCellWithIdentifier(cellId, forIndexPath:indexPath) as MusicCell
         cell.textLabel?.textColor = UIColor.whiteColor()
-        cell.bulbIdentifier = (lights[indexPath.row].identifier as String)
-        cell.bulbName = (lights[indexPath.row].name as String)
+        cell.bulbIdentifier = (lights[indexPath.row].bulbIdentifier as String)
+        cell.bulbName = (lights[indexPath.row].bulbName as String)
         //        cell.bulbRange = 2
-        cell.SetBulbRange(2)
-        cell.textLabel?.text = (lights[indexPath.row].name as String)
+        cell.SetBulbRange(lights[indexPath.row].bulbRange)
+        cell.textLabel?.text = (lights[indexPath.row].bulbName as String)
         cell.backgroundColor = UIColor.blackColor()
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         cell.cellDelegate = self

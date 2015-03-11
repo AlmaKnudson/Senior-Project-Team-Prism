@@ -464,6 +464,7 @@ bool throttleSkip = true;
             mbrs.bulbRange = 0;
             mbrs.bulbName = light.name;
             mbrs.bulbIdentifier = light.identifier;
+            [musicBulbs insertObject:mbrs atIndex:0];
         }
         
         
@@ -815,26 +816,23 @@ bool throttleSkip = true;
     });
 }
 
--(void)onBulbRangeChange:(NSString *) identifier withRange: (int *)range {
-    NSLog(@"SHIT YASS-BulbRangeChanged");
-}
-
+/*
+ *Change this function and you will have bad KARMA.
+ *
+ */
 -(void)onBulbRangeChange:(MusicCell *) cell {
-    NSLog(@"SHIT YASS-BulbRangeChangedzzzzzzzzzzzzzzz%@--%i", cell.bulbIdentifier, cell.bulbRange);
-    
+    for (MusicBulbRangeSelection *mbrs in musicBulbs){
+        if([mbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
+            mbrs.bulbRange = cell.bulbRange;
+        }
+    }
 }
 
--(void)thisIsATest{
-    NSLog(@"SHIT YASS-BulbRangeChanged--TEST");
-}
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"musicLights"]) {
-        NSLog(@"@WTF");
-        //        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         MusicSelectBulbsViewController *destViewController = (MusicSelectBulbsViewController *)segue.destinationViewController;
-//        destViewController.
-//        [destViewController dic]
+        destViewController.moses = musicBulbs;
         destViewController.rangeSelectionDelegate = self;
     }
 }
