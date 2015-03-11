@@ -38,6 +38,7 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
     private List<PHGroup> currentGroups;
     private String[] groupNames;
     private Integer dragPosition;
+//    private int shouldUpdateFromCache = 0;
 
     private GridView gridView;
     private ImageView trash;
@@ -76,13 +77,14 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
                 } else {
                     HueBulbChangeUtility.toggleBulbGroupState((PHGroup) gridView.getAdapter().getItem(position));
                 }
+//                shouldUpdateFromCache = 3;
             }
         });
 
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
                 Bundle bundle = new Bundle();
                 if(position < currentLights.size()) {
                     bundle.putInt(lightPositionString, position);
@@ -146,11 +148,12 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
                             }
                         }
                     }
-                } else if(gridView.getBottom() - event.getY() < 50) {
+                } else if(gridView.getBottom() - event.getY() < 50 && event.getX() < gridView.getRight() - (gridView.getWidth() / 4)) {
                     gridView.smoothScrollByOffset(50);
                 } else if(event.getY() - gridView.getTop() < 50) {
                     gridView.smoothScrollByOffset(-50);
                 }
+//                shouldUpdateFromCache = 3;
                 return true;
             }
         });
@@ -158,12 +161,17 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
             @Override
             public boolean onDrag(View v, DragEvent event) {
                 if(event.getAction() == DragEvent.ACTION_DROP) {
+                    if(dragPosition == null || currentLights == null) {
+                        System.out.println("THIS IS A DISASTER");
+                        return true;
+                    }
                     if(dragPosition < currentLights.size()) {
                         HueBulbChangeUtility.deleteLight(currentLights.get(dragPosition));
                     } else {
                         HueBulbChangeUtility.deleteGroup(currentGroups.get(dragPosition - currentLights.size()));
                     }
                 }
+//                shouldUpdateFromCache = 3;
                 return true;
             }
         });
@@ -173,8 +181,12 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
 
     @Override
     public void cacheUpdated() {
-        updateFromCache();
-        ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
+//        if(shouldUpdateFromCache == 0 || shouldUpdateFromCache == 3) {
+          updateFromCache();
+          ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
+//        } else {
+//            shouldUpdateFromCache--;
+//        }
     }
 
     private void updateFromCache() {

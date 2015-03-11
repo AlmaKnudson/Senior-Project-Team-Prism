@@ -192,13 +192,13 @@ public class MainActivity extends Activity implements PHSDKListener{
      * and let the user select their bridge.   If one is found you may opt to connect automatically to that bridge.
      */
     public void onAccessPointsFound(List<PHAccessPoint> accessPoints) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast toast = Toast.makeText(MainActivity.this, "Access Points Found", Toast.LENGTH_LONG);
-                toast.show();
-            }
-        });
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Toast toast = Toast.makeText(MainActivity.this, "Access Points Found", Toast.LENGTH_LONG);
+//                toast.show();
+//            }
+//        });
         if(accessPoints != null && accessPoints.size() == 1) {
             HueSharedPreferences preferences = HueSharedPreferences.getInstance(this.getApplicationContext());
             PHAccessPoint accessPoint = accessPoints.get(0);
@@ -233,8 +233,8 @@ public class MainActivity extends Activity implements PHSDKListener{
                 if(code == PHHueError.NO_CONNECTION) {
                     return;
                 }
-                Toast toast = Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT);
-                toast.show();
+//                Toast toast = Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT);
+//                toast.show();
 
             }
         });

@@ -26,7 +26,6 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
 
 //    private OnFragmentInteractionListener mListener;
 
-    //TODO: I need to change this for group of lights. now it is just for a single light.
     private int position; // The number for the chosen Light
     private boolean isGroup; //True if group false otherwise
     private EditText nameEditor;
@@ -35,6 +34,8 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
     private TextView brightnessPercentage;
     private float[] currentColor;
     private ColorPickerViewGroup colorPicker;
+    //will update from cache if == 0
+    private int shouldUpdateFromCache = 0;
 
     private Button advancedSettingButton;
 
@@ -57,7 +58,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
 
         position = getArguments().getInt(HomeFragment.lightPositionString);
         isGroup = getArguments().getBoolean(HomeFragment.groupOrLightString);
-        Toast.makeText(getActivity(), "SettingFragment opened with light " + position, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), "SettingFragment opened with light " + position, Toast.LENGTH_SHORT).show();
 
     }
 
@@ -85,6 +86,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
                         HueBulbChangeUtility.changeLightName(position, nameEditor.getText().toString());
                     }
                     nameEditor.clearFocus();
+//                    shouldUpdateFromCache = 2;
                 }
                 return false;
             }
@@ -99,6 +101,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
                 } else {
                     HueBulbChangeUtility.turnBulbOnOff(position, bulbOn.isChecked());
                 }
+//                shouldUpdateFromCache = 2;
             }
         });
         brightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -118,6 +121,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
                 } else {
                     HueBulbChangeUtility.changeBrightness(position, seekBar.getProgress());
                 }
+//                shouldUpdateFromCache = 2;
             }
         });
         colorPicker.setColorChangedListener(new ColorChangedListener() {
@@ -129,6 +133,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
                 } else {
                     HueBulbChangeUtility.changeBulbColor(position, newColor);
                 }
+//                shouldUpdateFromCache = 2;
             }
         });
 
@@ -186,7 +191,11 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
 
     @Override
     public void cacheUpdated() {
-        updateState();
+//        if(shouldUpdateFromCache != 1) {
+          updateState();
+//        } else {
+//            shouldUpdateFromCache--;
+//        }
     }
 
 //    // TODO: Rename method, update argument and hook method into UI event
