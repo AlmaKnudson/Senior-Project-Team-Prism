@@ -1,18 +1,19 @@
 package app.lights.prism.com.prismlights;
 
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -29,7 +30,6 @@ import com.philips.lighting.model.PHLightState;
 import com.philips.lighting.model.PHSchedule;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -56,9 +56,13 @@ public class TimerFragment extends Fragment{
     static TimerAdapter adapter;
     static private PHHueSDK phHueSDK;
     private static PHBridge bridge;
-    String delegate;
     List<PHSchedule> currentTimers; // this List of Timer schedules in bridge.
     private List<CountDownTimer> countDownTimers; // List of the Countdown for timers.
+
+    private int timeToSend;
+    int alarmMode;
+    AlertDialog modeDialog;
+    TimePickerFragment timePickerDialog;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -74,8 +78,10 @@ public class TimerFragment extends Fragment{
         phHueSDK = PHHueSDK.getInstance();
         bridge = phHueSDK.getSelectedBridge();
 
-        // TODO: need seconds too.   DateFormat.format(delegate, d.getTime());
-        delegate = "hh:mm aaa";
+        timeToSend = 0;
+        alarmMode = 0;
+        modeDialog = null;
+        timePickerDialog = null;
 
         if (getArguments() != null) {
             currentBulbId = getArguments().getInt(lightPositionString);
@@ -127,9 +133,32 @@ public class TimerFragment extends Fragment{
         adapter = new TimerAdapter();
         timerListView.setAdapter(adapter);
 
+        ImageView refreshButton = (ImageView)view.findViewById(R.id.refreshButton);
+
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearCountDown();
+                getCurrentTimers();
+                adapter.notifyDataSetChanged();
+            }
+        });
+
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getCurrentTimers();
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        clearCountDown();
+    }
 
     private class TimerAdapter extends BaseAdapter {
 
@@ -174,14 +203,53 @@ public class TimerFragment extends Fragment{
             deleteTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deleteTimer(position);
+                    if (timeView.getText() == "Done") {
+                        getCurrentTimers();
+                        clearCountDown();
+                        adapter.notifyDataSetChanged();
+                    } else
+                        deleteTimer(position);
                 }
             });
 
-            Date startTimer = timer.getCreated();
-            startTimer.setTime(startTimer.getTime()+(long)(timer.getTimer()*1000)); //add duration of the timer to current time.
+
+            TextView modeView = (TextView) currentView.findViewById(R.id.textMode);
+            String modeString = null;
+            PHLightState state = timer.getLightState();
+            if (!state.isOn())
+                modeString = "Off";
+            else if (state.getAlertMode() == PHLight.PHLightAlertMode.ALERT_SELECT)
+                modeString = "Alert";
+            else
+                modeString = "On";
+
+            modeView.setText(modeString);
+
+
+            Date createdTime = timer.getCreated();
+            Date startTime = timer.getStartTime();
+            int duration = timer.getTimer();
+            String s;
+
+            // bridge is giving me wrong value. I am picking better date among the two value...
+            if(startTime!=null)
+                s = startTime.toString();
+            else
+                s = "null";
+            Log.d("createdTime", createdTime.toString() +" "+ s );
+
+            Date startedTime;
+            if (startTime!=null)
+                if (startTime.getTime() <= createdTime.getTime())
+                    startedTime = startTime;
+                else
+                    startedTime = createdTime;
+            else
+                startedTime = createdTime;
+
+            startedTime.setTime(startedTime.getTime()+(long)(duration*1000)); //add duration of the timer to current time.
             Date currentTime = new Date();
-            long timeLeft = startTimer.getTime() - currentTime.getTime(); // calculate the difference between current time and timer time
+            long timeLeft = startedTime.getTime() - currentTime.getTime(); // calculate the difference between current time and timer time
 
 
 
@@ -196,13 +264,14 @@ public class TimerFragment extends Fragment{
                 @Override
                 public void onFinish() {
                     // clean currentTimers and countDownTimers and refresh the adapter
-                    getActivity().runOnUiThread(new Runnable() {
-                        public void run() {
-                            getCurrentTimers();
-                            refreshCountDown();
-                            adapter.notifyDataSetChanged();
-                        }
-                    });
+                    timeView.setText("Done");
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        public void run() {
+//                            getCurrentTimers();
+//                            clearCountDown();
+//                            adapter.notifyDataSetChanged();
+//                        }
+//                    });
                 }
             };
 
@@ -214,7 +283,7 @@ public class TimerFragment extends Fragment{
         }
     }
 
-    private void refreshCountDown() {
+    private void clearCountDown() {
         for (int i = 0; i < countDownTimers.size();i++)
         {
             countDownTimers.get(i).cancel();
@@ -226,16 +295,26 @@ public class TimerFragment extends Fragment{
     private String getTimerString(int timerTime) {
         int hours = timerTime / 3600;
         int minutes = (timerTime % 3600) / 60;
-        int seconds = timerTime % 60;
+        String min;
+        if (minutes < 10)
+            min = "0"+minutes;
+        else
+            min = ""+minutes;
 
-        String timerString = hours+":"+minutes+":"+seconds;
+        int seconds = timerTime % 60;
+        String sec;
+        if (seconds<10)
+            sec = "0"+seconds;
+        else
+            sec = ""+seconds;
+
+        String timerString = hours+":"+min+":"+sec;
 
         return timerString;
     }
 
     // this is TimePickerFragment, showTimePickerDialog create this DialogFragment.
     // when user click "done", onTimeSet get called.
-    // TODO: is this ok non static? public class in a class.... private-> fragment have to be public,...?
     private class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {
 
@@ -266,36 +345,70 @@ public class TimerFragment extends Fragment{
 
             if (view.isShown()) {
 
-                int time = hour * 3600 + minute * 60;
+                timeToSend = hour * 3600 + minute * 60;
 
-                // user want to add new Timer
-                if (chosenTimerPosition == -1)
-                {
-                    addNewTimer(time);
-                }
-                // user wants to change existing Timer
-                else
-                {
-                    updateTimer(chosenTimerPosition, time);
-                }
 
+                // Strings to Show In Dialog with Radio Buttons
+                final CharSequence[] items = {" On "," Off "," Alert "};
+
+                // Creating and Building the Dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                builder.setTitle("Select The Alarm Mode");
+                builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+
+
+                        switch (item) {
+                            case 0:
+                                alarmMode = 0; //on
+                                break;
+                            case 1:
+                                alarmMode = 1; //off
+                                break;
+                            case 2:
+                                alarmMode = 2; //alert
+                                break;
+
+                        }
+
+                        // user want to add new Timer
+                        if (chosenTimerPosition == -1)
+                        {
+                            addNewTimer(timeToSend);
+                        }
+                        // user wants to change existing Timer
+                        else
+                        {
+                            updateTimer(chosenTimerPosition, timeToSend);
+                        }
+
+                        modeDialog.dismiss();
+                        getCurrentTimers();
+                        clearCountDown();
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+                modeDialog = builder.create();
+                timePickerDialog.dismiss();
+                timePickerDialog = null;
+                modeDialog.show();
             }
-
-            adapter.notifyDataSetChanged();
         }
     }
 
     //This function gets called when user want to add/change timer, and this opens the timepicker.
     public void showTimePickerDialog(int timerPosition) {
         chosenTimerPosition = timerPosition;
-        DialogFragment newFragment = new TimePickerFragment();
-        newFragment.show(getFragmentManager(), "timePicker");
+        timePickerDialog = new TimePickerFragment();
+        timePickerDialog.show(getFragmentManager(), "timePicker");
     }
 
     private void updateTimer(int timerPosition, int time) {
 
         PHSchedule schedule = currentTimers.get(timerPosition);
         schedule.setTimer(time);
+        schedule.setLightState(getLightState());
 
         final PHWizardAlertDialog dialogManager = PHWizardAlertDialog
                 .getInstance();
@@ -316,7 +429,7 @@ public class TimerFragment extends Fragment{
                             PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_timer_updated), R.string.btn_ok, R.string.txt_result);
                         }
                         getCurrentTimers();
-                        refreshCountDown();
+                        clearCountDown();
                         adapter.notifyDataSetChanged();
                     }
                 });
@@ -349,8 +462,10 @@ public class TimerFragment extends Fragment{
         schedule.setLightState(getLightState());
         schedule.setDescription("Timer");
         Date startTime = new Date();
-//        schedule.setStartTime(startTime);
+        //TODO: inpect setting startTime and CreatedTime...
+        schedule.setStartTime(startTime);
         schedule.setCreated(startTime);
+        Log.d("StartTime", ""+startTime);
 
         final PHWizardAlertDialog dialogManager = PHWizardAlertDialog.getInstance();
         dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
@@ -366,7 +481,7 @@ public class TimerFragment extends Fragment{
                             PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_timer_created), R.string.btn_ok, R.string.txt_result);
                         }
                         getCurrentTimers();
-                        refreshCountDown();
+                        clearCountDown();
                         adapter.notifyDataSetChanged();
                     }
                 });
@@ -419,7 +534,7 @@ public class TimerFragment extends Fragment{
                             PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_timer_deleted), R.string.btn_ok, R.string.txt_result);
                         }
                         getCurrentTimers();
-                        refreshCountDown();
+                        clearCountDown();
                         adapter.notifyDataSetChanged();
                     }
                 });
@@ -458,7 +573,21 @@ public class TimerFragment extends Fragment{
         //PHLightState state = phHueSDK.getCurrentLightState();
         //currentBulb.getLastKnownLightState();
         PHLightState state = new PHLightState();
-        state.setOn(true);
+
+        switch(alarmMode)
+        {
+            case 0:
+                state.setOn(true); //on
+                break;
+            case 1:
+                state.setOn(false); //off
+                break;
+            case 2:
+                state.setOn(true);
+                state.setAlertMode(PHLight.PHLightAlertMode.ALERT_SELECT); //alert
+                break;
+
+        }
 //        state.setHue(50);
 //        state.setSaturation(50);
 //        state.setBrightness(50);

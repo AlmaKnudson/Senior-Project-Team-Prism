@@ -24,6 +24,16 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="mode"
+        android:id="@+id/textMode"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/alarmDeleteText"
+        android:layout_alignParentBottom="true"
+        android:gravity="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Delete"
         android:textColor="@color/white"
         android:id="@+id/alarmDeleteText"

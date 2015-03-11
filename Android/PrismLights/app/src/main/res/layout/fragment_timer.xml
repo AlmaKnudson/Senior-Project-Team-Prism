@@ -22,6 +22,12 @@
             android:textColor="@color/white"/>
 
         <ImageView
+            android:layout_width="65dp"
+            android:layout_height="match_parent"
+            android:id="@+id/refreshButton"
+            android:src="@android:drawable/ic_menu_rotate" />
+
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
