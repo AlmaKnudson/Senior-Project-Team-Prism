@@ -127,22 +127,7 @@
         
         bridgeSendAPI = [[PHBridgeSendAPI alloc] init];
         
-        //Range selection code:
-//        PHBridgeResourcesCache *cache = [PHBridgeResourcesReader readBridgeResourcesCache];
-//        if (cache != nil && cache.bridgeConfiguration != nil && cache.bridgeConfiguration.ipaddress != nil){
-//            NSArray *myLights = [cache.lights allValues];
-//            if(musicCells != nil) {
-//                for (PHLight *light in myLights) {
-//                    for(MusicCell *cell in musicCells){
-////                        if (light.identifier ==)
-//                        if([light.identifier isEqualToString:cell.bulbIdentifier]){
-//                            
-//                        }
-//                    }
-//                }
-//                
-//            }
-//        }
+        
         
     } else {
         //Clean up.
@@ -234,8 +219,8 @@ NSTimer *highTimer;
 NSTimer *overloadedHitsTimer;
 
 //NSDictionary *musicCells = [NSDictionary dictionaryWithObject:MusicCell forKeys:]
-NSArray *musicCells;
-MusicCell *allBulbs[3];
+//NSMutableDictionary *musicCells;
+NSMutableArray *musicBulbs;
 
 
 
@@ -461,6 +446,47 @@ bool throttleSkip = true;
     //    selectBulb
     //    var picker = ((self.childViewControllers.last)?.view) as ColorPicker
     //    picker.colorChangedDelegate = self
+    
+    
+    //Range selection code:
+    PHBridgeResourcesCache *cache = [PHBridgeResourcesReader readBridgeResourcesCache];
+    if (cache != nil && cache.bridgeConfiguration != nil && cache.bridgeConfiguration.ipaddress != nil){
+        NSArray *myLights = [cache.lights allValues];
+        
+        //        musicCells = [[NSMutableDictionary alloc] init];
+        musicBulbs = [[NSMutableArray alloc] init];
+        
+        
+        for (PHLight *light in myLights) {
+            
+            MusicBulbRangeSelection *mbrs = [[MusicBulbRangeSelection alloc] init];
+         
+            mbrs.bulbRange = 0;
+            mbrs.bulbName = light.name;
+            mbrs.bulbIdentifier = light.identifier;
+        }
+        
+        
+        
+            //            [musicCells setObject: [NSString stringWithFormat:@"%@%@%@", light.identifier, @"@~~~*~~~", light.name] forKey:@"1"];
+            
+            //            MusicCell *cell = [MusicCell init];
+            //            cell.bulbRange = 1;
+            //            cell.bulbName = light.name;
+            //            cell.bulbIdentifier = light.identifier;
+        
+        
+        //        if(musicCells == nil) {
+        //            musicCells = [[NSMutableArray alloc] init];
+        //            for (PHLight *light in myLights) {
+        //                MusicCell *cell = [MusicCell init];
+        //                cell.bulbRange = 1;
+        //                cell.bulbName = light.name;
+        //                cell.bulbIdentifier = light.identifier;
+        //            }
+        //        }
+    }
+    
     
 }
 
@@ -794,7 +820,7 @@ bool throttleSkip = true;
 }
 
 -(void)onBulbRangeChange:(MusicCell *) cell {
-     NSLog(@"SHIT YASS-BulbRangeChangedzzzzzzzzzzzzzzz%@--%i", cell.bulbIdentifier, cell.bulbRange);
+    NSLog(@"SHIT YASS-BulbRangeChangedzzzzzzzzzzzzzzz%@--%i", cell.bulbIdentifier, cell.bulbRange);
     
 }
 
@@ -807,7 +833,8 @@ bool throttleSkip = true;
         NSLog(@"@WTF");
         //        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         MusicSelectBulbsViewController *destViewController = (MusicSelectBulbsViewController *)segue.destinationViewController;
-        //        destViewController.ligh
+//        destViewController.
+//        [destViewController dic]
         destViewController.rangeSelectionDelegate = self;
     }
 }

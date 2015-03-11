@@ -35,7 +35,17 @@ class EstViewController:UITableViewController, ESTBeaconManagerDelegate{
     
     func beaconManager(manager: ESTBeaconRegion, didRangeBeacons: [ESTBeacon], inRegion: ESTBeaconRegion){
         println("I've found \(didRangeBeacons.count) beacons in range.")
+//        var cell:UITableViewCell = self.tableView.dequeueReusableCellWithIdentifier("cell") as UITableViewCell
+        
+//        cell.textLabel?.text = self.items[0]
+        
+//        return cell
     }
+    
+//    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+//      
+//        
+//    }
     
     
     

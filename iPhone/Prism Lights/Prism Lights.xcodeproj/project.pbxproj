@@ -68,6 +68,7 @@
 		11AF010D1AA95C6000122F24 /* EstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11AF010C1AA95C6000122F24 /* EstViewController.swift */; };
 		11FDAB4C1AACD2A20055C2AD /* MusicSelectBulbsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDAB4B1AACD2A20055C2AD /* MusicSelectBulbsViewController.swift */; };
 		11FDAB501AACDA5F0055C2AD /* MusicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDAB4F1AACDA5F0055C2AD /* MusicCell.swift */; };
+		11FDAB541AAFF2460055C2AD /* MusicBulbRangeSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDAB531AAFF2460055C2AD /* MusicBulbRangeSelection.swift */; };
 		CC24AE701A77EFEA003316FD /* Lights.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC24AE6F1A77EFEA003316FD /* Lights.swift */; };
 		CC27D7FF1A802E9C00346F47 /* PrismSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC27D7FE1A802E9C00346F47 /* PrismSDK.swift */; };
 		CC391F411A7D91F9004C94B5 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC391F401A7D91F9004C94B5 /* Networking.swift */; };
@@ -206,6 +207,7 @@
 		11AF01281AA95D6800122F24 /* libEstimoteSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libEstimoteSDK.a; sourceTree = "<group>"; };
 		11FDAB4B1AACD2A20055C2AD /* MusicSelectBulbsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicSelectBulbsViewController.swift; sourceTree = "<group>"; };
 		11FDAB4F1AACDA5F0055C2AD /* MusicCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicCell.swift; sourceTree = "<group>"; };
+		11FDAB531AAFF2460055C2AD /* MusicBulbRangeSelection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicBulbRangeSelection.swift; sourceTree = "<group>"; };
 		CC24AE6F1A77EFEA003316FD /* Lights.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lights.swift; sourceTree = "<group>"; };
 		CC27D7FE1A802E9C00346F47 /* PrismSDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrismSDK.swift; sourceTree = "<group>"; };
 		CC391F401A7D91F9004C94B5 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
@@ -277,6 +279,7 @@
 			isa = PBXGroup;
 			children = (
 				11FDAB4B1AACD2A20055C2AD /* MusicSelectBulbsViewController.swift */,
+				11FDAB531AAFF2460055C2AD /* MusicBulbRangeSelection.swift */,
 				117F49641A96DB2500A31746 /* MusicController.h */,
 				117F49621A96DAFE00A31746 /* MusicController.m */,
 				0D9862571A1D2C0B00FAD175 /* MusicViewController.swift */,
@@ -756,6 +759,7 @@
 				117F49591A96DA4500A31746 /* EZAudioPlotGLKViewController.m in Sources */,
 				117F49531A96DA4500A31746 /* AEFloatConverter.m in Sources */,
 				0D3A79131A26A716003AC6D4 /* DDASLLogger.m in Sources */,
+				11FDAB541AAFF2460055C2AD /* MusicBulbRangeSelection.swift in Sources */,
 				117F49571A96DA4500A31746 /* EZAudioPlot.m in Sources */,
 				0D0A26DB1A38B6E70033550D /* SettingsTableViewController.swift in Sources */,
 				0D4F25451A2AD34A005C61EA /* BridgeConnect.swift in Sources */,

@@ -13,6 +13,7 @@ import Foundation
 //    func onBulbRangeChange(identifier: NSString?, range:Int?)
     func onBulbRangeChange(cell:MusicCell)
     func thisIsATest()
+    
 }
 
 
@@ -20,10 +21,16 @@ import Foundation
 class MusicSelectBulbsViewController: UITableViewController, CellRangeChangeDelegate{
     
     var rangeSelectionDelegate: BulbRangeSelectionDelegate? = nil
-    
-    
-    var lightCells: Array<MusicCell> = [];
+
     var lights: Array<AnyObject> = []
+    
+    var holyMoses: NSMutableArray? = nil
+    
+    func setHolyMoses(hM: NSMutableArray){
+        self.holyMoses = hM;
+    }
+    
+
     
     //    var cache:PHBridgeResourcesCache
     var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
@@ -46,14 +53,15 @@ class MusicSelectBulbsViewController: UITableViewController, CellRangeChangeDele
     override func viewDidLoad() {
         super.viewDidLoad();
         var index = 0;
-        for light in cache!.lights.values{
+        for light in cache.lights.values{
             //            lights.append(light)
             //            println(light.lightState.description)
             
-            if light.lightState.description.rangeOfString("reachable = 1;") != nil{
+            if (light.lightState.description.rangeOfString("reachable = 1;") != nil){
                 //                println("Reachable...")
                 lights.insert(light, atIndex: index++)
             }
+//            lights.insert(light, atIndex: index++)
         }
         
         //        lights = {}
@@ -76,7 +84,6 @@ class MusicSelectBulbsViewController: UITableViewController, CellRangeChangeDele
         cell.textLabel?.text = (lights[indexPath.row].name as String)
         cell.backgroundColor = UIColor.blackColor()
         cell.selectionStyle = UITableViewCellSelectionStyle.None
-        lightCells.insert(cell, atIndex: 0)
         cell.cellDelegate = self
         return cell
     }
