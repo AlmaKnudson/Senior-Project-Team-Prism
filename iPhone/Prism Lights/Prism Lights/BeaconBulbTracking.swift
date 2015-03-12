@@ -10,17 +10,17 @@ import Foundation
 
 
 class BeaconBulbTracking: NSObject{
-    var bulbName: NSString
+//    var bulbName: NSString
     var bulbIdentifier: NSString
     var beaconRange: Int
     var beaconIdentifier: NSString
-    var turnLightsOn: Bool
+//    var turnLightsOn: Bool
     
     override init(){
-        bulbName = "noname"
+//        bulbName = "noname"
         bulbIdentifier = "-1"
         beaconRange = 0
         beaconIdentifier = ""
-        turnLightsOn = true
+//        turnLightsOn = true
     }
 }

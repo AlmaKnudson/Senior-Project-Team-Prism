@@ -17,6 +17,7 @@ class EstViewController:UIViewController, ESTBeaconManagerDelegate{
     var range:NSNumber = 0
     let beaconMA = NSMutableSet()
     var currentBeaconIdentifier: NSString = ""
+    var currentBulbIdentifier: NSString? = ""
     
     var bbTrackingArray: Array<BeaconBulbTracking> = []
     var notTracking: Bool = true
@@ -34,15 +35,38 @@ class EstViewController:UIViewController, ESTBeaconManagerDelegate{
     
     @IBAction func onTrackingDown(sender: UIButton) {
         NSLog("\(sender.titleLabel?.text)")
-        if (sender.titleLabel?.text == "Start Tracking") {
-            sender.setTitle("Stop Tracking", forState: UIControlState.Normal)
-            //            sender.titleLabel?.text = "Stop Tracking"
-            notTracking = false
-        } else {
-            sender.setTitle("Start Tracking", forState: UIControlState.Normal)
-            //            sender.titleLabel?.text = "Start Tracking"
-            notTracking = true
-        }
+        
+//        var bulbName: NSString
+//        var bulbIdentifier: NSString
+//        var beaconRange: Int
+//        var beaconIdentifier: NSString
+//        var turnLightsOn: Bool
+//        
+        var bbT:BeaconBulbTracking = BeaconBulbTracking()
+        bbT.bulbIdentifier = currentBulbIdentifier!
+        bbT.beaconRange = range.integerValue
+        bbT.beaconIdentifier = currentBeaconIdentifier
+        
+        var bbtString = "\(bbT.bulbIdentifier)_\(bbT.beaconRange)"
+        
+        
+        var defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setObject(bbtString, forKey: currentBeaconIdentifier)
+//         defaults.removeObjectForKey(currentBeaconIdentifier)
+        
+        
+//        writetopersistantfile(bulbID, beaconID);
+//        if (sender.titleLabel?.text == "Start Tracking") {
+//            sender.setTitle("Stop Tracking", forState: UIControlState.Normal)
+//            //            sender.titleLabel?.text = "Stop Tracking"
+//            notTracking = false
+//        } else {
+//            sender.setTitle("Start Tracking", forState: UIControlState.Normal)
+//            //            sender.titleLabel?.text = "Start Tracking"
+//            notTracking = true
+//        }
+        
+        
     }
     //    @IBAction func onTrackingChange(sender: UIButton) {
     //        NSLog("\(sender.titleLabel)")
@@ -76,15 +100,14 @@ class EstViewController:UIViewController, ESTBeaconManagerDelegate{
     
     
     func beaconManager(manager: ESTBeaconRegion, didRangeBeacons: [ESTBeacon], inRegion: ESTBeaconRegion){
-        //        println("I've found \(didRangeBeacons.count) beacons in range.")
+//                println("I've found \(didRangeBeacons.count) beacons in range.")
         
         if(didRangeBeacons.count > 0) {
             //Keeping track of all beacon macAddresses in beaconMA set
             
-            for b in didRangeBeacons{
-                beaconMA.addObject("\(b.major)_\(b.minor)")
-                
-            }
+//            for b in didRangeBeacons{
+//                beaconMA.addObject("\(b.major)_\(b.minor)")
+//            }
             
             //Closest beacon is at index 0
             var closestBeacon:ESTBeacon = didRangeBeacons.first!
@@ -92,18 +115,19 @@ class EstViewController:UIViewController, ESTBeaconManagerDelegate{
             if (notTracking) {
                 currentBeaconIdentifier  = "\(closestBeacon.major)_\(closestBeacon.minor)"
                 searchingLabel.text = currentBeaconIdentifier
-            } else {
-                for b in didRangeBeacons {
-                    if ( ("\(b.major)_\(b.minor)") == currentBeaconIdentifier ) {
-                        closestBeacon = b
-                    }
-                }
             }
+//            else {
+//                for b in didRangeBeacons {
+//                    if ( ("\(b.major)_\(b.minor)") == currentBeaconIdentifier ) {
+//                        closestBeacon = b
+//                    }
+//                }
+//            }
             
-            if ( (closestBeacon.distance).integerValue < range.integerValue/3){
-                //update bulbs
-                NSLog("Update Light Bulb__\(closestBeacon.distance)___\(range.integerValue)");
-            }
+//            if ( (closestBeacon.distance).integerValue < range.integerValue/3){
+//                //update bulbs
+//                NSLog("Update Light Bulb__\(closestBeacon.distance)___\(range.integerValue)");
+//            }
         }
     }
     

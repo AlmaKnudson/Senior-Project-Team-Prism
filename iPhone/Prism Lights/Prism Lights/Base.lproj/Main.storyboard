@@ -360,7 +360,7 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
-                                            <segue destination="KQc-Ju-9IU" kind="show" id="bl0-lF-gFh"/>
+                                            <segue destination="KQc-Ju-9IU" kind="show" identifier="KevinBaconsSegue" id="bl0-lF-gFh"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -2399,20 +2399,20 @@
                                 <exclude reference="hdR-hi-Sba"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="ugO-mA-Cw5"/>
+                                <exclude reference="XP7-9G-GxH"/>
+                                <exclude reference="h6y-Af-duq"/>
+                                <exclude reference="tJt-X4-1N9"/>
                                 <exclude reference="TrB-OX-d5v"/>
+                                <exclude reference="ugO-mA-Cw5"/>
                                 <exclude reference="AED-Zo-A3x"/>
                                 <exclude reference="d29-Tw-6CO"/>
                                 <exclude reference="zrp-o7-AhS"/>
-                                <exclude reference="h6y-Af-duq"/>
-                                <exclude reference="XP7-9G-GxH"/>
-                                <exclude reference="tJt-X4-1N9"/>
                                 <exclude reference="03L-VW-Ryd"/>
                                 <exclude reference="APu-b1-6od"/>
                                 <exclude reference="7Oc-pA-3VZ"/>
                                 <exclude reference="tsy-h2-MsN"/>
-                                <exclude reference="aRp-0c-rjB"/>
                                 <exclude reference="WZK-Nl-FE8"/>
+                                <exclude reference="aRp-0c-rjB"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -2425,20 +2425,20 @@
                                 <include reference="hdR-hi-Sba"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="ugO-mA-Cw5"/>
+                                <include reference="XP7-9G-GxH"/>
+                                <include reference="h6y-Af-duq"/>
+                                <include reference="tJt-X4-1N9"/>
                                 <include reference="TrB-OX-d5v"/>
+                                <include reference="ugO-mA-Cw5"/>
                                 <include reference="AED-Zo-A3x"/>
                                 <include reference="d29-Tw-6CO"/>
                                 <include reference="zrp-o7-AhS"/>
-                                <include reference="h6y-Af-duq"/>
-                                <include reference="XP7-9G-GxH"/>
-                                <include reference="tJt-X4-1N9"/>
                                 <include reference="03L-VW-Ryd"/>
                                 <include reference="APu-b1-6od"/>
                                 <include reference="7Oc-pA-3VZ"/>
                                 <include reference="tsy-h2-MsN"/>
-                                <include reference="aRp-0c-rjB"/>
                                 <include reference="WZK-Nl-FE8"/>
+                                <include reference="aRp-0c-rjB"/>
                             </mask>
                         </variation>
                     </view>

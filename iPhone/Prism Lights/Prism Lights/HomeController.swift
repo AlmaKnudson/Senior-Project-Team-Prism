@@ -17,13 +17,18 @@ protocol BulbSettingsProtocol{
 
 
 
-class HomeController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, BulbSettingsProtocol {
+class HomeController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, BulbSettingsProtocol, ESTBeaconManagerDelegate {
     
     @IBOutlet weak var bulbCollectionView: UICollectionView!
     var retryConnection = true
     var beenConnected = false
     var skipNextHeartbeat = false
     @IBOutlet weak var loadingView: UIView!
+    
+    //Create beacon manager instance
+    let beaconManager : ESTBeaconManager = ESTBeaconManager()
+    
+    var bridgeSendAPI = PHBridgeSendAPI();
     
     
     var lightCount :Int = 0;
@@ -32,6 +37,15 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     //MARK: - UIViewController Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //set beacon manager delegate
+        beaconManager.delegate = self
+        
+        var beaconRegion : ESTBeaconRegion = ESTBeaconRegion(proximityUUID: NSUUID(UUIDString:"B9407F30-F5F8-466E-AFF9-25556B57FE6D"), identifier: "regionName")
+        
+        beaconManager.requestWhenInUseAuthorization()
+        
+        beaconManager.startRangingBeaconsInRegion(beaconRegion)
         
         //Add long press Gesture
         var gesture = UILongPressGestureRecognizer(target: self, action: "ShowBulbSettings:")
@@ -172,7 +186,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         }
         
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-
+        
         var light = cache?.lights?["\(indexPath.row+1)"] as? PHLight
         //        var sdk = ((UIApplication.sharedApplication().delegate) as AppDelegate).hueSDK!
         if(light != nil){
@@ -397,6 +411,103 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     
     func ApplySettings(){
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    
+    func beaconManager(manager: ESTBeaconRegion, didRangeBeacons: [ESTBeacon], inRegion: ESTBeaconRegion){
+        //        println("I've found \(didRangeBeacons.count) beacons in range.")
+        
+        if(didRangeBeacons.count > 0) {
+            //Keeping track of all beacon macAddresses in beaconMA set
+            var closestBeacon:ESTBeacon = didRangeBeacons.first!
+            var bId:NSString = "\(closestBeacon.major)_\(closestBeacon.minor)"
+            
+            var defaults = NSUserDefaults.standardUserDefaults()
+            //            defaults.setObject(bbtString, forKey: currentBeaconIdentifier)
+            var bulbIdPlusRange = defaults.objectForKey(bId)
+            //            if bulbIdPlusRange != nil {
+            //                NSLog("Found a bulb/beacon association::\(bulbIdPlusRange)::::\(bId)")
+            //            }
+            
+            var cache:PHBridgeResourcesCache? = PHBridgeResourcesReader.readBridgeResourcesCache()
+            
+            
+            for b in didRangeBeacons{
+                bId = "\(b.major)_\(b.minor)"
+                bulbIdPlusRange = defaults.objectForKey(bId)
+                if bulbIdPlusRange != nil {
+                    NSLog("Found a bulb/beacon association::\(bulbIdPlusRange)::::\(bId)")
+                    
+                    
+                    var bulb = bulbIdPlusRange as String
+                    
+                    
+                    let resultArr = bulb.componentsSeparatedByString("_")
+                    
+                    var bulbId: String = resultArr[0]
+                    var range: String? = resultArr[1]
+                    //Found this beacon assocaitionsdafjlk with a bulb
+                    if(cache != nil){
+                        
+                        for light in cache!.lights.values{
+                            if light.identifier == bulbId {
+                                //Found the bulb.
+                                
+                                var numberFormatter = NSNumberFormatter()
+                                var number:NSNumber? = numberFormatter.numberFromString(range!)
+                                var rangeInt = (Int(number!)/10)
+//                                NSLog()
+                                if b.distance.integerValue <= rangeInt {
+                                    var lightState:PHLightState = PHLightState()
+                                    //                        lightState.on = false
+                                    lightState.on = true
+                                    var ls:PHLightState = light.lightState
+                                    if light.on != nil {
+                                        if light.on == true {
+                                            lightState.on = false
+                                        }
+                                    }
+                                    //                    lightState.hue = hueVal.toInt();
+                                    //                        lightState.on = true;
+                                    //                        lightState.saturation = 254;
+                                    //                        lightState.brightness = currentBrightness;
+                                    lightState.brightness = 254;
+                                    
+                                    
+                                    bridgeSendAPI.updateLightStateForId(bulbId, withLightState: lightState, completionHandler: nil);
+                                }
+                                
+                            }
+                            
+                            
+                            //                            var resultArr = split(bulb) {$0 == "_"}
+                            //                            var bulbId: String = resultArr[0]
+                            //                            var range: String? = resultArr.count > 1 ? resultArr[1] : nil
+                        }
+                        
+                    }
+                }
+            }
+            //
+            //            //Closest beacon is at index 0
+            //            var closestBeacon:ESTBeacon = didRangeBeacons.first!
+            //            loadingCircle.stopAnimating()
+            //            if (notTracking) {
+            //                currentBeaconIdentifier  = "\(closestBeacon.major)_\(closestBeacon.minor)"
+            //                searchingLabel.text = currentBeaconIdentifier
+            //            } else {
+            //                for b in didRangeBeacons {
+            //                    if ( ("\(b.major)_\(b.minor)") == currentBeaconIdentifier ) {
+            //                        closestBeacon = b
+            //                    }
+            //                }
+            //            }
+            //
+            //            if ( (closestBeacon.distance).integerValue < range.integerValue/3){
+            //                //update bulbs
+            //                NSLog("Update Light Bulb__\(closestBeacon.distance)___\(range.integerValue)");
+            //            }
+        }
     }
     
     

@@ -20,7 +20,10 @@ class AdvancedSettingsController: UITableViewController {
             var alarmTable:AlarmsTable = segue.destinationViewController as AlarmsTable
             alarmTable.bulbId = self.bulbId
             alarmTable.isGroup = isGroup
-        } 
+        }  else if segue.identifier == "KevinBaconsSegue" {
+            var dest:EstViewController = segue.destinationViewController as EstViewController
+            dest.currentBulbIdentifier = self.bulbId
+        }
     }
     
     override func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
