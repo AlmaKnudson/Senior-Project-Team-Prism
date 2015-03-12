@@ -16,31 +16,26 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.philips.lighting.hue.sdk.PHHueSDK;
+import com.philips.lighting.model.PHGroup;
 import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
 
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link LightSettingsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link LightSettingsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class LightSettingsFragment extends Fragment implements CacheUpdateListener{
 
 //    private OnFragmentInteractionListener mListener;
 
-    //TODO: I need to change this for group of lights. now it is just for a single light.
     private int position; // The number for the chosen Light
+    private boolean isGroup; //True if group false otherwise
     private EditText nameEditor;
     private Switch bulbOnState;
     private SeekBar brightness;
     private TextView brightnessPercentage;
     private float[] currentColor;
     private ColorPickerViewGroup colorPicker;
+    //will update from cache if == 0
+    private int shouldUpdateFromCache = 0;
 
     private Button advancedSettingButton;
 
@@ -48,9 +43,10 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
 
     private List<PHLight> currentLights;
     private String[] lightNames;
+    private List<PHGroup> currentGroups;
+    private String[] groupNames;
 
 
-    public static String lightPositionString = "CURRENT_BULB_POSITION";
 
     public LightSettingsFragment() {
         hueSDK = PHHueSDK.getInstance();
@@ -60,15 +56,14 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        position = getArguments().getInt(lightPositionString);
-
-        Toast.makeText(getActivity(), "SettingFragment opened with light " + position, Toast.LENGTH_SHORT).show();
+        position = getArguments().getInt(HomeFragment.lightPositionString);
+        isGroup = getArguments().getBoolean(HomeFragment.groupOrLightString);
+//        Toast.makeText(getActivity(), "SettingFragment opened with light " + position, Toast.LENGTH_SHORT).show();
 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         FrameLayout frame = (FrameLayout) inflater.inflate(R.layout.fragment_light_settings, container, false);
         nameEditor = (EditText) frame.findViewById(R.id.nameEditor);
@@ -85,8 +80,13 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
                     //TODO check if name is valid
-                    HueBulbChangeUtility.changeLightName(position, nameEditor.getText().toString());
+                    if(isGroup) {
+                        HueBulbChangeUtility.changeGroupName(position, nameEditor.getText().toString());
+                    } else {
+                        HueBulbChangeUtility.changeLightName(position, nameEditor.getText().toString());
+                    }
                     nameEditor.clearFocus();
+//                    shouldUpdateFromCache = 2;
                 }
                 return false;
             }
@@ -96,7 +96,12 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
             @Override
             public void onClick(View v) {
                 Switch bulbOn = (Switch) v;
-                HueBulbChangeUtility.turnBulbOnOff(position, bulbOn.isChecked());
+                if(isGroup) {
+                    HueBulbChangeUtility.turnGroupOnOff(position, bulbOn.isChecked());
+                } else {
+                    HueBulbChangeUtility.turnBulbOnOff(position, bulbOn.isChecked());
+                }
+//                shouldUpdateFromCache = 2;
             }
         });
         brightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -111,42 +116,66 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                HueBulbChangeUtility.changeBrightness(position, seekBar.getProgress());
+                if(isGroup) {
+                    HueBulbChangeUtility.changeGroupBrightness(position, seekBar.getProgress());
+                } else {
+                    HueBulbChangeUtility.changeBrightness(position, seekBar.getProgress());
+                }
+//                shouldUpdateFromCache = 2;
             }
         });
         colorPicker.setColorChangedListener(new ColorChangedListener() {
             @Override
             public void onColorChanged(float[] newColor) {
                 currentColor = newColor;
-                HueBulbChangeUtility.changeBulbColor(position, newColor);
+                if(isGroup) {
+                    HueBulbChangeUtility.changeGroupColor(position, newColor);
+                } else {
+                    HueBulbChangeUtility.changeBulbColor(position, newColor);
+                }
+//                shouldUpdateFromCache = 2;
             }
         });
 
-        advancedSettingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putInt(lightPositionString, position);
-
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                AdvancedSettingFragment advancedSettingFragment = new AdvancedSettingFragment();
-                advancedSettingFragment.setArguments(bundle);
-                fragmentTransaction.replace(R.id.container, advancedSettingFragment);
-                fragmentTransaction.addToBackStack("AdvancedSettings");
-                fragmentTransaction.commit();
-            }
-        });
+        if(!isGroup) {
+            advancedSettingButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(HomeFragment.lightPositionString, position);
+                    bundle.putBoolean(HomeFragment.groupOrLightString, isGroup);
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    AdvancedSettingFragment advancedSettingFragment = new AdvancedSettingFragment();
+                    advancedSettingFragment.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.container, advancedSettingFragment);
+                    fragmentTransaction.addToBackStack("AdvancedSettings");
+                    fragmentTransaction.commit();
+                }
+            });
+        }
 
         return frame;
     }
 
     private void updateState() {
         currentLights = hueSDK.getSelectedBridge().getResourceCache().getAllLights();
+        currentGroups = hueSDK.getSelectedBridge().getResourceCache().getAllGroups();
+        groupNames = hueSDK.getGroupNames(currentGroups);
         lightNames = hueSDK.getLightNames(currentLights);
-        PHLight currentLight = currentLights.get(position);
+        PHLight currentLight;
+        if(isGroup) {
+            //TODO find out if group can have no lights in it
+            currentLight = hueSDK.getSelectedBridge().getResourceCache().getLights().get(currentGroups.get(position).getLightIdentifiers().get(0));
+        } else {
+            currentLight = currentLights.get(position);
+        }
         PHLightState state = currentLight.getLastKnownLightState();
         if(!nameEditor.hasFocus()) {
-            nameEditor.setText(lightNames[position]);
+            if(isGroup) {
+                nameEditor.setText(groupNames[position]);
+            } else {
+                nameEditor.setText(lightNames[position]);
+            }
         }
         bulbOnState.setChecked(state.isOn());
         int currentBrightness = getCurrentBrightness(state.getBrightness());
@@ -162,7 +191,11 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
 
     @Override
     public void cacheUpdated() {
-        updateState();
+//        if(shouldUpdateFromCache != 1) {
+//          updateState();
+//        } else {
+//            shouldUpdateFromCache--;
+//        }
     }
 
 //    // TODO: Rename method, update argument and hook method into UI event

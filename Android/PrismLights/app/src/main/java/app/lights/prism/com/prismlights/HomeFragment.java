@@ -2,9 +2,13 @@ package app.lights.prism.com.prismlights;
 
 import android.app.FragmentTransaction;
 import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.PointF;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -18,18 +22,11 @@ import android.widget.Toast;
 
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
+import com.philips.lighting.model.PHGroup;
 import com.philips.lighting.model.PHLight;
 
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link HomeFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class HomeFragment extends Fragment implements CacheUpdateListener{
 //    private OnFragmentInteractionListener mListener;
 
@@ -38,13 +35,19 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
 
     private List<PHLight> currentLights;
     private String[] lightNames;
+    private List<PHGroup> currentGroups;
+    private String[] groupNames;
+    private Integer dragPosition;
+//    private int shouldUpdateFromCache = 0;
 
     private GridView gridView;
+    private ImageView trash;
 
     private static int disabledOverlay = Color.argb(125, 0, 0, 0);
     private static int offOverlay = Color.argb(50, 0, 0, 0);
 
-    public static String lightPositionString = "CURRENT_BULB_POSITION";
+    public static final String lightPositionString = "CURRENT_BULB_POSITION";
+    public static final String groupOrLightString = "GROUP_OR_LIGHT";
 
     public HomeFragment() {
         hueSDK = PHHueSDK.getInstance();
@@ -54,32 +57,43 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentLights = hueSDK.getSelectedBridge().getResourceCache().getAllLights();
-        lightNames = hueSDK.getLightNames(currentLights);
+        updateFromCache();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        FrameLayout frame = (FrameLayout) inflater.inflate(R.layout.fragment_home, container, false);
+        View frame = inflater.inflate(R.layout.fragment_home, container, false);
         gridView= (GridView) frame.findViewById(R.id.homeGridView);
         gridView.setAdapter(new HomeGridAdapter());
+        trash = (ImageView) frame.findViewById(R.id.homeTrashImage);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 //                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
-                HueBulbChangeUtility.toggleBulbState(position);
+                if(position < currentLights.size()) {
+                    HueBulbChangeUtility.toggleBulbState(position);
+                } else {
+                    HueBulbChangeUtility.toggleBulbGroupState((PHGroup) gridView.getAdapter().getItem(position));
+                }
+//                shouldUpdateFromCache = 3;
             }
         });
 
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
-                //TODO: I need to change this for group of lights. now it is just for a single light.
+//                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
                 Bundle bundle = new Bundle();
-                bundle.putInt(lightPositionString, position);
+                if(position < currentLights.size()) {
+                    bundle.putInt(lightPositionString, position);
+                    bundle.putBoolean(groupOrLightString, false);
+                } else {
+                    bundle.putInt(lightPositionString, position - currentLights.size());
+                    bundle.putBoolean(groupOrLightString, true);
+                }
+                dragPosition = null;
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 LightSettingsFragment lightSettingFragment = new LightSettingsFragment();
@@ -92,54 +106,95 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
             }
         });
 
+        gridView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int newPosition = gridView.pointToPosition((int) event.getX(), (int) event.getY());
+                if(event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_POINTER_DOWN) {
+                    if(newPosition < currentLights.size() + currentGroups.size()) {
+                        dragPosition = newPosition;
+                    } else {
+                        dragPosition = null;
+                    }
+                }
+                else if(dragPosition != null && newPosition != dragPosition) {
+                    if(gridView.getChildAt(dragPosition) == null) {
+                        dragPosition = null;
+                        return false;
+                    }
+                    View bulbImage = gridView.getChildAt(dragPosition).findViewById(R.id.bulbImage);
+                    View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(bulbImage);
+                    bulbImage.startDrag(null, shadowBuilder, null, 0);
+                    return false;
+                }
+                return false;
+            }
+        });
+        gridView.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                if(event.getAction() == DragEvent.ACTION_DROP) {
+                    int position = gridView.pointToPosition((int) event.getX(), (int) event.getY());
+                    if(position != dragPosition && position >= 0 && position < currentLights.size() + currentGroups.size()) {
+                        if(position < currentLights.size() && dragPosition < currentLights.size()) {
+                            HueBulbChangeUtility.createGroup(currentLights.get(position), currentLights.get(dragPosition));
+                        } else if(position >= currentLights.size() && dragPosition >= currentLights.size()) {
+                            HueBulbChangeUtility.createGroup(currentGroups.get(position - currentLights.size()), currentGroups.get(dragPosition - currentLights.size()));
+                        } else {
+                            if(position >= currentLights.size()) {
+                                HueBulbChangeUtility.createGroup(currentLights.get(dragPosition), currentGroups.get(position - currentLights.size()));
+                            } else {
+                                HueBulbChangeUtility.createGroup(currentLights.get(position), currentGroups.get(dragPosition - currentLights.size()));
+                            }
+                        }
+                    }
+                } else if(gridView.getBottom() - event.getY() < 50 && event.getX() < gridView.getRight() - (gridView.getWidth() / 4)) {
+                    gridView.smoothScrollByOffset(50);
+                } else if(event.getY() - gridView.getTop() < 50) {
+                    gridView.smoothScrollByOffset(-50);
+                }
+//                shouldUpdateFromCache = 3;
+                return true;
+            }
+        });
+        trash.setOnDragListener(new View.OnDragListener(){
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                if(event.getAction() == DragEvent.ACTION_DROP) {
+                    if(dragPosition == null || currentLights == null) {
+                        System.out.println("THIS IS A DISASTER");
+                        return true;
+                    }
+                    if(dragPosition < currentLights.size()) {
+                        HueBulbChangeUtility.deleteLight(currentLights.get(dragPosition));
+                    } else {
+                        HueBulbChangeUtility.deleteGroup(currentGroups.get(dragPosition - currentLights.size()));
+                    }
+                }
+//                shouldUpdateFromCache = 3;
+                return true;
+            }
+        });
+
         return frame;
     }
 
     @Override
     public void cacheUpdated() {
-        currentLights = hueSDK.getSelectedBridge().getResourceCache().getAllLights();
-        lightNames = hueSDK.getLightNames(currentLights);
-        gridView.invalidateViews();
+//        if(shouldUpdateFromCache == 0 || shouldUpdateFromCache == 3) {
+          updateFromCache();
+          ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
+//        } else {
+//            shouldUpdateFromCache--;
+//        }
     }
 
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
-//
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-//
-//    /**
-//     * This interface must be implemented by activities that contain this
-//     * fragment to allow an interaction in this fragment to be communicated
-//     * to the activity and potentially other fragments contained in that
-//     * activity.
-//     * <p/>
-//     * See the Android Training lesson <a href=
-//     * "http://developer.android.com/training/basics/fragments/communicating.html"
-//     * >Communicating with Other Fragments</a> for more information.
-//     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        public void onFragmentInteraction(Uri uri);
-//    }
+    private void updateFromCache() {
+        currentLights = hueSDK.getSelectedBridge().getResourceCache().getAllLights();
+        lightNames = hueSDK.getLightNames(currentLights);
+        currentGroups = hueSDK.getSelectedBridge().getResourceCache().getAllGroups();
+        groupNames = hueSDK.getGroupNames(currentGroups);
+    }
 
 
     private class HomeGridAdapter extends BaseAdapter {
@@ -147,17 +202,20 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
 
         public HomeGridAdapter() {
             super();
-            currentLights = hueSDK.getSelectedBridge().getResourceCache().getAllLights();
-            lightNames = hueSDK.getLightNames(currentLights);
+            updateFromCache();
         }
         @Override
         public int getCount() {
-            return currentLights.size();
+            return currentLights.size() + currentGroups.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return currentLights.get(position);
+            if(position < currentLights.size()) {
+                return currentLights.get(position);
+            } else {
+                return currentGroups.get(position - currentLights.size());
+            }
         }
 
         @Override
@@ -167,19 +225,32 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            PHLight currentLight = (PHLight) getItem(position);
-            String lightName = lightNames[position];
             LinearLayout currentView;
             if(convertView == null) {
                 currentView = (LinearLayout) LayoutInflater.from(HomeFragment.this.getActivity()).inflate(R.layout.bulb_view, parent, false);
             } else {
                 currentView = (LinearLayout) convertView;
             }
+            Object currentLight = getItem(position);
+            if(currentLight instanceof PHLight) {
+                return getLightView(position, currentView, (PHLight) currentLight);
+            } else {
+                return getGroupView(position - currentLights.size(), currentView, (PHGroup) currentLight);
+            }
+
+        }
+
+
+        private View getLightView(int position, View currentView, PHLight currentLight) {
+            String lightName = lightNames[position];
+
             ImageView bulbTop = (ImageView) currentView.findViewById(R.id.bulbTop);
             TextView bulbName = (TextView) currentView.findViewById(R.id.bulbName);
             bulbName.setText(lightName);
 
             ImageView bulbBottom = (ImageView) currentView.findViewById(R.id.bulbBottom);
+            bulbTop.setImageResource(R.drawable.bulb_top);
+            bulbBottom.setImageResource(R.drawable.bulb_bottom);
             if(!currentLight.getLastKnownLightState().isReachable()) {
                 bulbBottom.setColorFilter(disabledOverlay);
                 bulbTop.setColorFilter(disabledOverlay);
@@ -200,7 +271,36 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
             return currentView;
         }
 
+        private View getGroupView(int position, View currentView, PHGroup currentGroup) {
+            String groupName = groupNames[position];
+            ImageView bulbTop = (ImageView) currentView.findViewById(R.id.bulbTop);
+            TextView bulbName = (TextView) currentView.findViewById(R.id.bulbName);
+            bulbName.setText(groupName);
 
+            ImageView bulbBottom = (ImageView) currentView.findViewById(R.id.bulbBottom);
+            bulbTop.setImageResource(R.drawable.group_top);
+            bulbBottom.setImageResource(R.drawable.group_bottom);
+            if(!HueBulbChangeUtility.isGroupReachable(currentGroup)) {
+                bulbBottom.setColorFilter(disabledOverlay);
+                bulbTop.setColorFilter(disabledOverlay);
+                return currentView;
+            } else {
+                bulbBottom.clearColorFilter();
+            }
+            if(HueBulbChangeUtility.isGroupOff(currentGroup)) {
+                bulbTop.setColorFilter(offOverlay);
+                return currentView;
+            }
+            Integer currentColor = HueBulbChangeUtility.getGroupColor(currentGroup);
+            if(currentColor != null) {
+                currentColor = Color.argb(300, Color.red(currentColor), Color.green(currentColor), Color.blue(currentColor));
+                System.out.println(currentColor);
+                bulbTop.setColorFilter(currentColor);
+            } else {
+                bulbTop.clearColorFilter();
+            }
+            return currentView;
+        }
     }
 
 }
