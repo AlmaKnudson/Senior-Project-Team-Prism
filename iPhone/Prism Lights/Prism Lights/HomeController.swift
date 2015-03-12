@@ -461,12 +461,18 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
                                     var lightState:PHLightState = PHLightState()
                                     //                        lightState.on = false
                                     lightState.on = true
-                                    var ls:PHLightState = light.lightState
-                                    if light.on != nil {
-                                        if light.on == true {
-                                            lightState.on = false
-                                        }
-                                    }
+                                    //                    lightState.hue = hueVal.toInt();
+                                    //                        lightState.on = true;
+                                    //                        lightState.saturation = 254;
+                                    //                        lightState.brightness = currentBrightness;
+                                    lightState.brightness = 254;
+                                    
+                                    
+                                    bridgeSendAPI.updateLightStateForId(bulbId, withLightState: lightState, completionHandler: nil);
+                                } else {
+                                    var lightState:PHLightState = PHLightState()
+                                    //                        lightState.on = false
+                                    lightState.on = false
                                     //                    lightState.hue = hueVal.toInt();
                                     //                        lightState.on = true;
                                     //                        lightState.saturation = 254;
