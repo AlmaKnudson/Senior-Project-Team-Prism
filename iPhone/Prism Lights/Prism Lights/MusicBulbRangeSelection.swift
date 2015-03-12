@@ -14,8 +14,8 @@ import Foundation
     var bulbIdentifier: NSString
     var bulbRange: Int
     override init(){
-         bulbName = "noname"
-         bulbIdentifier = "-1"
-         bulbRange = 0
+        bulbName = "noname"
+        bulbIdentifier = "-1"
+        bulbRange = 0
     }
 }

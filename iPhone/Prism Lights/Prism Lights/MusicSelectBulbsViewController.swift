@@ -36,7 +36,7 @@ import Foundation
     @IBOutlet weak var light: UIView!
     
 //    @IBAction func onRangeChanged(sender: UISegmentedControl) {
-//        
+//
 //        sender.
 //        NSLog("UMMM--onRangeChanged---TableView");
 //        if(rangeSelectionDelegate != nil) {
@@ -60,7 +60,7 @@ import Foundation
 //        for light in cache.lights.values{
 //            //            lights.append(light)
 //            //            println(light.lightState.description)
-//            
+//
 //            if (light.lightState.description.rangeOfString("reachable = 1;") != nil){
 //                //                println("Reachable...")
 //                lights.insert(light, atIndex: index++)

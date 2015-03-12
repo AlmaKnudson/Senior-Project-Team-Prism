@@ -218,9 +218,13 @@ NSTimer *midTimer;
 NSTimer *highTimer;
 NSTimer *overloadedHitsTimer;
 
-//NSDictionary *musicCells = [NSDictionary dictionaryWithObject:MusicCell forKeys:]
-//NSMutableDictionary *musicCells;
+
 NSMutableArray *musicBulbs;
+NSMutableArray *highBulbs;
+NSMutableArray *midBulbs;
+NSMutableArray *lowBulbs;
+
+
 
 
 
@@ -333,9 +337,19 @@ bool throttleSkip = true;
         lastHighHue = r;
         NSInteger hueVal = r;
         NSNumber *b = [NSNumber numberWithInteger:intensity];
+        NSString *identifierGRRR;
         
+        for (MusicBulbRangeSelection *hbrs in highBulbs){
+            //            if(hbrs.bulbRange  == 3){
+            identifierGRRR = hbrs.bulbIdentifier;
+            [self setBulb:identifierGRRR withSaturation:@254 withBrightness:b withHue:[NSNumber numberWithInteger:(NSInteger) hueVal]];
+            //remove hbrs and add it to the end..
+            //                [midBulbs removeObject:mbrs];
+            //                [musicBulbs insertObject:mbrs atIndex:musicBulbs.count];
+            //            }
+        }
         //        NSLog(@"HIGHS-->Brightness: %f \t Color: %li \t frequency: %f", intensity, (long)hueVal, frequency);
-        [self setBulb:@"1" withSaturation:@254 withBrightness:b withHue:[NSNumber numberWithInteger:(NSInteger) hueVal]];
+        
     }
     highsFlag = false;
 }
@@ -360,9 +374,20 @@ bool throttleSkip = true;
         lastMidHue = r;
         NSInteger hueVal = r;
         NSNumber *b = [NSNumber numberWithInteger:intensity];
+        NSString *identifierGRRR;
+        
+        for (MusicBulbRangeSelection *mbrs in midBulbs){
+            //            if(mbrs.bulbRange  == 2){
+            identifierGRRR = mbrs.bulbIdentifier;
+            [self setBulb:identifierGRRR withSaturation:@254 withBrightness:b withHue:[NSNumber numberWithInteger:(NSInteger) hueVal]];
+            //remove mbrs and add it to the end..
+            //                [midBulbs removeObject:mbrs];
+            //                [musicBulbs insertObject:mbrs atIndex:musicBulbs.count];
+            //            }
+        }
         
         //        NSLog(@"MIDS-->Brightness: %f \t Color: %li \t frequency: %f", intensity, (long)hueVal, frequency);
-        [self setBulb:@"2" withSaturation:@254 withBrightness:b withHue:[NSNumber numberWithInteger:(NSInteger) hueVal]];
+        
     }
     midsFlag = false;
 }
@@ -388,12 +413,24 @@ bool throttleSkip = true;
         }
         lastLowHue = r;
         NSInteger hueVal = r;
+        
+        NSString *identifierGRRR;
+        
+        for (MusicBulbRangeSelection *mbrs in lowBulbs){
+            //            if(mbrs.bulbRange  == 1){
+            identifierGRRR = mbrs.bulbIdentifier;
+            bool f = (((int)intensity % 2) == 0);
+            if(f)
+                [self setBulb:identifierGRRR withSaturation:@254 withBrightness:[NSNumber numberWithInteger:intensity] withHue:[NSNumber numberWithInteger:(NSInteger) hueVal]];
+            else
+                [self setBulb:identifierGRRR withSaturation:@254 withBrightness:@0 withHue:[NSNumber numberWithInteger:(NSInteger) hueVal]];
+            //remove mbrs and add it to the end..
+            //                [midBulbs removeObject:mbrs];
+            //                [musicBulbs insertObject:mbrs atIndex:musicBulbs.count];
+            //            }
+        }
         //        NSLog(@"LOWS-->Brightness: %f \t Color: %li \t frequency: %f", intensity, (long)hueVal, frequency);
-        bool f = (((int)intensity % 2) == 0);
-        if(f)
-            [self setBulb:@"3" withSaturation:@254 withBrightness:[NSNumber numberWithInteger:intensity] withHue:[NSNumber numberWithInteger:(NSInteger) hueVal]];
-        else
-            [self setBulb:@"3" withSaturation:@254 withBrightness:@0 withHue:[NSNumber numberWithInteger:(NSInteger) hueVal]];
+        
     }
     lowsFlag = false;
 }
@@ -455,12 +492,16 @@ bool throttleSkip = true;
         
         //        musicCells = [[NSMutableDictionary alloc] init];
         musicBulbs = [[NSMutableArray alloc] init];
+        highBulbs = [[NSMutableArray alloc] init];
+        midBulbs = [[NSMutableArray alloc] init];
+        lowBulbs = [[NSMutableArray alloc] init];
+        
         
         
         for (PHLight *light in myLights) {
             
             MusicBulbRangeSelection *mbrs = [[MusicBulbRangeSelection alloc] init];
-         
+            
             mbrs.bulbRange = 0;
             mbrs.bulbName = light.name;
             mbrs.bulbIdentifier = light.identifier;
@@ -469,12 +510,12 @@ bool throttleSkip = true;
         
         
         
-            //            [musicCells setObject: [NSString stringWithFormat:@"%@%@%@", light.identifier, @"@~~~*~~~", light.name] forKey:@"1"];
-            
-            //            MusicCell *cell = [MusicCell init];
-            //            cell.bulbRange = 1;
-            //            cell.bulbName = light.name;
-            //            cell.bulbIdentifier = light.identifier;
+        //            [musicCells setObject: [NSString stringWithFormat:@"%@%@%@", light.identifier, @"@~~~*~~~", light.name] forKey:@"1"];
+        
+        //            MusicCell *cell = [MusicCell init];
+        //            cell.bulbRange = 1;
+        //            cell.bulbName = light.name;
+        //            cell.bulbIdentifier = light.identifier;
         
         
         //        if(musicCells == nil) {
@@ -824,17 +865,105 @@ bool throttleSkip = true;
     for (MusicBulbRangeSelection *mbrs in musicBulbs){
         if([mbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
             mbrs.bulbRange = cell.bulbRange;
+            if(cell.bulbRange == 1){
+                //Remove from whichever range/array it was in and add to lows array
+                //                for(MusicBulbRangeSelection *lmbrs in lowBulbs){
+                //                    if([lmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
+                //                        return;
+                //                    }
+                //                }
+                //                for(MusicBulbRangeSelection *mmbrs in midBulbs){
+                //                    if([mmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
+                //                        [midBulbs removeObject:mmbrs];
+                //                    }
+                //                }
+                //                for(MusicBulbRangeSelection *hmbrs in highBulbs){
+                //                    if([hmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
+                //                        [highBulbs removeObject:hmbrs];
+                //                    }
+                //                }
+                [midBulbs removeObject:mbrs];
+                [highBulbs removeObject:mbrs];
+                
+                [lowBulbs insertObject: mbrs atIndex:0];
+            } else if (cell.bulbRange == 2){
+                //Remove from whichever range/array it was in and add to mids array
+                //                for(MusicBulbRangeSelection *mmbrs in midBulbs){
+                //                    if([mmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
+                //                        return;
+                //                    }
+                //                }
+                //                for(MusicBulbRangeSelection *lmbrs in lowBulbs){
+                //                    if([lmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
+                //                        [lowBulbs removeObject:lmbrs];
+                //                    }
+                //                }
+                //
+                //                for(MusicBulbRangeSelection *hmbrs in highBulbs){
+                //                    if([hmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
+                //                        [highBulbs removeObject:hmbrs];
+                //                    }
+                //                }
+                [lowBulbs removeObject:mbrs];
+                [highBulbs removeObject:mbrs];
+                
+                [midBulbs insertObject: mbrs atIndex:0];
+                
+            } else if (cell.bulbRange == 3){
+                //Remove from whichever range/array it was in and add to highs array
+                //                for(MusicBulbRangeSelection *hmbrs in highBulbs){
+                //                    if([hmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
+                //                        return;
+                //                    }
+                //                }
+                //                for(MusicBulbRangeSelection *lmbrs in lowBulbs){
+                //                    if([lmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
+                //                        [lowBulbs removeObject:lmbrs];
+                //                    }
+                //                }
+                //                for(MusicBulbRangeSelection *mmbrs in midBulbs){
+                //                    if([mmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
+                //                        [midBulbs removeObject:mmbrs];
+                //                    }
+                //                }
+                [lowBulbs removeObject:mbrs];
+                [midBulbs removeObject:mbrs];
+                
+                [highBulbs insertObject: mbrs atIndex:0];
+            } else if (cell.bulbRange == 0){
+                //Remove from whichever array it was in.
+                [lowBulbs removeObject:mbrs];
+                [midBulbs removeObject:mbrs];
+                [highBulbs removeObject:mbrs];
+                //                for(MusicBulbRangeSelection *lmbrs in lowBulbs){
+                //                    if([lmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
+                //                        [lowBulbs removeObject:lmbrs];
+                //                    }
+                //                }
+                //                for(MusicBulbRangeSelection *mmbrs in midBulbs){
+                //                    if([mmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
+                //                        [midBulbs removeObject:mmbrs];
+                //                    }
+                //                }
+                //                for(MusicBulbRangeSelection *hmbrs in highBulbs){
+                //                    if([hmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
+                //                        [highBulbs removeObject:hmbrs];
+                //                    }
+                //                }
+            }
         }
     }
 }
 
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+//    self.microphone.stopFetchingAudio;
     if ([segue.identifier isEqualToString:@"musicLights"]) {
         MusicSelectBulbsViewController *destViewController = (MusicSelectBulbsViewController *)segue.destinationViewController;
         destViewController.moses = musicBulbs;
         destViewController.rangeSelectionDelegate = self;
     }
+    
 }
 
 
