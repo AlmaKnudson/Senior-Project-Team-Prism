@@ -32,6 +32,19 @@ class EstViewController:UIViewController, ESTBeaconManagerDelegate{
         range = sender.value
         distanceLabel.text = "\(range.integerValue) Feet"
     }
+    @IBAction func onStopTrackingDown(sender: AnyObject) {
+        var bbT:BeaconBulbTracking = BeaconBulbTracking()
+        bbT.bulbIdentifier = currentBulbIdentifier!
+        bbT.beaconRange = range.integerValue
+        bbT.beaconIdentifier = currentBeaconIdentifier
+        
+        var bbtString = "\(bbT.bulbIdentifier)_\(bbT.beaconRange)"
+        
+        
+        var defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setObject(bbtString, forKey: currentBeaconIdentifier)
+        defaults.removeObjectForKey(currentBeaconIdentifier)
+    }
     
     @IBAction func onTrackingDown(sender: UIButton) {
         NSLog("\(sender.titleLabel?.text)")
