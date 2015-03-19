@@ -457,7 +457,15 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
                                 var number:NSNumber? = numberFormatter.numberFromString(range!)
                                 var rangeInt = (Int(number!)/10)
 //                                NSLog()
+                                
+                                
                                 if b.distance.integerValue <= rangeInt {
+                                   
+                                    
+                                    //This is to print out the distance to see if I get a different reading each time. Otherwise, I will have to poll for an average in a different/slower way.
+                                    for var i = 0; i < 10; ++i  {
+                                        NSLog("\(b.distance)")
+                                    }
                                     var lightState:PHLightState = PHLightState()
                                     //                        lightState.on = false
                                     lightState.on = true
