@@ -16,7 +16,7 @@
 @protocol WitDelegate;
 @protocol WITRecordingSessionDelegate;
 
-
+#pragma
 
 @interface Wit : NSObject  <WITRecordingSessionDelegate>
 

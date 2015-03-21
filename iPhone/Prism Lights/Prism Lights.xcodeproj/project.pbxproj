@@ -23,7 +23,7 @@
 		0D4F25451A2AD34A005C61EA /* BridgeConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D4F25441A2AD34A005C61EA /* BridgeConnect.swift */; };
 		0D5980F21A3E9279007C4EF1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D5980F11A3E9279007C4EF1 /* QuartzCore.framework */; };
 		0D799B0F1A39260200E9DDF2 /* Wit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0D799B0D1A39260200E9DDF2 /* Wit.bundle */; };
-		0D799B101A39260200E9DDF2 /* Wit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D799B0E1A39260200E9DDF2 /* Wit.framework */; };
+		0D799B101A39260200E9DDF2 /* Wit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D799B0E1A39260200E9DDF2 /* Wit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		0D799B121A3926DC00E9DDF2 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D799B111A3926DC00E9DDF2 /* CoreLocation.framework */; };
 		0D799B141A3926E800E9DDF2 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D799B131A3926E800E9DDF2 /* SystemConfiguration.framework */; };
 		0D799B161A3926F400E9DDF2 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D799B151A3926F400E9DDF2 /* MobileCoreServices.framework */; };
@@ -40,7 +40,6 @@
 		0D9862561A1D2C0B00FAD175 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862551A1D2C0B00FAD175 /* HomeController.swift */; };
 		0D9862581A1D2C0B00FAD175 /* MusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862571A1D2C0B00FAD175 /* MusicViewController.swift */; };
 		0D98625D1A1D2C0B00FAD175 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0D98625C1A1D2C0B00FAD175 /* Images.xcassets */; };
-		0D9862601A1D2C0B00FAD175 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D98625E1A1D2C0B00FAD175 /* LaunchScreen.xib */; };
 		0D98626C1A1D2C0B00FAD175 /* Prism_LightsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D98626B1A1D2C0B00FAD175 /* Prism_LightsTests.swift */; };
 		0DB347431A2D5BCE00B91EF2 /* PushAuthController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB347421A2D5BCE00B91EF2 /* PushAuthController.swift */; };
 		117F49531A96DA4500A31746 /* AEFloatConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 117F49391A96DA4500A31746 /* AEFloatConverter.m */; };
@@ -79,7 +78,6 @@
 		CC9E5ECF1A89B95300B19DF6 /* AlarmCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9E5ECE1A89B95300B19DF6 /* AlarmCell.swift */; };
 		CCB135A41AAB9601006E464F /* libEstimoteSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CCB135A31AAB9601006E464F /* libEstimoteSDK.a */; };
 		CCB135A71AAD03C2006E464F /* datething.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB135A61AAD03C2006E464F /* datething.swift */; };
-		CCB135AA1AAD5606006E464F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CCB135A81AAD5606006E464F /* Main.storyboard */; };
 		CCB135AC1AAF5727006E464F /* ColorPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB135AB1AAF5727006E464F /* ColorPickerController.swift */; };
 		CCB707851AA68A73002BF12B /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB707821AA68A73002BF12B /* ColorPicker.swift */; };
 		CCB707861AA68A73002BF12B /* ColorSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB707831AA68A73002BF12B /* ColorSelectorView.swift */; };
@@ -700,10 +698,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0D9862601A1D2C0B00FAD175 /* LaunchScreen.xib in Resources */,
 				0D799B0F1A39260200E9DDF2 /* Wit.bundle in Resources */,
 				117F49601A96DA4500A31746 /* VERSION in Resources */,
-				CCB135AA1AAD5606006E464F /* Main.storyboard in Resources */,
 				0D98625D1A1D2C0B00FAD175 /* Images.xcassets in Resources */,
 				117F495F1A96DA4500A31746 /* CHANGELOG in Resources */,
 			);

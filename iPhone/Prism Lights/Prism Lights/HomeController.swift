@@ -113,13 +113,11 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         var cache:PHBridgeResourcesCache! = PHBridgeResourcesReader.readBridgeResourcesCache()
         if(cache != nil){
             
-            if(cache.bridgeConfiguration == nil){
+            if(cache.bridgeConfiguration == nil || cache.bridgeConfiguration.ipaddress == nil ){
                 //TODO: First Time App user - App has never connected to bridge
                 
-            } else{
-                if cache.bridgeConfiguration.ipaddress == nil {
-                    //TODO: No previous bridge saved
-                }
+                //This line is here so that there is always an IP set if they haven't connected to a bridge in the past.
+                (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.setBridgeToUseWithIpAddress("1.1.1.1", macAddress: "ab:ab:ab:ab:ab:ab")
             }
             
         }
@@ -499,7 +497,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             
             var defaults = NSUserDefaults.standardUserDefaults()
             //            defaults.setObject(bbtString, forKey: currentBeaconIdentifier)
-            var bulbIdPlusRange = defaults.objectForKey(bId)
+            var bulbIdPlusRange: AnyObject? = defaults.objectForKey(bId)
             //            if bulbIdPlusRange != nil {
             //                NSLog("Found a bulb/beacon association::\(bulbIdPlusRange)::::\(bId)")
             //            }
