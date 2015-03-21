@@ -74,6 +74,7 @@
 		CC391F411A7D91F9004C94B5 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC391F401A7D91F9004C94B5 /* Networking.swift */; };
 		CC4A46E51A8912FD007DC0F2 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A46E41A8912FD007DC0F2 /* Settings.swift */; };
 		CC4A46E71A89130F007DC0F2 /* ModeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A46E61A89130F007DC0F2 /* ModeCell.swift */; };
+		CC9A11FF1AB9003500BDFA85 /* HomeLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9A11FE1AB9003500BDFA85 /* HomeLoadingView.swift */; };
 		CC9E5ECD1A89A16100B19DF6 /* AlarmsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9E5ECC1A89A16100B19DF6 /* AlarmsTable.swift */; };
 		CC9E5ECF1A89B95300B19DF6 /* AlarmCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9E5ECE1A89B95300B19DF6 /* AlarmCell.swift */; };
 		CCB135A41AAB9601006E464F /* libEstimoteSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CCB135A31AAB9601006E464F /* libEstimoteSDK.a */; };
@@ -215,6 +216,7 @@
 		CC391F401A7D91F9004C94B5 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		CC4A46E41A8912FD007DC0F2 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		CC4A46E61A89130F007DC0F2 /* ModeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModeCell.swift; sourceTree = "<group>"; };
+		CC9A11FE1AB9003500BDFA85 /* HomeLoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeLoadingView.swift; sourceTree = "<group>"; };
 		CC9E5ECC1A89A16100B19DF6 /* AlarmsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmsTable.swift; sourceTree = "<group>"; };
 		CC9E5ECE1A89B95300B19DF6 /* AlarmCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmCell.swift; sourceTree = "<group>"; };
 		CCB135A31AAB9601006E464F /* libEstimoteSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libEstimoteSDK.a; path = EstimoteSDK/libEstimoteSDK.a; sourceTree = "<group>"; };
@@ -275,6 +277,7 @@
 				0D0A26D91A38AFA10033550D /* Bulb Settings */,
 				0D9357E61A2D4BB100AAD52D /* BulbCollectionCell.swift */,
 				0D9862551A1D2C0B00FAD175 /* HomeController.swift */,
+				CC9A11FE1AB9003500BDFA85 /* HomeLoadingView.swift */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -390,7 +393,6 @@
 		0D9862501A1D2C0B00FAD175 /* Prism Lights */ = {
 			isa = PBXGroup;
 			children = (
-				CCB135A21AAB8261006E464F /* HueSDK_API */,
 				0D9862531A1D2C0B00FAD175 /* AppDelegate.swift */,
 				0D0A26D41A3766C70033550D /* TabViewController.swift */,
 				0D98625E1A1D2C0B00FAD175 /* LaunchScreen.xib */,
@@ -403,6 +405,7 @@
 				0D9862511A1D2C0B00FAD175 /* Supporting Files */,
 				117F49651A96DB8B00A31746 /* PrefixHeader.pch */,
 				CCB135A11AAB8095006E464F /* ColorPicker */,
+				CCB135A21AAB8261006E464F /* HueSDK_API */,
 			);
 			path = "Prism Lights";
 			sourceTree = "<group>";
@@ -664,11 +667,11 @@
 				TargetAttributes = {
 					0D98624D1A1D2C0B00FAD175 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = N7UB2ADRTE;
+						DevelopmentTeam = HD79G6T428;
 					};
 					0D9862641A1D2C0B00FAD175 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = N7UB2ADRTE;
+						DevelopmentTeam = HD79G6T428;
 						TestTargetID = 0D98624D1A1D2C0B00FAD175;
 					};
 				};
@@ -735,6 +738,7 @@
 				117F495B1A96DA4500A31746 /* EZOutput.m in Sources */,
 				CCB707871AA68A73002BF12B /* NewColorPickerView.swift in Sources */,
 				117F49561A96DA4500A31746 /* EZAudioPlayer.m in Sources */,
+				CC9A11FF1AB9003500BDFA85 /* HomeLoadingView.swift in Sources */,
 				CCCB88D71A994CFF003D68F4 /* AdvancedSettingsController.swift in Sources */,
 				CC9E5ECD1A89A16100B19DF6 /* AlarmsTable.swift in Sources */,
 				0D9862581A1D2C0B00FAD175 /* MusicViewController.swift in Sources */,

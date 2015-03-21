@@ -43,26 +43,26 @@ class PushAuthController : UIViewController {
     //MARK: - Notification Methods
     func AuthSuccessful(){
         PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
-        self.dismissViewControllerAnimated(true, completion: { () -> Void in})
+        navigationController?.popViewControllerAnimated(true)
     }
     
     
     func AuthFailed(){
         PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
         //TODO: AuthFailed Method
-        self.dismissViewControllerAnimated(true, completion: { () -> Void in})
+        navigationController?.popViewControllerAnimated(true)
     }
     
     func NoConnection(){
         PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
         //TODO: Inform user of Network connection going down.
-        self.dismissViewControllerAnimated(true, completion: { () -> Void in})
+        navigationController?.popViewControllerAnimated(true)
     }
     
     func NoBridgeSet(){
         PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
         //TODO: Provide message to user to fill out bug report
-        self.dismissViewControllerAnimated(true, completion: { () -> Void in})
+        navigationController?.popViewControllerAnimated(true)
     }
     
     func ButtonNotPressed(){
