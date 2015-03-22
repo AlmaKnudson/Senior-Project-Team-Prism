@@ -157,6 +157,7 @@
                         <outlet property="rescanButton" destination="LW5-E2-AQX" id="64b-eA-DLd"/>
                         <outlet property="scanningIndicator" destination="YdP-WM-b8N" id="G81-r6-nVV"/>
                         <segue destination="5xJ-tq-vqj" kind="show" identifier="BulbSettingsNav" id="Zij-yb-hZI"/>
+                        <segue destination="dYi-Ic-E3x" kind="show" identifier="pushAuth" id="VIG-4p-d0T"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
@@ -832,7 +833,7 @@
         <!--Push Auth Controller-->
         <scene sceneID="m4j-EH-B9S">
             <objects>
-                <viewController id="dYi-Ic-E3x" customClass="PushAuthController" customModule="Prism_Lights" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="dYi-Ic-E3x" customClass="PushAuthController" customModule="Prism_Lights" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="K0c-Cu-5oE"/>
                         <viewControllerLayoutGuide type="bottom" id="gvs-mU-RIe"/>
@@ -2513,6 +2514,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="MV1-5L-hp4"/>
+        <segue reference="VIG-4p-d0T"/>
         <segue reference="agp-MF-nMt"/>
     </inferredMetricsTieBreakers>
 </document>

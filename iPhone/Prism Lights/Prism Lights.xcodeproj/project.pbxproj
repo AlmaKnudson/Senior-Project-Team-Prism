@@ -73,6 +73,8 @@
 		CC391F411A7D91F9004C94B5 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC391F401A7D91F9004C94B5 /* Networking.swift */; };
 		CC4A46E51A8912FD007DC0F2 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A46E41A8912FD007DC0F2 /* Settings.swift */; };
 		CC4A46E71A89130F007DC0F2 /* ModeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A46E61A89130F007DC0F2 /* ModeCell.swift */; };
+		CC96AD941ABE26E00025896F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CCB135A81AAD5606006E464F /* Main.storyboard */; };
+		CC96AD951ABE26E60025896F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D98625E1A1D2C0B00FAD175 /* LaunchScreen.xib */; };
 		CC9A11FF1AB9003500BDFA85 /* HomeLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9A11FE1AB9003500BDFA85 /* HomeLoadingView.swift */; };
 		CC9E5ECD1A89A16100B19DF6 /* AlarmsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9E5ECC1A89A16100B19DF6 /* AlarmsTable.swift */; };
 		CC9E5ECF1A89B95300B19DF6 /* AlarmCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9E5ECE1A89B95300B19DF6 /* AlarmCell.swift */; };
@@ -626,6 +628,7 @@
 				0D98624A1A1D2C0B00FAD175 /* Sources */,
 				0D98624B1A1D2C0B00FAD175 /* Frameworks */,
 				0D98624C1A1D2C0B00FAD175 /* Resources */,
+				CC96AD961ABE59120025896F /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -698,6 +701,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC96AD951ABE26E60025896F /* LaunchScreen.xib in Resources */,
+				CC96AD941ABE26E00025896F /* Main.storyboard in Resources */,
 				0D799B0F1A39260200E9DDF2 /* Wit.bundle in Resources */,
 				117F49601A96DA4500A31746 /* VERSION in Resources */,
 				0D98625D1A1D2C0B00FAD175 /* Images.xcassets in Resources */,
@@ -713,6 +718,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		CC96AD961ABE59120025896F /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "TAGS=\"TODO:|FIXME:\"\necho \"searching ${SRCROOT} for ${TAGS}\"\nfind \"${SRCROOT}\" \\( -name \"*.swift\" -or -name \"*.m\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | perl -p -e \"s/($TAGS)/ warning: \\$1/\"";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		0D98624A1A1D2C0B00FAD175 /* Sources */ = {

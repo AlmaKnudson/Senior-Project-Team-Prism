@@ -21,7 +21,8 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     
     let lastBridgeMessage = "Looking for Bridge..."
     let SCANNING_MESSAGE = "Scanning for New Bridge..."
-    
+    let GROUP_SECTION = 0
+    let BULB_SECTION = 1
     
     var retryConnection = true
     var beenConnected = false
@@ -164,16 +165,19 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         if(DEBUG){
             println("In Prepare For Segue")
         }
+        if segue.identifier == "BulbSettingsNav" {
         var dest = segue.destinationViewController as UINavigationController
         var bulbSettingsController = dest.viewControllers[0] as BulbSettingsController
         bulbSettingsController.homeDelegate = self
         bulbSettingsController.bulbId = "\((sender as NSIndexPath).row+1)"
         bulbSettingsController.isGroup = false
+        } else if segue.identifier == "pushAuth" {
+            var dest = segue.destinationViewController as PushAuthController
+            dest.delegate = self
+        }
     }
     
     //MARK: - UICollectionView Methods
-    
-    
     
     /**
     Number of sections
@@ -187,10 +191,12 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
         
         
-        if(section == 1){
+        if(section == BULB_SECTION){
             
             if(cache.lights != nil){
                 lightCount = cache.lights.count
+            } else{
+                lightCount = 0
             }
             if(BRIDGELESS){
                 lightCount = 3
@@ -199,9 +205,12 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             return lightCount;
         }
         
-        if section == 0 {
+        if section == GROUP_SECTION {
             if(cache.lights != nil){
-                groupCount = cache.groups.count
+                //count doesn't account for group number 0. So +1 to account for it.
+                groupCount = cache.groups.count + 1
+            } else {
+                groupCount = 1
             }
             if(BRIDGELESS){
                 groupCount = 1
@@ -225,11 +234,12 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         }
         
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-        
-        var light = cache?.lights?["\(indexPath.row+1)"] as? PHLight
-        //        var sdk = ((UIApplication.sharedApplication().delegate) as AppDelegate).hueSDK!
+        var lightId = indexPath.row
+        if indexPath.section == BULB_SECTION {
+            lightId++
+        }
+        var light = cache?.lights?["\(lightId)"] as? PHLight
         if(light != nil){
-            
             
             cell!.SetBulbLabel(light!.name)
             if(light!.lightState.on == 0){
@@ -247,7 +257,6 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             }
         } else{
             cell!.SetBulbImage(false)
-            //            cell!.SetBulbUnreachable()
         }
         
         return cell!
@@ -369,15 +378,26 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         self.bulbCollectionView.reloadData()
     }
     
-    func HideConnectingView(){
-        loadingView.hidden = true
-        scanningIndicator.stopAnimating()
-    }
+    /**
     
-    func ShowConnectingView(){
-        loadingView.hidden = false
-    }
+    Handles the not authorized with the bridge PHNotification
     
+    :param: void
+    
+    :returns: void
+    
+    */
+    func NotAuthorized(){
+        var hueSDK = (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!
+        //        hueSDK.disableLocalConnection()
+        //        var alert = UIAlertController(title: "Authenticate", message: "Press button on Bridge to Authenticate.", preferredStyle: UIAlertControllerStyle.Alert)
+        //        let cancelButton = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Cancel) { (cancelButton) -> Void in     }
+        //        alert.addAction(cancelButton)
+        //        //Show the alert to the user
+        //        self.presentViewController(alert, animated: true) { () -> Void in}
+        //TODO: Initiate Push Auth
+        self.performSegueWithIdentifier("pushAuth", sender: self)
+    }
     /**
     Handles the unable to connect bridge PHNotification
     
@@ -401,7 +421,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             //Create the alert
             var alert = UIAlertController(title: "No Connection", message: "Connection to bridge lost. Insure the bridge is available and your network is working", preferredStyle: UIAlertControllerStyle.Alert)
             let reScan = UIAlertAction(title: "Re-Connect", style: UIAlertActionStyle.Default) {
-                    (scan) -> Void in
+                (scan) -> Void in
                 
                 
             }
@@ -424,7 +444,16 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         
     }
     
+    //MARK: Helper Methods
     
+    func HideConnectingView(){
+        loadingView.hidden = true
+        scanningIndicator.stopAnimating()
+    }
+    
+    func ShowConnectingView(){
+        loadingView.hidden = false
+    }
     
     func SearchForBridge(upnpSearch:Bool, portalSearch:Bool, ipAddressSearch:Bool){
         
@@ -446,7 +475,6 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
                 var alert = UIAlertController(title: "1+ Bridges Found", message: "More than 1 bridge has been dectected.", preferredStyle: UIAlertControllerStyle.Alert)
                 let cancelButton = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Cancel) { (cancelButton) -> Void in     }
                 alert.addAction(cancelButton)
-                //TODO: Add retry connection button.
                 //Show the alert to the user
                 self.presentViewController(alert, animated: true) { () -> Void in}
                 
@@ -457,7 +485,6 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
                 var alert = UIAlertController(title: "No Bridge Found", message: "Please ensure you are connected to the wireless.", preferredStyle: UIAlertControllerStyle.Alert)
                 let cancelButton = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Cancel) { (cancelButton) -> Void in     }
                 alert.addAction(cancelButton)
-                //TODO: Add retry connection button.
                 //Show the alert to the user
                 self.presentViewController(alert, animated: true) { () -> Void in}
                 
@@ -465,27 +492,12 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         }
     }
     
-    /**
-    
-    Handles the not authorized with the bridge PHNotification
-    
-    :param: void
-    
-    :returns: void
-    
-    */
-    func NotAuthorized(){
-        var hueSDK = (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!
-        hueSDK.disableLocalConnection()
-        //TODO: Notify user of lost Authorization
-        //TODO: Initiate Push Auth
-    }
-    
-    
     func ApplySettings(){
         self.dismissViewControllerAnimated(true, completion: nil)
+        HideConnectingView()
+        self.bulbCollectionView.reloadData()
+        //TODO: Need protocol for pushAuth
     }
-    
     
     func beaconManager(manager: ESTBeaconRegion, didRangeBeacons: [ESTBeacon], inRegion: ESTBeaconRegion){
         //        println("I've found \(didRangeBeacons.count) beacons in range.")
