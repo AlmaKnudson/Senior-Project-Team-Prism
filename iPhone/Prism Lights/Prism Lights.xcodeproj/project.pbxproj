@@ -23,7 +23,7 @@
 		0D4F25451A2AD34A005C61EA /* BridgeConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D4F25441A2AD34A005C61EA /* BridgeConnect.swift */; };
 		0D5980F21A3E9279007C4EF1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D5980F11A3E9279007C4EF1 /* QuartzCore.framework */; };
 		0D799B0F1A39260200E9DDF2 /* Wit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0D799B0D1A39260200E9DDF2 /* Wit.bundle */; };
-		0D799B101A39260200E9DDF2 /* Wit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D799B0E1A39260200E9DDF2 /* Wit.framework */; };
+		0D799B101A39260200E9DDF2 /* Wit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D799B0E1A39260200E9DDF2 /* Wit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		0D799B121A3926DC00E9DDF2 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D799B111A3926DC00E9DDF2 /* CoreLocation.framework */; };
 		0D799B141A3926E800E9DDF2 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D799B131A3926E800E9DDF2 /* SystemConfiguration.framework */; };
 		0D799B161A3926F400E9DDF2 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D799B151A3926F400E9DDF2 /* MobileCoreServices.framework */; };
@@ -40,7 +40,6 @@
 		0D9862561A1D2C0B00FAD175 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862551A1D2C0B00FAD175 /* HomeController.swift */; };
 		0D9862581A1D2C0B00FAD175 /* MusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862571A1D2C0B00FAD175 /* MusicViewController.swift */; };
 		0D98625D1A1D2C0B00FAD175 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0D98625C1A1D2C0B00FAD175 /* Images.xcassets */; };
-		0D9862601A1D2C0B00FAD175 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D98625E1A1D2C0B00FAD175 /* LaunchScreen.xib */; };
 		0D98626C1A1D2C0B00FAD175 /* Prism_LightsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D98626B1A1D2C0B00FAD175 /* Prism_LightsTests.swift */; };
 		0DB347431A2D5BCE00B91EF2 /* PushAuthController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB347421A2D5BCE00B91EF2 /* PushAuthController.swift */; };
 		117F49531A96DA4500A31746 /* AEFloatConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 117F49391A96DA4500A31746 /* AEFloatConverter.m */; };
@@ -74,11 +73,13 @@
 		CC391F411A7D91F9004C94B5 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC391F401A7D91F9004C94B5 /* Networking.swift */; };
 		CC4A46E51A8912FD007DC0F2 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A46E41A8912FD007DC0F2 /* Settings.swift */; };
 		CC4A46E71A89130F007DC0F2 /* ModeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A46E61A89130F007DC0F2 /* ModeCell.swift */; };
+		CC96AD941ABE26E00025896F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CCB135A81AAD5606006E464F /* Main.storyboard */; };
+		CC96AD951ABE26E60025896F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D98625E1A1D2C0B00FAD175 /* LaunchScreen.xib */; };
+		CC9A11FF1AB9003500BDFA85 /* HomeLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9A11FE1AB9003500BDFA85 /* HomeLoadingView.swift */; };
 		CC9E5ECD1A89A16100B19DF6 /* AlarmsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9E5ECC1A89A16100B19DF6 /* AlarmsTable.swift */; };
 		CC9E5ECF1A89B95300B19DF6 /* AlarmCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9E5ECE1A89B95300B19DF6 /* AlarmCell.swift */; };
 		CCB135A41AAB9601006E464F /* libEstimoteSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CCB135A31AAB9601006E464F /* libEstimoteSDK.a */; };
 		CCB135A71AAD03C2006E464F /* datething.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB135A61AAD03C2006E464F /* datething.swift */; };
-		CCB135AA1AAD5606006E464F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CCB135A81AAD5606006E464F /* Main.storyboard */; };
 		CCB135AC1AAF5727006E464F /* ColorPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB135AB1AAF5727006E464F /* ColorPickerController.swift */; };
 		CCB707851AA68A73002BF12B /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB707821AA68A73002BF12B /* ColorPicker.swift */; };
 		CCB707861AA68A73002BF12B /* ColorSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB707831AA68A73002BF12B /* ColorSelectorView.swift */; };
@@ -215,6 +216,7 @@
 		CC391F401A7D91F9004C94B5 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		CC4A46E41A8912FD007DC0F2 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		CC4A46E61A89130F007DC0F2 /* ModeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModeCell.swift; sourceTree = "<group>"; };
+		CC9A11FE1AB9003500BDFA85 /* HomeLoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeLoadingView.swift; sourceTree = "<group>"; };
 		CC9E5ECC1A89A16100B19DF6 /* AlarmsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmsTable.swift; sourceTree = "<group>"; };
 		CC9E5ECE1A89B95300B19DF6 /* AlarmCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmCell.swift; sourceTree = "<group>"; };
 		CCB135A31AAB9601006E464F /* libEstimoteSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libEstimoteSDK.a; path = EstimoteSDK/libEstimoteSDK.a; sourceTree = "<group>"; };
@@ -275,6 +277,7 @@
 				0D0A26D91A38AFA10033550D /* Bulb Settings */,
 				0D9357E61A2D4BB100AAD52D /* BulbCollectionCell.swift */,
 				0D9862551A1D2C0B00FAD175 /* HomeController.swift */,
+				CC9A11FE1AB9003500BDFA85 /* HomeLoadingView.swift */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -390,7 +393,6 @@
 		0D9862501A1D2C0B00FAD175 /* Prism Lights */ = {
 			isa = PBXGroup;
 			children = (
-				CCB135A21AAB8261006E464F /* HueSDK_API */,
 				0D9862531A1D2C0B00FAD175 /* AppDelegate.swift */,
 				0D0A26D41A3766C70033550D /* TabViewController.swift */,
 				0D98625E1A1D2C0B00FAD175 /* LaunchScreen.xib */,
@@ -403,6 +405,7 @@
 				0D9862511A1D2C0B00FAD175 /* Supporting Files */,
 				117F49651A96DB8B00A31746 /* PrefixHeader.pch */,
 				CCB135A11AAB8095006E464F /* ColorPicker */,
+				CCB135A21AAB8261006E464F /* HueSDK_API */,
 			);
 			path = "Prism Lights";
 			sourceTree = "<group>";
@@ -625,6 +628,7 @@
 				0D98624A1A1D2C0B00FAD175 /* Sources */,
 				0D98624B1A1D2C0B00FAD175 /* Frameworks */,
 				0D98624C1A1D2C0B00FAD175 /* Resources */,
+				CC96AD961ABE59120025896F /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -664,11 +668,11 @@
 				TargetAttributes = {
 					0D98624D1A1D2C0B00FAD175 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = N7UB2ADRTE;
+						DevelopmentTeam = HD79G6T428;
 					};
 					0D9862641A1D2C0B00FAD175 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = N7UB2ADRTE;
+						DevelopmentTeam = HD79G6T428;
 						TestTargetID = 0D98624D1A1D2C0B00FAD175;
 					};
 				};
@@ -697,10 +701,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0D9862601A1D2C0B00FAD175 /* LaunchScreen.xib in Resources */,
+				CC96AD951ABE26E60025896F /* LaunchScreen.xib in Resources */,
+				CC96AD941ABE26E00025896F /* Main.storyboard in Resources */,
 				0D799B0F1A39260200E9DDF2 /* Wit.bundle in Resources */,
 				117F49601A96DA4500A31746 /* VERSION in Resources */,
-				CCB135AA1AAD5606006E464F /* Main.storyboard in Resources */,
 				0D98625D1A1D2C0B00FAD175 /* Images.xcassets in Resources */,
 				117F495F1A96DA4500A31746 /* CHANGELOG in Resources */,
 			);
@@ -714,6 +718,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		CC96AD961ABE59120025896F /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "TAGS=\"TODO:|FIXME:\"\necho \"searching ${SRCROOT} for ${TAGS}\"\nfind \"${SRCROOT}\" \\( -name \"*.swift\" -or -name \"*.m\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | perl -p -e \"s/($TAGS)/ warning: \\$1/\"";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		0D98624A1A1D2C0B00FAD175 /* Sources */ = {
@@ -735,6 +755,7 @@
 				117F495B1A96DA4500A31746 /* EZOutput.m in Sources */,
 				CCB707871AA68A73002BF12B /* NewColorPickerView.swift in Sources */,
 				117F49561A96DA4500A31746 /* EZAudioPlayer.m in Sources */,
+				CC9A11FF1AB9003500BDFA85 /* HomeLoadingView.swift in Sources */,
 				CCCB88D71A994CFF003D68F4 /* AdvancedSettingsController.swift in Sources */,
 				CC9E5ECD1A89A16100B19DF6 /* AlarmsTable.swift in Sources */,
 				0D9862581A1D2C0B00FAD175 /* MusicViewController.swift in Sources */,
