@@ -20,11 +20,7 @@
     vDSP_Length   _log2n;
 }
 
-
-
-
 @property (weak, nonatomic) IBOutlet UILabel *maxBrightnessLabel;
-
 @property (weak, nonatomic) IBOutlet UILabel *bpmLabel;
 @property (weak, nonatomic) IBOutlet UILabel *lowRangeMax;
 @property (weak, nonatomic) IBOutlet UILabel *midRangeMin;
@@ -33,7 +29,6 @@
 @property (weak, nonatomic) IBOutlet UISlider *midFrequencyRangeSlider;
 @property (weak, nonatomic) IBOutlet UILabel *highRangeMin;
 @property (weak, nonatomic) IBOutlet UISlider *highFrequencyRangeSlider;
-
 @end
 
 
@@ -42,28 +37,22 @@
 @synthesize audioPlotTime;
 @synthesize microphone;
 
-
-
 //@property (weak) IBOutlet UILabel *bpmLabel;
 - (IBAction)lowFrequencyRangeSlider:(UISlider *)sender{
     lowFrequencyRangeMax = sender.value;
     _lowRangeMax.text = [NSString stringWithFormat:@"%dhz", (int)sender.value];
     _midRangeMin.text = [NSString stringWithFormat:@"%dhz", (int)sender.value + 1];
     _midFrequencyRangeSlider.minimumValue = (int)sender.value + 1;
-    //    slider.minimumValue = (int)sender.value;
-    //    slider.maximumValue = 3.0f;
 }
 
 - (IBAction)midFrequencyRangeSlider:(UISlider *)sender {
     midFrequencyRangeMax = sender.value;
-    
     if((int)_lowFrequencyRangeSlider.value >= sender.value){
         _lowFrequencyRangeSlider.value = (int)sender.value - 1;
         _lowRangeMax.text = [NSString stringWithFormat:@"%dhz", (int)sender.value - 1];
     }
     _midRangeMax.text = [NSString stringWithFormat:@"%dhz", (int)sender.value];
     _highRangeMin.text = [NSString stringWithFormat:@"%dhz", (int)sender.value + 1];
-    
 }
 
 - (IBAction)highFrequencyRangeSlider:(UISlider *)sender {
@@ -77,7 +66,6 @@
     UISwitch *mySwitch = (UISwitch *)sender;
     if([mySwitch isOn])
     {
-        
         lowTimer = [NSTimer scheduledTimerWithTimeInterval:sensitivity
                                                     target:self
                                                   selector:@selector(updateLowTimerFlag:)
@@ -100,8 +88,6 @@
                                                                  selector:@selector(resetHits:)
                                                                  userInfo:nil
                                                                   repeats:YES];
-        
-        
         /*
          Customizing the audio plot's look
          */
@@ -111,41 +97,30 @@
         self.audioPlotTime.shouldFill      = YES;
         self.audioPlotTime.shouldMirror    = YES;
         self.audioPlotTime.plotType        = EZPlotTypeRolling;
-        
         // Setup frequency domain audio plot
         //    self.audioPlotFreq.backgroundColor = [UIColor colorWithRed: 0.114 green: 0.111 blue: 0.125 alpha: 1];
         //    self.audioPlotFreq.color           = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
         //    self.audioPlotFreq.shouldFill      = YES;
         //    self.audioPlotFreq.plotType        = EZPlotTypeBuffer;
-        
         /*
          Start the microphone
          */
         self.microphone = [EZMicrophone microphoneWithDelegate:self
                                              startsImmediately:YES];
-        
-        
         bridgeSendAPI = [[PHBridgeSendAPI alloc] init];
-        
-        
-        
     } else {
         //Clean up.
         [lowTimer invalidate];
         [midTimer invalidate];
         [highTimer invalidate];
         self.audioPlotTime.backgroundColor = [UIColor colorWithRed: 0.0904 green: 0.0901 blue: 0.105 alpha: 1];
-        
         //        self.audioPlotTime.backgroundColor = nil;
         //        self.audioPlotTime.color           = nil;
         //        self.audioPlotTime.shouldFill      = nil;
         //        self.audioPlotTime.shouldMirror    = nil;
         //        self.audioPlotTime.plotType        = nil;
         self.microphone.stopFetchingAudio;
-        
-        
     }
-    
 }
 
 
@@ -577,6 +552,9 @@ bool throttleSkip = true;
     vDSP_fft_zrip(_FFTSetup, &_A, 1, _log2n, FFT_FORWARD);
     
     // Convert COMPLEX_SPLIT A result to magnitudes
+    float arbitraryMinMagnitude = 10; //This is arbitrary.
+    float arbitraryRunningMaxSoundTax = .10; //10 Percent tax, WOWIE--Thanks Obama.
+    
     float amp[nOver2]; //256
     float maxMag = 0;
     float frequency = 0;
@@ -623,16 +601,13 @@ bool throttleSkip = true;
             }
         }
         
-        //THIS IS SOME RANDOM SHIT-->
         if(mag > maxMag) {
             maxMag = mag;
             index = i;
         }
-        
-        //        maxMag = mag > maxMag ? mag : maxMag;
-        
-        //END OF SOME RANDOM GOBBLYGOOP
     }
+    
+    
     if( (maxMag/previousLoudness) < .33){
         previousLoudness = maxMag;
         return;
@@ -647,7 +622,7 @@ bool throttleSkip = true;
         runningMaxMag = maxMag;
     
     if(runningMaxMag > 10)
-        runningMaxMag = runningMaxMag > maxMag ? (runningMaxMag - 10)  : maxMag;
+        runningMaxMag = runningMaxMag > maxMag ? (runningMaxMag - arbitraryRunningMaxSoundTax)  : maxMag;
     else{
         runningMaxMag = runningMaxMag > maxMag ? (runningMaxMag)  : maxMag;
     }
@@ -665,7 +640,7 @@ bool throttleSkip = true;
         runningFrequency = frequency;
     }
     
-    //    NSLog(@"%f", runningFrequency);
+    
     
     for(int i=0; i<nOver2; i++) {
         // Calculate the magnitude
@@ -676,39 +651,30 @@ bool throttleSkip = true;
     
     
     
-    //    public static double Index2Freq(int i, double samples, int nFFT) {
-    //        return (double) i * (samples / nFFT / 2.);
-    //    }
-    
     float maxSound = data[0];
     for(int i = 0; i < bufferSize; i ++){
         maxSound = maxSound > data[i] ? maxSound  : data[i];
     }
+    
+    
+    
+    
+    /* If the current sample's maxSound/Magnitude is less than the runningMaxSound then lets decrement the runningMaxSound
+     * so that the runningMaxSound --> 0 in the absence of sound.  This helps with determining relative brightness.
+     */
     if(runningMaxSound >= 1)
         runningMaxSound = runningMaxSound > maxSound ? (runningMaxSound - .025)  : maxSound;
     else{
         runningMaxSound = runningMaxSound > maxSound ? (runningMaxSound)  : maxSound;
     }
-    if(maxMag < 15)
-        return;
-    //    NSLog(@"%f", maxMag);
     
     
-    /* Play with the frequency-->Determine high/mid/low*/
-    //        if(maxMag > max){
-    //            max = maxMag;
-    //        }
-    //            NSLog(@"%f", maxMag);
-    //    NSLog(@"%f", runningMaxSound);
-    //        if(maxMag < min){
-    //            min = maxMag;
-    //        } else {
-    //            min = min;
-    //        }
-    // NSLog(@"%f \t %f", max, min);
-    /* Plotting the time domain plot takes around 50-60% CPU... HOLY MOSES */
     
-    //        int magScalar = 2;
+
+    
+    
+    
+
     if(frequency < lowFrequencyRangeMax){
         currentRangeBin = 3;
     } else if(frequency < midFrequencyRangeMax){
@@ -716,42 +682,20 @@ bool throttleSkip = true;
     } else {
         currentRangeBin = 1;
     }
+
     
-    //        if(frequency < (2*runningFrequency/3)){
-    //            currentRangeBin = 3;
-    //        } else if(frequency < runningFrequency + (1*runningFrequency/3)){
-    //            currentRangeBin = 2;
-    //        } else {
-    //            currentRangeBin = 1;
-    //        }
     
-    //    NSLog(@"%f", frequency);
-    
-    //    if(index < maxIndex/3){
-    //        currentRangeBin = 3;
-    //    } else if(index < (2*(maxIndex/3)) ){
-    //        currentRangeBin = 2;
-    //    } else {
-    //        currentRangeBin = 1;
-    //    }
     
     /* Play with the sound-->Determine whether or not to CHANGE bulbs */
     if( (maxSound < 0 && runningMaxSound > 0) || (maxSound > 0 && runningMaxSound < 0) )
         maxSound = maxSound * -1;
-    //    NSLog(@"%f", (runningMaxSound / maxSound));
-    
-    //    NSLog(@"frequency: %f", frequency);
-    //    return;
-    
-    
-    //I think this is LOUD-->FORTISSIMO
-    //            NSLog(@"HARD HIT");
+
+
     
     bool l = false;
     bool m = false;
     bool h = false;
     if( (lMaxMag > 5 && mMaxMag > 5) ){
-        //                    NSLog(@"%f, %f, %f", lMaxMag, mMaxMag, hMaxMag);
         l = true;
         m = true;
     }
@@ -789,38 +733,14 @@ bool throttleSkip = true;
     }
     
     
-    
-    /*
-     else if( (runningMaxSound / maxSound) < 4 ){
-     //This is medium loudness. meto forte
-     //            NSLog(@"MEDIUM HIT");
-     sendChange = true;
-     } else if( (runningMaxSound / maxSound) < 6 ){
-     //This is quiter.
-     //            NSLog(@"SOFT HIT");
-     sendChange = true;
-     }
-     */
-    
-    
-    // NSLog(@"%f", maxSound);
-    
-    /* Plotting frequency domain + FFT --> 3% CPU and minimal memory footprint */
-    // Update the frequency domain plot
-    //    [self.audioPlotFreq updateBuffer:amp
-    //                      withBufferSize:64];
-    
-    //
-    //        // Update time domain plot
-    //        [self.audioPlotTime updateBuffer:data
-    //                          withBufferSize:bufferSize];
-    //
-    
-    
-    //    } else {
-    //        counter = counter + 1;
-    //    }
-    //
+/* (19-MAR-2015 Alma Knudson)
+ * Currently,
+ *
+ *
+ *
+ *
+ *
+ */
     
     //We have the FFT results of the current audio data buffer:
     
@@ -833,27 +753,17 @@ bool throttleSkip = true;
        withBufferSize:(UInt32)bufferSize
  withNumberOfChannels:(UInt32)numberOfChannels {
     dispatch_async(dispatch_get_main_queue(), ^{
-        
-        
-        
-        // Update time domain plot
+    // Update time domain plot
         [self.audioPlotTime updateBuffer:buffer[0]
                           withBufferSize:bufferSize];
-        
-        
-        //We have AUDIO DATA:
-        
-        
-        
+        //We have AUDIO DATA
         // Setup the FFT if it's not already setup
         if( !_isFFTSetup ){
             [self createFFTWithBufferSize:bufferSize withAudioData:buffer[0]];
             _isFFTSetup = YES;
         }
-        
         // Get the FFT data
         [self updateFFTWithBufferSize:bufferSize withAudioData:buffer[0]];
-        
     });
 }
 
@@ -866,90 +776,22 @@ bool throttleSkip = true;
         if([mbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
             mbrs.bulbRange = cell.bulbRange;
             if(cell.bulbRange == 1){
-                //Remove from whichever range/array it was in and add to lows array
-                //                for(MusicBulbRangeSelection *lmbrs in lowBulbs){
-                //                    if([lmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
-                //                        return;
-                //                    }
-                //                }
-                //                for(MusicBulbRangeSelection *mmbrs in midBulbs){
-                //                    if([mmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
-                //                        [midBulbs removeObject:mmbrs];
-                //                    }
-                //                }
-                //                for(MusicBulbRangeSelection *hmbrs in highBulbs){
-                //                    if([hmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
-                //                        [highBulbs removeObject:hmbrs];
-                //                    }
-                //                }
                 [midBulbs removeObject:mbrs];
                 [highBulbs removeObject:mbrs];
-                
                 [lowBulbs insertObject: mbrs atIndex:0];
             } else if (cell.bulbRange == 2){
-                //Remove from whichever range/array it was in and add to mids array
-                //                for(MusicBulbRangeSelection *mmbrs in midBulbs){
-                //                    if([mmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
-                //                        return;
-                //                    }
-                //                }
-                //                for(MusicBulbRangeSelection *lmbrs in lowBulbs){
-                //                    if([lmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
-                //                        [lowBulbs removeObject:lmbrs];
-                //                    }
-                //                }
-                //
-                //                for(MusicBulbRangeSelection *hmbrs in highBulbs){
-                //                    if([hmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
-                //                        [highBulbs removeObject:hmbrs];
-                //                    }
-                //                }
                 [lowBulbs removeObject:mbrs];
                 [highBulbs removeObject:mbrs];
-                
                 [midBulbs insertObject: mbrs atIndex:0];
-                
             } else if (cell.bulbRange == 3){
-                //Remove from whichever range/array it was in and add to highs array
-                //                for(MusicBulbRangeSelection *hmbrs in highBulbs){
-                //                    if([hmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
-                //                        return;
-                //                    }
-                //                }
-                //                for(MusicBulbRangeSelection *lmbrs in lowBulbs){
-                //                    if([lmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
-                //                        [lowBulbs removeObject:lmbrs];
-                //                    }
-                //                }
-                //                for(MusicBulbRangeSelection *mmbrs in midBulbs){
-                //                    if([mmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
-                //                        [midBulbs removeObject:mmbrs];
-                //                    }
-                //                }
                 [lowBulbs removeObject:mbrs];
                 [midBulbs removeObject:mbrs];
-                
                 [highBulbs insertObject: mbrs atIndex:0];
             } else if (cell.bulbRange == 0){
                 //Remove from whichever array it was in.
                 [lowBulbs removeObject:mbrs];
                 [midBulbs removeObject:mbrs];
                 [highBulbs removeObject:mbrs];
-                //                for(MusicBulbRangeSelection *lmbrs in lowBulbs){
-                //                    if([lmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
-                //                        [lowBulbs removeObject:lmbrs];
-                //                    }
-                //                }
-                //                for(MusicBulbRangeSelection *mmbrs in midBulbs){
-                //                    if([mmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
-                //                        [midBulbs removeObject:mmbrs];
-                //                    }
-                //                }
-                //                for(MusicBulbRangeSelection *hmbrs in highBulbs){
-                //                    if([hmbrs.bulbIdentifier isEqualToString:cell.bulbIdentifier]){
-                //                        [highBulbs removeObject:hmbrs];
-                //                    }
-                //                }
             }
         }
     }
