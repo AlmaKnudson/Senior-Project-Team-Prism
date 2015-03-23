@@ -20,7 +20,7 @@
 
 #import "Prism Lights-Bridging-Header.h"
 #import "Prism_Lights-Swift.h"
-
+#import <math.h>
 
 
 /**

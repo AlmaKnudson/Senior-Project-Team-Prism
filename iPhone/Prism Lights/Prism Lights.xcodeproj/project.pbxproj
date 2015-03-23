@@ -668,11 +668,11 @@
 				TargetAttributes = {
 					0D98624D1A1D2C0B00FAD175 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = HD79G6T428;
+						DevelopmentTeam = N7UB2ADRTE;
 					};
 					0D9862641A1D2C0B00FAD175 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = HD79G6T428;
+						DevelopmentTeam = N7UB2ADRTE;
 						TestTargetID = 0D98624D1A1D2C0B00FAD175;
 					};
 				};

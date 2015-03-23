@@ -28,6 +28,7 @@
 @property (weak, nonatomic) IBOutlet UISlider *lowFrequencyRangeSlider;
 @property (weak, nonatomic) IBOutlet UISlider *midFrequencyRangeSlider;
 @property (weak, nonatomic) IBOutlet UILabel *highRangeMin;
+@property (weak, nonatomic) IBOutlet UILabel *highRangeMax;
 @property (weak, nonatomic) IBOutlet UISlider *highFrequencyRangeSlider;
 @end
 
@@ -173,6 +174,7 @@
 
 //Counter
 int counter;
+double maxFrequency = 1200;
 float min = 500;
 float max = 500;
 int currentRangeBin;
@@ -205,8 +207,8 @@ NSMutableArray *lowBulbs;
 
 //Sensitivity is how often can a bulb change... 1 means once per second. .25 means 4 times per second and 5 means 1 time in every 5 seconds.
 
-int lowFrequencyRangeMax = 1500;
-int midFrequencyRangeMax = 2700;
+int lowFrequencyRangeMax = 800;
+int midFrequencyRangeMax = 1500;
 int maxBrightness = 254;
 float sensitivity = 1;
 float previousLoudness = 100000;
@@ -295,9 +297,25 @@ bool throttleSkip = true;
 
 - (void)updateHighBulbs:(int)intensity withFrequency:(float)frequency
 {
+//    NSLog(@"%f", frequency);
+//    if (maxFrequency < (frequency - 100) ) {
+        //Update
+        
+        /*
+         _midRangeMax.text = [NSString stringWithFormat:@"%dhz", (int)sender.value];
+         _highRangeMin.text = [NSString stringWithFormat:@"%dhz", (int)sender.value + 1];
+         */
+        
+//        maxFrequency = frequency;
+//        _highRangeMax.text = [NSString stringWithFormat:@"%ihz", (int)frequency];
+//        _highFrequencyRangeSlider.maximumValue = frequency; //[NSString stringWithFormat:@"%fhz", frequency];
+//        _lowFrequencyRangeSlider.value = frequency; //[NSString stringWithFormat:@"%fhz", frequency];
+//    }
     //    if(fabsf( (frequency-lastHigh) ) < 10)
     //        if(!highsFlag)
     //            return;
+
+
     if(highsFlag){
         NSInteger temp = highs[highsIndex];
         if(highsIndex + 1 > 3){
@@ -374,40 +392,37 @@ bool throttleSkip = true;
     //        if(!lowsFlag)
     //            return;
     //    }
-    if(lowsFlag)
-    {
-        NSInteger temp = lows[lowsIndex];
-        if(lowsIndex + 1 > 3){
-            lowsIndex = 0;
-        } else{
-            lowsIndex = lowsIndex + 1;
-        }
-        int r = arc4random() % 18180 + temp;
-        while(fabs((double) r - lastLowHue) < 2000){
-            r = arc4random() % 18180 + temp;
-        }
-        lastLowHue = r;
-        NSInteger hueVal = r;
-        
-        NSString *identifierGRRR;
-        
-        for (MusicBulbRangeSelection *mbrs in lowBulbs){
-            //            if(mbrs.bulbRange  == 1){
-            identifierGRRR = mbrs.bulbIdentifier;
-            bool f = (((int)intensity % 2) == 0);
-            if(f)
-                [self setBulb:identifierGRRR withSaturation:@254 withBrightness:[NSNumber numberWithInteger:intensity] withHue:[NSNumber numberWithInteger:(NSInteger) hueVal]];
-            else
-                [self setBulb:identifierGRRR withSaturation:@254 withBrightness:@0 withHue:[NSNumber numberWithInteger:(NSInteger) hueVal]];
-            //remove mbrs and add it to the end..
-            //                [midBulbs removeObject:mbrs];
-            //                [musicBulbs insertObject:mbrs atIndex:musicBulbs.count];
-            //            }
-        }
-        //        NSLog(@"LOWS-->Brightness: %f \t Color: %li \t frequency: %f", intensity, (long)hueVal, frequency);
-        
+    
+    NSInteger temp = lows[lowsIndex];
+    if(lowsIndex + 1 > 3){
+        lowsIndex = 0;
+    } else{
+        lowsIndex = lowsIndex + 1;
     }
-    lowsFlag = false;
+    int r = arc4random() % 18180 + temp;
+    while(fabs((double) r - lastLowHue) < 2000){
+        r = arc4random() % 18180 + temp;
+    }
+    lastLowHue = r;
+    NSInteger hueVal = r;
+    
+    NSString *identifierGRRR;
+    
+    for (MusicBulbRangeSelection *mbrs in lowBulbs){
+        //            if(mbrs.bulbRange  == 1){
+        identifierGRRR = mbrs.bulbIdentifier;
+        bool f = (((int)intensity % 2) == 0);
+        if(f)
+            [self setBulb:identifierGRRR withSaturation:@254 withBrightness:[NSNumber numberWithInteger:intensity] withHue:[NSNumber numberWithInteger:(NSInteger) hueVal]];
+        else
+            [self setBulb:identifierGRRR withSaturation:@254 withBrightness:@0 withHue:[NSNumber numberWithInteger:(NSInteger) hueVal]];
+        //remove mbrs and add it to the end..
+        //                [midBulbs removeObject:mbrs];
+        //                [musicBulbs insertObject:mbrs atIndex:musicBulbs.count];
+        //            }
+    }
+    //        NSLog(@"LOWS-->Brightness: %f \t Color: %li \t frequency: %f", intensity, (long)hueVal, frequency);
+    
 }
 
 -(void)updateLowTimerFlag:(NSTimer *)timer
@@ -553,7 +568,7 @@ bool throttleSkip = true;
     
     // Convert COMPLEX_SPLIT A result to magnitudes
     float arbitraryMinMagnitude = 10; //This is arbitrary.
-    float arbitraryRunningMaxSoundTax = .10; //10 Percent tax, WOWIE--Thanks Obama.
+    float arbitraryRunningMaxSoundTax = 100; //10 Percent tax, WOWIE--Thanks Obama.
     
     float amp[nOver2]; //256
     float maxMag = 0;
@@ -567,11 +582,22 @@ bool throttleSkip = true;
     float frequencyTotal = 0;
     
     float lMaxMag = 0;
+    //I use these indices to determine a variance by calculating a running avergage and keeping it in maxMadIndexTotal
+    //Hypothesis: By only changing the bulbs at indices/frequencies that are within range with respect to the variance
+    //I will be able to filter out outliers/noise that does not provide meaning.  Also, songs can change drastically so
+    // I will only calculate the average using the previous 1mm samples (sample rate --> 41k/sec).
+    int deviationThreshold = 15; //Need to allow user to adjust this to also increase sensitivity
     int lMaxMagIndex = 0;
+    int lMaxMagIndexTotal = 0;
+    int lSampleCount = 0;
     float mMaxMag = 0;
     int mMaxMagIndex = 0;
+    int mMaxMagIndexTotal = 0;
+    int mSampleCount = 0;
     float hMaxMag = 0;
     int hMaxMagIndex = 0;
+    int hMaxMagIndexTotal = 0;
+    int hSampleCount = 0;
     //    int lowIndex = 0;
     //    int midIndex = 0;
     //    int highIndex = 0;
@@ -621,7 +647,7 @@ bool throttleSkip = true;
     if(maxMag > runningMaxMag)
         runningMaxMag = maxMag;
     
-    if(runningMaxMag > 10)
+    if(runningMaxMag > 100)
         runningMaxMag = runningMaxMag > maxMag ? (runningMaxMag - arbitraryRunningMaxSoundTax)  : maxMag;
     else{
         runningMaxMag = runningMaxMag > maxMag ? (runningMaxMag)  : maxMag;
@@ -670,27 +696,27 @@ bool throttleSkip = true;
     
     
     
-
     
     
     
-
-    if(frequency < lowFrequencyRangeMax){
+    
+    
+    if(frequency < lowFrequencyRangeMax && frequency > 350){
         currentRangeBin = 3;
     } else if(frequency < midFrequencyRangeMax){
         currentRangeBin = 2;
     } else {
         currentRangeBin = 1;
     }
-
+    
     
     
     
     /* Play with the sound-->Determine whether or not to CHANGE bulbs */
     if( (maxSound < 0 && runningMaxSound > 0) || (maxSound > 0 && runningMaxSound < 0) )
         maxSound = maxSound * -1;
-
-
+    
+    
     
     bool l = false;
     bool m = false;
@@ -709,38 +735,117 @@ bool throttleSkip = true;
     }
     
     
-    int brightness = ((maxMag / runningMaxMag)*maxBrightness);
-    
+    int brightness = fmax((maxMag / runningMaxMag)*maxBrightness, (maxBrightness/2));
+    if (brightness < (maxBrightness/2)){
+        brightness = (maxBrightness/2) + brightness;
+    }
     
     //    brightness = max((double)brightness, (double)maxBrightness);
     
-    //        NSLog(@"Brightness:%x", brightness);
+//            NSLog(@"Brightness:%d", brightness);
     if(currentRangeBin == 1 || h){
         //SEND CHANGE TO BIN 1
         //                    NSLog(@"HIGH");
         //[self createFFTWithBufferSize:bufferSize withAudioData:buffer[0]];
-        [self updateHighBulbs:brightness withFrequency:frequency];
+        //        [self updateHighBulbs:brightness withFrequency:frequency];
+        
+        if (hSampleCount > 1000000){
+            //low sample count needs to be reset to 2.
+            hSampleCount = 2;
+            hMaxMagIndexTotal = hMaxMagIndexTotal + hMaxMagIndex;
+        } else {
+            //Increment sample count and adjust average.
+            hSampleCount ++;
+            hMaxMagIndexTotal = hMaxMagIndexTotal + hMaxMagIndex;
+        }
+        
+        if(highsFlag)
+        {
+//            int avg = hMaxMagIndexTotal/hSampleCount;
+//            double deviation = fabs(hMaxMagIndex - sqrt((double)avg));
+            //            NSLog(@"Deviation: %f, %x, %d, %f", deviation, lSampleCount, lMaxMagIndex, ((double)lMaxMagIndex/(double)lhs));
+//            if (deviation < deviationThreshold) {
+            
+                //                    NSLog(@"Deviation: %f, %x, %d, %f", deviation, hSampleCount, hMaxMagIndex, ((double)hMaxMagIndex/(double)lhs));
+                //                    NSLog(@"Frequency: %f, %f", frequency, maxMag);
+                [self updateHighBulbs:brightness withFrequency:frequency];
+//            }
+            highsFlag = false;
+        }
+        
     }
     if(currentRangeBin == 2 || m) {
         //SEND CHANGE TO BIN 2
-        //                     NSLog(@"MID");
-        [self updateMidBulbs:brightness withFrequency:frequency];
+        
+        //        [self updateMidBulbs:brightness withFrequency:frequency];
+        
+        
+        if (mSampleCount > 1000000){
+            //low sample count needs to be reset to 2.
+            mSampleCount = 2;
+            mMaxMagIndexTotal = mMaxMagIndexTotal + mMaxMagIndex;
+        } else {
+            //Increment sample count and adjust average.
+            mSampleCount ++;
+            mMaxMagIndexTotal = mMaxMagIndexTotal + mMaxMagIndex;
+        }
+//         NSLog(@"MID, %f" , mMaxMag);
+        if(midsFlag)
+        {
+            int avg = mMaxMagIndexTotal/mSampleCount;
+            double deviation = fabs(mMaxMagIndex - sqrt((double)avg));
+//                        NSLog(@"Deviation: %f, %x, %d, %f", deviation, mSampleCount, mMaxMagIndex, ((double)mMaxMagIndex/(double)lhs));
+//            if (deviation < deviationThreshold) {
+            
+//                NSLog(@"Deviation: %f, %x, %d, %f", deviation, mSampleCount, mMaxMagIndex, ((double)mMaxMagIndex/(double)lhs));
+//                NSLog(@"Frequency: %f, %f", frequency, maxMag);
+                [self updateMidBulbs:brightness withFrequency:frequency];
+//            }
+            midsFlag = false;
+        }
+        
     }
     if(currentRangeBin == 3 || l){
         //SNED CHANGE TO BIN 3
-        //                     NSLog(@"LOW");
-        [self updateLowBulbs:brightness withFrequency:frequency];
+        //                             NSLog(@"LOW");
+        
+        /*
+         * Check Variance and determine whether or not I should send out this change.
+         */
+        
+        if (lSampleCount > 1000000){
+            //low sample count needs to be reset to 2.
+            lSampleCount = 2;
+            lMaxMagIndexTotal = lMaxMagIndexTotal + lMaxMagIndex;
+        } else {
+            //Increment sample count and adjust average.
+            lSampleCount ++;
+            lMaxMagIndexTotal = lMaxMagIndexTotal + lMaxMagIndex;
+        }
+        
+        if(lowsFlag)
+        {
+            int avg = lMaxMagIndexTotal/lSampleCount;
+            double deviation = fabs(lMaxMagIndex - sqrt((double)avg));
+            //            NSLog(@"Deviation: %f, %x, %d, %f", deviation, lSampleCount, lMaxMagIndex, ((double)lMaxMagIndex/(double)lhs));
+            if (deviation < deviationThreshold) {
+                //                    NSLog(@"Deviation: %f, %x, %d, %f", deviation, lSampleCount, lMaxMagIndex, ((double)lMaxMagIndex/(double)lhs));
+                //                     NSLog(@"Frequency: %f, %f", frequency, maxMag);
+                [self updateLowBulbs:brightness withFrequency:frequency];
+            }
+            lowsFlag = false;
+        }
     }
     
     
-/* (19-MAR-2015 Alma Knudson)
- * Currently,
- *
- *
- *
- *
- *
- */
+    /* (19-MAR-2015 Alma Knudson)
+     * Currently,
+     *
+     *
+     *
+     *
+     *
+     */
     
     //We have the FFT results of the current audio data buffer:
     
@@ -753,7 +858,7 @@ bool throttleSkip = true;
        withBufferSize:(UInt32)bufferSize
  withNumberOfChannels:(UInt32)numberOfChannels {
     dispatch_async(dispatch_get_main_queue(), ^{
-    // Update time domain plot
+        // Update time domain plot
         [self.audioPlotTime updateBuffer:buffer[0]
                           withBufferSize:bufferSize];
         //We have AUDIO DATA
@@ -799,7 +904,7 @@ bool throttleSkip = true;
 
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-//    self.microphone.stopFetchingAudio;
+    //    self.microphone.stopFetchingAudio;
     if ([segue.identifier isEqualToString:@"musicLights"]) {
         MusicSelectBulbsViewController *destViewController = (MusicSelectBulbsViewController *)segue.destinationViewController;
         destViewController.moses = musicBulbs;
