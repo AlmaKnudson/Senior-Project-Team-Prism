@@ -222,9 +222,6 @@
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="hOD-FU-zih">
                                 <rect key="frame" x="110" y="48" width="409" height="74"/>
                                 <color key="tintColor" red="0.67615609219999995" green="0.0" blue="0.033951910420000002" alpha="1" colorSpace="calibratedRGB"/>
-                                <variation key="widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="110" y="48" width="209" height="72"/>
-                                </variation>
                                 <connections>
                                     <action selector="BrightnessFinished:" destination="jXd-oy-Uyn" eventType="touchUpInside" id="7kC-bF-oL6"/>
                                     <action selector="BrightnessFinishedOutside:" destination="jXd-oy-Uyn" eventType="touchUpOutside" id="FbO-wR-bWn"/>
@@ -242,9 +239,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
-                                <variation key="widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="16" y="71" width="88" height="26"/>
-                                </variation>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Np1-3E-9WZ">
                                 <rect key="frame" x="74" y="4" width="510" height="30"/>
@@ -1203,6 +1197,7 @@
             </objects>
             <point key="canvasLocation" x="1446" y="2378"/>
         </scene>
+
         <!--Colors-->
         <scene sceneID="dC2-5G-Mo8">
             <objects>
@@ -1299,7 +1294,7 @@
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="Tjk-Ua-o1F">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="Tjk-Ua-o1F" customClass="ColorPaletteCell" customModule="Prism_Lights" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -1308,7 +1303,7 @@
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kQR-bY-qOh" customClass="ColorView" customModule="Prism_Lights" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="number" keyPath="roundness">
                                                     <real key="value" value="25"/>
@@ -1320,21 +1315,36 @@
                                                     <color key="value" red="0.95686274510000002" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
-                                            <variation key="widthClass=compact" fixedFrame="YES">
-                                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                            </variation>
                                         </view>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="kQR-bY-qOh" secondAttribute="bottom" id="Arq-3s-VFZ"/>
+                                    <constraint firstItem="kQR-bY-qOh" firstAttribute="top" secondItem="Tjk-Ua-o1F" secondAttribute="top" id="csu-cF-ALj"/>
+                                    <constraint firstItem="kQR-bY-qOh" firstAttribute="leading" secondItem="Tjk-Ua-o1F" secondAttribute="leading" id="eVP-pb-6Ny"/>
+                                    <constraint firstAttribute="trailing" secondItem="kQR-bY-qOh" secondAttribute="trailing" id="nS6-ux-X4G"/>
+                                </constraints>
                                 <variation key="default">
                                     <mask key="subviews">
                                         <exclude reference="kQR-bY-qOh"/>
+                                    </mask>
+                                    <mask key="constraints">
+                                        <exclude reference="Arq-3s-VFZ"/>
+                                        <exclude reference="csu-cF-ALj"/>
+                                        <exclude reference="eVP-pb-6Ny"/>
+                                        <exclude reference="nS6-ux-X4G"/>
                                     </mask>
                                 </variation>
                                 <variation key="widthClass=compact">
                                     <mask key="subviews">
                                         <include reference="kQR-bY-qOh"/>
+                                    </mask>
+                                    <mask key="constraints">
+                                        <include reference="Arq-3s-VFZ"/>
+                                        <include reference="csu-cF-ALj"/>
+                                        <include reference="eVP-pb-6Ny"/>
+                                        <include reference="nS6-ux-X4G"/>
                                     </mask>
                                 </variation>
                             </collectionViewCell>
