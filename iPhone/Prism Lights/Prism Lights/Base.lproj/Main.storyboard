@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
@@ -1212,6 +1212,7 @@
                         <viewControllerLayoutGuide type="bottom" id="oHF-3G-cnr"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="w82-Ha-0fM">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ijz-Md-V6d">
@@ -1289,6 +1290,7 @@
             <objects>
                 <collectionViewController id="jWQ-VK-QWA" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="muz-Jc-GKl">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Awi-Ag-hhg">
                             <size key="itemSize" width="50" height="50"/>
@@ -1775,14 +1777,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tpv-D8-UH5" customClass="EZAudioPlotGL">
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tpv-D8-UH5" customClass="EZAudioPlotGL">
                                 <rect key="frame" x="0.0" y="64" width="600" height="35"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <variation key="heightClass=regular-widthClass=regular" ambiguous="YES">
                                     <rect key="frame" x="0.0" y="0.0" width="0.0" height="0.0"/>
                                 </variation>
                             </view>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="dJx-rp-aV8">
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="dJx-rp-aV8">
                                 <rect key="frame" x="276" y="512" width="51" height="31"/>
                                 <color key="onTintColor" red="0.95686274510000002" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="thumbTintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -1790,13 +1792,13 @@
                                     <action selector="startListening:" destination="FhO-Vs-WhA" eventType="valueChanged" id="UFi-G4-qPh"/>
                                 </connections>
                             </switch>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oRH-cO-GdM">
+                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oRH-cO-GdM">
                                 <rect key="frame" x="133" y="255" width="335" height="249"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="afB-JD-ms5">
+                                    <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="afB-JD-ms5">
                                         <rect key="frame" x="2" y="2" width="331" height="245"/>
                                         <subviews>
-                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="400" minValue="100" maxValue="600" translatesAutoresizingMaskIntoConstraints="NO" id="Y6I-wJ-M2z">
+                                            <slider opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="400" minValue="100" maxValue="600" translatesAutoresizingMaskIntoConstraints="NO" id="Y6I-wJ-M2z">
                                                 <rect key="frame" x="67" y="44" width="200" height="31"/>
                                                 <color key="minimumTrackTintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <color key="maximumTrackTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1804,7 +1806,7 @@
                                                     <action selector="lowFrequencyRangeSlider:" destination="FhO-Vs-WhA" eventType="valueChanged" id="TTk-dt-Ywo"/>
                                                 </connections>
                                             </slider>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Frequency Ranges" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gg3-Ey-0Vh">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Frequency Ranges" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gg3-Ey-0Vh">
                                                 <rect key="frame" x="88" y="8" width="158" height="21"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="158" id="Cvf-kb-NHD"/>
@@ -1820,20 +1822,20 @@
                                                     </mask>
                                                 </variation>
                                             </label>
-                                            <slider opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="4000" minValue="2700" maxValue="4000" translatesAutoresizingMaskIntoConstraints="NO" id="YkB-M1-jA2">
+                                            <slider opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="4000" minValue="2700" maxValue="4000" translatesAutoresizingMaskIntoConstraints="NO" id="YkB-M1-jA2">
                                                 <rect key="frame" x="67" y="178" width="199" height="31"/>
                                                 <color key="minimumTrackTintColor" red="0.95686274510000002" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <connections>
                                                     <action selector="highFrequencyRangeSlider:" destination="FhO-Vs-WhA" eventType="valueChanged" id="ed0-NS-ODn"/>
                                                 </connections>
                                             </slider>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1800hz" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rAh-as-ACs">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="1800hz" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rAh-as-ACs">
                                                 <rect key="frame" x="273" y="182" width="50" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="901hz" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2pj-PY-Hsd">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="901hz" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2pj-PY-Hsd">
                                                 <rect key="frame" x="8" y="182" width="50" height="21"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="50" id="dFY-C4-ag3"/>
@@ -1852,7 +1854,7 @@
                                                     </mask>
                                                 </variation>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="401hz" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yak-tD-0Km">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="401hz" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yak-tD-0Km">
                                                 <rect key="frame" x="8" y="115" width="57" height="21"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="21" id="2ZA-he-nSV"/>
@@ -1873,13 +1875,13 @@
                                                     </mask>
                                                 </variation>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="900hz" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ba0-na-0SZ">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="900hz" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ba0-na-0SZ">
                                                 <rect key="frame" x="273" y="115" width="50" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="600" minValue="401" maxValue="900" translatesAutoresizingMaskIntoConstraints="NO" id="qQd-R7-HoZ">
+                                            <slider opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="600" minValue="401" maxValue="900" translatesAutoresizingMaskIntoConstraints="NO" id="qQd-R7-HoZ">
                                                 <rect key="frame" x="66" y="111" width="199" height="31"/>
                                                 <color key="minimumTrackTintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <color key="maximumTrackTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1887,7 +1889,7 @@
                                                     <action selector="midFrequencyRangeSlider:" destination="FhO-Vs-WhA" eventType="valueChanged" id="qy0-Aw-5oc"/>
                                                 </connections>
                                             </slider>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mid Range" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ap1-s9-l8D">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Mid Range" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ap1-s9-l8D">
                                                 <rect key="frame" x="122" y="149" width="87" height="21"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="87" id="0Ol-AM-5J4"/>
@@ -1909,7 +1911,7 @@
                                                     </mask>
                                                 </variation>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="400hz" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c5g-dp-gc4">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="400hz" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c5g-dp-gc4">
                                                 <rect key="frame" x="272" y="48" width="57" height="21"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="21" id="lE8-F1-TQo"/>
@@ -1923,7 +1925,7 @@
                                                     </mask>
                                                 </variation>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100hz" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K0B-vl-5XL">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="100hz" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K0B-vl-5XL">
                                                 <rect key="frame" x="8" y="48" width="42" height="21"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="21" id="xcy-om-HWX"/>
@@ -1942,7 +1944,7 @@
                                                     </mask>
                                                 </variation>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Low Range" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="blS-XL-LtR">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Low Range" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="blS-XL-LtR">
                                                 <rect key="frame" x="119" y="82" width="91" height="21"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="91" id="vXg-hn-HNH"/>
@@ -1961,7 +1963,7 @@
                                                     </mask>
                                                 </variation>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="High Range" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ec7-lK-1g5">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="High Range" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ec7-lK-1g5">
                                                 <rect key="frame" x="119" y="216" width="94" height="21"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="94" id="xsd-HL-2rs"/>
@@ -2032,12 +2034,12 @@
                                                 <exclude reference="45O-NO-Umk"/>
                                                 <exclude reference="67b-kB-Le9"/>
                                                 <exclude reference="yGj-WV-Sfi"/>
-                                                <exclude reference="WBf-lZ-DhU"/>
-                                                <exclude reference="ZC6-z5-3Gc"/>
-                                                <exclude reference="qDI-on-7dE"/>
                                                 <exclude reference="4WJ-BG-tWj"/>
                                                 <exclude reference="mCA-wL-Ebl"/>
                                                 <exclude reference="oic-Fy-zhA"/>
+                                                <exclude reference="WBf-lZ-DhU"/>
+                                                <exclude reference="ZC6-z5-3Gc"/>
+                                                <exclude reference="qDI-on-7dE"/>
                                                 <exclude reference="Xxo-Pa-5Mo"/>
                                                 <exclude reference="gcG-SG-WJn"/>
                                                 <exclude reference="roF-fZ-Sjh"/>
@@ -2079,12 +2081,12 @@
                                                 <include reference="45O-NO-Umk"/>
                                                 <include reference="67b-kB-Le9"/>
                                                 <include reference="yGj-WV-Sfi"/>
-                                                <include reference="WBf-lZ-DhU"/>
-                                                <include reference="ZC6-z5-3Gc"/>
-                                                <include reference="qDI-on-7dE"/>
                                                 <include reference="4WJ-BG-tWj"/>
                                                 <include reference="mCA-wL-Ebl"/>
                                                 <include reference="oic-Fy-zhA"/>
+                                                <include reference="WBf-lZ-DhU"/>
+                                                <include reference="ZC6-z5-3Gc"/>
+                                                <include reference="qDI-on-7dE"/>
                                                 <include reference="Xxo-Pa-5Mo"/>
                                                 <include reference="gcG-SG-WJn"/>
                                                 <include reference="roF-fZ-Sjh"/>
@@ -2142,13 +2144,13 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LTR-UT-yRB">
+                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LTR-UT-yRB">
                                 <rect key="frame" x="133" y="123" width="335" height="124"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rhv-zL-NF4">
+                                    <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rhv-zL-NF4">
                                         <rect key="frame" x="2" y="2" width="331" height="120"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Max Brightness" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g3L-7s-crS">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Max Brightness" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g3L-7s-crS">
                                                 <rect key="frame" x="104" y="91" width="122" height="21"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="122" id="xVI-0c-j51"/>
@@ -2169,7 +2171,7 @@
                                                     </mask>
                                                 </variation>
                                             </label>
-                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="200" minValue="0.0" maxValue="254" translatesAutoresizingMaskIntoConstraints="NO" id="9Fd-NA-jbd">
+                                            <slider opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="200" minValue="0.0" maxValue="254" translatesAutoresizingMaskIntoConstraints="NO" id="9Fd-NA-jbd">
                                                 <rect key="frame" x="45" y="61" width="240" height="31"/>
                                                 <color key="minimumTrackTintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <color key="maximumTrackTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -2183,7 +2185,7 @@
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="120" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BYn-0c-c6w">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="120" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BYn-0c-c6w">
                                                 <rect key="frame" x="291" y="6" width="42" height="18"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="42" id="V9l-4Q-yge"/>
@@ -2218,7 +2220,7 @@
                                                     </mask>
                                                 </variation>
                                             </label>
-                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="120" minValue="60" maxValue="180" translatesAutoresizingMaskIntoConstraints="NO" id="cjC-5K-vOh">
+                                            <slider opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="120" minValue="60" maxValue="180" translatesAutoresizingMaskIntoConstraints="NO" id="cjC-5K-vOh">
                                                 <rect key="frame" x="45" y="0.0" width="240" height="31"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="236" id="b5k-Gz-ejj"/>
@@ -2264,6 +2266,11 @@
                                                 <exclude reference="HAv-fz-gS4"/>
                                             </mask>
                                             <mask key="constraints">
+                                                <exclude reference="VTm-yb-H5x"/>
+                                                <exclude reference="foe-u7-7dV"/>
+                                                <exclude reference="tpi-Y1-d0O"/>
+                                                <exclude reference="VgA-al-JxS"/>
+                                                <exclude reference="jWo-Gq-MhA"/>
                                                 <exclude reference="0Zz-m7-ZNJ"/>
                                                 <exclude reference="2T9-1f-ffK"/>
                                                 <exclude reference="m5f-Mz-E46"/>
@@ -2272,8 +2279,6 @@
                                                 <exclude reference="iNW-yC-ncp"/>
                                                 <exclude reference="ilf-4G-fWk"/>
                                                 <exclude reference="v7p-t9-Z0s"/>
-                                                <exclude reference="VgA-al-JxS"/>
-                                                <exclude reference="jWo-Gq-MhA"/>
                                                 <exclude reference="8RQ-iK-nVN"/>
                                                 <exclude reference="kLj-Gq-dO4"/>
                                                 <exclude reference="p0J-dv-jNA"/>
@@ -2281,9 +2286,6 @@
                                                 <exclude reference="G20-i8-wwB"/>
                                                 <exclude reference="i1Y-by-qLm"/>
                                                 <exclude reference="xE2-3j-owQ"/>
-                                                <exclude reference="VTm-yb-H5x"/>
-                                                <exclude reference="foe-u7-7dV"/>
-                                                <exclude reference="tpi-Y1-d0O"/>
                                             </mask>
                                         </variation>
                                         <variation key="widthClass=compact">
@@ -2292,6 +2294,11 @@
                                                 <include reference="HAv-fz-gS4"/>
                                             </mask>
                                             <mask key="constraints">
+                                                <include reference="VTm-yb-H5x"/>
+                                                <include reference="foe-u7-7dV"/>
+                                                <include reference="tpi-Y1-d0O"/>
+                                                <include reference="VgA-al-JxS"/>
+                                                <include reference="jWo-Gq-MhA"/>
                                                 <include reference="0Zz-m7-ZNJ"/>
                                                 <include reference="2T9-1f-ffK"/>
                                                 <include reference="m5f-Mz-E46"/>
@@ -2300,8 +2307,6 @@
                                                 <include reference="iNW-yC-ncp"/>
                                                 <include reference="ilf-4G-fWk"/>
                                                 <include reference="v7p-t9-Z0s"/>
-                                                <include reference="VgA-al-JxS"/>
-                                                <include reference="jWo-Gq-MhA"/>
                                                 <include reference="8RQ-iK-nVN"/>
                                                 <include reference="kLj-Gq-dO4"/>
                                                 <include reference="p0J-dv-jNA"/>
@@ -2309,9 +2314,6 @@
                                                 <include reference="G20-i8-wwB"/>
                                                 <include reference="i1Y-by-qLm"/>
                                                 <include reference="xE2-3j-owQ"/>
-                                                <include reference="VTm-yb-H5x"/>
-                                                <include reference="foe-u7-7dV"/>
-                                                <include reference="tpi-Y1-d0O"/>
                                             </mask>
                                         </variation>
                                     </view>
@@ -2377,6 +2379,9 @@
                                 <exclude reference="udJ-67-eDA"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="Q2a-9U-Pdg"/>
+                                <exclude reference="aeC-jz-tq2"/>
+                                <exclude reference="lhf-ZP-bS9"/>
                                 <exclude reference="Gqf-YM-ltU"/>
                                 <exclude reference="KSh-ht-egj"/>
                                 <exclude reference="Sg8-XV-qaa"/>
@@ -2391,9 +2396,6 @@
                                 <exclude reference="vO1-AU-9DS"/>
                                 <exclude reference="OZZ-BI-NFz"/>
                                 <exclude reference="U1E-Za-1OI"/>
-                                <exclude reference="Q2a-9U-Pdg"/>
-                                <exclude reference="aeC-jz-tq2"/>
-                                <exclude reference="lhf-ZP-bS9"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -2401,6 +2403,9 @@
                                 <include reference="udJ-67-eDA"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="Q2a-9U-Pdg"/>
+                                <include reference="aeC-jz-tq2"/>
+                                <include reference="lhf-ZP-bS9"/>
                                 <include reference="Gqf-YM-ltU"/>
                                 <include reference="KSh-ht-egj"/>
                                 <include reference="Sg8-XV-qaa"/>
@@ -2415,9 +2420,6 @@
                                 <include reference="vO1-AU-9DS"/>
                                 <include reference="OZZ-BI-NFz"/>
                                 <include reference="U1E-Za-1OI"/>
-                                <include reference="Q2a-9U-Pdg"/>
-                                <include reference="aeC-jz-tq2"/>
-                                <include reference="lhf-ZP-bS9"/>
                             </mask>
                         </variation>
                     </view>

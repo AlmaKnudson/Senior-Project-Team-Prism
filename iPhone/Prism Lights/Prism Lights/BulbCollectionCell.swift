@@ -21,18 +21,32 @@ class BulbCollectionCell : UICollectionViewCell{
         if(on){
             top_bulb!.image = UIImage(named: "bulb_top")
             bottom_bulb!.image = UIImage(named: "bulb_bottom")
+            if animate {
+                var pulseAnimation:CABasicAnimation = CABasicAnimation(keyPath: "opacity");
+                pulseAnimation.duration = 3.0;
+                pulseAnimation.toValue = NSNumber(float: 1.0);
+                pulseAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut);
+                pulseAnimation.autoreverses = false;
+                pulseAnimation.repeatCount = 1;
+                self.top_bulb.layer.addAnimation(pulseAnimation, forKey: nil)
+            }
         } else{
-            top_bulb!.image = UIImage(named: "bulb_absent")
+            top_bulb!.image = UIImage(named: "bulb_top")
             bottom_bulb!.image = UIImage(named: "bulb_bottom")
+            
+            if animate {
+                var pulseAnimation:CABasicAnimation = CABasicAnimation(keyPath: "opacity");
+                pulseAnimation.duration = 3.0;
+                pulseAnimation.toValue = NSNumber(float: 0.1);
+                pulseAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut);
+                pulseAnimation.autoreverses = false;
+                pulseAnimation.repeatCount = 1;
+                self.top_bulb.layer.addAnimation(pulseAnimation, forKey: nil)
+            }
+            
         }
         
-        var pulseAnimation:CABasicAnimation = CABasicAnimation(keyPath: "opacity");
-        pulseAnimation.duration = 3.0;
-        pulseAnimation.toValue = NSNumber(float: 0.0);
-        pulseAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut);
-        pulseAnimation.autoreverses = true;
-        pulseAnimation.repeatCount = FLT_MAX;
-        self.top_bulb.layer.addAnimation(pulseAnimation, forKey: nil)
+        
         
         
     }
@@ -85,11 +99,11 @@ class BulbCollectionCell : UICollectionViewCell{
         UIGraphicsEndImageContext();
         
         top_bulb!.image = coloredImage
-    
-
+        
+        
     }
     
-
+    
     func SetBulbColor(color:UIColor){
         
         //Load image
@@ -117,7 +131,7 @@ class BulbCollectionCell : UICollectionViewCell{
         UIGraphicsEndImageContext();
         
         top_bulb!.image = coloredImage
-        }
+    }
     
 }
 

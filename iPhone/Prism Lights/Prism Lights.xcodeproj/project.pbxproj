@@ -86,6 +86,7 @@
 		CCB707861AA68A73002BF12B /* ColorSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB707831AA68A73002BF12B /* ColorSelectorView.swift */; };
 		CCB707871AA68A73002BF12B /* NewColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB707841AA68A73002BF12B /* NewColorPickerView.swift */; };
 		CCC54A371ABF1AC4003FF0E2 /* Lights.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC54A361ABF1AC4003FF0E2 /* Lights.swift */; };
+		CCC54A381AC0FAC5003FF0E2 /* Info_API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD59311A780140008B209D /* Info_API.swift */; };
 		CCCB88D51A98D808003D68F4 /* Alarms.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCB88D41A98D808003D68F4 /* Alarms.swift */; };
 		CCCB88D71A994CFF003D68F4 /* AdvancedSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCB88D61A994CFF003D68F4 /* AdvancedSettingsController.swift */; };
 		CCCB88DC1A9BAAD8003D68F4 /* AlarmDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCB88DB1A9BAAD8003D68F4 /* AlarmDetail.swift */; };
@@ -94,7 +95,6 @@
 		CCCD592A1A7800FE008B209D /* Scenes_API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD59291A7800FE008B209D /* Scenes_API.swift */; };
 		CCCD592E1A78011E008B209D /* Rules_API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD592D1A78011E008B209D /* Rules_API.swift */; };
 		CCCD59301A78012F008B209D /* Configuration_API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD592F1A78012F008B209D /* Configuration_API.swift */; };
-		CCCD59321A780140008B209D /* Info_API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD59311A780140008B209D /* Info_API.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -669,16 +669,16 @@
 		0D9862461A1D2C0B00FAD175 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0620;
 				ORGANIZATIONNAME = Prism;
 				TargetAttributes = {
 					0D98624D1A1D2C0B00FAD175 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = N7UB2ADRTE;
+						DevelopmentTeam = HD79G6T428;
 					};
 					0D9862641A1D2C0B00FAD175 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = N7UB2ADRTE;
+						DevelopmentTeam = HD79G6T428;
 						TestTargetID = 0D98624D1A1D2C0B00FAD175;
 					};
 				};
@@ -801,9 +801,8 @@
 				CCB135AC1AAF5727006E464F /* ColorPickerController.swift in Sources */,
 				117F49581A96DA4500A31746 /* EZAudioPlotGL.m in Sources */,
 				1168EAD71ABF973300FC7CD9 /* ColorView.swift in Sources */,
-				CCCD59321A780140008B209D /* Info.swift in Sources */,
+				CCC54A381AC0FAC5003FF0E2 /* Info_API.swift in Sources */,
 				CCC54A371ABF1AC4003FF0E2 /* Lights.swift in Sources */,
-				CCCD59321A780140008B209D /* Info_API.swift in Sources */,
 				117F495E1A96DA4500A31746 /* TPCircularBuffer.c in Sources */,
 				0D3A791B1A26A716003AC6D4 /* ContextFilterLogFormatter.m in Sources */,
 			);
