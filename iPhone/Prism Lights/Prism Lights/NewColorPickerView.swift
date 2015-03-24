@@ -22,7 +22,7 @@ class NewColorPickerView: UIView {
     override init(frame: CGRect) {
         currentBounds = CGRectZero
         super.init(frame: frame)
-        //TODO: see if something similar exists for ios
+
 //        setLayerType(View.LAYER_TYPE_HARDWARE, null);
     }
 

@@ -33,7 +33,6 @@ class AlarmsTable: UITableViewController, UITableViewDataSource, UITableViewDele
         }
         
         return alarms!.count
-        
     }
     
     // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
@@ -48,9 +47,7 @@ class AlarmsTable: UITableViewController, UITableViewDataSource, UITableViewDele
         var x = alarms![indexPath.row]
         cell!.setupView(x)
         
-        
         return cell!
-
     }
 
     

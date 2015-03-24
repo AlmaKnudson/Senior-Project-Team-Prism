@@ -37,7 +37,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     
     var lightCount :Int = 0;
     var groupCount :Int = 1;
-
+    
     @IBOutlet weak var scanningIndicator: UIActivityIndicatorView!
     @IBOutlet weak var loadingMessageLabel: UILabel!
     @IBOutlet weak var rescanButton: UIButton!
@@ -45,10 +45,10 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     @IBOutlet weak var bulbCollectionView: UICollectionView!
     
     @IBAction func StartRescan(sender: UIButton) {
-
+        
         (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.enableLocalConnection()
         self.loadingMessageLabel.text = lastBridgeMessage
-//        SearchForBridge(true, portalSearch: false, ipAddressSearch: false)
+        //        SearchForBridge(true, portalSearch: false, ipAddressSearch: false)
         sender.hidden = true
         scanningIndicator.startAnimating()
     }
@@ -68,7 +68,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         
         //Add long press Gesture
         var gesture = UILongPressGestureRecognizer(target: self, action: "ShowBulbSettings:")
-        gesture.minimumPressDuration = 0.5
+        gesture.minimumPressDuration = 0.50
         gesture.delegate = self
         self.bulbCollectionView.addGestureRecognizer(gesture)
         
@@ -82,6 +82,16 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
                 lightCount = (cache?.lights.count)!
             }
         }
+        
+        //Button look and feel
+        rescanButton.backgroundColor = UIColor.whiteColor()
+        rescanButton.layer.cornerRadius = 10
+        rescanButton.layer.borderWidth = 2
+        rescanButton.layer.borderColor = UIColor.darkGrayColor().CGColor
+        
+        
+        
+        
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -166,11 +176,11 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             println("In Prepare For Segue")
         }
         if segue.identifier == "BulbSettingsNav" {
-        var dest = segue.destinationViewController as UINavigationController
-        var bulbSettingsController = dest.viewControllers[0] as BulbSettingsController
-        bulbSettingsController.homeDelegate = self
-        bulbSettingsController.bulbId = "\((sender as NSIndexPath).row+1)"
-        bulbSettingsController.isGroup = false
+            var dest = segue.destinationViewController as UINavigationController
+            var bulbSettingsController = dest.viewControllers[0] as BulbSettingsController
+            bulbSettingsController.homeDelegate = self
+            bulbSettingsController.bulbId = "\((sender as NSIndexPath).row+1)"
+            bulbSettingsController.isGroup = false
         } else if segue.identifier == "pushAuth" {
             var dest = segue.destinationViewController as PushAuthController
             dest.delegate = self
@@ -206,7 +216,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         }
         
         if section == GROUP_SECTION {
-            if(cache.lights != nil){
+            if(cache.groups != nil){
                 //count doesn't account for group number 0. So +1 to account for it.
                 groupCount = cache.groups.count + 1
             } else {
@@ -228,35 +238,69 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell{
         
-        var cell = bulbCollectionView.dequeueReusableCellWithReuseIdentifier("bulb", forIndexPath: indexPath) as? BulbCollectionCell
+        var cell:BulbCollectionCell! = bulbCollectionView.dequeueReusableCellWithReuseIdentifier("bulb", forIndexPath: indexPath) as? BulbCollectionCell
         if( cell == nil){
             cell = BulbCollectionCell()
         }
         
-        var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-        var lightId = indexPath.row
+        var cache:PHBridgeResourcesCache! = PHBridgeResourcesReader.readBridgeResourcesCache()
+        
         if indexPath.section == BULB_SECTION {
-            lightId++
-        }
-        var light = cache?.lights?["\(lightId)"] as? PHLight
-        if(light != nil){
-            
-            cell!.SetBulbLabel(light!.name)
-            if(light!.lightState.on == 0){
-                cell!.SetBulbImage(false)
+            var lightId = indexPath.row+1
+            var light:PHLight! = cache.lights?["\(lightId)"] as? PHLight
+            if(light != nil){
+                
+                cell.SetBulbLabel(light.name)
+                if(light.lightState.on == 0){
+                    cell.SetBulbImage(false, animate:false)
+                } else{
+                    var point = CGPoint(x: Double(light.lightState.x), y: Double(light.lightState.y))
+                    var color = PHUtilities.colorFromXY(point, forModel: light.modelNumber)
+                    cell.SetBulbImage(true, animate:false)
+                    cell.SetBulbColor(color)
+                    if (light.lightState.reachable == 0){
+                        cell.SetBulbUnreachable()
+                    }
+                }
             } else{
-                //cell!.SetBulbImage(true)
-                var point = CGPoint(x: Double(light!.lightState.x), y: Double(light!.lightState.y))
-                var color = PHUtilities.colorFromXY(point, forModel: light!.modelNumber)
-                //var color = UIColor(hue: CGFloat(light!.lightState.hue), saturation: CGFloat(light!.lightState.saturation), brightness: CGFloat(light!.lightState.brightness), alpha: 1)
-                cell!.SetBulbImage(true)
-                cell!.SetBulbColor(color)
-                if (light?.lightState.reachable == 0){
-                    cell!.SetBulbUnreachable()
+                cell.SetBulbImage(false, animate:false)
+            }
+        } else if indexPath.section == GROUP_SECTION {
+            var groupId = indexPath.row
+            var lightState = PHLightState()
+            lightState.on = false
+            var group:PHGroup! = cache?.groups?["\(groupId)"] as? PHGroup
+            
+            if groupId == 0 {
+                cell.SetBulbLabel("All Bulbs")
+            } else {
+                cell.SetBulbLabel(group.name)
+            }
+            
+            var theLight:PHLight! = nil
+            for (lightId, light) in (cache.lights as [String:PHLight]){
+                //Ignore lights not connected to bridge
+                if(light.lightState.reachable == 0){
+                    continue
+                }
+                
+                if light.lightState.on == 1{
+                    theLight = light
+                    lightState.on = true
+                    lightState.x = light.lightState.x
+                    lightState.y = light.lightState.y
+                    break
                 }
             }
-        } else{
-            cell!.SetBulbImage(false)
+            
+            if(lightState.on == 1){
+                var point = CGPoint(x: Double(lightState.x), y: Double(lightState.y))
+                var color = PHUtilities.colorFromXY(point, forModel: theLight.modelNumber)
+                cell.SetGroupImage(true)
+                cell.SetGroupColor(color)
+            } else{
+                cell.SetGroupImage(false)
+            }
         }
         
         return cell!
@@ -267,50 +311,21 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         if(DEBUG){
             println("Bulb tapped")
         }
-        var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-        var light = cache!.lights["\(indexPath.row+1)"] as PHLight
+        self.skipNextHeartbeat = true
+        if( indexPath.section == BULB_SECTION){
+            var identifier = "\(indexPath.row+1)"
+            ToggleLightState(identifier)
+            
+        }
         
-        if(light.lightState.reachable == 0){
-            return
-        }
-        var lightState = PHLightState()
-        var cell = bulbCollectionView.cellForItemAtIndexPath(indexPath) as BulbCollectionCell
-        if light.lightState.on == 1{
-            light.lightState.on = false
-            lightState.on = false
-        } else{
-            lightState.on = true
-            light.lightState.on = true
-            //cell.SetBulbImage(true)
+        if( indexPath.section == GROUP_SECTION){
+            var identifier = "\(indexPath.row)"
+            ToggleGroupState(identifier)
             
         }
-        var bridgeSendAPI = PHBridgeSendAPI()
-        bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil)
-        if(light.lightState.on == 1){
-            var point = CGPoint(x: Double(light.lightState.x), y: Double(light.lightState.y))
-            var color = PHUtilities.colorFromXY(point, forModel: light.modelNumber)
-            cell.SetBulbColor(color)
-        } else{
-            cell.SetBulbImage(false)
-        }
-        bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState){
-            error -> Void in
-            if error != nil {
-                if(DEBUG){
-                    println("Error updating light state.")
-                }
-                return
-            }
-            
-            if(light.lightState.on == 1){
-                var point = CGPoint(x: Double(light.lightState.x), y: Double(light.lightState.y))
-                var color = PHUtilities.colorFromXY(point, forModel: light.modelNumber)
-                cell.SetBulbColor(color)
-            } else{
-                cell.SetBulbImage(false)
-            }
-            self.skipNextHeartbeat = true
-        }
+        collectionView.reloadData()
+        
+        
     }
     
     /**
@@ -395,7 +410,6 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         //        alert.addAction(cancelButton)
         //        //Show the alert to the user
         //        self.presentViewController(alert, animated: true) { () -> Void in}
-        //TODO: Initiate Push Auth
         self.performSegueWithIdentifier("pushAuth", sender: self)
     }
     /**
@@ -427,20 +441,18 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             }
             let cancelButton = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Cancel) { (cancelButton) -> Void in     }
             alert.addAction(cancelButton)
-            //TODO: Add retry connection button.
             //Show the alert to the user
             self.presentViewController(alert, animated: true) { () -> Void in}
         } else{
             hueSDK.disableLocalConnection()
-            if loadingView.hidden == true {
-                ShowConnectingView()
+            if !BRIDGELESS {
+                if loadingView.hidden == true {
+                    ShowConnectingView()
+                }
+                loadingMessageLabel.text = SCANNING_MESSAGE
+                SearchForBridge(true, portalSearch: false, ipAddressSearch: false)
             }
-            loadingMessageLabel.text = SCANNING_MESSAGE
-            SearchForBridge(true, portalSearch: false, ipAddressSearch: false)
-            
-            
         }
-        
         
     }
     
@@ -454,6 +466,90 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     func ShowConnectingView(){
         loadingView.hidden = false
     }
+    
+    
+    func ToggleLightState(identifier:String) -> Bool {
+        var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
+        var lightState = PHLightState()
+        var bridgeSendAPI = PHBridgeSendAPI()
+        
+        var light = cache!.lights[identifier] as PHLight
+        if(light.lightState.reachable == 0){
+            return false
+        }
+        if light.lightState.on == 1{
+            light.lightState.on = false
+            lightState.on = false
+        } else{
+            lightState.on = true
+            light.lightState.on = true
+        }
+        
+        //Send Light change to Bridge
+        bridgeSendAPI.updateLightStateForId(identifier, withLightState: lightState){
+            error -> Void in
+            if error != nil {
+                if(DEBUG){
+                    println("Error updating light state.")
+                }
+                return
+            }
+            
+        }
+        
+        return lightState.on == 1
+    }
+    
+    func ToggleGroupState(identifier:String) -> Bool {
+        var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
+        var lightState = PHLightState()
+        var bridgeSendAPI = PHBridgeSendAPI()
+        lightState.on = true
+        
+        //Group 0 is all lights
+        //Group 0 is assumed and isn't in the cache
+        if identifier == "0" {
+            for (lightId, light) in (cache.lights as [String:PHLight]){
+                //Ignore lights not connected to bridge
+                if(light.lightState.reachable == 0){
+                    continue
+                }
+                
+                if light.lightState.on == 1{
+                    lightState.on = false
+                    break
+                }
+            }
+        } else {
+            
+            var group:PHGroup = cache!.groups[identifier] as PHGroup
+            
+            
+            for lightId:String in (group.lightIdentifiers as [String]) {
+                var light = cache.lights[lightId] as PHLight
+                
+                
+                
+            }
+        }
+        //Send Light change to Bridge
+        bridgeSendAPI.setLightStateForGroupWithId(identifier, lightState: lightState){
+            error -> Void in
+            if error != nil {
+                if(DEBUG){
+                    println("Error updating light state.")
+                }
+                return
+            }
+            self.skipNextHeartbeat = true
+        }
+        
+        return lightState.on == 1
+        
+        
+    }
+    
+    
     
     func SearchForBridge(upnpSearch:Bool, portalSearch:Bool, ipAddressSearch:Bool){
         
@@ -541,11 +637,11 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
                                 var numberFormatter = NSNumberFormatter()
                                 var number:NSNumber? = numberFormatter.numberFromString(range!)
                                 var rangeInt = (Int(number!)/10)
-//                                NSLog()
+                                //                                NSLog()
                                 
                                 
                                 if b.distance.integerValue <= rangeInt {
-                                   
+                                    
                                     
                                     //This is to print out the distance to see if I get a different reading each time. Otherwise, I will have to poll for an average in a different/slower way.
                                     for var i = 0; i < 10; ++i  {

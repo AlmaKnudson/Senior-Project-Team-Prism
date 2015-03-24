@@ -70,7 +70,7 @@
 		11FDAB501AACDA5F0055C2AD /* MusicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDAB4F1AACDA5F0055C2AD /* MusicCell.swift */; };
 		11FDAB541AAFF2460055C2AD /* MusicBulbRangeSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDAB531AAFF2460055C2AD /* MusicBulbRangeSelection.swift */; };
 		11FDAB581AB109510055C2AD /* BeaconBulbTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDAB571AB109510055C2AD /* BeaconBulbTracking.swift */; };
-		CC24AE701A77EFEA003316FD /* Lights.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC24AE6F1A77EFEA003316FD /* Lights.swift */; };
+		CC24AE701A77EFEA003316FD /* Lights_API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC24AE6F1A77EFEA003316FD /* Lights_API.swift */; };
 		CC27D7FF1A802E9C00346F47 /* PrismSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC27D7FE1A802E9C00346F47 /* PrismSDK.swift */; };
 		CC391F411A7D91F9004C94B5 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC391F401A7D91F9004C94B5 /* Networking.swift */; };
 		CC4A46E51A8912FD007DC0F2 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A46E41A8912FD007DC0F2 /* Settings.swift */; };
@@ -86,15 +86,16 @@
 		CCB707851AA68A73002BF12B /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB707821AA68A73002BF12B /* ColorPicker.swift */; };
 		CCB707861AA68A73002BF12B /* ColorSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB707831AA68A73002BF12B /* ColorSelectorView.swift */; };
 		CCB707871AA68A73002BF12B /* NewColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB707841AA68A73002BF12B /* NewColorPickerView.swift */; };
+		CCC54A371ABF1AC4003FF0E2 /* Lights.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC54A361ABF1AC4003FF0E2 /* Lights.swift */; };
 		CCCB88D51A98D808003D68F4 /* Alarms.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCB88D41A98D808003D68F4 /* Alarms.swift */; };
 		CCCB88D71A994CFF003D68F4 /* AdvancedSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCB88D61A994CFF003D68F4 /* AdvancedSettingsController.swift */; };
 		CCCB88DC1A9BAAD8003D68F4 /* AlarmDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCB88DB1A9BAAD8003D68F4 /* AlarmDetail.swift */; };
-		CCCD59261A7800D6008B209D /* Groups.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD59251A7800D6008B209D /* Groups.swift */; };
-		CCCD59281A7800EA008B209D /* Schedules.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD59271A7800EA008B209D /* Schedules.swift */; };
-		CCCD592A1A7800FE008B209D /* Scenes.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD59291A7800FE008B209D /* Scenes.swift */; };
-		CCCD592E1A78011E008B209D /* Rules.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD592D1A78011E008B209D /* Rules.swift */; };
-		CCCD59301A78012F008B209D /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD592F1A78012F008B209D /* Configuration.swift */; };
-		CCCD59321A780140008B209D /* Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD59311A780140008B209D /* Info.swift */; };
+		CCCD59261A7800D6008B209D /* Groups_API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD59251A7800D6008B209D /* Groups_API.swift */; };
+		CCCD59281A7800EA008B209D /* Schedules_API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD59271A7800EA008B209D /* Schedules_API.swift */; };
+		CCCD592A1A7800FE008B209D /* Scenes_API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD59291A7800FE008B209D /* Scenes_API.swift */; };
+		CCCD592E1A78011E008B209D /* Rules_API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD592D1A78011E008B209D /* Rules_API.swift */; };
+		CCCD59301A78012F008B209D /* Configuration_API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD592F1A78012F008B209D /* Configuration_API.swift */; };
+		CCCD59321A780140008B209D /* Info_API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD59311A780140008B209D /* Info_API.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -215,7 +216,7 @@
 		11FDAB4F1AACDA5F0055C2AD /* MusicCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicCell.swift; sourceTree = "<group>"; };
 		11FDAB531AAFF2460055C2AD /* MusicBulbRangeSelection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicBulbRangeSelection.swift; sourceTree = "<group>"; };
 		11FDAB571AB109510055C2AD /* BeaconBulbTracking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeaconBulbTracking.swift; sourceTree = "<group>"; };
-		CC24AE6F1A77EFEA003316FD /* Lights.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lights.swift; sourceTree = "<group>"; };
+		CC24AE6F1A77EFEA003316FD /* Lights_API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lights_API.swift; sourceTree = "<group>"; };
 		CC27D7FE1A802E9C00346F47 /* PrismSDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrismSDK.swift; sourceTree = "<group>"; };
 		CC391F401A7D91F9004C94B5 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		CC4A46E41A8912FD007DC0F2 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -230,16 +231,17 @@
 		CCB707821AA68A73002BF12B /* ColorPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPicker.swift; sourceTree = "<group>"; };
 		CCB707831AA68A73002BF12B /* ColorSelectorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorSelectorView.swift; sourceTree = "<group>"; };
 		CCB707841AA68A73002BF12B /* NewColorPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewColorPickerView.swift; sourceTree = "<group>"; };
+		CCC54A361ABF1AC4003FF0E2 /* Lights.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lights.swift; sourceTree = "<group>"; };
 		CCCB88D41A98D808003D68F4 /* Alarms.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alarms.swift; sourceTree = "<group>"; wrapsLines = 1; };
 		CCCB88D61A994CFF003D68F4 /* AdvancedSettingsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsController.swift; sourceTree = "<group>"; };
 		CCCB88DB1A9BAAD8003D68F4 /* AlarmDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmDetail.swift; sourceTree = "<group>"; };
-		CCCD59251A7800D6008B209D /* Groups.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Groups.swift; sourceTree = "<group>"; };
-		CCCD59271A7800EA008B209D /* Schedules.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schedules.swift; sourceTree = "<group>"; };
-		CCCD59291A7800FE008B209D /* Scenes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scenes.swift; sourceTree = "<group>"; };
-		CCCD592B1A78010F008B209D /* Sensors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sensors.swift; sourceTree = "<group>"; };
-		CCCD592D1A78011E008B209D /* Rules.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rules.swift; sourceTree = "<group>"; };
-		CCCD592F1A78012F008B209D /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
-		CCCD59311A780140008B209D /* Info.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Info.swift; sourceTree = "<group>"; };
+		CCCD59251A7800D6008B209D /* Groups_API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Groups_API.swift; sourceTree = "<group>"; };
+		CCCD59271A7800EA008B209D /* Schedules_API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schedules_API.swift; sourceTree = "<group>"; };
+		CCCD59291A7800FE008B209D /* Scenes_API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scenes_API.swift; sourceTree = "<group>"; };
+		CCCD592B1A78010F008B209D /* Sensors_API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sensors_API.swift; sourceTree = "<group>"; };
+		CCCD592D1A78011E008B209D /* Rules_API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rules_API.swift; sourceTree = "<group>"; };
+		CCCD592F1A78012F008B209D /* Configuration_API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration_API.swift; sourceTree = "<group>"; };
+		CCCD59311A780140008B209D /* Info_API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Info_API.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -527,14 +529,14 @@
 		CC24AE6E1A77EFC2003316FD /* Hue_Restful_API */ = {
 			isa = PBXGroup;
 			children = (
-				CC24AE6F1A77EFEA003316FD /* Lights.swift */,
-				CCCD59251A7800D6008B209D /* Groups.swift */,
-				CCCD59271A7800EA008B209D /* Schedules.swift */,
-				CCCD59291A7800FE008B209D /* Scenes.swift */,
-				CCCD592B1A78010F008B209D /* Sensors.swift */,
-				CCCD592D1A78011E008B209D /* Rules.swift */,
-				CCCD592F1A78012F008B209D /* Configuration.swift */,
-				CCCD59311A780140008B209D /* Info.swift */,
+				CC24AE6F1A77EFEA003316FD /* Lights_API.swift */,
+				CCCD59251A7800D6008B209D /* Groups_API.swift */,
+				CCCD59271A7800EA008B209D /* Schedules_API.swift */,
+				CCCD59291A7800FE008B209D /* Scenes_API.swift */,
+				CCCD592B1A78010F008B209D /* Sensors_API.swift */,
+				CCCD592D1A78011E008B209D /* Rules_API.swift */,
+				CCCD592F1A78012F008B209D /* Configuration_API.swift */,
+				CCCD59311A780140008B209D /* Info_API.swift */,
 				CC391F401A7D91F9004C94B5 /* Networking.swift */,
 				CC27D7FE1A802E9C00346F47 /* PrismSDK.swift */,
 			);
@@ -593,6 +595,7 @@
 			isa = PBXGroup;
 			children = (
 				CCCB88D41A98D808003D68F4 /* Alarms.swift */,
+				CCC54A361ABF1AC4003FF0E2 /* Lights.swift */,
 			);
 			name = HueSDK_API;
 			sourceTree = "<group>";
@@ -753,11 +756,11 @@
 				0D3A79191A26A716003AC6D4 /* DDTTYLogger.m in Sources */,
 				CC391F411A7D91F9004C94B5 /* Networking.swift in Sources */,
 				CC9E5ECF1A89B95300B19DF6 /* AlarmCell.swift in Sources */,
-				CCCD592E1A78011E008B209D /* Rules.swift in Sources */,
+				CCCD592E1A78011E008B209D /* Rules_API.swift in Sources */,
 				0D8B27A61A3A0B7C0069372C /* ColorPickerView.swift in Sources */,
 				CCCB88D51A98D808003D68F4 /* Alarms.swift in Sources */,
 				0D8B27A41A3A0B3A0069372C /* BulbSettings.swift in Sources */,
-				CCCD59301A78012F008B209D /* Configuration.swift in Sources */,
+				CCCD59301A78012F008B209D /* Configuration_API.swift in Sources */,
 				117F495B1A96DA4500A31746 /* EZOutput.m in Sources */,
 				1168EAD91AC0FA8E00FC7CD9 /* ColorPaletteCell.swift in Sources */,
 				CCB707871AA68A73002BF12B /* NewColorPickerView.swift in Sources */,
@@ -767,7 +770,7 @@
 				CC9E5ECD1A89A16100B19DF6 /* AlarmsTable.swift in Sources */,
 				0D9862581A1D2C0B00FAD175 /* MusicViewController.swift in Sources */,
 				117F49541A96DA4500A31746 /* EZAudio.m in Sources */,
-				CC24AE701A77EFEA003316FD /* Lights.swift in Sources */,
+				CC24AE701A77EFEA003316FD /* Lights_API.swift in Sources */,
 				CCCB88DC1A9BAAD8003D68F4 /* AlarmDetail.swift in Sources */,
 				0D3A79151A26A716003AC6D4 /* DDFileLogger.m in Sources */,
 				117F49551A96DA4500A31746 /* EZAudioFile.m in Sources */,
@@ -780,17 +783,17 @@
 				11FDAB501AACDA5F0055C2AD /* MusicCell.swift in Sources */,
 				0D9862561A1D2C0B00FAD175 /* HomeController.swift in Sources */,
 				117F495A1A96DA4500A31746 /* EZMicrophone.m in Sources */,
-				CCCD59261A7800D6008B209D /* Groups.swift in Sources */,
+				CCCD59261A7800D6008B209D /* Groups_API.swift in Sources */,
 				11AF010D1AA95C6000122F24 /* EstViewController.swift in Sources */,
 				CCB707851AA68A73002BF12B /* ColorPicker.swift in Sources */,
 				117F495D1A96DA4500A31746 /* EZRecorder.m in Sources */,
 				11FDAB4C1AACD2A20055C2AD /* MusicSelectBulbsViewController.swift in Sources */,
-				CCCD592A1A7800FE008B209D /* Scenes.swift in Sources */,
+				CCCD592A1A7800FE008B209D /* Scenes_API.swift in Sources */,
 				CCB707861AA68A73002BF12B /* ColorSelectorView.swift in Sources */,
 				CC4A46E71A89130F007DC0F2 /* ModeCell.swift in Sources */,
 				CC4A46E51A8912FD007DC0F2 /* Settings.swift in Sources */,
 				CC27D7FF1A802E9C00346F47 /* PrismSDK.swift in Sources */,
-				CCCD59281A7800EA008B209D /* Schedules.swift in Sources */,
+				CCCD59281A7800EA008B209D /* Schedules_API.swift in Sources */,
 				117F49591A96DA4500A31746 /* EZAudioPlotGLKViewController.m in Sources */,
 				117F49531A96DA4500A31746 /* AEFloatConverter.m in Sources */,
 				0D3A79131A26A716003AC6D4 /* DDASLLogger.m in Sources */,
@@ -803,6 +806,8 @@
 				117F49581A96DA4500A31746 /* EZAudioPlotGL.m in Sources */,
 				1168EAD71ABF973300FC7CD9 /* ColorView.swift in Sources */,
 				CCCD59321A780140008B209D /* Info.swift in Sources */,
+				CCC54A371ABF1AC4003FF0E2 /* Lights.swift in Sources */,
+				CCCD59321A780140008B209D /* Info_API.swift in Sources */,
 				117F495E1A96DA4500A31746 /* TPCircularBuffer.c in Sources */,
 				0D3A791B1A26A716003AC6D4 /* ContextFilterLogFormatter.m in Sources */,
 			);
