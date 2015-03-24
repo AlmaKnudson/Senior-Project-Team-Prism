@@ -568,7 +568,7 @@ bool throttleSkip = true;
     
     // Convert COMPLEX_SPLIT A result to magnitudes
     float arbitraryMinMagnitude = 10; //This is arbitrary.
-    float arbitraryRunningMaxSoundTax = 100; //10 Percent tax, WOWIE--Thanks Obama.
+    float arbitraryRunningMaxSoundTax = 100; //100 tax, WOWIE--Thanks Obama.
     
     float amp[nOver2]; //256
     float maxMag = 0;

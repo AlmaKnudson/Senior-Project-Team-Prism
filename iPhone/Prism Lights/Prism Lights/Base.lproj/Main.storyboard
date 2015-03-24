@@ -37,9 +37,15 @@
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bulb_top" translatesAutoresizingMaskIntoConstraints="NO" id="TRG-YN-pOb">
                                                     <rect key="frame" x="0.0" y="0.0" width="80" height="116"/>
+                                                    <variation key="heightClass=regular-widthClass=regular" misplaced="YES">
+                                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="150"/>
+                                                    </variation>
                                                 </imageView>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bulb_bottom" translatesAutoresizingMaskIntoConstraints="NO" id="YdV-Zu-Lsg">
                                                     <rect key="frame" x="0.0" y="0.0" width="80" height="116"/>
+                                                    <variation key="heightClass=regular-widthClass=regular" misplaced="YES">
+                                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="150"/>
+                                                    </variation>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Kitchen" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="uwm-nL-wua">
                                                     <rect key="frame" x="0.0" y="105" width="80" height="35"/>
@@ -52,6 +58,9 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
+                                                    <variation key="heightClass=regular-widthClass=regular" misplaced="YES">
+                                                        <rect key="frame" x="0.0" y="-35" width="0.0" height="35"/>
+                                                    </variation>
                                                 </label>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -87,9 +96,6 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </collectionReusableView>
                                 <variation key="heightClass=compact-widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="0.0" y="0.0" width="0.0" height="0.0"/>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
                                     <rect key="frame" x="0.0" y="0.0" width="0.0" height="0.0"/>
                                 </variation>
                                 <connections>
@@ -215,6 +221,9 @@
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="hOD-FU-zih">
                                 <rect key="frame" x="110" y="48" width="409" height="74"/>
                                 <color key="tintColor" red="0.67615609219999995" green="0.0" blue="0.033951910420000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <variation key="widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="110" y="48" width="209" height="72"/>
+                                </variation>
                                 <connections>
                                     <action selector="BrightnessFinished:" destination="jXd-oy-Uyn" eventType="touchUpInside" id="7kC-bF-oL6"/>
                                     <action selector="BrightnessFinishedOutside:" destination="jXd-oy-Uyn" eventType="touchUpOutside" id="FbO-wR-bWn"/>
@@ -232,6 +241,9 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
+                                <variation key="widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="16" y="71" width="88" height="26"/>
+                                </variation>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Np1-3E-9WZ">
                                 <rect key="frame" x="74" y="4" width="510" height="30"/>
@@ -254,6 +266,9 @@
                             </button>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zWJ-Qs-Tnj">
                                 <rect key="frame" x="16" y="129" width="568" height="291"/>
+                                <variation key="widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="16" y="127" width="368" height="293"/>
+                                </variation>
                                 <connections>
                                     <segue destination="s48-kf-NEl" kind="embed" id="RtF-g0-koD"/>
                                 </connections>
@@ -549,6 +564,9 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
+                                                    <variation key="widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="369" y="12" width="25" height="21"/>
+                                                    </variation>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bB0-AO-3tu">
                                                     <rect key="frame" x="512" y="6" width="51" height="31"/>
@@ -581,10 +599,16 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
+                                                    <variation key="widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="8" y="13" width="100" height="21"/>
+                                                    </variation>
                                                 </label>
                                                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="FFa-YL-hg4">
                                                     <rect key="frame" x="114" y="7" width="480" height="31"/>
                                                     <color key="tintColor" red="0.67615609219999995" green="0.0" blue="0.033951910420000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <variation key="widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="114" y="8" width="280" height="31"/>
+                                                    </variation>
                                                     <connections>
                                                         <action selector="BrightnessTouchUpOutside:" destination="x2R-WH-Oz0" eventType="touchUpOutside" id="syu-Xf-tVI"/>
                                                         <action selector="brightnessSliderTouchUpInside:" destination="x2R-WH-Oz0" eventType="touchUpInside" id="KcX-Ts-Jsh"/>
@@ -1178,7 +1202,7 @@
             </objects>
             <point key="canvasLocation" x="1446" y="2378"/>
         </scene>
-        <!--Title-->
+        <!--Colors-->
         <scene sceneID="dC2-5G-Mo8">
             <objects>
                 <viewController id="Vru-n0-LH6" sceneMemberID="viewController">
@@ -1186,36 +1210,144 @@
                         <viewControllerLayoutGuide type="top" id="9UM-QF-5Zz"/>
                         <viewControllerLayoutGuide type="bottom" id="oHF-3G-cnr"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="w82-Ha-0fM" customClass="ColorView" customModule="Prism_Lights" customModuleProvider="target">
+                    <view key="view" contentMode="scaleToFill" id="w82-Ha-0fM">
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ijz-Md-V6d">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <items>
-                                    <navigationItem title="Colors" prompt="" id="RzF-FT-Tux"/>
+                                    <navigationItem title="Colors" id="LpW-HY-4EO">
+                                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="bpf-Bg-TPD"/>
+                                    </navigationItem>
                                 </items>
                                 <variation key="widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="0.0" y="20" width="400" height="44"/>
                                 </variation>
                             </navigationBar>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ewy-qf-VSv" customClass="ColorView" customModule="Prism_Lights" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <color key="backgroundColor" red="0.95686274510000002" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="startColor">
+                                        <color key="value" red="0.95686274510000002" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="endColor">
+                                        <color key="value" red="0.95686274510000002" green="0.14934449299999999" blue="0.84025158820000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isHorizontal" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="roundness">
+                                        <real key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="100" y="108" width="80" height="80"/>
+                                </variation>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="ijz-Md-V6d"/>
+                                <exclude reference="Ewy-qf-VSv"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
                             <mask key="subviews">
                                 <include reference="ijz-Md-V6d"/>
+                                <include reference="Ewy-qf-VSv"/>
                             </mask>
                         </variation>
                     </view>
-                    <navigationItem key="navigationItem" title="Title" id="Ucf-gx-rjY"/>
+                    <navigationItem key="navigationItem" title="Colors" id="Ucf-gx-rjY">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="PkC-1D-UCB"/>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hSF-xb-zhG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-748.5" y="2047"/>
+            <point key="canvasLocation" x="-52.5" y="2225"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="4cu-OR-77k">
+            <objects>
+                <navigationController id="DN4-Io-HRe" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="XbC-iL-yxz">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="jWQ-VK-QWA" kind="relationship" relationship="rootViewController" id="mgD-Ue-Qhc"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yLv-MI-Pcl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1390.5" y="2038"/>
+        </scene>
+        <!--Colors-->
+        <scene sceneID="Owx-i2-Ifl">
+            <objects>
+                <collectionViewController id="jWQ-VK-QWA" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="muz-Jc-GKl">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Awi-Ag-hhg">
+                            <size key="itemSize" width="50" height="50"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="Tjk-Ua-o1F">
+                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kQR-bY-qOh" customClass="ColorView" customModule="Prism_Lights" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="roundness">
+                                                    <real key="value" value="25"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="color" keyPath="startColor">
+                                                    <color key="value" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="color" keyPath="endColor">
+                                                    <color key="value" red="0.95686274510000002" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                            <variation key="widthClass=compact" fixedFrame="YES">
+                                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            </variation>
+                                        </view>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <variation key="default">
+                                    <mask key="subviews">
+                                        <exclude reference="kQR-bY-qOh"/>
+                                    </mask>
+                                </variation>
+                                <variation key="widthClass=compact">
+                                    <mask key="subviews">
+                                        <include reference="kQR-bY-qOh"/>
+                                    </mask>
+                                </variation>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="jWQ-VK-QWA" id="9g2-RF-KFp"/>
+                            <outlet property="delegate" destination="jWQ-VK-QWA" id="Bka-pV-l19"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" title="Colors" id="tvY-TC-Py7">
+                        <barButtonItem key="rightBarButtonItem" title="Item" systemItem="add" id="rZ6-ae-vhK"/>
+                    </navigationItem>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8VZ-Hi-j2D" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-676.5" y="2038"/>
         </scene>
         <!--Setting-->
         <scene sceneID="vWs-Ne-Je7">
@@ -1645,6 +1777,9 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tpv-D8-UH5" customClass="EZAudioPlotGL">
                                 <rect key="frame" x="0.0" y="64" width="600" height="35"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <variation key="heightClass=regular-widthClass=regular" ambiguous="YES">
+                                    <rect key="frame" x="0.0" y="0.0" width="0.0" height="0.0"/>
+                                </variation>
                             </view>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="dJx-rp-aV8">
                                 <rect key="frame" x="276" y="512" width="51" height="31"/>
@@ -2211,9 +2346,9 @@
                                     <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="307" y="431" width="61" height="30"/>
-                                </variation>
+                                <connections>
+                                    <segue destination="DN4-Io-HRe" kind="show" id="fY3-UQ-Qq8"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -2223,12 +2358,15 @@
                             <constraint firstAttribute="trailing" secondItem="Tpv-D8-UH5" secondAttribute="trailing" id="Gqf-YM-ltU"/>
                             <constraint firstItem="Tpv-D8-UH5" firstAttribute="centerX" secondItem="oRH-cO-GdM" secondAttribute="centerX" id="KSh-ht-egj"/>
                             <constraint firstItem="dJx-rp-aV8" firstAttribute="top" secondItem="oRH-cO-GdM" secondAttribute="bottom" constant="16" id="OZZ-BI-NFz"/>
+                            <constraint firstItem="udJ-67-eDA" firstAttribute="leading" secondItem="dJx-rp-aV8" secondAttribute="trailing" constant="82" id="Q2a-9U-Pdg"/>
                             <constraint firstItem="Tpv-D8-UH5" firstAttribute="leading" secondItem="fLy-Cd-8CV" secondAttribute="leading" id="Sg8-XV-qaa"/>
                             <constraint firstItem="dJx-rp-aV8" firstAttribute="centerX" secondItem="oRH-cO-GdM" secondAttribute="centerX" id="U1E-Za-1OI"/>
+                            <constraint firstItem="udJ-67-eDA" firstAttribute="trailing" secondItem="oRH-cO-GdM" secondAttribute="trailing" id="aeC-jz-tq2"/>
                             <constraint firstItem="Tpv-D8-UH5" firstAttribute="centerX" secondItem="LTR-UT-yRB" secondAttribute="centerX" id="dEV-ra-xFT"/>
                             <constraint firstItem="Tpv-D8-UH5" firstAttribute="top" secondItem="E2q-C9-fFx" secondAttribute="bottom" id="hRT-yb-hp9"/>
                             <constraint firstItem="LTR-UT-yRB" firstAttribute="top" secondItem="Tpv-D8-UH5" secondAttribute="bottom" constant="24" id="hZr-hZ-4Vr"/>
                             <constraint firstItem="oRH-cO-GdM" firstAttribute="top" secondItem="LTR-UT-yRB" secondAttribute="bottom" constant="8" symbolic="YES" id="iKr-Jv-rOB"/>
+                            <constraint firstItem="udJ-67-eDA" firstAttribute="top" secondItem="dJx-rp-aV8" secondAttribute="top" id="lhf-ZP-bS9"/>
                             <constraint firstItem="LTR-UT-yRB" firstAttribute="leading" secondItem="fLy-Cd-8CV" secondAttribute="leadingMargin" constant="17" id="qza-9l-LM6"/>
                             <constraint firstAttribute="bottom" secondItem="Tpv-D8-UH5" secondAttribute="bottom" constant="501" id="s7F-JS-O3n"/>
                             <constraint firstAttribute="bottom" secondItem="oRH-cO-GdM" secondAttribute="bottom" constant="185" id="vO1-AU-9DS"/>
@@ -2252,6 +2390,9 @@
                                 <exclude reference="vO1-AU-9DS"/>
                                 <exclude reference="OZZ-BI-NFz"/>
                                 <exclude reference="U1E-Za-1OI"/>
+                                <exclude reference="Q2a-9U-Pdg"/>
+                                <exclude reference="aeC-jz-tq2"/>
+                                <exclude reference="lhf-ZP-bS9"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -2273,6 +2414,9 @@
                                 <include reference="vO1-AU-9DS"/>
                                 <include reference="OZZ-BI-NFz"/>
                                 <include reference="U1E-Za-1OI"/>
+                                <include reference="Q2a-9U-Pdg"/>
+                                <include reference="aeC-jz-tq2"/>
+                                <include reference="lhf-ZP-bS9"/>
                             </mask>
                         </variation>
                     </view>
@@ -2587,8 +2731,8 @@
         <image name="second" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="MV1-5L-hp4"/>
         <segue reference="VIG-4p-d0T"/>
         <segue reference="agp-MF-nMt"/>
+        <segue reference="MV1-5L-hp4"/>
     </inferredMetricsTieBreakers>
 </document>
