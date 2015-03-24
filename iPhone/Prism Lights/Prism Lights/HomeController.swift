@@ -251,16 +251,17 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             if(light != nil){
                 
                 cell.SetBulbLabel(light.name)
-                if(light.lightState.on == 0){
+                
+                if !light.lightState.reachable.boolValue {
+                    cell.SetBulbUnreachable()
+                } else if(light.lightState.on == 0){
                     cell.SetBulbImage(false, animate:false)
                 } else{
                     var point = CGPoint(x: Double(light.lightState.x), y: Double(light.lightState.y))
                     var color = PHUtilities.colorFromXY(point, forModel: light.modelNumber)
                     cell.SetBulbImage(true, animate:false)
                     cell.SetBulbColor(color)
-                    if (light.lightState.reachable == 0){
-                        cell.SetBulbUnreachable()
-                    }
+                    
                 }
             } else{
                 cell.SetBulbImage(false, animate:false)
@@ -296,10 +297,10 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             if(lightState.on == 1){
                 var point = CGPoint(x: Double(lightState.x), y: Double(lightState.y))
                 var color = PHUtilities.colorFromXY(point, forModel: theLight.modelNumber)
-                cell.SetGroupImage(true)
+                cell.SetGroupImage(true, animate: false)
                 cell.SetGroupColor(color)
             } else{
-                cell.SetGroupImage(false)
+                cell.SetGroupImage(false, animate: false)
             }
         }
         
@@ -470,7 +471,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     
     func ToggleLightState(identifier:String) -> Bool {
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-        var lightState = PHLightState()
+        var lightOn = true
         var bridgeSendAPI = PHBridgeSendAPI()
         
         var light = cache!.lights[identifier] as PHLight
@@ -479,14 +480,12 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         }
         if light.lightState.on == 1{
             light.lightState.on = false
-            lightState.on = false
         } else{
-            lightState.on = true
             light.lightState.on = true
         }
         
         //Send Light change to Bridge
-        bridgeSendAPI.updateLightStateForId(identifier, withLightState: lightState){
+        bridgeSendAPI.updateLightStateForId(identifier, withLightState: light.lightState){
             error -> Void in
             if error != nil {
                 if(DEBUG){
@@ -497,14 +496,14 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             
         }
         
-        return lightState.on == 1
+        return light.lightState.on.boolValue
     }
     
     func ToggleGroupState(identifier:String) -> Bool {
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-        var lightState = PHLightState()
+        var lightOn = true
         var bridgeSendAPI = PHBridgeSendAPI()
-        lightState.on = true
+        var lightState:PHLightState? = nil
         
         //Group 0 is all lights
         //Group 0 is assumed and isn't in the cache
@@ -515,11 +514,24 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
                     continue
                 }
                 
-                if light.lightState.on == 1{
-                    lightState.on = false
+                if light.lightState.on.boolValue {
+                    lightOn = false
                     break
+                } else {
+                    
                 }
             }
+            
+            //update all lightStates
+                for (lightId, light) in (cache.lights as [String:PHLight]){
+                    //Ignore lights not connected to bridge
+                    if(light.lightState.reachable == 0){
+                        continue
+                    }
+                    light.lightState.on = lightOn
+                    lightState = light.lightState
+                }
+            
         } else {
             
             var group:PHGroup = cache!.groups[identifier] as PHGroup
@@ -531,6 +543,10 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
                 
                 
             }
+        }
+
+        if lightState == nil {
+            return false
         }
         //Send Light change to Bridge
         bridgeSendAPI.setLightStateForGroupWithId(identifier, lightState: lightState){
@@ -544,7 +560,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             self.skipNextHeartbeat = true
         }
         
-        return lightState.on == 1
+        return true
         
         
     }

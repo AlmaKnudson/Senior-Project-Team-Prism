@@ -29,6 +29,8 @@ class BulbCollectionCell : UICollectionViewCell{
                 pulseAnimation.autoreverses = false;
                 pulseAnimation.repeatCount = 1;
                 self.top_bulb.layer.addAnimation(pulseAnimation, forKey: nil)
+            } else {
+                top_bulb.layer.opacity = 1.0
             }
         } else{
             top_bulb!.image = UIImage(named: "bulb_top")
@@ -42,24 +44,50 @@ class BulbCollectionCell : UICollectionViewCell{
                 pulseAnimation.autoreverses = false;
                 pulseAnimation.repeatCount = 1;
                 self.top_bulb.layer.addAnimation(pulseAnimation, forKey: nil)
+            } else {
+                top_bulb.layer.opacity = 0.2
             }
             
         }
         
         
-        
-        
     }
     
-    func SetGroupImage(on:Bool){
+    func SetGroupImage(on:Bool, animate:Bool ){
         if(on){
             top_bulb!.image = UIImage(named: "groupTop")
             bottom_bulb!.image = UIImage(named: "groupBottom")
+            
+            if animate {
+                var pulseAnimation:CABasicAnimation = CABasicAnimation(keyPath: "opacity");
+                pulseAnimation.duration = 3.0;
+                pulseAnimation.toValue = NSNumber(float: 1.0);
+                pulseAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut);
+                pulseAnimation.autoreverses = false;
+                pulseAnimation.repeatCount = 1;
+                self.top_bulb.layer.addAnimation(pulseAnimation, forKey: nil)
+            } else {
+                top_bulb.layer.opacity = 1.0
+            }
+
+            
         } else{
             top_bulb!.image = UIImage(named: "groupTop")
             bottom_bulb!.image = UIImage(named: "groupBottom")
-            var color = UIColor(red: 0.05, green: 0.05, blue: 0.05, alpha: 0.75)
-            SetGroupColor(color)
+            
+            if animate {
+                var pulseAnimation:CABasicAnimation = CABasicAnimation(keyPath: "opacity");
+                pulseAnimation.duration = 3.0;
+                pulseAnimation.toValue = NSNumber(float: 0.1);
+                pulseAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut);
+                pulseAnimation.autoreverses = false;
+                pulseAnimation.repeatCount = 1;
+                self.top_bulb.layer.addAnimation(pulseAnimation, forKey: nil)
+            } else {
+                top_bulb.layer.opacity = 0.2
+            }
+            
+            
         }
     }
     
