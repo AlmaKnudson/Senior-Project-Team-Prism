@@ -43,6 +43,7 @@
 		0D98626C1A1D2C0B00FAD175 /* Prism_LightsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D98626B1A1D2C0B00FAD175 /* Prism_LightsTests.swift */; };
 		0DB347431A2D5BCE00B91EF2 /* PushAuthController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB347421A2D5BCE00B91EF2 /* PushAuthController.swift */; };
 		1168EAD71ABF973300FC7CD9 /* ColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1168EAD61ABF973300FC7CD9 /* ColorView.swift */; };
+		1168EAD91AC0FA8E00FC7CD9 /* ColorPaletteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1168EAD81AC0FA8E00FC7CD9 /* ColorPaletteCell.swift */; };
 		117F49531A96DA4500A31746 /* AEFloatConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 117F49391A96DA4500A31746 /* AEFloatConverter.m */; };
 		117F49541A96DA4500A31746 /* EZAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 117F493B1A96DA4500A31746 /* EZAudio.m */; };
 		117F49551A96DA4500A31746 /* EZAudioFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 117F493D1A96DA4500A31746 /* EZAudioFile.m */; };
@@ -148,6 +149,7 @@
 		0D98626B1A1D2C0B00FAD175 /* Prism_LightsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prism_LightsTests.swift; sourceTree = "<group>"; };
 		0DB347421A2D5BCE00B91EF2 /* PushAuthController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushAuthController.swift; sourceTree = "<group>"; };
 		1168EAD61ABF973300FC7CD9 /* ColorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorView.swift; sourceTree = "<group>"; };
+		1168EAD81AC0FA8E00FC7CD9 /* ColorPaletteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPaletteCell.swift; sourceTree = "<group>"; };
 		117F49381A96DA4500A31746 /* AEFloatConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEFloatConverter.h; sourceTree = "<group>"; };
 		117F49391A96DA4500A31746 /* AEFloatConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AEFloatConverter.m; sourceTree = "<group>"; };
 		117F493A1A96DA4500A31746 /* EZAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudio.h; sourceTree = "<group>"; };
@@ -287,6 +289,7 @@
 		0D0A26D71A376D4A0033550D /* Music */ = {
 			isa = PBXGroup;
 			children = (
+				1168EAD81AC0FA8E00FC7CD9 /* ColorPaletteCell.swift */,
 				11FDAB4B1AACD2A20055C2AD /* MusicSelectBulbsViewController.swift */,
 				11FDAB531AAFF2460055C2AD /* MusicBulbRangeSelection.swift */,
 				117F49641A96DB2500A31746 /* MusicController.h */,
@@ -756,6 +759,7 @@
 				0D8B27A41A3A0B3A0069372C /* BulbSettings.swift in Sources */,
 				CCCD59301A78012F008B209D /* Configuration.swift in Sources */,
 				117F495B1A96DA4500A31746 /* EZOutput.m in Sources */,
+				1168EAD91AC0FA8E00FC7CD9 /* ColorPaletteCell.swift in Sources */,
 				CCB707871AA68A73002BF12B /* NewColorPickerView.swift in Sources */,
 				117F49561A96DA4500A31746 /* EZAudioPlayer.m in Sources */,
 				CC9A11FF1AB9003500BDFA85 /* HomeLoadingView.swift in Sources */,
