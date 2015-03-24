@@ -72,12 +72,6 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate{
     
     //MARK - UIViewController Methods
     override func viewWillAppear(animated: Bool) {
-        
-
-    }
-    
-
-    override func viewDidAppear(animated: Bool) {
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
         
         //Sets the slider to current brightness
@@ -95,6 +89,31 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate{
         }
         
         self.title = light.name
+        //Set the Delegate of the Child Controller
+        var picker = ((self.childViewControllers.last)?.view) as ColorPicker
+        picker.colorChangedDelegate = self
+
+    }
+    
+
+    override func viewDidAppear(animated: Bool) {
+        var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
+        
+        //Sets the slider to current brightness
+        var light = (cache.lights?[bulbId!]) as PHLight
+        var lightState = light.lightState
+        var brightness = Float(lightState.brightness) / 255
+        brightnessSlider.value = brightness
+        self.brightnessPercentLabel.text = "\(Int(brightnessSlider.value*100))%"
+//        
+//        //Sets the on-off switch
+//        if lightState.on == 1{
+//            onSwitch.on = true
+//        } else{
+//            onSwitch.on = false
+//        }
+        
+//        self.title = light.name
         //Set the Delegate of the Child Controller
         var picker = ((self.childViewControllers.last)?.view) as ColorPicker
         picker.colorChangedDelegate = self

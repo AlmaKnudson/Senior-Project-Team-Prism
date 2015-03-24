@@ -249,22 +249,21 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             var lightId = indexPath.row+1
             var light:PHLight! = cache.lights?["\(lightId)"] as? PHLight
             if(light != nil){
-                
-                cell.SetBulbLabel(light.name)
+                cell.initBulbCell(light.name)
                 
                 if !light.lightState.reachable.boolValue {
-                    cell.SetBulbUnreachable()
+                    cell.SetUnreachable()
                 } else if(light.lightState.on == 0){
-                    cell.SetBulbImage(false, animate:false)
+                    cell.turnOff(false)
                 } else{
                     var point = CGPoint(x: Double(light.lightState.x), y: Double(light.lightState.y))
                     var color = PHUtilities.colorFromXY(point, forModel: light.modelNumber)
-                    cell.SetBulbImage(true, animate:false)
                     cell.SetBulbColor(color)
+                    cell.turnOn(false)
                     
                 }
             } else{
-                cell.SetBulbImage(false, animate:false)
+                cell.initBulbCell("")
             }
         } else if indexPath.section == GROUP_SECTION {
             var groupId = indexPath.row
@@ -273,9 +272,9 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             var group:PHGroup! = cache?.groups?["\(groupId)"] as? PHGroup
             
             if groupId == 0 {
-                cell.SetBulbLabel("All Bulbs")
+                cell.initGroupCell("All Lights")
             } else {
-                cell.SetBulbLabel(group.name)
+                cell.initGroupCell(group.name)
             }
             
             var theLight:PHLight! = nil
@@ -297,10 +296,10 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             if(lightState.on == 1){
                 var point = CGPoint(x: Double(lightState.x), y: Double(lightState.y))
                 var color = PHUtilities.colorFromXY(point, forModel: theLight.modelNumber)
-                cell.SetGroupImage(true, animate: false)
+                cell.turnOn(false)
                 cell.SetGroupColor(color)
             } else{
-                cell.SetGroupImage(false, animate: false)
+                cell.turnOff(false)
             }
         }
         
@@ -352,7 +351,13 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
                 if(DEBUG){
                     println("indexPath of cell: \(indexPath)")
                 }
-                self.performSegueWithIdentifier("BulbSettingsNav", sender: indexPath)
+                
+                var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
+                var lightId = indexPath!.row+1
+                var light = cache.lights["\(lightId)"] as PHLight
+                if(light.lightState.reachable.boolValue){
+                    self.performSegueWithIdentifier("BulbSettingsNav", sender: indexPath)
+                }
             }
         }
         
@@ -462,6 +467,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     func HideConnectingView(){
         loadingView.hidden = true
         scanningIndicator.stopAnimating()
+        self.bulbCollectionView.reloadData()
     }
     
     func ShowConnectingView(){
