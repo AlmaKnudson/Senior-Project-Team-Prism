@@ -89,6 +89,7 @@
 		CCB707871AA68A73002BF12B /* NewColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB707841AA68A73002BF12B /* NewColorPickerView.swift */; };
 		CCC54A371ABF1AC4003FF0E2 /* Lights.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC54A361ABF1AC4003FF0E2 /* Lights.swift */; };
 		CCC54A381AC0FAC5003FF0E2 /* Info_API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD59311A780140008B209D /* Info_API.swift */; };
+		CCC54A3A1AC1EA39003FF0E2 /* BulbActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC54A391AC1EA39003FF0E2 /* BulbActivity.swift */; };
 		CCCB88D51A98D808003D68F4 /* Alarms.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCB88D41A98D808003D68F4 /* Alarms.swift */; };
 		CCCB88D71A994CFF003D68F4 /* AdvancedSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCB88D61A994CFF003D68F4 /* AdvancedSettingsController.swift */; };
 		CCCB88DC1A9BAAD8003D68F4 /* AlarmDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCB88DB1A9BAAD8003D68F4 /* AlarmDetail.swift */; };
@@ -234,6 +235,7 @@
 		CCB707831AA68A73002BF12B /* ColorSelectorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorSelectorView.swift; sourceTree = "<group>"; };
 		CCB707841AA68A73002BF12B /* NewColorPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewColorPickerView.swift; sourceTree = "<group>"; };
 		CCC54A361ABF1AC4003FF0E2 /* Lights.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lights.swift; sourceTree = "<group>"; };
+		CCC54A391AC1EA39003FF0E2 /* BulbActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BulbActivity.swift; sourceTree = "<group>"; };
 		CCCB88D41A98D808003D68F4 /* Alarms.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alarms.swift; sourceTree = "<group>"; wrapsLines = 1; };
 		CCCB88D61A994CFF003D68F4 /* AdvancedSettingsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsController.swift; sourceTree = "<group>"; };
 		CCCB88DB1A9BAAD8003D68F4 /* AlarmDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmDetail.swift; sourceTree = "<group>"; };
@@ -417,6 +419,7 @@
 				117F49651A96DB8B00A31746 /* PrefixHeader.pch */,
 				CCB135A11AAB8095006E464F /* ColorPicker */,
 				CCB135A21AAB8261006E464F /* HueSDK_API */,
+				CCC54A391AC1EA39003FF0E2 /* BulbActivity.swift */,
 			);
 			path = "Prism Lights";
 			sourceTree = "<group>";
@@ -777,6 +780,7 @@
 				0D3A79151A26A716003AC6D4 /* DDFileLogger.m in Sources */,
 				117F49551A96DA4500A31746 /* EZAudioFile.m in Sources */,
 				0D9862541A1D2C0B00FAD175 /* AppDelegate.swift in Sources */,
+				CCC54A3A1AC1EA39003FF0E2 /* BulbActivity.swift in Sources */,
 				117F495C1A96DA4500A31746 /* EZPlot.m in Sources */,
 				0D3A791D1A26A716003AC6D4 /* DispatchQueueLogFormatter.m in Sources */,
 				0DB347431A2D5BCE00B91EF2 /* PushAuthController.swift in Sources */,

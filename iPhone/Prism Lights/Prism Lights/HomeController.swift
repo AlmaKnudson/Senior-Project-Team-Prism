@@ -269,37 +269,45 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             var groupId = indexPath.row
             var lightState = PHLightState()
             lightState.on = false
-            var group:PHGroup! = cache?.groups?["\(groupId)"] as? PHGroup
             
             if groupId == 0 {
                 cell.initGroupCell("All Lights")
             } else {
-                cell.initGroupCell(group.name)
+                
+                var group:PHGroup! = cache?.groups?["\(groupId)"] as? PHGroup
+                if group != nil {
+                    cell.initGroupCell(group.name)
+                } else{
+                    cell.initGroupCell("")
+                    return cell
+                }
             }
             
-            var theLight:PHLight! = nil
-            for (lightId, light) in (cache.lights as [String:PHLight]){
-                //Ignore lights not connected to bridge
-                if(light.lightState.reachable == 0){
-                    continue
+            if cache.groups != nil{
+                var theLight:PHLight! = nil
+                for (lightId, light) in (cache.lights as [String:PHLight]){
+                    //Ignore lights not connected to bridge
+                    if(light.lightState.reachable == 0){
+                        continue
+                    }
+                    
+                    if light.lightState.on == 1{
+                        theLight = light
+                        lightState.on = true
+                        lightState.x = light.lightState.x
+                        lightState.y = light.lightState.y
+                        break
+                    }
                 }
                 
-                if light.lightState.on == 1{
-                    theLight = light
-                    lightState.on = true
-                    lightState.x = light.lightState.x
-                    lightState.y = light.lightState.y
-                    break
+                if(lightState.on == 1){
+                    var point = CGPoint(x: Double(lightState.x), y: Double(lightState.y))
+                    var color = PHUtilities.colorFromXY(point, forModel: theLight.modelNumber)
+                    cell.turnOn(false)
+                    cell.SetGroupColor(color)
+                } else{
+                    cell.turnOff(false)
                 }
-            }
-            
-            if(lightState.on == 1){
-                var point = CGPoint(x: Double(lightState.x), y: Double(lightState.y))
-                var color = PHUtilities.colorFromXY(point, forModel: theLight.modelNumber)
-                cell.turnOn(false)
-                cell.SetGroupColor(color)
-            } else{
-                cell.turnOff(false)
             }
         }
         
@@ -529,14 +537,14 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             }
             
             //update all lightStates
-                for (lightId, light) in (cache.lights as [String:PHLight]){
-                    //Ignore lights not connected to bridge
-                    if(light.lightState.reachable == 0){
-                        continue
-                    }
-                    light.lightState.on = lightOn
-                    lightState = light.lightState
+            for (lightId, light) in (cache.lights as [String:PHLight]){
+                //Ignore lights not connected to bridge
+                if(light.lightState.reachable == 0){
+                    continue
                 }
+                light.lightState.on = lightOn
+                lightState = light.lightState
+            }
             
         } else {
             
@@ -550,7 +558,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
                 
             }
         }
-
+        
         if lightState == nil {
             return false
         }
@@ -659,16 +667,16 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
                                 var numberFormatter = NSNumberFormatter()
                                 var number:NSNumber? = numberFormatter.numberFromString(range!)
                                 var rangeInt = (Float(number!)/10)
-//                                                            NSLog("\(b.distance.floatValue) < \(rangeInt)")
+                                //                                                            NSLog("\(b.distance.floatValue) < \(rangeInt)")
                                 
                                 
                                 if b.distance.floatValue <= rangeInt {
                                     
                                     
                                     //This is to print out the distance to see if I get a different reading each time. Otherwise, I will have to poll for an average in a different/slower way.
-//                                    for var i = 0; i < 10; ++i  {
-                                        NSLog("\(b.distance.floatValue)")
-//                                    }
+                                    //                                    for var i = 0; i < 10; ++i  {
+                                    NSLog("\(b.distance.floatValue)")
+                                    //                                    }
                                     var lightState:PHLightState = PHLightState()
                                     //                        lightState.on = false
                                     lightState.on = true
