@@ -1,6 +1,13 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="app.lights.prism.com.prismlights.MusicFragment">
+    tools:context="app.lights.prism.com.prismlights.MusicFragment"
+    android:orientation="vertical">
 
-</FrameLayout>
+    <view
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        class="app.lights.prism.com.prismlights.WaveformView"
+        android:id="@+id/waveformView"
+        android:layout_gravity="center_horizontal" />
+</LinearLayout>

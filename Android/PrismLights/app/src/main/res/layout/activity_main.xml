@@ -34,6 +34,7 @@
             android:id="@+id/settingsButton"
             android:background="@drawable/bottom_button"
             android:layout_marginRight="1dp"
+            android:layout_marginEnd="1dp"
             android:enabled="false"/>
 
         <Button
@@ -44,17 +45,20 @@
             android:id="@+id/homeButton"
             android:background="@drawable/bottom_button"
             android:layout_marginLeft="1dp"
+            android:layout_marginEnd="1dp"
             android:layout_marginRight="1dp"
-            android:enabled="true" />
+            android:layout_marginStart="1dp"
+            android:enabled="false" />
 
         <Button
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
-            android:text="@string/voice"
+            android:text="@string/music"
             android:id="@+id/voiceButton"
             android:background="@drawable/bottom_button"
             android:layout_marginLeft="1dp"
+            android:layout_marginStart="1dp"
             android:enabled="false" />
 
     </LinearLayout>
