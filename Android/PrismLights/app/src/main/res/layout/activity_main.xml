@@ -12,15 +12,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:id="@+id/container">
-
-        <fragment
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="app.lights.prism.com.prismlights.SettingsFragment"
-        tools:layout="@layout/settings_fragment"
-        android:id="@+id/settings_fragment">
-
-        </fragment></FrameLayout>
+    </FrameLayout>
 
     <LinearLayout
         android:orientation="horizontal"

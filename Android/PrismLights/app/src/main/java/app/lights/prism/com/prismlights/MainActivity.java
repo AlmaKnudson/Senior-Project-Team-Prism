@@ -45,7 +45,9 @@ public class MainActivity extends Activity implements PHSDKListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.container, new SettingsFragment());
+        fragmentTransaction.commit();
         currentSchedule = null;
 
         setContentView(R.layout.activity_main);
@@ -70,6 +72,17 @@ public class MainActivity extends Activity implements PHSDKListener{
                 if(!(getFragmentManager().findFragmentById(R.id.container) instanceof VoiceFragment)) {
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.container, new VoiceFragment());
+                    fragmentTransaction.addToBackStack("settings");
+                    fragmentTransaction.commit();
+                }
+            }
+        });
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!(getFragmentManager().findFragmentById(R.id.container) instanceof SettingsFragment)) {
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.container, new SettingsFragment());
                     fragmentTransaction.addToBackStack("settings");
                     fragmentTransaction.commit();
                 }
@@ -152,19 +165,23 @@ public class MainActivity extends Activity implements PHSDKListener{
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.container, new HomeFragment());
-                fragmentTransaction.commit();
-                dialog.setCancelable(true);
-                dialog.cancel();
-                //enable tab buttons so we can use them
-                settingsButton.setEnabled(true);
-                voiceButton.setEnabled(true);
-                homeButton.setEnabled(true);
+                openHomeScreen();
             }
         });
     }
 
+
+    private void openHomeScreen() {
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.container, new HomeFragment());
+        fragmentTransaction.commit();
+        dialog.setCancelable(true);
+        dialog.cancel();
+        //enable tab buttons so we can use them
+        settingsButton.setEnabled(true);
+        voiceButton.setEnabled(true);
+        homeButton.setEnabled(true);
+    }
     @Override
     /**
      * From API:
@@ -204,7 +221,16 @@ public class MainActivity extends Activity implements PHSDKListener{
             PHAccessPoint accessPoint = accessPoints.get(0);
             accessPoint.setUsername(preferences.getUsername());
             preferences.setLastConnectedIPAddress(accessPoint.getIpAddress());
-            hueBridgeSdk.connect(accessPoints.get(0));
+            if(!hueBridgeSdk.isAccessPointConnected(accessPoint)) {
+                hueBridgeSdk.connect(accessPoints.get(0));
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        openHomeScreen();
+                    }
+                });
+            }
             dialog.setCancelable(true);
             dialog.cancel();
         }

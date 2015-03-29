@@ -27,7 +27,7 @@ public class SettingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        LinearLayout layout = (LinearLayout)inflater.inflate(R.layout.settings_fragment, container);
+        LinearLayout layout = (LinearLayout)inflater.inflate(R.layout.settings_fragment, container, false);
         Button bridgeSearch = (Button) layout.findViewById(R.id.searchBridgeButton);
         bridgeSearch.setOnClickListener(new View.OnClickListener() {
             @Override
