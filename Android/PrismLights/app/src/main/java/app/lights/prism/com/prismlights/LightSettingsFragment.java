@@ -14,6 +14,7 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.model.PHGroup;
@@ -29,7 +30,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
     private int position; // The number for the chosen Light
     private boolean isGroup; //True if group false otherwise
     private EditText nameEditor;
-    private Switch bulbOnState;
+    private ToggleButton bulbOnState;
     private SeekBar brightness;
     private TextView brightnessPercentage;
     private float[] currentColor;
@@ -67,7 +68,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
         // Inflate the layout for this fragment
         FrameLayout frame = (FrameLayout) inflater.inflate(R.layout.fragment_light_settings, container, false);
         nameEditor = (EditText) frame.findViewById(R.id.nameEditor);
-        bulbOnState = (Switch) frame.findViewById(R.id.bulbOnState);
+        bulbOnState = (ToggleButton) frame.findViewById(R.id.bulbOnState);
         brightness = (SeekBar) frame.findViewById(R.id.brightness);
         brightnessPercentage = (TextView) frame.findViewById(R.id.brightnessLabel);
         colorPicker = (ColorPickerViewGroup) frame.findViewById(R.id.colorPickerView);
@@ -95,7 +96,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
         bulbOnState.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Switch bulbOn = (Switch) v;
+                ToggleButton bulbOn = (ToggleButton) v;
                 if(isGroup) {
                     HueBulbChangeUtility.turnGroupOnOff(position, bulbOn.isChecked());
                 } else {
