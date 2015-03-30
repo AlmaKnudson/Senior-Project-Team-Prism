@@ -2,12 +2,136 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="app.lights.prism.com.prismlights.MusicFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/black">
 
     <view
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="50dp"
         class="app.lights.prism.com.prismlights.WaveformView"
         android:id="@+id/waveformView"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+       />
+
+    <LinearLayout
+        android:layout_margin="5dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/music_top">
+
+    <SeekBar
+        android:layout_width="275dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBar"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Beats Per Minute"
+            android:id="@+id/textView8"
+            android:layout_gravity="center_horizontal" />
+
+        <SeekBar
+        android:layout_width="275dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBar2"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Max Brightness"
+            android:id="@+id/textView9"
+            android:layout_gravity="center_horizontal" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:background="@drawable/music_bottom"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Frequency Ranges"
+            android:id="@+id/textView10"
+            android:layout_gravity="center_horizontal" />
+
+        <SeekBar
+        android:layout_width="275dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBar3"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Low Range"
+            android:id="@+id/textView11"
+            android:layout_gravity="center_horizontal" />
+
+        <SeekBar
+        android:layout_width="275dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBar4"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Mid Range"
+            android:id="@+id/textView12"
+            android:layout_gravity="center_horizontal" />
+
+        <SeekBar
+        android:layout_width="275dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBar5"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="High Range"
+            android:id="@+id/textView13"
+            android:layout_gravity="center_horizontal" />
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.67" />
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recording"
+        android:id="@+id/toggleButton"
+        android:layout_gravity="center_horizontal"
+        android:checked="false"
+        />
+
 </LinearLayout>

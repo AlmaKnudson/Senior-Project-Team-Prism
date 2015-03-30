@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.philips.lighting.hue.sdk.PHAccessPoint;
 import com.philips.lighting.hue.sdk.PHBridgeSearchManager;
@@ -21,8 +20,6 @@ import com.philips.lighting.hue.sdk.PHSDKListener;
 import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHHueError;
 import com.philips.lighting.model.PHHueParsingError;
-import com.philips.lighting.model.PHLight;
-import com.philips.lighting.model.PHLightState;
 import com.philips.lighting.model.PHSchedule;
 
 import java.util.List;
@@ -33,7 +30,7 @@ public class MainActivity extends Activity implements PHSDKListener{
     private PHHueSDK hueBridgeSdk;
     private Dialog dialog;
     private Button homeButton;
-    private Button voiceButton;
+    private Button musicButton;
     private ImageButton settingsButton;
     private int connectionLostCount = 0;
     public static int MIN_CONNECTION_LOST_COUNT=1;
@@ -52,7 +49,7 @@ public class MainActivity extends Activity implements PHSDKListener{
         homeButton = (Button) findViewById(R.id.homeButton);
         settingsButton = (ImageButton) findViewById(R.id.settingsButton);
         settingsButton.setEnabled(false);//TODO do this in the xml if possible
-        voiceButton = (Button) findViewById(R.id.voiceButton);
+        musicButton = (Button) findViewById(R.id.musicButton);
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,12 +61,12 @@ public class MainActivity extends Activity implements PHSDKListener{
                 }
             }
         });
-        voiceButton.setOnClickListener(new View.OnClickListener() {
+        musicButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!(getFragmentManager().findFragmentById(R.id.container) instanceof VoiceFragment)) {
+                if (!(getFragmentManager().findFragmentById(R.id.container) instanceof MusicFragment)) {
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.container, new VoiceFragment());
+                    fragmentTransaction.replace(R.id.container, new MusicFragment());
                     fragmentTransaction.addToBackStack("settings");
                     fragmentTransaction.commit();
                 }
@@ -159,7 +156,7 @@ public class MainActivity extends Activity implements PHSDKListener{
                 dialog.cancel();
                 //enable tab buttons so we can use them
                 settingsButton.setEnabled(true);
-                voiceButton.setEnabled(true);
+                musicButton.setEnabled(true);
                 homeButton.setEnabled(true);
             }
         });
