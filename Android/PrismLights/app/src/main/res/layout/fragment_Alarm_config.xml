@@ -1,0 +1,61 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Set Time For Alarm"
+        android:id="@+id/alarmSettingText"
+        android:gravity="center"
+        android:textSize="30dp"
+        android:layout_weight="0.09" />
+
+    <TimePicker
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/alarmTimePicker" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="109dp"
+        android:layout_gravity="center_horizontal"
+        android:weightSum="1">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="on"
+            android:id="@+id/radioButtonOn"
+            android:checked="false"
+            android:layout_weight="0.33" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="off"
+            android:id="@+id/radioButtonOff"
+            android:layout_weight="0.33"
+            android:checked="false" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Alert"
+            android:id="@+id/radioButtonAlert"
+            android:layout_weight="0.33"
+            android:checked="false" />
+    </LinearLayout>
+
+    <Button
+        android:layout_width="105dp"
+        android:layout_height="58dp"
+        android:text="Save"
+        android:id="@+id/buttonSave"
+        android:layout_gravity="center_horizontal" />
+
+</LinearLayout>
