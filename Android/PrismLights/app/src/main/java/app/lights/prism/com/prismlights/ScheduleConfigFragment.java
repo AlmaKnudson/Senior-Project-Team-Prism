@@ -202,7 +202,7 @@ public class ScheduleConfigFragment extends Fragment {
             public void onClick(View v) {
                 TimePickerDialog timePicker = new TimePickerDialog(
                         getActivity(),
-                        mTimeSetListener, mHour, mMinute, true);
+                        mTimeSetListener, mHour, mMinute, false);
 
                 timePicker.show();
             }
@@ -219,14 +219,23 @@ public class ScheduleConfigFragment extends Fragment {
 
         if(currentSchedule != null) {
             PHLightState state = currentSchedule.getLightState();
+
             nameEditor.setText(currentSchedule.getName());
+
             bulbOnState.setChecked(state.isOn());
-            int currentBrightness = state.getBrightness();
-            brightness.setProgress(currentBrightness);
-            brightnessPercentage.setText(currentBrightness + "%");
-            float[] currentXYColor = new float[]{state.getX(), state.getY()};
-            currentColor = PHUtilities.colorFromXY(currentXYColor, HueBulbChangeUtility.colorXYModelForHue);
-            colorPicker.setColor(currentXYColor);
+
+            if(state.getBrightness() != null) {
+                int currentBrightness = state.getBrightness();
+                brightness.setProgress(currentBrightness);
+                brightnessPercentage.setText(currentBrightness + "%");
+            }
+
+            if(state.getX() != null && state.getY() != null) {
+                float[] currentXYColor = new float[]{state.getX(), state.getY()};
+                currentColor = PHUtilities.colorFromXY(currentXYColor, HueBulbChangeUtility.colorXYModelForHue);
+                colorPicker.setColor(currentXYColor);
+            }
+
             recurringDays = currentSchedule.getRecurringDays();
             recurringDaysBitStr = String.format("%07d", new BigInteger(
                     Integer.toBinaryString(recurringDays)));

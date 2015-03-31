@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -21,14 +23,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.philips.lighting.hue.listener.PHBridgeConfigurationListener;
 import com.philips.lighting.hue.listener.PHScheduleListener;
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.model.PHBridge;
+import com.philips.lighting.model.PHBridgeConfiguration;
 import com.philips.lighting.model.PHHueError;
 import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
 import com.philips.lighting.model.PHSchedule;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -63,6 +69,7 @@ public class TimerFragment extends Fragment{
     int alarmMode;
     AlertDialog modeDialog;
     TimePickerFragment timePickerDialog;
+    private Dialog dialog;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -131,7 +138,15 @@ public class TimerFragment extends Fragment{
         });
 
         adapter = new TimerAdapter();
+
         timerListView.setAdapter(adapter);
+
+        timerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                showTimePickerDialog(position);
+            }
+        });
 
         ImageView refreshButton = (ImageView)view.findViewById(R.id.refreshButton);
 
@@ -190,13 +205,13 @@ public class TimerFragment extends Fragment{
 
             final TextView timeView = (TextView) currentView.findViewById(R.id.singleTimerTimeText);
 
-            // When individual timer is clicked, open a time picker to change the timer
-            timeView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showTimePickerDialog(position);
-                }
-            });
+//            // When individual timer is clicked, open a time picker to change the timer
+//            timeView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    showTimePickerDialog(position);
+//                }
+//            });
 
             final TextView deleteTextView = (TextView) currentView.findViewById(R.id.TimerDeleteText);
 
@@ -217,54 +232,120 @@ public class TimerFragment extends Fragment{
             String modeString = null;
             PHLightState state = timer.getLightState();
             if (!state.isOn())
-                modeString = "Off";
+                modeString = "Mode:Off";
             else if (state.getAlertMode() == PHLight.PHLightAlertMode.ALERT_SELECT)
-                modeString = "Alert";
+                modeString = "Mode:Alert";
             else
-                modeString = "On";
+                modeString = "Mode:On";
 
             modeView.setText(modeString);
 
 
             Date createdTime = timer.getCreated();
-            Date startTime = timer.getStartTime();
+//            Date startTime = timer.getStartTime();
             int duration = timer.getTimer();
-            String s;
+//            String s;
+//
+//
+////            String bridgeGetTime = bridge.getResourceCache().getBridgeConfiguration().getTime();
+//            String bridgeGetLocalTime = bridge.getResourceCache().getBridgeConfiguration().getLocalTime();
+//
+//            Date bridgeTime= null;
+//            try {
+//                bridgeTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(bridgeGetLocalTime);
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//
+//
+////            PHBridgeConfiguration configuration = new PHBridgeConfiguration();
+////            configuration.setTime(new Date().toString());
+////            bridge.updateBridgeConfigurations(configuration, new PHBridgeConfigurationListener() {
+////                @Override
+////                public void onReceivingConfiguration(PHBridgeConfiguration phBridgeConfiguration) {
+////                   ;
+////                }
+////
+////                @Override
+////                public void onSuccess() {
+////                    ;
+////                }
+////
+////                @Override
+////                public void onError(int i, String s) {
+////                    ;
+////                }
+////
+////                @Override
+////                public void onStateUpdate(Map<String, String> map, List<PHHueError> list) {
+////                    ;
+////                }
+////            });
+//
+//
+//            // bridge is giving me wrong value. I am picking better date among the two value...
+//            if(startTime!=null)
+//                s = startTime.toString();
+//            else
+//                s = "null";
+//
+//            Log.d("TimeTest", "CreatedTime:" + createdTime.toString() +" startTime:"+ s + " bridgeTime:"+bridgeTime);
+//
+//            Date startedTime;
+//            if (startTime!=null)
+//                if (startTime.getTime() <= createdTime.getTime())
+//                    startedTime = startTime;
+//                else
+//                    startedTime = createdTime;
+//            else
+//                startedTime = createdTime;
 
-            // bridge is giving me wrong value. I am picking better date among the two value...
-            if(startTime!=null)
-                s = startTime.toString();
-            else
-                s = "null";
-            Log.d("createdTime", createdTime.toString() +" "+ s );
 
-            Date startedTime;
-            if (startTime!=null)
-                if (startTime.getTime() <= createdTime.getTime())
-                    startedTime = startTime;
-                else
-                    startedTime = createdTime;
-            else
+            long timeLeft;
+
+            if (createdTime == null)
+                timeLeft = duration * 1000;
+
+            else{
+                Date startedTime;
+
                 startedTime = createdTime;
 
-            startedTime.setTime(startedTime.getTime()+(long)(duration*1000)); //add duration of the timer to current time.
-            Date currentTime = new Date();
-            long timeLeft = startedTime.getTime() - currentTime.getTime(); // calculate the difference between current time and timer time
+                startedTime.setTime(startedTime.getTime() + (long) (duration * 1000)); //add duration of the timer to current time.
 
+                timeLeft = startedTime.getTime() - new Date().getTime(); // calculate the difference between current time and timer time
+            }
 
+            if (timeLeft < 0) {
+                timeView.setText("Error");
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog = ((MainActivity)getActivity()).getDialog();
+                        dialog.setCancelable(true);
+                        dialog.setCanceledOnTouchOutside(true);
+                        dialog.setContentView(R.layout.dialog_warning);
+                        TextView dialogTitle = (TextView) (dialog.findViewById(R.id.dialogTitle));
+                        dialogTitle.setText(getText(R.string.time_sync_error));
+                        TextView dialogText = (TextView) (dialog.findViewById(R.id.textExplanation));
+                        dialogText.setText(getText(R.string.time_sync_error_message));
+                        dialog.show();
+                    }
+                });
+            }
+            else {
+                CountDownTimer countDownTimer = new CountDownTimer(timeLeft, 1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        //changer time left text
+                        String timerString = getTimerString((int) millisUntilFinished / 1000);
+                        timeView.setText(timerString);
+                    }
 
-            CountDownTimer countDownTimer = new CountDownTimer(timeLeft,1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    //changer time left text
-                    String timerString = getTimerString((int)millisUntilFinished/1000);
-                    timeView.setText(timerString);
-                }
-
-                @Override
-                public void onFinish() {
-                    // clean currentTimers and countDownTimers and refresh the adapter
-                    timeView.setText("Done");
+                    @Override
+                    public void onFinish() {
+                        // clean currentTimers and countDownTimers and refresh the adapter
+                        timeView.setText("Done");
 //                    getActivity().runOnUiThread(new Runnable() {
 //                        public void run() {
 //                            getCurrentTimers();
@@ -272,12 +353,13 @@ public class TimerFragment extends Fragment{
 //                            adapter.notifyDataSetChanged();
 //                        }
 //                    });
-                }
-            };
+                    }
+                };
 
-            countDownTimer.start();
+                countDownTimer.start();
 
-            countDownTimers.add(position,countDownTimer);
+                countDownTimers.add(position, countDownTimer);
+            }
 
             return currentView;
         }
@@ -337,8 +419,7 @@ public class TimerFragment extends Fragment{
 //            }
 
             // Create a new instance of TimePickerDialog and return it
-            return new TimePickerDialog(getActivity(), this, hour, minute,
-                    true);
+            return new TimePickerDialog(getActivity(), this, hour, minute, true);
         }
 
         public void onTimeSet(TimePicker view, int hour, int minute) {
@@ -461,11 +542,11 @@ public class TimerFragment extends Fragment{
         schedule.setLightIdentifier(currentBulb.getIdentifier());
         schedule.setLightState(getLightState());
         schedule.setDescription("Timer");
-        Date startTime = new Date();
-        //TODO: inpect setting startTime and CreatedTime...
-        schedule.setStartTime(startTime);
-        schedule.setCreated(startTime);
-        Log.d("StartTime", ""+startTime);
+//        Date startTime = new Date();
+//        //TODO: inpect setting startTime and CreatedTime...
+//        schedule.setStartTime(startTime);
+//        schedule.setCreated(startTime);
+//        Log.d("StartTime", ""+startTime);
 
         final PHWizardAlertDialog dialogManager = PHWizardAlertDialog.getInstance();
         dialogManager.showProgressDialog(R.string.sending_progress, getActivity());

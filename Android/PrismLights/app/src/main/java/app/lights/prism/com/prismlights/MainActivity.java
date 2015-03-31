@@ -1,10 +1,14 @@
 package app.lights.prism.com.prismlights;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,7 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.philips.lighting.hue.sdk.PHAccessPoint;
 import com.philips.lighting.hue.sdk.PHBridgeSearchManager;
@@ -21,11 +24,13 @@ import com.philips.lighting.hue.sdk.PHSDKListener;
 import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHHueError;
 import com.philips.lighting.model.PHHueParsingError;
-import com.philips.lighting.model.PHLight;
-import com.philips.lighting.model.PHLightState;
 import com.philips.lighting.model.PHSchedule;
 
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
+
+import app.lights.prism.com.prismlights.receiver.BroadCastAlarmReceiver;
 
 
 public class MainActivity extends Activity implements PHSDKListener{
@@ -93,6 +98,13 @@ public class MainActivity extends Activity implements PHSDKListener{
         hueBridgeSdk.setDeviceName(Build.MODEL);
         hueBridgeSdk.getNotificationManager().registerSDKListener(this);
         CharSequence waitingText = "";
+
+
+        // TODO: find a perfect place for this.
+        //set recurring service here once. it is ok to be called multiple time, previous alarm broadcasting will be replaced.
+        Context context = this.getApplicationContext();
+        setAlarmBroadcasting(context);
+
         //code from example app
         HueSharedPreferences prefs = HueSharedPreferences.getInstance(getApplicationContext());
         String lastIpAddress = prefs.getLastConnectedIPAddress();
@@ -142,7 +154,7 @@ public class MainActivity extends Activity implements PHSDKListener{
             @Override
             public void run() {
                 Fragment currentFragment = getFragmentManager().findFragmentById(R.id.container);
-                if(currentFragment instanceof CacheUpdateListener) {
+                if (currentFragment instanceof CacheUpdateListener) {
                     CacheUpdateListener fragment = (CacheUpdateListener) currentFragment;
                     fragment.cacheUpdated();
                 }
@@ -158,6 +170,7 @@ public class MainActivity extends Activity implements PHSDKListener{
      * Also it is recommended you store the connected IP Address/ Username in your app here.  This will allow easy automatic connection on subsequent use.
      */
     public void onBridgeConnected(PHBridge phBridge) {
+
         hueBridgeSdk.setSelectedBridge(phBridge);
         hueBridgeSdk.enableHeartbeat(phBridge, PHHueSDK.HB_INTERVAL);
         hueBridgeSdk.getHeartbeatManager().enableLightsHeartbeat(phBridge, 2000);
@@ -200,6 +213,7 @@ public class MainActivity extends Activity implements PHSDKListener{
             }
         });
         hueBridgeSdk.startPushlinkAuthentication(accessPoint);
+
     }
 
     @Override
@@ -315,8 +329,51 @@ public class MainActivity extends Activity implements PHSDKListener{
         }
     }
 
+    public Dialog getDialog() {
+        return dialog;
+    }
+
     @Override
     public void onParsingErrors(List<PHHueParsingError> phHueParsingErrors) {
 
     }
+
+    /* this function starts recurring service.
+    *  Once this is called, SmartSunService will be triggered every day.
+    */
+    private void setAlarmBroadcasting(Context context) {
+        Calendar updateTime = Calendar.getInstance();
+        updateTime.setTimeZone(TimeZone.getDefault());
+        updateTime.set(Calendar.HOUR_OF_DAY, 01);
+        updateTime.set(Calendar.MINUTE, 00);
+
+        Intent downloader = new Intent(context, BroadCastAlarmReceiver.class);
+        PendingIntent recurringDownload = PendingIntent.getBroadcast(context,
+                0, downloader, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarms = (AlarmManager) this.getSystemService(
+                Context.ALARM_SERVICE);
+        alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                updateTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY,
+                recurringDownload);
+//        alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+//                updateTime.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+//                recurringDownload);
+//        alarms.setRepeating(AlarmManager.RTC_WAKEUP,
+//                updateTime.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+//                recurringDownload);
+    }
+
+    //TODO: add enable or disable SmartSun option in general option.
+    /*
+     this function cancel recurring service.
+     */
+    private void cancelAlarmBroadcasting(Context context) {
+        Intent downloader = new Intent(context, BroadCastAlarmReceiver.class);
+        PendingIntent recurringDownload = PendingIntent.getBroadcast(context,
+                0, downloader, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarms = (AlarmManager) this.getSystemService(
+                Context.ALARM_SERVICE);
+        alarms.cancel(recurringDownload);
+    }
+
 }
