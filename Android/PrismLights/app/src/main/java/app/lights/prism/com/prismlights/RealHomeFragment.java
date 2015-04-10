@@ -27,8 +27,12 @@ public class RealHomeFragment extends Fragment implements ViewPager.OnPageChange
     private View favoriteIconSelected;
     private View favoriteIconDeselected;
 
-    public static int disabledOverlay = Color.argb(125, 0, 0, 0);
-    public static int offOverlay = Color.argb(50, 0, 0, 0);
+    public static final int disabledOverlay = Color.argb(125, 0, 0, 0);
+    public static final int offOverlay = Color.argb(50, 0, 0, 0);
+
+    public static final int EDIT_BUTTON = 2;
+    public static final int PLUS_BUTTON = 1;
+    public static final int NORMAL_VIEW = 0;
 
     public static final String lightPositionString = "CURRENT_BULB_ID";
     public static final String groupOrLightString = "GROUP_OR_LIGHT";
@@ -105,6 +109,7 @@ public class RealHomeFragment extends Fragment implements ViewPager.OnPageChange
 
     private void updateFromCache() {
         Fragment fragment = getChildFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewPager + ":" + viewPager.getCurrentItem());
+        //Favorites fragment does not implement this
         if(fragment instanceof CacheUpdateListener) {
             ((CacheUpdateListener) fragment).cacheUpdated();
         }

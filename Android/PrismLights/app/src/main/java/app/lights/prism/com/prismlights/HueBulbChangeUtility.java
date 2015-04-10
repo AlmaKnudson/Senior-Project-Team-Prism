@@ -13,6 +13,7 @@ import com.philips.lighting.model.PHGroup;
 import com.philips.lighting.model.PHHueError;
 import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
+import com.philips.lighting.model.PHScene;
 import com.philips.lighting.model.PHSchedule;
 
 import java.util.ArrayList;
@@ -536,4 +537,9 @@ public class HueBulbChangeUtility {
         });
     }
 
+    public static void activateFavorite(PHScene selectedScene) {
+        PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
+//        System.out.println(selectedScene.getLightIdentifiers());
+//        bridge.activateScene(selectedScene.getSceneIdentifier(), new PHGroup(selectedScene.getLightIdentifiers()), null);
+    }
 }

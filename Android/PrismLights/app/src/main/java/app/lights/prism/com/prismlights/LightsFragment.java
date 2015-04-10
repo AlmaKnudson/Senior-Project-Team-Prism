@@ -51,14 +51,15 @@ public class LightsFragment extends Fragment implements CacheUpdateListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        updateFromCache();
         View layout = inflater.inflate(R.layout.fragment_lights, container, false);
         gridView= (GridView) layout.findViewById(R.id.homeGridView);
         gridView.setAdapter(new LightViewAdapter());
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 //                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
-                  HueBulbChangeUtility.toggleBulbState((PHLight) gridView.getAdapter().getItem(position));
+                if (gridView.getAdapter().getItemViewType(position) == RealHomeFragment.NORMAL_VIEW) {
+                    HueBulbChangeUtility.toggleBulbState((PHLight) gridView.getAdapter().getItem(position));
+                }
             }
         });
 
@@ -66,16 +67,18 @@ public class LightsFragment extends Fragment implements CacheUpdateListener {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 //                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
-                Bundle bundle = new Bundle();
-                bundle.putString(RealHomeFragment.lightPositionString, currentLightIdOrder.get(position));
-                bundle.putBoolean(RealHomeFragment.groupOrLightString, false);
+                if (gridView.getAdapter().getItemViewType(position) == RealHomeFragment.NORMAL_VIEW) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(RealHomeFragment.lightPositionString, currentLightIdOrder.get(position));
+                    bundle.putBoolean(RealHomeFragment.groupOrLightString, false);
 
-                FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
-                LightSettingsFragment lightSettingFragment = new LightSettingsFragment();
-                lightSettingFragment.setArguments(bundle);
-                fragmentTransaction.replace(R.id.container, lightSettingFragment);
-                fragmentTransaction.addToBackStack("lightsettings");
-                fragmentTransaction.commit();
+                    FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
+                    LightSettingsFragment lightSettingFragment = new LightSettingsFragment();
+                    lightSettingFragment.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.container, lightSettingFragment);
+                    fragmentTransaction.addToBackStack("lightsettings");
+                    fragmentTransaction.commit();
+                }
 
                 return false;
             }
@@ -86,22 +89,22 @@ public class LightsFragment extends Fragment implements CacheUpdateListener {
     @Override
     public void cacheUpdated() {
         updateFromCache();
+        ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
         updateFromCache();
+        ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
+
     }
 
     private void updateFromCache() {
         currentLights = hueSDK.getSelectedBridge().getResourceCache().getLights();
         currentLightIdOrder = new ArrayList<String>(currentLights.keySet());
         HueBulbChangeUtility.sortIds(currentLightIdOrder);
-        //this check is necessary because this can be called before the view is created
-        if(gridView != null && gridView.getAdapter() != null) {
-            ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
-        }
     }
 
 
@@ -114,12 +117,16 @@ public class LightsFragment extends Fragment implements CacheUpdateListener {
         }
         @Override
         public int getCount() {
-            return currentLights.size();
+            return currentLights.size() + 2;
         }
 
         @Override
         public Object getItem(int position) {
-            return currentLights.get(currentLightIdOrder.get(position));
+            if(getItemViewType(position) == RealHomeFragment.NORMAL_VIEW) {
+                return currentLights.get(currentLightIdOrder.get(position));
+            } else {
+                return null;
+            }
         }
 
         @Override
@@ -128,7 +135,35 @@ public class LightsFragment extends Fragment implements CacheUpdateListener {
         }
 
         @Override
+        public int getViewTypeCount() {
+            return 3;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if(position == currentLights.size() + 1) {
+                return RealHomeFragment.EDIT_BUTTON;
+            } else if (position == currentLights.size()) {
+                return RealHomeFragment.PLUS_BUTTON;
+            } else {
+                return RealHomeFragment.NORMAL_VIEW;
+            }
+        }
+
+        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+            if(getItemViewType(position) == RealHomeFragment.EDIT_BUTTON) {
+                View editView =  LayoutInflater.from(LightsFragment.this.getActivity()).inflate(R.layout.edit_view, parent, false);
+                TextView editText = (TextView) editView.findViewById(R.id.editLabel);
+                editText.setText(getText(R.string.edit_lights));
+                return editView;
+            }
+            else if(getItemViewType(position) == RealHomeFragment.PLUS_BUTTON) {
+                View addView =  LayoutInflater.from(LightsFragment.this.getActivity()).inflate(R.layout.add_view, parent, false);
+                TextView addText = (TextView) addView.findViewById(R.id.addLabel);
+                addText.setText(getText(R.string.add_light));
+                return addView;
+            }
             LinearLayout currentView;
             if(convertView == null) {
                 currentView = (LinearLayout) LayoutInflater.from(LightsFragment.this.getActivity()).inflate(R.layout.bulb_view, parent, false);

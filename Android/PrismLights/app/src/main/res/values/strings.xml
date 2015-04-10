@@ -56,6 +56,10 @@
     <string name="lights">Lights</string>
     <string name="favorites">Favorites</string>
     <string name="groups">Groups</string>
-
-
+    <string name="edit_groups">Edit Groups</string>
+    <string name="add_group">Add Group</string>
+    <string name="edit_lights">Edit Lights</string>
+    <string name="add_light">Add Lights</string>
+    <string name="edit_favorites">Edit Favorites</string>
+    <string name="add_favorite">Add Favorite</string>
 </resources>
