@@ -3,8 +3,13 @@ package app.lights.prism.com.prismlights.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.util.Log;
+
+import java.util.Date;
+import java.util.List;
 
 import app.lights.prism.com.prismlights.service.SmartSunService;
 
@@ -22,6 +27,12 @@ public class BroadCastAlarmReceiver extends BroadcastReceiver{
         Log.d(DEBUG_TAG, "Recurring broadcast alarm; requesting download service.");
         Intent downloader = new Intent(context, SmartSunService.class);
 
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        List<String> providers = locationManager.getProviders(true);
+
+        Location location = locationManager.getLastKnownLocation(providers.get(0));
+
+        Date date = new Date();
         /*
         TODO: need to change to real url
         http://www.earthtools.org/sun/<latitude>/<longitude>/<day>/<month>/<timezone>/<dst>
@@ -34,7 +45,8 @@ public class BroadCastAlarmReceiver extends BroadcastReceiver{
         dst - whether daylight saving time should be taken into account (either 0 for no or 1 for yes).
         Note that the query should be entered without the <s or >s (as in the example below).
          */
-        downloader.setData(Uri.parse("http://www.earthtools.org/sun/40.71417/-74.00639/4/12/-5/1"));
+        downloader.setData(Uri.parse("http://www.earthtools.org/sun/"+location.getLatitude()+"/"
+                +location.getLongitude()+"/"+date.getMonth()+"/"+date.getDate()+"/99/1"));
         context.startService(downloader);
     }
 }

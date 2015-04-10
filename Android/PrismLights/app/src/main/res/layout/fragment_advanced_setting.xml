@@ -63,6 +63,86 @@
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:background="@drawable/grid_background"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/darkGray"/>
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="59dp"
+            android:text="Smart Sunset"
+            android:layout_gravity="center_horizontal"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:id="@+id/sunsetText"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/SunsetSwitch"
+            android:layout_toStartOf="@+id/SunsetSwitch" />
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/SunsetSwitch"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignBottom="@+id/sunsetText"
+            android:checked="false" />
+
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/darkGray"/>
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="59dp"
+            android:text="Smart Sunrise"
+            android:layout_gravity="center_horizontal"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:id="@+id/sunriseText"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/SunriseSwitch"
+            android:layout_toStartOf="@+id/SunriseSwitch" />
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/SunriseSwitch"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignBottom="@+id/sunriseText"
+            android:checked="false" />
+
+    </RelativeLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"

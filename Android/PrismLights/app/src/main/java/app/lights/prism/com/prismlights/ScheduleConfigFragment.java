@@ -117,8 +117,8 @@ public class ScheduleConfigFragment extends Fragment {
         phHueSDK = PHHueSDK.getInstance();
         bridge = phHueSDK.getSelectedBridge();
 
-        currentSchedule = ((MainActivity)getActivity()).currentSchedule;
-        ((MainActivity)getActivity()).currentSchedule = null;
+        currentSchedule = ((MainActivity)getActivity()).getCurrentSchedule();
+        ((MainActivity)getActivity()).setCurrentSchedule(null);
 
         if (getArguments() != null) {
             bulbID = getArguments().getInt(lightPositionString);
