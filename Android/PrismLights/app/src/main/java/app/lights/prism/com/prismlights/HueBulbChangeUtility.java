@@ -1,5 +1,6 @@
 package app.lights.prism.com.prismlights;
 
+import android.os.AsyncTask;
 import android.text.format.DateFormat;
 
 import com.philips.lighting.hue.listener.PHGroupListener;
@@ -16,9 +17,13 @@ import com.philips.lighting.model.PHSchedule;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class HueBulbChangeUtility {
 
@@ -27,19 +32,33 @@ public class HueBulbChangeUtility {
 
     public static String colorXYModelForHue = "LCT001";
 
-    public static PHLight getLightFromPosition(int position, PHBridge bridge) {
-        List<PHLight> currentLights = bridge.getResourceCache().getAllLights();
-        return currentLights.get(position);
+    public static PHLight getLightFromId(String identifier, PHBridge bridge) {
+        return bridge.getResourceCache().getLights().get(identifier);
     }
 
-    private static PHGroup getGroupFromPosition(int position, PHBridge bridge) {
-        List<PHGroup> currentGroups = bridge.getResourceCache().getAllGroups();
-        return currentGroups.get(position);
+    private static PHGroup getGroupFromId(String identifier, PHBridge bridge) {
+        return bridge.getResourceCache().getGroups().get(identifier);
     }
 
-    public static void toggleBulbState(int lightPosition) {
+    public static void setBulbAlertState(String lightId, boolean on) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
-        PHLight light = getLightFromPosition(lightPosition, bridge);
+        PHLight light = bridge.getResourceCache().getLights().get(lightId);
+        PHLightState lightState = new PHLightState();
+        if(on) {
+            lightState.setAlertMode(PHLight.PHLightAlertMode.ALERT_SELECT);
+        } else {
+            lightState.setAlertMode(PHLight.PHLightAlertMode.ALERT_NONE);
+        }
+        bridge.updateLightState(light, lightState);
+    }
+    public static void toggleBulbState(String lightId) {
+        PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
+        PHLight light = getLightFromId(lightId, bridge);
+        toggleBulbState(light);
+    }
+
+    public static void toggleBulbState(PHLight light) {
+        PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
         PHLightState lightState = new PHLightState();
         if(light.getLastKnownLightState().isOn()) {
             lightState.setOn(false);
@@ -53,9 +72,9 @@ public class HueBulbChangeUtility {
 
 
 
-    public static void turnBulbOnOff (int lightPosition, boolean on) {
+    public static void turnBulbOnOff (String lightId, boolean on) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
-        turnBulbOnOff(getLightFromPosition(lightPosition, bridge), on);
+        turnBulbOnOff(getLightFromId(lightId, bridge), on);
 
     }
 
@@ -66,9 +85,9 @@ public class HueBulbChangeUtility {
         bridge.updateLightState(light, lightState);
     }
 
-    public static boolean changeLightName(int lightPosition, String lightName) {
+    public static boolean changeLightName(String lightId, String lightName) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
-        PHLight light = getLightFromPosition(lightPosition, bridge);
+        PHLight light = getLightFromId(lightId, bridge);
         light.setName(lightName);
         bridge.updateLight(light, new PHLightListener() {
             @Override
@@ -104,9 +123,9 @@ public class HueBulbChangeUtility {
         return true;
     }
 
-    public static void changeBrightness(int lightPosition, int brightness) {
+    public static void changeBrightness(String lightId, int brightness) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
-        PHLight light = getLightFromPosition(lightPosition, bridge);
+        PHLight light = getLightFromId(lightId, bridge);
         changeBrightness(light, brightness);
     }
 
@@ -117,9 +136,9 @@ public class HueBulbChangeUtility {
     }
 
 
-    public static void changeBulbColor(int lightPosition, float[] xY) {
+    public static void changeBulbColor(String lightId, float[] xY) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
-        PHLight light = getLightFromPosition(lightPosition, bridge);
+        PHLight light = getLightFromId(lightId, bridge);
         changeBulbColor(light, xY);
     }
 
@@ -257,9 +276,9 @@ public class HueBulbChangeUtility {
 
     }
 
-    public static void changeGroupName(int position, String groupName) {
+    public static void changeGroupName(String identifier, String groupName) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
-        PHGroup group = getGroupFromPosition(position, bridge);
+        PHGroup group = getGroupFromId(identifier, bridge);
         group.setName(groupName);
         bridge.updateGroup(group, new PHGroupListener() {
             @Override
@@ -296,23 +315,23 @@ public class HueBulbChangeUtility {
 
 
 
-    public static void turnGroupOnOff(int position, boolean on) {
+    public static void turnGroupOnOff(String identifier, boolean on) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
-        PHGroup group = getGroupFromPosition(position, bridge);
+        PHGroup group = getGroupFromId(identifier, bridge);
         bridge.setLightStateForGroup(group.getIdentifier(), getOnState(on));
     }
 
-    public static void changeGroupBrightness(int position, int brightness) {
+    public static void changeGroupBrightness(String identifier, int brightness) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
-        PHGroup group = getGroupFromPosition(position, bridge);
+        PHGroup group = getGroupFromId(identifier, bridge);
         Map<String, PHLight> lights = getAllLights();
         bridge.setLightStateForGroup(group.getIdentifier(), getBrightnessState(brightness, true));
 
     }
 
-    public static void changeGroupColor(int position, float[] newColor) {
+    public static void changeGroupColor(String identifier, float[] newColor) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
-        PHGroup group = getGroupFromPosition(position, bridge);
+        PHGroup group = getGroupFromId(identifier, bridge);
         bridge.setLightStateForGroup(group.getIdentifier(), getColorState(newColor, true));
     }
 
@@ -500,4 +519,21 @@ public class HueBulbChangeUtility {
             }
         });
     }
+
+    public static void sortIds(List<String> ids) {
+        Collections.sort(ids, new Comparator<String>() {
+            @Override
+            public int compare(String lhs, String rhs) {
+                try{
+                    int l = Integer.parseInt(lhs);
+                    int r = Integer.parseInt(rhs);
+                    return l - r;
+
+                } catch (Exception e) {//TODO make this more specific
+                    return lhs.compareTo(rhs);
+                }
+            }
+        });
+    }
+
 }

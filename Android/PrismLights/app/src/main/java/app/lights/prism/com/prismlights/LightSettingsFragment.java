@@ -27,7 +27,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
 
 //    private OnFragmentInteractionListener mListener;
 
-    private int position; // The number for the chosen Light
+    private String identifier; // The id of the chosen Light
     private boolean isGroup; //True if group false otherwise
     private EditText nameEditor;
     private ToggleButton bulbOnState;
@@ -57,7 +57,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        position = getArguments().getInt(HomeFragment.lightPositionString);
+        identifier = getArguments().getString(RealHomeFragment.lightPositionString);
         isGroup = getArguments().getBoolean(HomeFragment.groupOrLightString);
 //        Toast.makeText(getActivity(), "SettingFragment opened with light " + position, Toast.LENGTH_SHORT).show();
 
@@ -82,9 +82,9 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
                     //TODO check if name is valid
                     if(isGroup) {
-                        HueBulbChangeUtility.changeGroupName(position, nameEditor.getText().toString());
+                        HueBulbChangeUtility.changeGroupName(identifier, nameEditor.getText().toString());
                     } else {
-                        HueBulbChangeUtility.changeLightName(position, nameEditor.getText().toString());
+                        HueBulbChangeUtility.changeLightName(identifier, nameEditor.getText().toString());
                     }
                     nameEditor.clearFocus();
 //                    shouldUpdateFromCache = 2;
@@ -98,9 +98,9 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
             public void onClick(View v) {
                 ToggleButton bulbOn = (ToggleButton) v;
                 if(isGroup) {
-                    HueBulbChangeUtility.turnGroupOnOff(position, bulbOn.isChecked());
+                    HueBulbChangeUtility.turnGroupOnOff(identifier, bulbOn.isChecked());
                 } else {
-                    HueBulbChangeUtility.turnBulbOnOff(position, bulbOn.isChecked());
+                    HueBulbChangeUtility.turnBulbOnOff(identifier, bulbOn.isChecked());
                 }
 //                shouldUpdateFromCache = 2;
             }
@@ -118,9 +118,9 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 if(isGroup) {
-                    HueBulbChangeUtility.changeGroupBrightness(position, seekBar.getProgress());
+                    HueBulbChangeUtility.changeGroupBrightness(identifier, seekBar.getProgress());
                 } else {
-                    HueBulbChangeUtility.changeBrightness(position, seekBar.getProgress());
+                    HueBulbChangeUtility.changeBrightness(identifier, seekBar.getProgress());
                 }
 //                shouldUpdateFromCache = 2;
             }
@@ -130,9 +130,9 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
             public void onColorChanged(float[] newColor) {
                 currentColor = newColor;
                 if(isGroup) {
-                    HueBulbChangeUtility.changeGroupColor(position, newColor);
+                    HueBulbChangeUtility.changeGroupColor(identifier, newColor);
                 } else {
-                    HueBulbChangeUtility.changeBulbColor(position, newColor);
+                    HueBulbChangeUtility.changeBulbColor(identifier, newColor);
                 }
 //                shouldUpdateFromCache = 2;
             }
@@ -143,8 +143,8 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
                 @Override
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
-                    bundle.putInt(HomeFragment.lightPositionString, position);
-                    bundle.putBoolean(HomeFragment.groupOrLightString, isGroup);
+                    bundle.putString(RealHomeFragment.lightPositionString, identifier);
+                    bundle.putBoolean(RealHomeFragment.groupOrLightString, isGroup);
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                     AdvancedSettingFragment advancedSettingFragment = new AdvancedSettingFragment();
                     advancedSettingFragment.setArguments(bundle);
@@ -159,23 +159,21 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
     }
 
     private void updateState() {
-        currentLights = hueSDK.getSelectedBridge().getResourceCache().getAllLights();
-        currentGroups = hueSDK.getSelectedBridge().getResourceCache().getAllGroups();
-        groupNames = hueSDK.getGroupNames(currentGroups);
-        lightNames = hueSDK.getLightNames(currentLights);
         PHLight currentLight;
+        PHGroup currentGroup = null;
         if(isGroup) {
             //TODO find out if group can have no lights in it
-            currentLight = hueSDK.getSelectedBridge().getResourceCache().getLights().get(currentGroups.get(position).getLightIdentifiers().get(0));
+            currentGroup = hueSDK.getSelectedBridge().getResourceCache().getGroups().get(identifier);
+            currentLight = hueSDK.getSelectedBridge().getResourceCache().getLights().get(currentGroup.getLightIdentifiers().get(0));
         } else {
-            currentLight = currentLights.get(position);
+            currentLight = hueSDK.getSelectedBridge().getResourceCache().getLights().get(identifier);
         }
         PHLightState state = currentLight.getLastKnownLightState();
         if(!nameEditor.hasFocus()) {
-            if(isGroup) {
-                nameEditor.setText(groupNames[position]);
+            if(currentGroup != null) {
+                nameEditor.setText(currentGroup.getName());
             } else {
-                nameEditor.setText(lightNames[position]);
+                nameEditor.setText(currentLight.getName());
             }
         }
         bulbOnState.setChecked(state.isOn());
@@ -192,11 +190,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
 
     @Override
     public void cacheUpdated() {
-//        if(shouldUpdateFromCache != 1) {
-//          updateState();
-//        } else {
-//            shouldUpdateFromCache--;
-//        }
+        updateState();
     }
 
 //    // TODO: Rename method, update argument and hook method into UI event

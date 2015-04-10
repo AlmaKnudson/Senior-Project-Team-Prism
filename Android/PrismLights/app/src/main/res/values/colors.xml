@@ -7,4 +7,7 @@
     <color name="mediumGray">#916f6f</color>
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="transparent">#00ffffff</color>
+    <color name="darkTeal">#6d7c7a</color>
+    <color name="lightTeal">#bcd3d1</color>
 </resources>
