@@ -30,7 +30,7 @@ project.xcworkspace
 *.out
 
 ## Android
-
+copyResources.sh
 # Built application files
 *.apk
 *.ap_

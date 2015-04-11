@@ -57,7 +57,8 @@ public class LightsFragment extends Fragment implements CacheUpdateListener {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 //                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
-                if (gridView.getAdapter().getItemViewType(position) == RealHomeFragment.NORMAL_VIEW) {
+                int itemViewType = gridView.getAdapter().getItemViewType(position);
+                if (itemViewType == RealHomeFragment.NORMAL_VIEW) {
                     HueBulbChangeUtility.toggleBulbState((PHLight) gridView.getAdapter().getItem(position));
                 }
             }
