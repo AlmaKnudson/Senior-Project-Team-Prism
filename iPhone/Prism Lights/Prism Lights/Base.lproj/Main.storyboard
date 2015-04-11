@@ -121,7 +121,6 @@
                     <connections>
                         <outlet property="bulbCollectionView" destination="Bd3-Da-90v" id="y0C-qx-nfb"/>
                         <outlet property="loadingMessageLabel" destination="kML-PA-ce6" id="W5O-Wj-Xu9"/>
-                        <outlet property="rescanButton" destination="LW5-E2-AQX" id="64b-eA-DLd"/>
                         <segue destination="5xJ-tq-vqj" kind="show" identifier="BulbSettingsNav" id="Zij-yb-hZI"/>
                         <segue destination="dYi-Ic-E3x" kind="show" identifier="pushAuth" id="VIG-4p-d0T"/>
                     </connections>
@@ -843,7 +842,7 @@
         <!--Connecting-->
         <scene sceneID="hYy-xu-CCI">
             <objects>
-                <viewController title="Connecting" id="vCE-X6-d9u" sceneMemberID="viewController">
+                <viewController title="Connecting" id="vCE-X6-d9u" customClass="ConnectingViewController" customModule="Prism_Lights" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="YgR-Gm-7l5"/>
                         <viewControllerLayoutGuide type="bottom" id="gTh-Be-rAX"/>
@@ -885,7 +884,7 @@
                                     </mask>
                                 </variation>
                                 <connections>
-                                    <action selector="StartRescan:" destination="9pv-A4-QxB" eventType="touchUpInside" id="5dB-Lj-IeC"/>
+                                    <action selector="scanButtonPressed:" destination="vCE-X6-d9u" eventType="touchUpInside" id="ZEB-mD-kXL"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -899,6 +898,8 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="connectingMessageLabel" destination="kML-PA-ce6" id="Un4-0f-HFH"/>
+                        <outlet property="rescanButton" destination="LW5-E2-AQX" id="qLC-RW-3mw"/>
                         <segue destination="49e-Tb-3d3" kind="show" identifier="HomeTabView" id="NCY-mb-N2w"/>
                     </connections>
                 </viewController>
