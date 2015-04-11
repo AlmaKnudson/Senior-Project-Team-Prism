@@ -17,11 +17,11 @@ class AdvancedSettingsController: UITableViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "AlarmsTable" {
-            var alarmTable:AlarmsTable = segue.destinationViewController as AlarmsTable
+            var alarmTable:AlarmsTable = segue.destinationViewController as! AlarmsTable
             alarmTable.bulbId = self.bulbId
             alarmTable.isGroup = isGroup
         }  else if segue.identifier == "KevinBaconsSegue" {
-            var dest:EstViewController = segue.destinationViewController as EstViewController
+            var dest:EstViewController = segue.destinationViewController as! EstViewController
             dest.currentBulbIdentifier = self.bulbId
         }
     }

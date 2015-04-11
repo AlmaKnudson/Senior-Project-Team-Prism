@@ -184,7 +184,7 @@ func AlarmsWithLightIdentifier(identifier :String) -> [PHSchedule]{
     
     if let schedules = cache.schedules as? [String:PHSchedule]{
         for schedule in schedules{
-            if(schedule.1.lightIdentifier? == identifier){
+            if(schedule.1.lightIdentifier == identifier){
                 schedulesList.append(schedule.1)
             }
         }

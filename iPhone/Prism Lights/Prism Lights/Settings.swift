@@ -80,37 +80,37 @@ class Settings: UITableViewController, UITableViewDataSource, UITableViewDelegat
             case 0:
                 if(DEBUG){
                     DEBUG = false
-                    (tableView.cellForRowAtIndexPath(indexPath) as ModeCell).Enabled(false)
+                    (tableView.cellForRowAtIndexPath(indexPath) as! ModeCell).Enabled(false)
                 }else{
                     DEBUG = true
-                    (tableView.cellForRowAtIndexPath(indexPath) as ModeCell).Enabled(true)
+                    (tableView.cellForRowAtIndexPath(indexPath) as! ModeCell).Enabled(true)
                 }
                 //Demo Mode
             case 1:
                 if(DEMO){
                     DEMO = false
-                    (tableView.cellForRowAtIndexPath(indexPath) as ModeCell).Enabled(false)
+                    (tableView.cellForRowAtIndexPath(indexPath) as! ModeCell).Enabled(false)
                 }else{
                     DEMO = true
-                    (tableView.cellForRowAtIndexPath(indexPath) as ModeCell).Enabled(true)
+                    (tableView.cellForRowAtIndexPath(indexPath) as! ModeCell).Enabled(true)
                 }
             case 2:
                 if(BRIDGELESS){
                     BRIDGELESS = false
-                    (tableView.cellForRowAtIndexPath(indexPath) as ModeCell).Enabled(false)
+                    (tableView.cellForRowAtIndexPath(indexPath) as! ModeCell).Enabled(false)
                 }else{
                     BRIDGELESS = true
-                    (tableView.cellForRowAtIndexPath(indexPath) as ModeCell).Enabled(true)
+                    (tableView.cellForRowAtIndexPath(indexPath) as! ModeCell).Enabled(true)
                 }
             case 3:
                 if(BRIDGELOGGING){
                     BRIDGELOGGING = false
-                    (tableView.cellForRowAtIndexPath(indexPath) as ModeCell).Enabled(false)
-                    (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.enableLogging(false)
+                    (tableView.cellForRowAtIndexPath(indexPath) as! ModeCell).Enabled(false)
+                    (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.enableLogging(false)
                 }else{
                     BRIDGELOGGING = true
-                    (tableView.cellForRowAtIndexPath(indexPath) as ModeCell).Enabled(true)
-                    (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.enableLogging(true)
+                    (tableView.cellForRowAtIndexPath(indexPath) as! ModeCell).Enabled(true)
+                    (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.enableLogging(true)
                 }
             default:
                 fatalError("Only 3 rows for sections 0")

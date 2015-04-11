@@ -15,7 +15,7 @@ class ColorPickerController : UIViewController {
     
     
     override func viewWillAppear(animated: Bool) {
-        var colorPickerView = self.view as ColorPicker
+        var colorPickerView = self.view as! ColorPicker
         colorPickerView.colorChangedDelegate = self.colorChangedDelegate
     }
     

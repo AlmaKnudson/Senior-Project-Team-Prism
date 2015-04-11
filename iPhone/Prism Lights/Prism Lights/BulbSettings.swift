@@ -44,7 +44,7 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate{
         bridgeSend.updateLightStateForId(self.bulbId, withLightState: lightState, completionHandler: nil)
         
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-        var light = (cache.lights?[bulbId!]) as PHLight
+        var light = (cache.lights?[bulbId!]) as! PHLight
         light.lightState.brightness = Int(254*sender.value)
         println(Int(255*sender.value))
         
@@ -75,7 +75,7 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate{
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
         
         //Sets the slider to current brightness
-        var light = (cache.lights?[bulbId!]) as PHLight
+        var light = (cache.lights?[bulbId!]) as! PHLight
         var lightState = light.lightState
         var brightness = Float(lightState.brightness) / 255
         brightnessSlider.value = brightness
@@ -90,7 +90,7 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate{
         
         self.title = light.name
         //Set the Delegate of the Child Controller
-        var picker = ((self.childViewControllers.last)?.view) as ColorPicker
+        var picker = ((self.childViewControllers.last)?.view) as! ColorPicker
         picker.colorChangedDelegate = self
 
     }
@@ -100,7 +100,7 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate{
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
         
         //Sets the slider to current brightness
-        var light = (cache.lights?[bulbId!]) as PHLight
+        var light = (cache.lights?[bulbId!]) as! PHLight
         var lightState = light.lightState
         var brightness = Float(lightState.brightness) / 255
         brightnessSlider.value = brightness
@@ -115,7 +115,7 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate{
         
 //        self.title = light.name
         //Set the Delegate of the Child Controller
-        var picker = ((self.childViewControllers.last)?.view) as ColorPicker
+        var picker = ((self.childViewControllers.last)?.view) as! ColorPicker
         picker.colorChangedDelegate = self
         
         
@@ -130,7 +130,7 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate{
     func onColorChanged(color: CGPoint) {
         
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-        var light = (cache.lights?[bulbId!]) as PHLight
+        var light = (cache.lights?[bulbId!]) as! PHLight
         
         
         
@@ -153,7 +153,7 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate{
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "advancedSettings" {
-            var alarmTable:AdvancedSettingsController = segue.destinationViewController as AdvancedSettingsController
+            var alarmTable:AdvancedSettingsController = segue.destinationViewController as! AdvancedSettingsController
             alarmTable.bulbId = self.bulbId
             alarmTable.isGroup = isGroup
         } else if segue.identifier == "CycleColorsTable" {

@@ -24,6 +24,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     let GROUP_SECTION = 0
     let BULB_SECTION = 1
     
+    
     var retryConnection = true
     var beenConnected = false
     var skipNextHeartbeat = false
@@ -38,7 +39,9 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     var lightCount :Int = 0;
     var groupCount :Int = 1;
     
-    @IBOutlet weak var scanningIndicator: UIActivityIndicatorView!
+    var activityIndicator: BulbActivity!
+    
+    
     @IBOutlet weak var loadingMessageLabel: UILabel!
     @IBOutlet weak var rescanButton: UIButton!
     @IBOutlet weak var loadingView: HomeLoadingView!
@@ -46,11 +49,11 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     
     @IBAction func StartRescan(sender: UIButton) {
         
-        (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.enableLocalConnection()
+        (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.enableLocalConnection()
         self.loadingMessageLabel.text = lastBridgeMessage
         //        SearchForBridge(true, portalSearch: false, ipAddressSearch: false)
         sender.hidden = true
-        scanningIndicator.startAnimating()
+        activityIndicator.StartActivityIndicator()
     }
     
     //MARK: - UIViewController Methods
@@ -89,18 +92,20 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         rescanButton.layer.borderWidth = 2
         rescanButton.layer.borderColor = UIColor.darkGrayColor().CGColor
         
-        
+        var frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+        activityIndicator = BulbActivity(frame: frame)
+        self.loadingView.addSubview(activityIndicator)
         
         
     }
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        
+        
+        
     }
     
-    override init() {
-        super.init()
-    }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nil, bundle: nil)
@@ -114,6 +119,10 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     Then tries to connect to the bridge
     */
     override func viewWillAppear(animated: Bool) {
+        
+        
+        
+        
         var manager = PHNotificationManager.defaultManager()
         manager!.registerObject(self, withSelector: "HeartBeatReceived", forNotification: "LOCAL_CONNECTION_NOTIFICATION")
         manager!.registerObject(self, withSelector: "NetworkConnectionLost", forNotification: "NO_LOCAL_CONNECTION_NOTIFICATION")
@@ -125,19 +134,19 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         if(cache != nil){
             
             if(cache.bridgeConfiguration == nil || cache.bridgeConfiguration.ipaddress == nil ){
-                //TODO: First Time App user - App has never connected to bridge
                 
                 //This line is here so that there is always an IP set if they haven't connected to a bridge in the past.
-                (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.setBridgeToUseWithIpAddress("1.1.1.1", macAddress: "ab:ab:ab:ab:ab:ab")
+                (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.setBridgeToUseWithIpAddress("1.1.1.1", macAddress: "ab:ab:ab:ab:ab:ab")
             }
             
         }
         
         //Check that we are connected to bridge.
-        if !((UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.localConnected()){
+        if !((UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.localConnected()){
             //Connect to bridge
-            (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.enableLocalConnection()
+            (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.enableLocalConnection()
             self.loadingMessageLabel.text = lastBridgeMessage
+            activityIndicator.StartActivityIndicator()
         } else{
             bulbCollectionView.reloadData()
         }
@@ -147,21 +156,24 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             HideConnectingView()
         }
         
+        activityIndicator.center = self.loadingView.center
+        
     }
     
     override func viewDidAppear(animated: Bool) {
         bulbCollectionView.reloadData()
+        
     }
     
     override func viewWillDisappear(animated: Bool) {
-        
+        PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
+
         if(DEBUG){
             println("Home Controller will disappeared")
         }
     }
     override func viewDidDisappear(animated: Bool) {
-        PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
-        if(DEBUG){
+                if(DEBUG){
             println("Home disappeared")
         }
     }
@@ -176,13 +188,13 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             println("In Prepare For Segue")
         }
         if segue.identifier == "BulbSettingsNav" {
-            var dest = segue.destinationViewController as UINavigationController
-            var bulbSettingsController = dest.viewControllers[0] as BulbSettingsController
+            var dest = segue.destinationViewController as! UINavigationController
+            var bulbSettingsController = dest.viewControllers[0] as! BulbSettingsController
             bulbSettingsController.homeDelegate = self
-            bulbSettingsController.bulbId = "\((sender as NSIndexPath).row+1)"
+            bulbSettingsController.bulbId = "\((sender as! NSIndexPath).row+1)"
             bulbSettingsController.isGroup = false
         } else if segue.identifier == "pushAuth" {
-            var dest = segue.destinationViewController as PushAuthController
+            var dest = segue.destinationViewController as! PushAuthController
             dest.delegate = self
         }
     }
@@ -285,7 +297,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             
             if cache.groups != nil{
                 var theLight:PHLight! = nil
-                for (lightId, light) in (cache.lights as [String:PHLight]){
+                for (lightId, light) in (cache.lights as! [String:PHLight]){
                     //Ignore lights not connected to bridge
                     if(light.lightState.reachable == 0){
                         continue
@@ -362,7 +374,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
                 
                 var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
                 var lightId = indexPath!.row+1
-                var light = cache.lights["\(lightId)"] as PHLight
+                var light = cache.lights["\(lightId)"] as! PHLight
                 if(light.lightState.reachable.boolValue){
                     self.performSegueWithIdentifier("BulbSettingsNav", sender: indexPath)
                 }
@@ -417,7 +429,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     
     */
     func NotAuthorized(){
-        var hueSDK = (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!
+        var hueSDK = (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!
         //        hueSDK.disableLocalConnection()
         //        var alert = UIAlertController(title: "Authenticate", message: "Press button on Bridge to Authenticate.", preferredStyle: UIAlertControllerStyle.Alert)
         //        let cancelButton = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Cancel) { (cancelButton) -> Void in     }
@@ -435,7 +447,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     */
     func NetworkConnectionLost(){
         
-        var hueSDK = (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!
+        var hueSDK = (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!
         
         //Has been connected to the bridge at least once during this session
         if(beenConnected){
@@ -474,7 +486,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     
     func HideConnectingView(){
         loadingView.hidden = true
-        scanningIndicator.stopAnimating()
+        activityIndicator.StopActivityIndicator()
         self.bulbCollectionView.reloadData()
     }
     
@@ -488,7 +500,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         var lightOn = true
         var bridgeSendAPI = PHBridgeSendAPI()
         
-        var light = cache!.lights[identifier] as PHLight
+        var light = cache!.lights[identifier] as! PHLight
         if(light.lightState.reachable == 0){
             return false
         }
@@ -522,7 +534,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         //Group 0 is all lights
         //Group 0 is assumed and isn't in the cache
         if identifier == "0" {
-            for (lightId, light) in (cache.lights as [String:PHLight]){
+            for (lightId, light) in (cache.lights as! [String:PHLight]){
                 //Ignore lights not connected to bridge
                 if(light.lightState.reachable == 0){
                     continue
@@ -537,7 +549,7 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             }
             
             //update all lightStates
-            for (lightId, light) in (cache.lights as [String:PHLight]){
+            for (lightId, light) in (cache.lights as! [String:PHLight]){
                 //Ignore lights not connected to bridge
                 if(light.lightState.reachable == 0){
                     continue
@@ -548,11 +560,11 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             
         } else {
             
-            var group:PHGroup = cache!.groups[identifier] as PHGroup
+            var group:PHGroup = cache!.groups[identifier] as! PHGroup
             
             
-            for lightId:String in (group.lightIdentifiers as [String]) {
-                var light = cache.lights[lightId] as PHLight
+            for lightId:String in (group.lightIdentifiers as! [String]) {
+                var light = cache.lights[lightId] as! PHLight
                 
                 
                 
@@ -583,12 +595,12 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     
     func SearchForBridge(upnpSearch:Bool, portalSearch:Bool, ipAddressSearch:Bool){
         
-        var hueSDK = (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!
+        var hueSDK = (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!
         let bridgeSearch = PHBridgeSearching(upnpSearch: upnpSearch, andPortalSearch: portalSearch, andIpAdressSearch: ipAddressSearch)
         
         bridgeSearch.startSearchWithCompletionHandler { (dict:[NSObject : AnyObject]!) -> Void in
-            self.scanningIndicator.stopAnimating()
-            var addresses = dict as [String:String]
+            self.activityIndicator.StopActivityIndicator()
+            var addresses = dict as! [String:String]
             var macAddresses = [String](addresses.keys)
             if(addresses.count == 1){
                 self.loadingMessageLabel.text = "Connected!"
@@ -625,32 +637,32 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         //TODO: Need protocol for pushAuth
     }
     
-    func beaconManager(manager: ESTBeaconRegion, didRangeBeacons: [ESTBeacon], inRegion: ESTBeaconRegion){
-        //        println("I've found \(didRangeBeacons.count) beacons in range.")
-        
-        if(didRangeBeacons.count > 0) {
+    //- (void)beaconManager:(ESTBeaconManager *)manager
+//    didStartMonitoringForRegion:(ESTBeaconRegion *)region;
+    func beaconManager(manager: ESTBeaconManager!, didRangeBeacons beacons: [AnyObject]!, inRegion region: ESTBeaconRegion!) {
+        if(beacons.count > 0) {
             //Keeping track of all beacon macAddresses in beaconMA set
-            var closestBeacon:ESTBeacon = didRangeBeacons.first!
+            var closestBeacon:ESTBeacon = beacons.first as! ESTBeacon
             var bId:NSString = "\(closestBeacon.major)_\(closestBeacon.minor)"
             
             var defaults = NSUserDefaults.standardUserDefaults()
             //            defaults.setObject(bbtString, forKey: currentBeaconIdentifier)
-            var bulbIdPlusRange: AnyObject? = defaults.objectForKey(bId)
+            var bulbIdPlusRange: AnyObject? = defaults.objectForKey(bId as String)
             //            if bulbIdPlusRange != nil {
             //                NSLog("Found a bulb/beacon association::\(bulbIdPlusRange)::::\(bId)")
             //            }
             
             var cache:PHBridgeResourcesCache? = PHBridgeResourcesReader.readBridgeResourcesCache()
             
-            
-            for b in didRangeBeacons{
+            var beacons2 = beacons as! [ESTBeacon]
+            for b in beacons2 {
                 bId = "\(b.major)_\(b.minor)"
-                bulbIdPlusRange = defaults.objectForKey(bId)
+                bulbIdPlusRange = defaults.objectForKey(bId as String)
                 if bulbIdPlusRange != nil {
                     NSLog("Found a bulb/beacon association::\(bulbIdPlusRange)::::\(bId)")
                     
                     
-                    var bulb = bulbIdPlusRange as String
+                    var bulb = bulbIdPlusRange as! String
                     
                     
                     let resultArr = bulb.componentsSeparatedByString("_")
@@ -734,6 +746,119 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             //            }
         }
     }
+
+    
+    
+    
+//    func beaconManager(manager: ESTBeaconRegion, didRangeBeacons: [ESTBeacon], inRegion: ESTBeaconRegion){
+//        //        println("I've found \(didRangeBeacons.count) beacons in range.")
+//        
+//        if(didRangeBeacons.count > 0) {
+//            //Keeping track of all beacon macAddresses in beaconMA set
+//            var closestBeacon:ESTBeacon = didRangeBeacons.first!
+//            var bId:NSString = "\(closestBeacon.major)_\(closestBeacon.minor)"
+//            
+//            var defaults = NSUserDefaults.standardUserDefaults()
+//            //            defaults.setObject(bbtString, forKey: currentBeaconIdentifier)
+//            var bulbIdPlusRange: AnyObject? = defaults.objectForKey(bId as String)
+//            //            if bulbIdPlusRange != nil {
+//            //                NSLog("Found a bulb/beacon association::\(bulbIdPlusRange)::::\(bId)")
+//            //            }
+//            
+//            var cache:PHBridgeResourcesCache? = PHBridgeResourcesReader.readBridgeResourcesCache()
+//            
+//            
+//            for b in didRangeBeacons{
+//                bId = "\(b.major)_\(b.minor)"
+//                bulbIdPlusRange = defaults.objectForKey(bId as String)
+//                if bulbIdPlusRange != nil {
+//                    NSLog("Found a bulb/beacon association::\(bulbIdPlusRange)::::\(bId)")
+//                    
+//                    
+//                    var bulb = bulbIdPlusRange as! String
+//                    
+//                    
+//                    let resultArr = bulb.componentsSeparatedByString("_")
+//                    
+//                    var bulbId: String = resultArr[0]
+//                    var range: String? = resultArr[1]
+//                    //Found this beacon assocaitionsdafjlk with a bulb
+//                    if(cache != nil){
+//                        
+//                        for light in cache!.lights.values{
+//                            if light.identifier == bulbId {
+//                                //Found the bulb.
+//                                
+//                                var numberFormatter = NSNumberFormatter()
+//                                var number:NSNumber? = numberFormatter.numberFromString(range!)
+//                                var rangeInt = (Float(number!)/10)
+//                                //                                                            NSLog("\(b.distance.floatValue) < \(rangeInt)")
+//                                
+//                                
+//                                if b.distance.floatValue <= rangeInt {
+//                                    
+//                                    
+//                                    //This is to print out the distance to see if I get a different reading each time. Otherwise, I will have to poll for an average in a different/slower way.
+//                                    //                                    for var i = 0; i < 10; ++i  {
+//                                    NSLog("\(b.distance.floatValue)")
+//                                    //                                    }
+//                                    var lightState:PHLightState = PHLightState()
+//                                    //                        lightState.on = false
+//                                    lightState.on = true
+//                                    //                    lightState.hue = hueVal.toInt();
+//                                    //                        lightState.on = true;
+//                                    //                        lightState.saturation = 254;
+//                                    //                        lightState.brightness = currentBrightness;
+//                                    lightState.brightness = 254;
+//                                    
+//                                    
+//                                    bridgeSendAPI.updateLightStateForId(bulbId, withLightState: lightState, completionHandler: nil);
+//                                } else {
+//                                    var lightState:PHLightState = PHLightState()
+//                                    //                        lightState.on = false
+//                                    lightState.on = false
+//                                    //                    lightState.hue = hueVal.toInt();
+//                                    //                        lightState.on = true;
+//                                    //                        lightState.saturation = 254;
+//                                    //                        lightState.brightness = currentBrightness;
+//                                    lightState.brightness = 254;
+//                                    
+//                                    
+//                                    bridgeSendAPI.updateLightStateForId(bulbId, withLightState: lightState, completionHandler: nil);
+//                                }
+//                                
+//                            }
+//                            
+//                            
+//                            //                            var resultArr = split(bulb) {$0 == "_"}
+//                            //                            var bulbId: String = resultArr[0]
+//                            //                            var range: String? = resultArr.count > 1 ? resultArr[1] : nil
+//                        }
+//                        
+//                    }
+//                }
+//            }
+//            //
+//            //            //Closest beacon is at index 0
+//            //            var closestBeacon:ESTBeacon = didRangeBeacons.first!
+//            //            loadingCircle.stopAnimating()
+//            //            if (notTracking) {
+//            //                currentBeaconIdentifier  = "\(closestBeacon.major)_\(closestBeacon.minor)"
+//            //                searchingLabel.text = currentBeaconIdentifier
+//            //            } else {
+//            //                for b in didRangeBeacons {
+//            //                    if ( ("\(b.major)_\(b.minor)") == currentBeaconIdentifier ) {
+//            //                        closestBeacon = b
+//            //                    }
+//            //                }
+//            //            }
+//            //
+//            //            if ( (closestBeacon.distance).integerValue < range.integerValue/3){
+//            //                //update bulbs
+//            //                NSLog("Update Light Bulb__\(closestBeacon.distance)___\(range.integerValue)");
+//            //            }
+//        }
+//    }
     
     
 }
