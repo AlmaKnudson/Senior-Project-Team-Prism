@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="app.lights.prism.com.prismlights.MusicFragment"
-    android:orientation="vertical"
-    android:background="@color/black">
+    android:background="@color/black"
+    android:orientation="vertical">
 
     <view
         android:layout_width="match_parent"
@@ -20,13 +20,23 @@
         android:layout_height="wrap_content"
         android:background="@drawable/music_top">
 
-    <SeekBar
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="120"
+            android:id="@+id/bpmLabel"
+            android:layout_gravity="right" />
+
+        <SeekBar
         android:layout_width="275dp"
         android:layout_height="wrap_content"
-        android:id="@+id/seekBar"
+        android:id="@+id/sensitivitySlider"
         android:layout_gravity="center_horizontal"
         android:paddingTop="2dp"
-        android:paddingBottom="2dp" />
+        android:paddingBottom="2dp"
+        android:indeterminate="false"
+            android:max="120"
+            android:progress="60" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -36,13 +46,23 @@
             android:id="@+id/textView8"
             android:layout_gravity="center_horizontal" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="80%"
+            android:id="@+id/muzeBrightnessLabel"
+            android:layout_gravity="right" />
+
         <SeekBar
         android:layout_width="275dp"
         android:layout_height="wrap_content"
-        android:id="@+id/seekBar2"
+        android:id="@+id/maxBrightnessSlider"
         android:layout_gravity="center_horizontal"
         android:paddingTop="2dp"
-        android:paddingBottom="2dp" />
+        android:paddingBottom="2dp"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="80" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -73,10 +93,13 @@
         <SeekBar
         android:layout_width="275dp"
         android:layout_height="wrap_content"
-        android:id="@+id/seekBar3"
+        android:id="@+id/lowRangeSlider"
         android:layout_gravity="center_horizontal"
         android:paddingTop="2dp"
-        android:paddingBottom="2dp" />
+        android:paddingBottom="2dp"
+            android:max="500"
+            android:indeterminate="false"
+            android:progress="300" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -89,10 +112,13 @@
         <SeekBar
         android:layout_width="275dp"
         android:layout_height="wrap_content"
-        android:id="@+id/seekBar4"
+        android:id="@+id/midRangeSlider"
         android:layout_gravity="center_horizontal"
         android:paddingTop="2dp"
-        android:paddingBottom="2dp" />
+        android:paddingBottom="2dp"
+            android:max="500"
+            android:indeterminate="false"
+            android:progress="200" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -105,10 +131,13 @@
         <SeekBar
         android:layout_width="275dp"
         android:layout_height="wrap_content"
-        android:id="@+id/seekBar5"
+        android:id="@+id/highRangeSlider"
         android:layout_gravity="center_horizontal"
         android:paddingTop="2dp"
-        android:paddingBottom="2dp" />
+        android:paddingBottom="2dp"
+            android:max="1800"
+            android:indeterminate="false"
+            android:progress="1800" />
 
         <TextView
             android:layout_width="wrap_content"
