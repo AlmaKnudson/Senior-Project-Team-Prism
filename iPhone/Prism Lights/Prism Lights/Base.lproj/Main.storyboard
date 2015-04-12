@@ -901,11 +901,12 @@
                         <outlet property="connectingMessageLabel" destination="kML-PA-ce6" id="Un4-0f-HFH"/>
                         <outlet property="rescanButton" destination="LW5-E2-AQX" id="qLC-RW-3mw"/>
                         <segue destination="49e-Tb-3d3" kind="show" identifier="HomeTabView" id="NCY-mb-N2w"/>
+                        <segue destination="dYi-Ic-E3x" kind="show" identifier="pushAuth" id="rHY-bs-Q2p"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gVB-zd-the" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-757" y="-853"/>
+            <point key="canvasLocation" x="-64" y="-1117"/>
         </scene>
         <!--Tab View Controller-->
         <scene sceneID="yl2-sM-qoP">
@@ -2832,8 +2833,8 @@
         <image name="unReachable" width="600" height="550"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="VIG-4p-d0T"/>
-        <segue reference="agp-MF-nMt"/>
+        <segue reference="rHY-bs-Q2p"/>
         <segue reference="MV1-5L-hp4"/>
+        <segue reference="agp-MF-nMt"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ConnectingViewController : UIViewController {
+class ConnectingViewController : UIViewController, DismissPresentedController {
     
     
     //MARK: - Message Strings
@@ -23,16 +23,11 @@ class ConnectingViewController : UIViewController {
     @IBOutlet weak var connectingMessageLabel: UILabel!
     @IBOutlet weak var rescanButton: UIButton!
     
-    
-    
-    
     @IBAction func scanButtonPressed(sender: UIButton) {
         
         
         
     }
-    
-    
     
     //MARK: - UIViewController Methods
     override func viewDidLoad() {
@@ -56,18 +51,11 @@ class ConnectingViewController : UIViewController {
         
     }
     
-    
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nil, bundle: nil)
     }
     
-    
-    
-    /**
-    View Will Appear
-    Then tries to connect to the bridge
-    */
-    override func viewWillAppear(animated: Bool) {
+    override func viewDidAppear(animated: Bool) {
         //Subscribe to the notifications about connection
         var manager = PHNotificationManager.defaultManager()
         manager!.registerObject(self, withSelector: "HeartBeatReceived", forNotification: "LOCAL_CONNECTION_NOTIFICATION")
@@ -86,14 +74,7 @@ class ConnectingViewController : UIViewController {
             
         }
         
-        //Check that we are connected to bridge.
-        if !((UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.localConnected()){
-            //Connect to bridge
-            (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.enableLocalConnection()
-        } 
-    }
-    
-    override func viewDidAppear(animated: Bool) {
+        BeginConnection()
         
     }
     
@@ -113,11 +94,11 @@ class ConnectingViewController : UIViewController {
         if(DEBUG){
             println("In Prepare For Segue")
         }
-        if segue.identifier == "" {
-        
+        if segue.identifier == "pushAuth" {
+            var dest = segue.destinationViewController as! PushAuthController
+            dest.delegate = self
         }
     }
-    
     //MARK: - Notification Methods
     
     /**
@@ -128,8 +109,7 @@ class ConnectingViewController : UIViewController {
     :returns:
     */
     func HeartBeatReceived(){
-        
-
+        performSegueWithIdentifier( "HomeTabView", sender: self)
     }
     
     /**
@@ -154,11 +134,26 @@ class ConnectingViewController : UIViewController {
     */
     func NetworkConnectionLost(){
         //Unable to connect to the bridge
+        
+        var hueSDK = (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!
+        //returns for one more heartbeat timer
+        hueSDK.disableLocalConnection()
+        
+        SearchForBridge(true, false, false, SearchFinished)
+        
     }
-
+    
     
     //MARK: - Helper Methods
+    
+    
+    
     func BeginConnection(){
+        //Check that we are connected to bridge.
+        if !((UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.localConnected()){
+            //Connect to bridge
+            (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.enableLocalConnection()
+        }
         activityIndicator.StartActivityIndicator()
         
         
@@ -167,6 +162,7 @@ class ConnectingViewController : UIViewController {
     
     
     func SearchFinished(dict:[NSObject:AnyObject]!){
+        activityIndicator.StopActivityIndicator()
         var addresses = dict as! [String:String]
         var macAddresses = [String](addresses.keys)
         if(addresses.count == 1){
@@ -204,6 +200,10 @@ class ConnectingViewController : UIViewController {
         self.presentViewController(alert, animated: true) { () -> Void in}
     }
     
+    func DismissMe(){
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
     
     
     
@@ -219,13 +219,13 @@ func SearchForBridge(upnpSearch:Bool, portalSearch:Bool, ipAddressSearch:Bool, s
 }
 
 
+
 /*
 
 
 
 
-        self.loadingView.addSubview(activityIndicator)
+self.loadingView.addSubview(activityIndicator)
 activityIndicator.center = self.loadingView.center
-
 
 */

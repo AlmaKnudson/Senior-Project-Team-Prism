@@ -73,6 +73,7 @@
 		11FDAB581AB109510055C2AD /* BeaconBulbTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDAB571AB109510055C2AD /* BeaconBulbTracking.swift */; };
 		CC24AE701A77EFEA003316FD /* Lights_API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC24AE6F1A77EFEA003316FD /* Lights_API.swift */; };
 		CC26D2591AD990EB00AEE7F7 /* ConnectingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC26D2581AD990EB00AEE7F7 /* ConnectingViewController.swift */; };
+		CC26D25B1AD9F71F00AEE7F7 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC26D25A1AD9F71F00AEE7F7 /* Protocols.swift */; };
 		CC27D7FF1A802E9C00346F47 /* PrismSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC27D7FE1A802E9C00346F47 /* PrismSDK.swift */; };
 		CC391F411A7D91F9004C94B5 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC391F401A7D91F9004C94B5 /* Networking.swift */; };
 		CC4A46E51A8912FD007DC0F2 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A46E41A8912FD007DC0F2 /* Settings.swift */; };
@@ -221,6 +222,7 @@
 		11FDAB571AB109510055C2AD /* BeaconBulbTracking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeaconBulbTracking.swift; sourceTree = "<group>"; };
 		CC24AE6F1A77EFEA003316FD /* Lights_API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lights_API.swift; sourceTree = "<group>"; };
 		CC26D2581AD990EB00AEE7F7 /* ConnectingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectingViewController.swift; sourceTree = "<group>"; };
+		CC26D25A1AD9F71F00AEE7F7 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		CC27D7FE1A802E9C00346F47 /* PrismSDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrismSDK.swift; sourceTree = "<group>"; };
 		CC391F401A7D91F9004C94B5 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		CC4A46E41A8912FD007DC0F2 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -420,6 +422,7 @@
 				CCB135A21AAB8261006E464F /* HueSDK_API */,
 				CCC54A391AC1EA39003FF0E2 /* BulbActivity.swift */,
 				CC26D2581AD990EB00AEE7F7 /* ConnectingViewController.swift */,
+				CC26D25A1AD9F71F00AEE7F7 /* Protocols.swift */,
 			);
 			path = "Prism Lights";
 			sourceTree = "<group>";
@@ -785,6 +788,7 @@
 				0DB347431A2D5BCE00B91EF2 /* PushAuthController.swift in Sources */,
 				11FDAB581AB109510055C2AD /* BeaconBulbTracking.swift in Sources */,
 				0D3A79111A26A716003AC6D4 /* DDAbstractDatabaseLogger.m in Sources */,
+				CC26D25B1AD9F71F00AEE7F7 /* Protocols.swift in Sources */,
 				11FDAB501AACDA5F0055C2AD /* MusicCell.swift in Sources */,
 				0D9862561A1D2C0B00FAD175 /* HomeController.swift in Sources */,
 				117F495A1A96DA4500A31746 /* EZMicrophone.m in Sources */,

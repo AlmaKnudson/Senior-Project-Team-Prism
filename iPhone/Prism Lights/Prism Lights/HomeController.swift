@@ -9,15 +9,7 @@
 import UIKit
 let MAX_HUE:UInt32 = 65535
 
-
-
-protocol BulbSettingsProtocol{
-    /*mutating*/ func ApplySettings()
-}
-
-
-
-class HomeController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, BulbSettingsProtocol, ESTBeaconManagerDelegate {
+class HomeController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, BulbSettingsProtocol, DismissPresentedController, ESTBeaconManagerDelegate {
     
     
     let GROUP_SECTION = 0
@@ -509,6 +501,13 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         self.bulbCollectionView.reloadData()
         //TODO: Need protocol for pushAuth
     }
+    
+    func DismissMe() {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    
+    
     
     //- (void)beaconManager:(ESTBeaconManager *)manager
 //    didStartMonitoringForRegion:(ESTBeaconRegion *)region;
