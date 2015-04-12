@@ -55,12 +55,12 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:id="@+id/brightness" />
+                android:id="@+id/brightness"
+                android:indeterminate="false" />
 
             <TextView
                 android:layout_width="45dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
                 android:text="100%"
                 android:id="@+id/brightnessLabel"
                 android:textSize="17sp"

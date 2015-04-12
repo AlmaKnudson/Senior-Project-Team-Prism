@@ -20,23 +20,31 @@
         android:layout_height="wrap_content"
         android:background="@drawable/music_top">
 
-        <TextView
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <SeekBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="120"
-            android:id="@+id/bpmLabel"
-            android:layout_gravity="right" />
+            android:id="@+id/sensitivitySlider"
+                android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:indeterminate="false"
+                android:max="120"
+                android:progress="60"
+                android:layout_weight="1" />
 
-        <SeekBar
-        android:layout_width="275dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/sensitivitySlider"
-        android:layout_gravity="center_horizontal"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-        android:indeterminate="false"
-            android:max="120"
-            android:progress="60" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="120"
+                android:id="@+id/bpmLabel"
+                android:layout_weight="0.11"
+                android:textAlignment="center" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -46,23 +54,33 @@
             android:id="@+id/textView8"
             android:layout_gravity="center_horizontal" />
 
-        <TextView
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <SeekBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="80%"
-            android:id="@+id/muzeBrightnessLabel"
-            android:layout_gravity="right" />
+            android:id="@+id/maxBrightnessSlider"
+                android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+                android:indeterminate="false"
+                android:max="100"
+                android:progress="80"
+                android:layout_weight="1.06" />
 
-        <SeekBar
-        android:layout_width="275dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/maxBrightnessSlider"
-        android:layout_gravity="center_horizontal"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-            android:indeterminate="false"
-            android:max="100"
-            android:progress="80" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="80%"
+                android:id="@+id/muzeBrightnessLabel"
+                android:gravity="center_vertical|bottom|end"
+                android:layout_weight="0.12"
+                android:autoText="false"
+                android:textAlignment="center" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -90,16 +108,36 @@
             android:id="@+id/textView10"
             android:layout_gravity="center_horizontal" />
 
-        <SeekBar
-        android:layout_width="275dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/lowRangeSlider"
-        android:layout_gravity="center_horizontal"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-            android:max="500"
-            android:indeterminate="false"
-            android:progress="300" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="100hz"
+                android:id="@+id/lowRangeMinLabel" />
+
+            <SeekBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lowRangeSlider"
+                android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+                android:max="500"
+                android:indeterminate="false"
+                android:progress="300"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="400hz"
+                android:id="@+id/lowRangeMaxLabel"
+                android:layout_weight="0.04" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -109,16 +147,37 @@
             android:id="@+id/textView11"
             android:layout_gravity="center_horizontal" />
 
-        <SeekBar
-        android:layout_width="275dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/midRangeSlider"
-        android:layout_gravity="center_horizontal"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-            android:max="500"
-            android:indeterminate="false"
-            android:progress="200" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/ll1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="401hz"
+                android:id="@+id/midRangeMinLabel" />
+
+            <SeekBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/midRangeSlider"
+                android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+                android:max="499"
+                android:indeterminate="false"
+                android:progress="200"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="600hz"
+                android:id="@+id/midRangeMaxLabel"
+                android:layout_weight="0.05" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -128,16 +187,36 @@
             android:id="@+id/textView12"
             android:layout_gravity="center_horizontal" />
 
-        <SeekBar
-        android:layout_width="275dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/highRangeSlider"
-        android:layout_gravity="center_horizontal"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-            android:max="1800"
-            android:indeterminate="false"
-            android:progress="1800" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="601hz"
+                android:id="@+id/highRangeMinLabel" />
+
+            <SeekBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/highRangeSlider"
+                android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+                android:max="1800"
+                android:indeterminate="false"
+                android:progress="1800"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1800hz"
+                android:id="@+id/highRangeMaxLabel" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
