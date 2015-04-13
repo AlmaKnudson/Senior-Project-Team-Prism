@@ -149,14 +149,14 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
                     int position = gridView.pointToPosition((int) event.getX(), (int) event.getY());
                     if(position != dragPosition && position >= 0 && position < currentLights.size() + currentGroups.size()) {
                         if(position < currentLights.size() && dragPosition < currentLights.size()) {
-                            HueBulbChangeUtility.createGroup(currentLights.get(position), currentLights.get(dragPosition));
+//                            HueBulbChangeUtility.createGroup(currentLights.get(position), currentLights.get(dragPosition));
                         } else if(position >= currentLights.size() && dragPosition >= currentLights.size()) {
-                            HueBulbChangeUtility.createGroup(currentGroups.get(position - currentLights.size()), currentGroups.get(dragPosition - currentLights.size()));
+//                            HueBulbChangeUtility.createGroup(currentGroups.get(position - currentLights.size()), currentGroups.get(dragPosition - currentLights.size()));
                         } else {
                             if(position >= currentLights.size()) {
-                                HueBulbChangeUtility.createGroup(currentLights.get(dragPosition), currentGroups.get(position - currentLights.size()));
+//                                HueBulbChangeUtility.createGroup(currentLights.get(dragPosition), currentGroups.get(position - currentLights.size()));
                             } else {
-                                HueBulbChangeUtility.createGroup(currentLights.get(position), currentGroups.get(dragPosition - currentLights.size()));
+//                                HueBulbChangeUtility.createGroup(currentLights.get(position), currentGroups.get(dragPosition - currentLights.size()));
                             }
                         }
                     }

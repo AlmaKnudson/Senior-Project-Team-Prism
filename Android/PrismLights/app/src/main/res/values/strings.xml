@@ -62,4 +62,5 @@
     <string name="add_light">Add Lights</string>
     <string name="edit_favorites">Edit Favorites</string>
     <string name="add_favorite">Add Favorite</string>
+    <string name="adding_group">Adding Group...</string>
 </resources>

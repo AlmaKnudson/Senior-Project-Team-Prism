@@ -2,6 +2,7 @@ package app.lights.prism.com.prismlights;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.GridView;
+import android.widget.ImageButton;
 
 import com.philips.lighting.hue.sdk.PHHueSDK;
 
@@ -36,6 +38,9 @@ public class RealHomeFragment extends Fragment implements ViewPager.OnPageChange
 
     public static final String lightPositionString = "CURRENT_BULB_ID";
     public static final String groupOrLightString = "GROUP_OR_LIGHT";
+    private ImageButton editButton;
+    private ImageButton addButton;
+
     public RealHomeFragment() {
     }
 
@@ -54,6 +59,8 @@ public class RealHomeFragment extends Fragment implements ViewPager.OnPageChange
         favoriteIconSelected = view.findViewById(R.id.favoritesIconSelected);
         bulbIconSelected = view.findViewById(R.id.bulbsIconSelected);
         bulbIconDeselected = view.findViewById(R.id.bulbsIconDeselected);
+        editButton = (ImageButton) view.findViewById(R.id.editButton);
+        addButton = (ImageButton) view.findViewById(R.id.addButton);
         return view;
     }
 
@@ -69,16 +76,46 @@ public class RealHomeFragment extends Fragment implements ViewPager.OnPageChange
                 turnOffView(groupIconSelected, groupIconDeselected);
                 turnOffView(favoriteIconSelected, favoriteIconDeselected);
                 turnOnView(bulbIconSelected, bulbIconDeselected);
+                addButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
+                        AddLightFragment addLightFragment = new AddLightFragment();
+                        fragmentTransaction.replace(R.id.container, addLightFragment);
+                        fragmentTransaction.addToBackStack("lightsettings");
+                        fragmentTransaction.commit();
+                    }
+                });
                 return;
             case 1:
                 turnOnView(groupIconSelected, groupIconDeselected);
                 turnOffView(favoriteIconSelected, favoriteIconDeselected);
                 turnOffView(bulbIconSelected, bulbIconDeselected);
+                addButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
+                        AddGroupFragment addGroupFragment = new AddGroupFragment();
+                        fragmentTransaction.replace(R.id.container, addGroupFragment);
+                        fragmentTransaction.addToBackStack("lightsettings");
+                        fragmentTransaction.commit();
+                    }
+                });
                 return;
             case 2:
                 turnOffView(groupIconSelected, groupIconDeselected);
                 turnOnView(favoriteIconSelected, favoriteIconDeselected);
                 turnOffView(bulbIconSelected, bulbIconDeselected);
+                addButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
+                        AddFavoriteFragment addFavoriteFragment = new AddFavoriteFragment();
+                        fragmentTransaction.replace(R.id.container, addFavoriteFragment);
+                        fragmentTransaction.addToBackStack("lightsettings");
+                        fragmentTransaction.commit();
+                    }
+                });
                 return;
             default:
                 turnOffView(groupIconSelected, groupIconDeselected);

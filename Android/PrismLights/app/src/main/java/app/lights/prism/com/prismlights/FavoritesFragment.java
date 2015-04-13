@@ -42,7 +42,7 @@ public class FavoritesFragment extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                HueBulbChangeUtility.activateScene(selectedScene);
+                HueBulbChangeUtility.activateFavorite((Favorite) gridView.getAdapter().getItem(position));
             }
         });
         return layout;
@@ -56,20 +56,16 @@ public class FavoritesFragment extends Fragment {
 
         public FavoriteViewAdapter() {
             super();
-            favoritesDataModel = FavoritesDataModel.getInstance();
+            favoritesDataModel = FavoritesDataModel.getInstance(getActivity().getFilesDir());
         }
         @Override
         public int getCount() {
-            return favoritesDataModel.getFavoritesCount() + 2;
+            return favoritesDataModel.getFavoritesCount();
         }
 
         @Override
         public Object getItem(int position) {
-            if(getItemViewType(position) == RealHomeFragment.NORMAL_VIEW) {
-                return favoritesDataModel.getFavoriteAtIndex(position);
-            } else {
-                return null;
-            }
+            return favoritesDataModel.getFavoriteAtIndex(position);
         }
 
         @Override
@@ -77,37 +73,8 @@ public class FavoritesFragment extends Fragment {
             return position;
         }
 
-
-        @Override
-        public int getViewTypeCount() {
-            return 3;
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            if(position == favoritesDataModel.getFavoritesCount() + 1) {
-                return RealHomeFragment.EDIT_BUTTON;
-            } else if (position == favoritesDataModel.getFavoritesCount()) {
-                return RealHomeFragment.PLUS_BUTTON;
-            } else {
-                return RealHomeFragment.NORMAL_VIEW;
-            }
-        }
-
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            if(getItemViewType(position) == RealHomeFragment.EDIT_BUTTON) {
-                View editView =  LayoutInflater.from(FavoritesFragment.this.getActivity()).inflate(R.layout.edit_view, parent, false);
-                TextView editText = (TextView) editView.findViewById(R.id.editLabel);
-                editText.setText(getText(R.string.edit_favorites));
-                return editView;
-            }
-            else if(getItemViewType(position) == RealHomeFragment.PLUS_BUTTON) {
-                View addView =  LayoutInflater.from(FavoritesFragment.this.getActivity()).inflate(R.layout.add_view, parent, false);
-                TextView addText = (TextView) addView.findViewById(R.id.addLabel);
-                addText.setText(getText(R.string.add_favorite));
-                return addView;
-            }
             LinearLayout currentView;
             if(convertView == null) {
                 currentView = (LinearLayout) LayoutInflater.from(FavoritesFragment.this.getActivity()).inflate(R.layout.favorites_view, parent, false);
@@ -115,11 +82,12 @@ public class FavoritesFragment extends Fragment {
                 currentView = (LinearLayout) convertView;
             }
             Favorite favorite = (Favorite) getItem(position);
-
             String favoriteName = favorite.getName();
 
             TextView favoriteNameView = (TextView) currentView.findViewById(R.id.favoriteName);
             favoriteNameView.setText(favoriteName);
+            SingleFavoriteView favoriteView = (SingleFavoriteView) currentView.findViewById(R.id.singleFavoriteView);
+            favoriteView.setColors(favorite.getColors());
             return currentView;
         }
     }

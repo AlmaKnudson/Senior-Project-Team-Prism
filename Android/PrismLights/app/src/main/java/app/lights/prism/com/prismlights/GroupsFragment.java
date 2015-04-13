@@ -4,7 +4,6 @@ import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +11,10 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.philips.lighting.hue.sdk.PHHueSDK;
-import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 import com.philips.lighting.model.PHGroup;
-import com.philips.lighting.model.PHLight;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +38,11 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
         // Inflate the layout for this fragment
         View layout = inflater.inflate(R.layout.fragment_lights, container, false);
         gridView= (GridView) layout.findViewById(R.id.homeGridView);
-        gridView.setAdapter(new LightViewAdapter());
+        gridView.setAdapter(new GroupViewAdapter());
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 //                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
-                if(gridView.getAdapter().getItemViewType(position) == RealHomeFragment.NORMAL_VIEW) {
-                    HueBulbChangeUtility.toggleBulbGroupState((PHGroup) gridView.getAdapter().getItem(position));
-                }
+                HueBulbChangeUtility.toggleBulbGroupState((PHGroup) gridView.getAdapter().getItem(position));
             }
         });
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -92,25 +86,21 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
         ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
     }
 
-    private class LightViewAdapter extends BaseAdapter {
+    private class GroupViewAdapter extends BaseAdapter {
 
 
-        public LightViewAdapter() {
+        public GroupViewAdapter() {
             super();
             updateFromCache();
         }
         @Override
         public int getCount() {
-            return currentGroups.size() + 2;
+            return currentGroups.size();
         }
 
         @Override
         public Object getItem(int position) {
-            if(getItemViewType(position) == RealHomeFragment.NORMAL_VIEW) {
-                return currentGroups.get(currentGroupIdOrder.get(position));
-            } else {
-                return null;
-            }
+            return currentGroups.get(currentGroupIdOrder.get(position));
         }
 
         @Override
@@ -119,35 +109,7 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
         }
 
         @Override
-        public int getViewTypeCount() {
-            return 3;
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            if(position == currentGroups.size() + 1) {
-                return RealHomeFragment.EDIT_BUTTON;
-            } else if (position == currentGroups.size()) {
-                return RealHomeFragment.PLUS_BUTTON;
-            } else {
-                return RealHomeFragment.NORMAL_VIEW;
-            }
-        }
-
-        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            if(getItemViewType(position) == RealHomeFragment.EDIT_BUTTON) {
-                View editView =  LayoutInflater.from(GroupsFragment.this.getActivity()).inflate(R.layout.edit_view, parent, false);
-                TextView editText = (TextView) editView.findViewById(R.id.editLabel);
-                editText.setText(getText(R.string.edit_groups));
-                return editView;
-            }
-            else if(getItemViewType(position) == RealHomeFragment.PLUS_BUTTON) {
-                View addView =  LayoutInflater.from(GroupsFragment.this.getActivity()).inflate(R.layout.add_view, parent, false);
-                TextView addText = (TextView) addView.findViewById(R.id.addLabel);
-                addText.setText(getText(R.string.add_group));
-                return addView;
-            }
             View currentView;
             if(convertView == null) {
                 currentView = LayoutInflater.from(GroupsFragment.this.getActivity()).inflate(R.layout.group_view, parent, false);

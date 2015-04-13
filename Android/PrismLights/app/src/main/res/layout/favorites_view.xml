@@ -3,24 +3,11 @@
     android:orientation="vertical" android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:id="@+id/bulbImage">
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:id="@+id/bulbTop"
-            android:src="@drawable/bulb_top"
-            android:adjustViewBounds="true"/>
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:id="@+id/bulbBottom"
-            android:src="@drawable/bulb_bottom"
-            android:adjustViewBounds="true"/>
-    </FrameLayout>
+    <app.lights.prism.com.prismlights.SingleFavoriteView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:padding="15dp"
+        android:id="@+id/singleFavoriteView"/>
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"

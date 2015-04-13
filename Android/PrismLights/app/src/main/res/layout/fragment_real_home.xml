@@ -3,6 +3,28 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/grad_background">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="end">
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:src="@drawable/edit_button"
+            android:background="@drawable/top_button"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
+            android:id="@+id/editButton"/>
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:src="@drawable/plus_button"
+            android:background="@drawable/top_button"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
+            android:id="@+id/addButton"/>
+    </LinearLayout>
     <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
         android:layout_height="0dp"
