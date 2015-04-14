@@ -32,10 +32,6 @@ public class RealHomeFragment extends Fragment implements ViewPager.OnPageChange
     public static final int disabledOverlay = Color.argb(125, 0, 0, 0);
     public static final int offOverlay = Color.argb(50, 0, 0, 0);
 
-    public static final int EDIT_BUTTON = 2;
-    public static final int PLUS_BUTTON = 1;
-    public static final int NORMAL_VIEW = 0;
-
     public static final String lightPositionString = "CURRENT_BULB_ID";
     public static final String groupOrLightString = "GROUP_OR_LIGHT";
     private ImageButton editButton;
@@ -61,6 +57,7 @@ public class RealHomeFragment extends Fragment implements ViewPager.OnPageChange
         bulbIconDeselected = view.findViewById(R.id.bulbsIconDeselected);
         editButton = (ImageButton) view.findViewById(R.id.editButton);
         addButton = (ImageButton) view.findViewById(R.id.addButton);
+        onPageSelected(0);
         return view;
     }
 

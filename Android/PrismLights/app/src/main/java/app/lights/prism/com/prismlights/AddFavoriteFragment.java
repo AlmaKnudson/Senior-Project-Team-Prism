@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.philips.lighting.model.PHLightState;
+
 public class AddFavoriteFragment extends Fragment implements CacheUpdateListener{
     private BulbSelectionFragment bulbSelectionFragment;
     private EditText nameEditor;
@@ -38,7 +40,16 @@ public class AddFavoriteFragment extends Fragment implements CacheUpdateListener
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                favoritesDataModel.addStateAsFavorite(bulbSelectionFragment.getSelectedLightIds(), nameEditor.getText().toString());
+                if(bulbSelectionFragment.getAllChecked()) {
+                    PHLightState lightState = bulbSelectionFragment.allBulbsSameState();
+                    if(lightState == null) {
+                        favoritesDataModel.addStateAsFavorite(bulbSelectionFragment.getSelectedLightIds(), nameEditor.getText().toString());
+                    } else {
+                        favoritesDataModel.addStateAsFavorite(nameEditor.getText().toString(), lightState);
+                    }
+                } else {
+                    favoritesDataModel.addStateAsFavorite(bulbSelectionFragment.getSelectedLightIds(), nameEditor.getText().toString());
+                }
                 getFragmentManager().popBackStack();
             }
         });

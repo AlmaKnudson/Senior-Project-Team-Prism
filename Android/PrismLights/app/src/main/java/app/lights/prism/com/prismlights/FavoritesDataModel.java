@@ -124,6 +124,11 @@ public class FavoritesDataModel {
         return "Favorite " + favorites.size();
     }
 
+    public void addStateAsFavorite(String name, PHLightState lightState) {
+        favorites.add(new Favorite(name, lightState));
+        saveToFile();
+    }
+
     static class FavoritesModelSerializer implements JsonSerializer<FavoritesDataModel> {
 
         @Override

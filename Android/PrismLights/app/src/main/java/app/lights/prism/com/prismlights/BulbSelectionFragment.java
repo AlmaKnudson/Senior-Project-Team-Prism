@@ -38,12 +38,15 @@ public class BulbSelectionFragment extends Fragment implements CacheUpdateListen
     private PHHueSDK hueSDK;
     private Set<String> checked;
     private boolean shouldAllowLongClick;
+    private boolean allChecked;
+    private CheckBox selectAllCheckBox;
 
 
 
     public BulbSelectionFragment() {
         hueSDK = PHHueSDK.getInstance();
         checked = new HashSet<String>();
+        allChecked = false;
     }
 
 
@@ -65,6 +68,21 @@ public class BulbSelectionFragment extends Fragment implements CacheUpdateListen
         if(shouldAllowLongClick) {
             setGridViewLongClickListener();
         }
+        selectAllCheckBox = (CheckBox) layout.findViewById(R.id.selectAllCheckBox);
+        selectAllCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(allChecked) {
+                    allChecked = false;
+                    selectAllCheckBox.setChecked(false);
+                } else {
+                    selectAllCheckBox.setChecked(true);
+                    allChecked = true;
+                    checked.addAll(currentLightIdOrder);
+                    ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
+                }
+            }
+        });
         return layout;
     }
 
@@ -72,6 +90,8 @@ public class BulbSelectionFragment extends Fragment implements CacheUpdateListen
         if(checked.contains(id)) {
             checked.remove(id);
             checkBox.setChecked(false);
+            selectAllCheckBox.setChecked(false);
+            allChecked = false;
         } else {
             checked.add(id);
             checkBox.setChecked(true);
@@ -127,6 +147,36 @@ public class BulbSelectionFragment extends Fragment implements CacheUpdateListen
         return new ArrayList<String>(checked);
     }
 
+    public boolean getAllChecked() {
+        return allChecked;
+    }
+
+    public PHLightState allBulbsSameState() {
+        PHLightState returnState = null;
+        float[] currentColor = new float[2];
+        for(String id: checked) {
+            PHLightState lightState = currentLights.get(id).getLastKnownLightState();
+            if(returnState == null) {
+                returnState = new PHLightState();
+                returnState.setX(lightState.getX());
+                returnState.setY(lightState.getY());
+                returnState.setOn(lightState.isOn());
+                returnState.setBrightness(lightState.getBrightness());
+                currentColor[0] = returnState.getX();
+                currentColor[1] = returnState.getY();
+            } else {
+                if(!HueBulbChangeUtility.colorsEqual(currentColor, new float[]{lightState.getX(), lightState.getY()}) ||
+                        ((returnState.getBrightness() != null && returnState.getBrightness().equals(lightState.getBrightness())) ||
+                            returnState.getBrightness() == null && lightState.getBrightness() != null) ||
+                        (returnState.isOn() != null && returnState.isOn().equals(lightState.isOn())) ||
+                            returnState.isOn() == null && lightState.isOn() != null) {
+                    return null;
+                }
+            }
+        }
+        return returnState;
+    }
+
     private class SelectGridAdapter extends BaseAdapter {
 
 
@@ -166,6 +216,12 @@ public class BulbSelectionFragment extends Fragment implements CacheUpdateListen
             bulbName.setText(lightName);
 
             ImageView bulbBottom = (ImageView) currentView.findViewById(R.id.bulbBottom);
+            CheckBox checkBox = (CheckBox) currentView.findViewById(R.id.selectBulbCheck);
+            if(checked.contains(currentLightIdOrder.get(position))) {
+                checkBox.setChecked(true);
+            } else{
+                checkBox.setChecked(false);
+            }
             if(!currentLight.getLastKnownLightState().isReachable()) {
                 bulbBottom.setColorFilter(RealHomeFragment.disabledOverlay);
                 bulbTop.setColorFilter(RealHomeFragment.disabledOverlay);
@@ -176,12 +232,6 @@ public class BulbSelectionFragment extends Fragment implements CacheUpdateListen
             if(!currentLight.getLastKnownLightState().isOn()) {
                 bulbTop.setColorFilter(RealHomeFragment.offOverlay);
                 return currentView;
-            }
-            CheckBox checkBox = (CheckBox) currentView.findViewById(R.id.selectBulbCheck);
-            if(checked.contains(currentLightIdOrder.get(position))) {
-                checkBox.setChecked(true);
-            } else{
-                checkBox.setChecked(false);
             }
             //TODO make work with alternate color formats
             Float x = currentLight.getLastKnownLightState().getX();

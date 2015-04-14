@@ -5,6 +5,7 @@ import android.text.format.DateFormat;
 
 import com.philips.lighting.hue.listener.PHGroupListener;
 import com.philips.lighting.hue.listener.PHLightListener;
+import com.philips.lighting.hue.sdk.PHBridgeSearchManager;
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 import com.philips.lighting.model.PHBridge;
@@ -491,5 +492,83 @@ public class HueBulbChangeUtility {
                 bridge.updateLightState(getLightFromId(lightId, bridge), lightState);
             }
         }
+    }
+
+    public static void searchForLights(final OnCompletedListener onCompletedListener) {
+        PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
+        bridge.findNewLights(new PHLightListener() {
+            @Override
+            public void onReceivingLightDetails(PHLight phLight) {
+
+            }
+
+            @Override
+            public void onReceivingLights(List<PHBridgeResource> phBridgeResources) {
+
+            }
+
+            @Override
+            public void onSearchComplete() {
+                if(onCompletedListener != null) {
+                    onCompletedListener.onCompleted();
+                }
+            }
+
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                if(onCompletedListener != null) {
+                    onCompletedListener.onCompleted();
+                }
+            }
+
+            @Override
+            public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
+
+            }
+        });
+    }
+
+    public static void searchForLights(List<String> serialCodes, final OnCompletedListener onCompletedListener) {
+        PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
+        bridge.findNewLightsWithSerials(serialCodes, new PHLightListener() {
+            @Override
+            public void onReceivingLightDetails(PHLight phLight) {
+
+            }
+
+            @Override
+            public void onReceivingLights(List<PHBridgeResource> phBridgeResources) {
+
+            }
+
+            @Override
+            public void onSearchComplete() {
+                if(onCompletedListener != null) {
+                    onCompletedListener.onCompleted();
+                }
+            }
+
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                if(onCompletedListener != null) {
+                    onCompletedListener.onCompleted();
+                }
+            }
+
+            @Override
+            public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
+
+            }
+        });
     }
 }
