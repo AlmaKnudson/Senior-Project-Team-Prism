@@ -12,7 +12,7 @@ class PushAuthController : UIViewController {
 
     @IBOutlet weak var pushImageView: UIImageView!
     
-    var delegate:BulbSettingsProtocol? = nil
+    var delegate:DismissPresentedController? = nil
     
     override func viewDidLoad() {
         self.title = "Authenticate"
@@ -46,7 +46,7 @@ class PushAuthController : UIViewController {
     func AuthSuccessful(){
         PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
         navigationController?.popViewControllerAnimated(true)
-        delegate?.ApplySettings()
+        delegate?.DismissMe()
     }
     
     
@@ -54,21 +54,21 @@ class PushAuthController : UIViewController {
         PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
         //TODO: AuthFailed Method
         navigationController?.popViewControllerAnimated(true)
-        delegate?.ApplySettings()
+        delegate?.DismissMe()
     }
     
     func NoConnection(){
         PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
         //TODO: Inform user of Network connection going down.
         navigationController?.popViewControllerAnimated(true)
-        delegate?.ApplySettings()
+        delegate?.DismissMe()
     }
     
     func NoBridgeSet(){
         PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
         //TODO: Provide message to user to fill out bug report
         navigationController?.popViewControllerAnimated(true)
-        delegate?.ApplySettings()
+        delegate?.DismissMe()
     }
     
     func ButtonNotPressed(){
