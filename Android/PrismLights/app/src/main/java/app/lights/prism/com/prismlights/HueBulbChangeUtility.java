@@ -17,6 +17,7 @@ import com.philips.lighting.model.PHSchedule;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +30,7 @@ public class HueBulbChangeUtility {
 
     public static PHLight getLightFromPosition(int position, PHBridge bridge) {
         List<PHLight> currentLights = bridge.getResourceCache().getAllLights();
+        Map<String, PHLight> map =  bridge.getResourceCache().getLights();
         return currentLights.get(position);
     }
 
@@ -126,6 +128,25 @@ public class HueBulbChangeUtility {
     private static void changeBulbColor(PHLight light, float[]xY) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
         bridge.updateLightState(light, getColorState(xY, !light.getLastKnownLightState().isOn()));
+    }
+
+    private static void musicChangeBulbColor(PHLight light, float[]xY, int transitionTime, int brightness) {
+        PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
+        PHLightState state = new PHLightState();
+        state.setX(xY[0]);
+        state.setY(xY[1]);
+        state.setColorMode(PHLight.PHLightColorMode.COLORMODE_XY);
+        state.setOn(true);
+        state.setBrightness(brightness);
+        state.setTransitionTime(transitionTime);
+//        System.out.println(state.getBrightness());
+        bridge.updateLightState(light, state);
+    }
+
+    public static void musicChangeBulbColor(int lightPosition, float[] xY, int transitionTime, int brightness) {
+        PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
+        PHLight light = getLightFromPosition(lightPosition, bridge);
+        musicChangeBulbColor(light, xY, transitionTime, brightness);
     }
 
 

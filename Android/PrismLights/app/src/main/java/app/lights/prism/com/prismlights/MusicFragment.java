@@ -14,8 +14,11 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 
+import com.philips.lighting.hue.sdk.utilities.PHUtilities;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Random;
 
 
 import be.tarsos.dsp.AudioDispatcher;
@@ -51,6 +54,7 @@ public class MusicFragment extends Fragment implements OnsetHandler {
     private TextView midRangeMaxLabel;
     private TextView highRangeMinLabel;
 
+    private Random rng;
     private double mostRecentPitch;
 
     PitchDetectionHandler pdh;
@@ -101,6 +105,8 @@ public class MusicFragment extends Fragment implements OnsetHandler {
         midRangeMaxLabel = (TextView) layout.findViewById(R.id.midRangeMaxLabel);
         highRangeMinLabel = (TextView) layout.findViewById(R.id.highRangeMinLabel);
 
+        //Initialize rng with the max hue value: 65280.... Hue Color range [0-65280]
+        rng = new Random();
 
 
         brightnessLabel = (TextView) layout.findViewById(R.id.muzeBrightnessLabel);
@@ -116,7 +122,7 @@ public class MusicFragment extends Fragment implements OnsetHandler {
                 mWaveformView.updateAudioData(data);
                 if(result.isPitched()){
                     float pitchInHz = result.getPitch();
-                    System.out.println("Most Recent Pitch: " + pitchInHz);
+//                    System.out.println("Most Recent Pitch: " + pitchInHz);
                     mostRecentPitch = pitchInHz;
                 }
 //                System.out.println(result.isPitched());
@@ -138,7 +144,7 @@ public class MusicFragment extends Fragment implements OnsetHandler {
         cOP.setHandler(this);
         p = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 44100, 2048, pdh);
         // add a processor, handle percussion event.
-//        dispatcher.addAudioProcessor(cOP);
+
 
         new Thread(dispatcher,"Audio Dispatcher").start();
 //        slave = new Thread(dispatcher,"Audio Dispatcher").start();
@@ -230,81 +236,83 @@ public class MusicFragment extends Fragment implements OnsetHandler {
 
                 if(startRecording.isChecked()) {
                     dispatcher.addAudioProcessor(p);
+                    dispatcher.addAudioProcessor(cOP);
                     /**
                      * Processing mic audio
                      */
-                    lowTimer = new CountDownTimer(10000, 1000) {
-
-                        public void onTick(long millisUntilFinished) {
-                            System.out.println("seconds remaining: " + millisUntilFinished / 1000);
-                        }
-
-                        public void onFinish() {
-
-                            dispatcher.removeAudioProcessor(p);
-                            lowTimer.cancel();
-                            midTimer.cancel();
-                            highTimer.cancel();
-                            decrementTimer.cancel();
-                            startRecording.setChecked(false);
-                            System.out.println("DONE");
-                        }
-                    }.start();
-
-                    midTimer = new CountDownTimer(10000, 1000) {
-
-                        public void onTick(long millisUntilFinished) {
-                            System.out.println("seconds remaining: " + millisUntilFinished / 1000);
-                        }
-
-                        public void onFinish() {
-                            dispatcher.removeAudioProcessor(p);
-                            lowTimer.cancel();
-                            midTimer.cancel();
-                            highTimer.cancel();
-                            decrementTimer.cancel();
-                            startRecording.setChecked(false);
-                            System.out.println("DONE");
-                        }
-                    }.start();
-
-                    highTimer = new CountDownTimer(10000, 1000) {
-
-                        public void onTick(long millisUntilFinished) {
-                            System.out.println("seconds remaining: " + millisUntilFinished / 1000);
-                        }
-
-                        public void onFinish() {
-
-
-                            dispatcher.removeAudioProcessor(p);
-                            lowTimer.cancel();
-                            midTimer.cancel();
-                            highTimer.cancel();
-                            decrementTimer.cancel();
-                            startRecording.setChecked(false);
-                            System.out.println("DONE");
-                        }
-                    }.start();
-
-
-                    decrementTimer = new CountDownTimer(10000, 1000) {
-
-                        public void onTick(long millisUntilFinished) {
-                            System.out.println("seconds remaining: " + millisUntilFinished / 1000);
-                        }
-
-                        public void onFinish() {
-                            System.out.println("DONE");
-                        }
-                    }.start();
+//                    lowTimer = new CountDownTimer(10000, 1000) {
+//
+//                        public void onTick(long millisUntilFinished) {
+//                            System.out.println("seconds remaining: " + millisUntilFinished / 1000);
+//                        }
+//
+//                        public void onFinish() {
+//
+//                            dispatcher.removeAudioProcessor(p);
+//                            lowTimer.cancel();
+//                            midTimer.cancel();
+//                            highTimer.cancel();
+//                            decrementTimer.cancel();
+//                            startRecording.setChecked(false);
+//                            System.out.println("DONE");
+//                        }
+//                    }.start();
+//
+//                    midTimer = new CountDownTimer(10000, 1000) {
+//
+//                        public void onTick(long millisUntilFinished) {
+//                            System.out.println("seconds remaining: " + millisUntilFinished / 1000);
+//                        }
+//
+//                        public void onFinish() {
+//                            dispatcher.removeAudioProcessor(p);
+//                            lowTimer.cancel();
+//                            midTimer.cancel();
+//                            highTimer.cancel();
+//                            decrementTimer.cancel();
+//                            startRecording.setChecked(false);
+//                            System.out.println("DONE");
+//                        }
+//                    }.start();
+//
+//                    highTimer = new CountDownTimer(10000, 1000) {
+//
+//                        public void onTick(long millisUntilFinished) {
+//                            System.out.println("seconds remaining: " + millisUntilFinished / 1000);
+//                        }
+//
+//                        public void onFinish() {
+//
+//
+//                            dispatcher.removeAudioProcessor(p);
+//                            lowTimer.cancel();
+//                            midTimer.cancel();
+//                            highTimer.cancel();
+//                            decrementTimer.cancel();
+//                            startRecording.setChecked(false);
+//                            System.out.println("DONE");
+//                        }
+//                    }.start();
+//
+//
+//                    decrementTimer = new CountDownTimer(10000, 1000) {
+//
+//                        public void onTick(long millisUntilFinished) {
+//                            System.out.println("seconds remaining: " + millisUntilFinished / 1000);
+//                        }
+//
+//                        public void onFinish() {
+//                            System.out.println("DONE");
+//                        }
+//                    }.start();
 
                 } else {
                     dispatcher.removeAudioProcessor(p);
-                    lowTimer.cancel();
-                    midTimer.cancel();
-                    highTimer.cancel();
-                    decrementTimer.cancel();
+                    dispatcher.removeAudioProcessor(cOP);
+//                    lowTimer.cancel();
+//                    midTimer.cancel();
+//                    highTimer.cancel();
+//                    decrementTimer.cancel();
                 }
             }
         };
@@ -316,11 +324,31 @@ public class MusicFragment extends Fragment implements OnsetHandler {
 
     @Override
     public void handleOnset(double time, double salience) {
-        double frequency = (double) salience * (44100.0 / 2048 / 2.0);
-        System.out.println(String.format("%.4f;%.4f", time, salience));
+
+//        System.out.println(String.format("%.4f;%.4f, %.4f", time, salience, (float)mostRecentPitch));
 
         //TODO-- Send bulb requests based on FREQUENCY ranges and the frequency detected by this ONSET.
         //Compare mostRecentPitch to the pitch selections on sliders.
+
+        int lowThreshold = ( Integer.parseInt(lowRangeMaxLabel.getText().toString().replace("hz", "")) );
+        int midThreshold = ( Integer.parseInt(midRangeMaxLabel.getText().toString().replace("hz", "")) );
+
+        int light = 0;
+        if(mostRecentPitch < lowThreshold){
+            //Send request to low bulbs
+           light = 2;
+        } else if (mostRecentPitch < midThreshold){
+            //Send request to mid bulbs
+            light = 3;
+        } else {
+            //Send request to high bulbs
+            light = 4;
+        }
+
+        float[] xY = {rng.nextFloat(), rng.nextFloat()};
+        HueBulbChangeUtility.musicChangeBulbColor(light, xY, 1, 254*(Integer.parseInt(brightnessLabel.getText().toString().replace("%", "") )/ 100) );
+        //Fade out slowly
+        HueBulbChangeUtility.musicChangeBulbColor(light, xY, 20, 0);
 
 
     }
