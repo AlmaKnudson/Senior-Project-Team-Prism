@@ -54,6 +54,7 @@ public class MusicFragment extends Fragment implements OnsetHandler {
     private TextView midRangeMaxLabel;
     private TextView highRangeMinLabel;
 
+    private TextView currentFrequencyLabel;
     private Random rng;
     private double mostRecentPitch;
 
@@ -104,7 +105,7 @@ public class MusicFragment extends Fragment implements OnsetHandler {
         midRangeMinLabel = (TextView) layout.findViewById(R.id.midRangeMinLabel);
         midRangeMaxLabel = (TextView) layout.findViewById(R.id.midRangeMaxLabel);
         highRangeMinLabel = (TextView) layout.findViewById(R.id.highRangeMinLabel);
-
+        currentFrequencyLabel = (TextView) layout.findViewById(R.id.currentFrequencyLabel);
         //Initialize rng with the max hue value: 65280.... Hue Color range [0-65280]
         rng = new Random();
 
@@ -332,17 +333,18 @@ public class MusicFragment extends Fragment implements OnsetHandler {
 
         int lowThreshold = ( Integer.parseInt(lowRangeMaxLabel.getText().toString().replace("hz", "")) );
         int midThreshold = ( Integer.parseInt(midRangeMaxLabel.getText().toString().replace("hz", "")) );
-
+//        currentFrequencyLabel.setText(mostRecentPitch + "hz");
+//        System.out.println(mostRecentPitch);
         int light = 0;
         if(mostRecentPitch < lowThreshold){
             //Send request to low bulbs
-           light = 2;
+           light = 1;
         } else if (mostRecentPitch < midThreshold){
             //Send request to mid bulbs
-            light = 3;
+            light = 2;
         } else {
             //Send request to high bulbs
-            light = 4;
+            light = 5;
         }
 
         float[] xY = {rng.nextFloat(), rng.nextFloat()};
