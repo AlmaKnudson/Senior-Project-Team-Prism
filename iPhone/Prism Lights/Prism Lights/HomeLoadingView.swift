@@ -15,9 +15,6 @@ class HomeLoadingView: UIView {
     var x :Bool = true
     
     
-    override init() {
-        super.init()
-    }
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)

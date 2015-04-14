@@ -149,21 +149,21 @@ class ColorPicker: UIView {
         setColorFromPosition(positionX, y: positionY)
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        updateColorFromTouch(touches.anyObject() as UITouch)
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        updateColorFromTouch(touches.first as! UITouch)
     }
     
-    override func touchesCancelled(touches: NSSet!, withEvent event: UIEvent!) {
+    override func touchesCancelled(touches: Set<NSObject>, withEvent event: UIEvent!) {
         tempColor = _currentXYColor
         setPositionFromColor()
     }
  
-    override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
-        updateColorFromTouch(touches.anyObject() as UITouch)
+    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+        updateColorFromTouch(touches.first as! UITouch)
     }
     
-    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
-        updateColorFromTouch(touches.anyObject() as UITouch)
+    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+        updateColorFromTouch(touches.first as! UITouch)
         _currentXYColor = tempColor
         colorChangedDelegate?.onColorChanged(_currentXYColor)
     }

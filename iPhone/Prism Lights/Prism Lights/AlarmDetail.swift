@@ -185,7 +185,7 @@ class AlarmDetail:UITableViewController, ColorChangedDelegate {
     */
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "colorPickerController" {
-            var colorPicker = segue.destinationViewController as ColorPickerController
+            var colorPicker = segue.destinationViewController as! ColorPickerController
             colorPicker.colorChangedDelegate = self
         }
     }

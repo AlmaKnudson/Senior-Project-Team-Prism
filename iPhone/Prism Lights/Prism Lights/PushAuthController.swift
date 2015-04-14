@@ -37,7 +37,7 @@ class PushAuthController : UIViewController {
 
         manager!.registerObject(self, withSelector: "ButtonNotPressed", forNotification: "PUSHLINK_BUTTON_NOT_PRESSED_NOTIFICATION")
         
-        (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.startPushlinkAuthentication()
+        (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.startPushlinkAuthentication()
     
     }
     

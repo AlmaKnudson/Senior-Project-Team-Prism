@@ -47,6 +47,9 @@
     <string name="txt_button_fri">F</string>
     <string name="txt_button_sat">S</string>
     <string name="btn_timer_time">Choose Time</string>
+    <string name="time_sync_error">Time Sync Error</string>
+    <string name="time_sync_error_message">The bridge and your mobile device have different time.
+        Please Connect your Bridge or Device to Internet.</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

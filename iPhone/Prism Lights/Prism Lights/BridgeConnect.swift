@@ -44,7 +44,7 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
     
     override func viewWillAppear(animated: Bool) {
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-        var hueSDK = (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!
+        var hueSDK = (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!
         if(hueSDK.localConnected()){
             LoadBridgeValues()
         }
@@ -56,7 +56,7 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
         manager!.registerObject(self, withSelector: "BridgeUnavailable", forNotification: "NO_LOCAL_CONNECTION_NOTIFICATION")
         manager!.registerObject(self, withSelector: "NotAuthorized", forNotification: "NO_LOCAL_AUTHENTICATION_NOTIFICATION")
         
-        (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.enableLocalConnection()
+        (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.enableLocalConnection()
     }
     
     override func didReceiveMemoryWarning() {
@@ -71,7 +71,7 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
             let ip = cache.bridgeConfiguration.ipaddress
             let mac = cache.bridgeConfiguration.mac
             var lastHeartbeat :String
-            if (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.localConnected(){
+            if (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.localConnected(){
                 let formatter = NSDateFormatter()
                 formatter.dateStyle = NSDateFormatterStyle.NoStyle
                 formatter.timeStyle = NSDateFormatterStyle.MediumStyle
@@ -121,7 +121,7 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         let mac = macAddresses[indexPath.row]
         let ip = addresses[mac]!
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let hueSDK = appDelegate.hueSDK
         hueSDK!.disableLocalConnection()
         hueSDK!.setBridgeToUseWithIpAddress(ip, macAddress: mac)
@@ -137,7 +137,7 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
     }
     
     func BridgeUnavailable(){
-        (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.disableLocalConnection()
+        (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.disableLocalConnection()
         ipLabel.text = "Not Connected"
         macLabel.text = "Not Connected"
         heartbeatLabel.text = "Not Connected"
@@ -145,7 +145,7 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
     }
     
     func NotAuthorized(){
-        (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.disableLocalConnection()
+        (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.disableLocalConnection()
         
         self.performSegueWithIdentifier("pushAuth", sender: self)
 
@@ -158,7 +158,7 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
         let bridgeSearch = PHBridgeSearching(upnpSearch: true, andPortalSearch: true, andIpAdressSearch: true)
         
         bridgeSearch.startSearchWithCompletionHandler { (dict:[NSObject : AnyObject]!) -> Void in
-            self.addresses = dict as [String:String]
+            self.addresses = dict as! [String:String]
             self.macAddresses = [String](self.addresses.keys)
             self.bridgesFound.reloadData()
             self.loadingView.stopAnimating()
@@ -167,7 +167,7 @@ class BridgeConnect: UIViewController, UITableViewDataSource, UITableViewDelegat
             if(self.addresses.count == 1){
                 var mac = self.macAddresses[0]
                 var ipaddress = self.addresses[mac]
-                var hueSDK = (UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!
+                var hueSDK = (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!
                 hueSDK.setBridgeToUseWithIpAddress(ipaddress, macAddress: mac)
                 hueSDK.enableLocalConnection()
             }

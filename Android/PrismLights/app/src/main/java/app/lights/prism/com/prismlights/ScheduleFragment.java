@@ -14,9 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -58,6 +60,7 @@ public class ScheduleFragment extends Fragment {
     private static PHBridge bridge;
     String delegate;
     List<PHSchedule> phSchedules; // this List of schedules in bridge whose description is Schedule.
+    Switch currentSwitch;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -84,6 +87,8 @@ public class ScheduleFragment extends Fragment {
         //get current bulb
         currentBulb = bridge.getResourceCache().getAllLights().get(currentBulbId);
         getPhSchedules();
+
+        currentSwitch = null;
     }
 
     // this function get list of schedule from the bridge, and return schedules for this bulb
@@ -120,7 +125,7 @@ public class ScheduleFragment extends Fragment {
                 //need to open new fragment with BulbID argument.
                 Bundle bundle = new Bundle();
                 bundle.putInt(lightPositionString, currentBulbId);
-                ((MainActivity)getActivity()).currentSchedule = null;
+                ((MainActivity)getActivity()).setCurrentSchedule(null);
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 ScheduleConfigFragment scheduleConfigFragment = new ScheduleConfigFragment();
@@ -141,7 +146,7 @@ public class ScheduleFragment extends Fragment {
                 //need to open new fragment with BulbID and scheduleID arguments.
                 Bundle bundle = new Bundle();
                 bundle.putInt(lightPositionString, currentBulbId);
-                ((MainActivity) getActivity()).currentSchedule = phSchedules.get(position);
+                ((MainActivity) getActivity()).setCurrentSchedule(phSchedules.get(position));
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 ScheduleConfigFragment scheduleConfigFragment = new ScheduleConfigFragment();
@@ -228,6 +233,26 @@ public class ScheduleFragment extends Fragment {
 
             View colorImage =  currentView.findViewById(R.id.scheduleColor);
             colorImage.setBackgroundColor(color);
+
+
+            final Switch scheduleSwitch = (Switch)currentView.findViewById(R.id.singleScheduleSwitch);
+            if(phSchedule.getStatus().equals(PHSchedule.PHScheduleStatus.ENABLED))
+                scheduleSwitch.setChecked(true);
+            else
+                scheduleSwitch.setChecked(false);
+
+            scheduleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked){
+                        phSchedule.setStatus(PHSchedule.PHScheduleStatus.ENABLED);
+                    } else {
+                        phSchedule.setStatus(PHSchedule.PHScheduleStatus.DISABLED);
+                    }
+                    currentSwitch = scheduleSwitch;
+                    updateSchedule(phSchedule);
+                }
+            });
 
             TextView nameText = (TextView) currentView.findViewById(R.id.scheduleName);
             nameText.setText(phSchedule.getName());
@@ -316,6 +341,58 @@ public class ScheduleFragment extends Fragment {
 
             return currentView;
         }
+    }
+
+    private void updateSchedule(final PHSchedule phSchedule) {
+        phSchedule.setAutoDelete(true);
+        final PHWizardAlertDialog dialogManager = PHWizardAlertDialog.getInstance();
+        dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
+
+        bridge.updateSchedule(phSchedule, new PHScheduleListener() {
+            @Override
+            public void onCreated(PHSchedule phSchedule) {
+
+            }
+
+            @Override
+            public void onSuccess() {
+                currentSwitch = null;
+                dialogManager.closeProgressDialog();
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        if (isCurrentActivity()) {
+                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_schedule_updated), R.string.btn_ok, R.string.txt_result);
+                        }
+                    }
+                });
+
+            }
+
+            @Override
+            public void onError(int i, final String s) {
+
+                if (phSchedule.getStatus().equals(PHSchedule.PHScheduleStatus.ENABLED))
+                    currentSwitch.setChecked(false);
+                else
+                    currentSwitch.setChecked(true);
+
+                currentSwitch = null;
+
+                dialogManager.closeProgressDialog();
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        if (isCurrentActivity()) {
+                            PHWizardAlertDialog.showErrorDialog(getActivity(), s, R.string.btn_ok);
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
+                ;
+            }
+        });
     }
 
     private void deleteSchedule(int position) {

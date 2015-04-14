@@ -52,7 +52,7 @@ import Foundation
         super.viewDidLoad();
         var index = 0;
         for holy in moses {
-            lights.insert(holy as MusicBulbRangeSelection, atIndex: index++)
+            lights.insert(holy as! MusicBulbRangeSelection, atIndex: index++)
         }
         
    
@@ -79,7 +79,7 @@ import Foundation
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
         let cellId:String = "MyCell"
-        var cell:MusicCell = tableView.dequeueReusableCellWithIdentifier(cellId, forIndexPath:indexPath) as MusicCell
+        var cell:MusicCell = tableView.dequeueReusableCellWithIdentifier(cellId, forIndexPath:indexPath) as! MusicCell
         cell.textLabel?.textColor = UIColor.whiteColor()
         cell.bulbIdentifier = (lights[indexPath.row].bulbIdentifier as String)
         cell.bulbName = (lights[indexPath.row].bulbName as String)

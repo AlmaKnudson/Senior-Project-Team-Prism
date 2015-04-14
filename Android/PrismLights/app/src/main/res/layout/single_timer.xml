@@ -15,21 +15,21 @@
     android:gravity="center_vertical|start"
     android:textSize="20sp"
     android:textColor="@color/white"
-    android:layout_toLeftOf="@+id/TimerDeleteText"
-    android:layout_toStartOf="@+id/TimerDeleteText"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"/>
+    android:padding="10dp" />
 
 <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="mode"
     android:id="@+id/textMode"
-    android:gravity="center"
     android:layout_alignParentTop="true"
-    android:layout_toStartOf="@+id/TimerDeleteText"
     android:layout_alignParentBottom="true"
-    android:layout_toLeftOf="@+id/TimerDeleteText" />
+    android:layout_toLeftOf="@+id/TimerDeleteText"
+    android:textColor="@color/white"
+    android:gravity="center_vertical|left"
+    android:layout_toRightOf="@+id/singleTimerTimeText"
+    android:layout_toEndOf="@+id/singleTimerTimeText"
+    android:padding="10dp" />/>
 
 <TextView
     android:layout_width="wrap_content"
