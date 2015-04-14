@@ -25,6 +25,13 @@ class ConnectingViewController : UIViewController, DismissPresentedController {
     
     @IBAction func scanButtonPressed(sender: UIButton) {
         
+        if(BRIDGELESS){
+            performSegueWithIdentifier( "HomeTabView", sender: self)
+            return
+        }
+        
+        rescanButton.hidden = true
+        BeginConnection()
         
         
     }
@@ -53,6 +60,10 @@ class ConnectingViewController : UIViewController, DismissPresentedController {
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nil, bundle: nil)
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        activityIndicator.center = self.view.center
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -198,6 +209,7 @@ class ConnectingViewController : UIViewController, DismissPresentedController {
         alert.addAction(cancelButton)
         //Show the alert to the user
         self.presentViewController(alert, animated: true) { () -> Void in}
+        rescanButton.hidden = false
     }
     
     func DismissMe(){

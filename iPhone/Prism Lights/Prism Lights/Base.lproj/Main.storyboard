@@ -10,7 +10,7 @@
         <!--Home-->
         <scene sceneID="hNz-n2-bh7">
             <objects>
-                <viewController id="9pv-A4-QxB" customClass="HomeController" customModule="Prism_Lights" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="9pv-A4-QxB" customClass="BulbsCollectionController" customModule="Prism_Lights" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Ia1-K6-d13"/>
                         <viewControllerLayoutGuide type="bottom" id="4ug-Mw-9AY"/>
@@ -127,7 +127,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="742" y="-196"/>
+            <point key="canvasLocation" x="753" y="-192"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Nlt-Kq-TFl">
@@ -908,6 +908,16 @@
             </objects>
             <point key="canvasLocation" x="-64" y="-1117"/>
         </scene>
+        <!--Home-->
+        <scene sceneID="Cbu-Ll-lhb">
+            <objects>
+                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="gvT-tx-tde" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Home" image="home" id="5df-P6-sxO"/>
+                </pageViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tbQ-lf-wdh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="753" y="-1215"/>
+        </scene>
         <!--Tab View Controller-->
         <scene sceneID="yl2-sM-qoP">
             <objects>
@@ -922,6 +932,7 @@
                         <segue destination="f97-iB-1xP" kind="relationship" relationship="viewControllers" id="5dh-jQ-XPx"/>
                         <segue destination="9pv-A4-QxB" kind="relationship" relationship="viewControllers" id="u7Y-xg-7CH"/>
                         <segue destination="33H-mq-ea0" kind="relationship" relationship="viewControllers" id="3FV-yo-q1x"/>
+                        <segue destination="gvT-tx-tde" kind="relationship" relationship="viewControllers" id="BWP-6X-BuR"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
@@ -2833,8 +2844,8 @@
         <image name="unReachable" width="600" height="550"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="rHY-bs-Q2p"/>
-        <segue reference="MV1-5L-hp4"/>
+        <segue reference="VIG-4p-d0T"/>
         <segue reference="agp-MF-nMt"/>
+        <segue reference="MV1-5L-hp4"/>
     </inferredMetricsTieBreakers>
 </document>

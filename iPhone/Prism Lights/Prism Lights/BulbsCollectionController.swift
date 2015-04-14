@@ -1,5 +1,5 @@
 //
-//  HomeController.swift
+//  BulbsCollectionController.swift
 //  Prism Lights
 //
 //  Created by Cody Foltz on 11/19/14.
@@ -9,7 +9,7 @@
 import UIKit
 let MAX_HUE:UInt32 = 65535
 
-class HomeController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, BulbSettingsProtocol, DismissPresentedController, ESTBeaconManagerDelegate {
+class BulbsCollectionController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, BulbSettingsProtocol, DismissPresentedController, ESTBeaconManagerDelegate {
     
     
     let GROUP_SECTION = 0
@@ -499,7 +499,6 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     func ApplySettings(){
         self.dismissViewControllerAnimated(true, completion: nil)
         self.bulbCollectionView.reloadData()
-        //TODO: Need protocol for pushAuth
     }
     
     func DismissMe() {

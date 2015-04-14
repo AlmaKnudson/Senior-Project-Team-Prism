@@ -37,7 +37,7 @@
 		0D9357E51A2CC48F00AAD52D /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A79031A26A716003AC6D4 /* DDAbstractDatabaseLogger.m */; };
 		0D9357E71A2D4BB100AAD52D /* BulbCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9357E61A2D4BB100AAD52D /* BulbCollectionCell.swift */; };
 		0D9862541A1D2C0B00FAD175 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862531A1D2C0B00FAD175 /* AppDelegate.swift */; };
-		0D9862561A1D2C0B00FAD175 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862551A1D2C0B00FAD175 /* HomeController.swift */; };
+		0D9862561A1D2C0B00FAD175 /* BulbsCollectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862551A1D2C0B00FAD175 /* BulbsCollectionController.swift */; };
 		0D9862581A1D2C0B00FAD175 /* MusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9862571A1D2C0B00FAD175 /* MusicViewController.swift */; };
 		0D98625D1A1D2C0B00FAD175 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0D98625C1A1D2C0B00FAD175 /* Images.xcassets */; };
 		0D98626C1A1D2C0B00FAD175 /* Prism_LightsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D98626B1A1D2C0B00FAD175 /* Prism_LightsTests.swift */; };
@@ -78,6 +78,9 @@
 		CC391F411A7D91F9004C94B5 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC391F401A7D91F9004C94B5 /* Networking.swift */; };
 		CC4A46E51A8912FD007DC0F2 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A46E41A8912FD007DC0F2 /* Settings.swift */; };
 		CC4A46E71A89130F007DC0F2 /* ModeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A46E61A89130F007DC0F2 /* ModeCell.swift */; };
+		CC89CA011ADD8E0B00E25DCD /* HomePageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC89CA001ADD8E0B00E25DCD /* HomePageController.swift */; };
+		CC89CA031ADD903D00E25DCD /* GroupCollectionControlller.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC89CA021ADD903D00E25DCD /* GroupCollectionControlller.swift */; };
+		CC89CA051ADD904F00E25DCD /* FavioriteCollectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC89CA041ADD904F00E25DCD /* FavioriteCollectionController.swift */; };
 		CC96AD941ABE26E00025896F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CCB135A81AAD5606006E464F /* Main.storyboard */; };
 		CC96AD951ABE26E60025896F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D98625E1A1D2C0B00FAD175 /* LaunchScreen.xib */; };
 		CC9E5ECD1A89A16100B19DF6 /* AlarmsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9E5ECC1A89A16100B19DF6 /* AlarmsTable.swift */; };
@@ -144,7 +147,7 @@
 		0D98624E1A1D2C0B00FAD175 /* Prism Lights.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Prism Lights.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D9862521A1D2C0B00FAD175 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0D9862531A1D2C0B00FAD175 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		0D9862551A1D2C0B00FAD175 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
+		0D9862551A1D2C0B00FAD175 /* BulbsCollectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulbsCollectionController.swift; sourceTree = "<group>"; };
 		0D9862571A1D2C0B00FAD175 /* MusicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicViewController.swift; sourceTree = "<group>"; };
 		0D98625C1A1D2C0B00FAD175 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		0D98625F1A1D2C0B00FAD175 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -227,6 +230,9 @@
 		CC391F401A7D91F9004C94B5 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		CC4A46E41A8912FD007DC0F2 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		CC4A46E61A89130F007DC0F2 /* ModeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModeCell.swift; sourceTree = "<group>"; };
+		CC89CA001ADD8E0B00E25DCD /* HomePageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageController.swift; sourceTree = "<group>"; };
+		CC89CA021ADD903D00E25DCD /* GroupCollectionControlller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupCollectionControlller.swift; sourceTree = "<group>"; };
+		CC89CA041ADD904F00E25DCD /* FavioriteCollectionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavioriteCollectionController.swift; sourceTree = "<group>"; };
 		CC9E5ECC1A89A16100B19DF6 /* AlarmsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmsTable.swift; sourceTree = "<group>"; };
 		CC9E5ECE1A89B95300B19DF6 /* AlarmCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmCell.swift; sourceTree = "<group>"; };
 		CCB135A31AAB9601006E464F /* libEstimoteSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libEstimoteSDK.a; path = EstimoteSDK/libEstimoteSDK.a; sourceTree = "<group>"; };
@@ -288,7 +294,10 @@
 			children = (
 				0D0A26D91A38AFA10033550D /* Bulb Settings */,
 				0D9357E61A2D4BB100AAD52D /* BulbCollectionCell.swift */,
-				0D9862551A1D2C0B00FAD175 /* HomeController.swift */,
+				0D9862551A1D2C0B00FAD175 /* BulbsCollectionController.swift */,
+				CC89CA001ADD8E0B00E25DCD /* HomePageController.swift */,
+				CC89CA021ADD903D00E25DCD /* GroupCollectionControlller.swift */,
+				CC89CA041ADD904F00E25DCD /* FavioriteCollectionController.swift */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -787,10 +796,11 @@
 				0D3A791D1A26A716003AC6D4 /* DispatchQueueLogFormatter.m in Sources */,
 				0DB347431A2D5BCE00B91EF2 /* PushAuthController.swift in Sources */,
 				11FDAB581AB109510055C2AD /* BeaconBulbTracking.swift in Sources */,
+				CC89CA011ADD8E0B00E25DCD /* HomePageController.swift in Sources */,
 				0D3A79111A26A716003AC6D4 /* DDAbstractDatabaseLogger.m in Sources */,
 				CC26D25B1AD9F71F00AEE7F7 /* Protocols.swift in Sources */,
 				11FDAB501AACDA5F0055C2AD /* MusicCell.swift in Sources */,
-				0D9862561A1D2C0B00FAD175 /* HomeController.swift in Sources */,
+				0D9862561A1D2C0B00FAD175 /* BulbsCollectionController.swift in Sources */,
 				117F495A1A96DA4500A31746 /* EZMicrophone.m in Sources */,
 				CCCD59261A7800D6008B209D /* Groups_API.swift in Sources */,
 				11AF010D1AA95C6000122F24 /* EstViewController.swift in Sources */,
@@ -802,6 +812,7 @@
 				CCB707861AA68A73002BF12B /* ColorSelectorView.swift in Sources */,
 				CC4A46E71A89130F007DC0F2 /* ModeCell.swift in Sources */,
 				CC4A46E51A8912FD007DC0F2 /* Settings.swift in Sources */,
+				CC89CA051ADD904F00E25DCD /* FavioriteCollectionController.swift in Sources */,
 				CC27D7FF1A802E9C00346F47 /* PrismSDK.swift in Sources */,
 				CCCD59281A7800EA008B209D /* Schedules_API.swift in Sources */,
 				119F14F51AC18DF60024B019 /* ColorViewCell.swift in Sources */,
@@ -813,6 +824,7 @@
 				117F49571A96DA4500A31746 /* EZAudioPlot.m in Sources */,
 				0D0A26DB1A38B6E70033550D /* SettingsTableViewController.swift in Sources */,
 				0D4F25451A2AD34A005C61EA /* BridgeConnect.swift in Sources */,
+				CC89CA031ADD903D00E25DCD /* GroupCollectionControlller.swift in Sources */,
 				0D0A26D51A3766C70033550D /* TabViewController.swift in Sources */,
 				CCB135AC1AAF5727006E464F /* ColorPickerController.swift in Sources */,
 				117F49581A96DA4500A31746 /* EZAudioPlotGL.m in Sources */,
