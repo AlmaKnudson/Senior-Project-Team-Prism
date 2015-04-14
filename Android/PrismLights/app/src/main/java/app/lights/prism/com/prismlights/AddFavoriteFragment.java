@@ -36,7 +36,16 @@ public class AddFavoriteFragment extends Fragment implements CacheUpdateListener
         nameEditor = (EditText) layout.findViewById(R.id.nameEditor);
         nameEditor.setText(favoritesDataModel.getNextFavoriteName());
         doneButton = (Button) layout.findViewById(R.id.doneButton);
-
+        bulbSelectionFragment.setOnCheckedNumberChanged(new CheckedNumberChangedListener() {
+            @Override
+            public void onCheckedNumberChanged(int checkedNumber) {
+                if(checkedNumber > 0) {
+                    doneButton.setEnabled(true);
+                } else {
+                    doneButton.setEnabled(false);
+                }
+            }
+        });
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

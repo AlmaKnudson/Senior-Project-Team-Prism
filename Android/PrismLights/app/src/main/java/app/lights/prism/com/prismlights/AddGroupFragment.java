@@ -36,9 +36,19 @@ public class AddGroupFragment extends Fragment implements CacheUpdateListener {
         title.setText(R.string.add_group);
         bulbSelectionFragment = (BulbSelectionFragment) getFragmentManager().findFragmentById(R.id.selectBulbFragment);
         bulbSelectionFragment.allowLongClick(false);
+        doneButton = (Button) layout.findViewById(R.id.doneButton);
+        bulbSelectionFragment.setOnCheckedNumberChanged(new CheckedNumberChangedListener() {
+            @Override
+            public void onCheckedNumberChanged(int checkedNumber) {
+                if(checkedNumber > 1) {
+                    doneButton.setEnabled(true);
+                } else {
+                    doneButton.setEnabled(false);
+                }
+            }
+        });
         nameEditor = (EditText) layout.findViewById(R.id.nameEditor);
         nameEditor.setText(HueBulbChangeUtility.getNextGroupId());
-        doneButton = (Button) layout.findViewById(R.id.doneButton);
         done = false;
         groupCreated = false;
 
