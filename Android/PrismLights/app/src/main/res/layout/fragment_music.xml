@@ -233,6 +233,13 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.67" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0hz"
+        android:id="@+id/currentFrequencyLabel"
+        android:layout_gravity="center_horizontal" />
+
     <ToggleButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
