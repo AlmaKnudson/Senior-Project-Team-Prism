@@ -113,10 +113,9 @@ public class MainActivity extends Activity implements PHSDKListener{
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
         dialog.show();
-        TextView textView = new TextView(this);
-        textView.setText(waitingText);
-        textView.setTextColor(Color.WHITE);
-        dialog.setContentView(textView);
+        dialog.setContentView(R.layout.progress);
+        TextView progressText = (TextView) dialog.findViewById(R.id.progressText);
+        progressText.setText(waitingText);
         //end code from example app
     }
 
@@ -124,13 +123,14 @@ public class MainActivity extends Activity implements PHSDKListener{
         PHBridgeSearchManager bridgeSearchManager = (PHBridgeSearchManager) hueBridgeSdk.getSDKService(PHHueSDK.SEARCH_BRIDGE);
         bridgeSearchManager.search(true, true);
         CharSequence waitingText = getText(R.string.searching);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
-        dialog.show();
-        TextView textView = new TextView(this);
-        textView.setText(waitingText);
-        textView.setTextColor(Color.WHITE);
-        dialog.setContentView(textView);
+        if(!dialog.isShowing()) {
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setCancelable(false);
+            dialog.show();
+            dialog.setContentView(R.layout.progress);
+        }
+        TextView progressText = (TextView) dialog.findViewById(R.id.progressText);
+        progressText.setText(waitingText);
     }
 
 

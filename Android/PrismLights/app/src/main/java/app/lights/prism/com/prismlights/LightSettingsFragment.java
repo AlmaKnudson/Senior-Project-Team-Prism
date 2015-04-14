@@ -66,7 +66,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        FrameLayout frame = (FrameLayout) inflater.inflate(R.layout.fragment_light_settings, container, false);
+        View frame = inflater.inflate(R.layout.fragment_light_settings, container, false);
         nameEditor = (EditText) frame.findViewById(R.id.nameEditor);
         bulbOnState = (ToggleButton) frame.findViewById(R.id.bulbOnState);
         brightness = (SeekBar) frame.findViewById(R.id.brightness);
