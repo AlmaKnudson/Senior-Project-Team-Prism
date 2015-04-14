@@ -21,6 +21,7 @@ import java.util.HashSet;
 
 public class RealHomeFragment extends Fragment implements ViewPager.OnPageChangeListener, CacheUpdateListener{
 
+    public static final String favoritePosition="FAVORITE_POSITION";
     private ViewPager viewPager;
     private View bulbIconSelected;
     private View bulbIconDeselected;

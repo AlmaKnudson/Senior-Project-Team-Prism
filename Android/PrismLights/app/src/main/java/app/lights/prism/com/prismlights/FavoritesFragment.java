@@ -45,6 +45,23 @@ public class FavoritesFragment extends Fragment {
                 HueBulbChangeUtility.activateFavorite((Favorite) gridView.getAdapter().getItem(position));
             }
         });
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                HueBulbChangeUtility.activateFavorite((Favorite) gridView.getAdapter().getItem(position));
+                Bundle bundle = new Bundle();
+                bundle.putInt(RealHomeFragment.favoritePosition, position);
+
+                FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
+                EditFavoriteFragment editFavoriteFragment = new EditFavoriteFragment();
+                editFavoriteFragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.container, editFavoriteFragment);
+                fragmentTransaction.addToBackStack("editfavorite");
+                fragmentTransaction.commit();
+
+                return false;
+            }
+        });
         return layout;
     }
 

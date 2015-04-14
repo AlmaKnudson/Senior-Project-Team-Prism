@@ -188,6 +188,21 @@ public class BulbSelectionFragment extends Fragment implements CacheUpdateListen
             checkedNumberChangedListener.onCheckedNumberChanged(checked.size());
         }
     }
+
+    public void selectAll() {
+        selectAllCheckBox.setChecked(true);
+        allChecked = true;
+        checked.addAll(currentLightIdOrder);
+        ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
+        callCheckedNumberChangedListener();
+    }
+
+    public void setSelectedIds(Set<String> ids) {
+        this.checked.addAll(ids);
+        ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
+        callCheckedNumberChangedListener();
+    }
+
     private class SelectGridAdapter extends BaseAdapter {
 
 
