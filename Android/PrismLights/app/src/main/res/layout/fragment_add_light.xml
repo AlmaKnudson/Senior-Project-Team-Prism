@@ -3,17 +3,10 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:text="@string/add_light"
-        android:textSize="30sp"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
-        android:textColor="@color/white"/>
+        style="@style/TitleTextView"/>
     <View
-        android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:background="@color/lightTeal"
+        style="@style/TitleUnderline"
         android:paddingBottom="5dp"/>
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,7 +35,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:id="@+id/serialCodeListView"/>
+        android:id="@+id/serialCodeListView"
+        style="@style/ListView"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

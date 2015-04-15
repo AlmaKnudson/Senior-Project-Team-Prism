@@ -7,15 +7,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/dialog_title"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
         android:paddingRight="40dp"
-        android:textColor="@color/white"/>
+        style="@style/TitleTextView"/>
     <View
-        android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:background="@color/lightTeal"
+        style="@style/TitleUnderline"
         android:paddingBottom="5dp"/>
     <!--limit text to hexadecimal upper case-->
     <EditText
