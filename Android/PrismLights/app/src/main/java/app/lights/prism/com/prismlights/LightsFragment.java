@@ -67,7 +67,6 @@ public class LightsFragment extends Fragment implements CacheUpdateListener {
 //                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
                 Bundle bundle = new Bundle();
                 bundle.putString(RealHomeFragment.lightPositionString, currentLightIdOrder.get(position));
-                bundle.putBoolean(RealHomeFragment.groupOrLightString, false);
 
                 FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
                 LightSettingsFragment lightSettingFragment = new LightSettingsFragment();

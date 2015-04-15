@@ -21,6 +21,7 @@ import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -197,8 +198,12 @@ public class BulbSelectionFragment extends Fragment implements CacheUpdateListen
         callCheckedNumberChangedListener();
     }
 
-    public void setSelectedIds(Set<String> ids) {
+    public void setSelectedIds(Collection<String> ids) {
         this.checked.addAll(ids);
+        if(checked.size() == gridView.getAdapter().getCount()) {
+            allChecked = true;
+            selectAllCheckBox.setChecked(true);
+        }
         ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
         callCheckedNumberChangedListener();
     }

@@ -50,7 +50,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@string/name_label"
+            android:text="@string/group_label"
             android:id="@+id/textView3"
             android:textSize="17sp"
             android:textColor="@android:color/white"
@@ -62,7 +62,14 @@
             android:layout_height="40dp"
             android:layout_weight="1"
             android:id="@+id/nameEditor"
-            android:inputType="textCapWords" />
+            android:inputType="textCapWords"/>
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/edit_button"
+            android:background="@drawable/top_button"
+            android:id="@+id/editGroupButton"/>
     </LinearLayout>
 
     <Button

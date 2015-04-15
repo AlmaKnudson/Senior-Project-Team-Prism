@@ -18,8 +18,10 @@ public class EditFavoriteFragment extends Fragment implements CacheUpdateListene
     private FavoritesDataModel favoritesDataModel;
     private int favoritePosition;
     private Favorite favorite;
+    private boolean done;
 
     public EditFavoriteFragment() {
+        done = false;
     }
 
     @Override
@@ -38,6 +40,9 @@ public class EditFavoriteFragment extends Fragment implements CacheUpdateListene
         TextView title = (TextView) layout.findViewById(R.id.title);
         title.setText(R.string.edit_favorite);
         bulbSelectionFragment = (BulbSelectionFragment) getFragmentManager().findFragmentById(R.id.selectBulbFragment);
+        if(bulbSelectionFragment == null) {
+            bulbSelectionFragment = (BulbSelectionFragment) getChildFragmentManager().findFragmentById(R.id.selectBulbFragment);
+        }
         bulbSelectionFragment.allowLongClick(true);
         nameEditor = (EditText) layout.findViewById(R.id.nameEditor);
         nameEditor.setText(favorite.getName());
@@ -61,16 +66,19 @@ public class EditFavoriteFragment extends Fragment implements CacheUpdateListene
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(bulbSelectionFragment.getAllChecked()) {
-                    PHLightState lightState = bulbSelectionFragment.allBulbsSameState();
-                    if(lightState == null) {
-                        favoritesDataModel.modifyFavorite(favoritePosition, bulbSelectionFragment.getSelectedLightIds(), nameEditor.getText().toString());
+                //avoid popping the backstack twice
+                if (!done)
+                    done = true;
+                    if (bulbSelectionFragment.getAllChecked()) {
+                        PHLightState lightState = bulbSelectionFragment.allBulbsSameState();
+                        if (lightState == null) {
+                            favoritesDataModel.modifyFavorite(favoritePosition, bulbSelectionFragment.getSelectedLightIds(), nameEditor.getText().toString());
+                        } else {
+                            favoritesDataModel.modifyFavorite(favoritePosition, nameEditor.getText().toString(), lightState);
+                        }
                     } else {
-                        favoritesDataModel.modifyFavorite(favoritePosition, nameEditor.getText().toString(), lightState);
+                        favoritesDataModel.modifyFavorite(favoritePosition, bulbSelectionFragment.getSelectedLightIds(), nameEditor.getText().toString());
                     }
-                } else {
-                    favoritesDataModel.modifyFavorite(favoritePosition, bulbSelectionFragment.getSelectedLightIds(), nameEditor.getText().toString());
-                }
                 getFragmentManager().popBackStack();
             }
         });

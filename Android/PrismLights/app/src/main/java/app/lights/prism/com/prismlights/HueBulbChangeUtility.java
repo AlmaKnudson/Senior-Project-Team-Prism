@@ -267,10 +267,10 @@ public class HueBulbChangeUtility {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
         Map<String, PHLight> lights = getAllLights();
         List<String> lightIds = group.getLightIdentifiers();
-        boolean shouldSetOn = false;
+        boolean shouldSetOn = true;
         for(String id : lightIds) {
-            if(lights.get(id).getLastKnownLightState().isReachable() && !lights.get(id).getLastKnownLightState().isOn()) {
-                shouldSetOn = true;
+            if(lights.get(id).getLastKnownLightState().isReachable() && lights.get(id).getLastKnownLightState().isOn()) {
+                shouldSetOn = false;
                 break;
             }
         }
@@ -568,6 +568,55 @@ public class HueBulbChangeUtility {
             @Override
             public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
 
+            }
+        });
+    }
+
+    public static void editGroup(String groupId, List<String> lightIdentifiers, final OnCompletedListener onCompletedListener) {
+        PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
+        PHGroup group = bridge.getResourceCache().getGroups().get(groupId);
+        group.setLightIdentifiers(lightIdentifiers);
+        bridge.updateGroup(group, new PHGroupListener() {
+            @Override
+            public void onCreated(PHGroup phGroup) {
+                System.out.println("Created Group");
+                if(onCompletedListener != null) {
+                    onCompletedListener.onCompleted();
+                    onCompletedListener.onCompleted();
+                }
+            }
+
+            @Override
+            public void onReceivingGroupDetails(PHGroup phGroup) {
+                System.out.println("recieving group details");
+            }
+
+            @Override
+            public void onReceivingAllGroups(List<PHBridgeResource> phBridgeResources) {
+                System.out.println("recieving all groups");
+            }
+
+            @Override
+            public void onSuccess() {
+                System.out.println("Success Group");
+
+                if(onCompletedListener != null) {
+                    onCompletedListener.onCompleted();
+                }
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                System.out.println("Error Group");
+                //TOOD handle error when
+                if(onCompletedListener != null) {
+                    onCompletedListener.onCompleted();
+                }
+            }
+
+            @Override
+            public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
+                System.out.println("State update");
             }
         });
     }

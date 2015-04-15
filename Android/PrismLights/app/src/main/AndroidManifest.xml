@@ -27,16 +27,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service
-            android:name=".service.SmartSunService"></service>
-        <receiver
-            android:name=".receiver.BroadCastAlarmReceiver"></receiver>
+        <!--<service-->
+            <!--android:name=".service.SmartSunService"></service>-->
+        <!--<receiver-->
+            <!--android:name=".receiver.BroadCastAlarmReceiver"></receiver>-->
         <!--<activity-->
             <!--android:name=".temp"     -->
             <!--android:label="@string/title_activity_temp" >-->
         <!--</activity>-->
     </application>
 
-    <service android:name=".service.SmartSunService"></service>
+    <!--<service android:name=".service.SmartSunService"></service>-->
 
 </manifest>

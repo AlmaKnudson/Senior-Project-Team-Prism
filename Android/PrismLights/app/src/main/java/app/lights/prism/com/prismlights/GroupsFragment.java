@@ -51,13 +51,12 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
 //                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
                 Bundle bundle = new Bundle();
                 bundle.putString(RealHomeFragment.lightPositionString, currentGroupIdOrder.get(position));
-                bundle.putBoolean(RealHomeFragment.groupOrLightString, true);
 
                 FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
-                LightSettingsFragment lightSettingFragment = new LightSettingsFragment();
-                lightSettingFragment.setArguments(bundle);
-                fragmentTransaction.replace(R.id.container, lightSettingFragment);
-                fragmentTransaction.addToBackStack("lightsettings");
+                GroupSettingsFragment groupSettingsFragment = new GroupSettingsFragment();
+                groupSettingsFragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.container, groupSettingsFragment);
+                fragmentTransaction.addToBackStack("groupSettings");
                 fragmentTransaction.commit();
 
                 return false;

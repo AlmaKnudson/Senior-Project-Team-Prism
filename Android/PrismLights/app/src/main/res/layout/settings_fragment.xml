@@ -24,7 +24,6 @@
         android:id="@+id/searchBridgeButton"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/buttons"
-        android:padding="15dp"
         android:layout_marginBottom="15dp"/>
 
 </LinearLayout>

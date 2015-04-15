@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Slider" parent="@android:style/Widget.Holo.SeekBar">
+        <item name="android:thumbTint">@color/lightGray</item>
+        <item name="android:progressTint">@color/lightTeal</item>
+    </style>
+</resources>
