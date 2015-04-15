@@ -7,13 +7,14 @@
 //
 
 import UIKit
-let MAX_HUE:UInt32 = 65535
+
 
 class BulbsCollectionController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, BulbSettingsProtocol, DismissPresentedController, ESTBeaconManagerDelegate {
     
     
-    let GROUP_SECTION = 0
-    let BULB_SECTION = 1
+    let BULB_SECTION = 0
+    let GROUP_SECTION = 1
+    let NUM_OF_SECTIONS = 1
     
     
     var retryConnection = true
@@ -28,7 +29,6 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
     
     
     var lightCount :Int = 0;
-    var groupCount :Int = 1;
     
     @IBOutlet weak var bulbCollectionView: UICollectionView!
     
@@ -67,9 +67,6 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
-        
-        
     }
     
     
@@ -78,32 +75,21 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
     }
     
     
-    
     /**
     View Will Appear
     Registers the controller with the PHManager for bridge connections
     Then tries to connect to the bridge
     */
     override func viewWillAppear(animated: Bool) {
-        
     }
     
     override func viewDidAppear(animated: Bool) {
-        bulbCollectionView.reloadData()
-        
     }
     
     override func viewWillDisappear(animated: Bool) {
         PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
-
-        if(DEBUG){
-            println("Home Controller will disappeared")
-        }
     }
     override func viewDidDisappear(animated: Bool) {
-                if(DEBUG){
-            println("Home disappeared")
-        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -154,24 +140,24 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
             
             return lightCount;
         }
-        
-        if section == GROUP_SECTION {
-            if(cache.groups != nil){
-                //count doesn't account for group number 0. So +1 to account for it.
-                groupCount = cache.groups.count + 1
-            } else {
-                groupCount = 1
-            }
-            if(BRIDGELESS){
-                groupCount = 1
-            }
-            return groupCount
-        }
+//        
+//        if section == GROUP_SECTION {
+//            if(cache.groups != nil){
+//                //count doesn't account for group number 0. So +1 to account for it.
+//                groupCount = cache.groups.count + 1
+//            } else {
+//                groupCount = 1
+//            }
+//            if(BRIDGELESS){
+//                groupCount = 1
+//            }
+//            return groupCount
+//        }
         return 0
     }
     
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        return 2
+        return NUM_OF_SECTIONS
     }
     
     
@@ -205,50 +191,50 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
             } else{
                 cell.initBulbCell("")
             }
-        } else if indexPath.section == GROUP_SECTION {
-            var groupId = indexPath.row
-            var lightState = PHLightState()
-            lightState.on = false
-            
-            if groupId == 0 {
-                cell.initGroupCell("All Lights")
-            } else {
-                
-                var group:PHGroup! = cache?.groups?["\(groupId)"] as? PHGroup
-                if group != nil {
-                    cell.initGroupCell(group.name)
-                } else{
-                    cell.initGroupCell("")
-                    return cell
-                }
-            }
-            
-            if cache.groups != nil{
-                var theLight:PHLight! = nil
-                for (lightId, light) in (cache.lights as! [String:PHLight]){
-                    //Ignore lights not connected to bridge
-                    if(light.lightState.reachable == 0){
-                        continue
-                    }
-                    
-                    if light.lightState.on == 1{
-                        theLight = light
-                        lightState.on = true
-                        lightState.x = light.lightState.x
-                        lightState.y = light.lightState.y
-                        break
-                    }
-                }
-                
-                if(lightState.on == 1){
-                    var point = CGPoint(x: Double(lightState.x), y: Double(lightState.y))
-                    var color = PHUtilities.colorFromXY(point, forModel: theLight.modelNumber)
-                    cell.turnOn(false)
-                    cell.SetGroupColor(color)
-                } else{
-                    cell.turnOff(false)
-                }
-            }
+//        } else if indexPath.section == GROUP_SECTION {
+//            var groupId = indexPath.row
+//            var lightState = PHLightState()
+//            lightState.on = false
+//            
+//            if groupId == 0 {
+//                cell.initGroupCell("All Lights")
+//            } else {
+//                
+//                var group:PHGroup! = cache?.groups?["\(groupId)"] as? PHGroup
+//                if group != nil {
+//                    cell.initGroupCell(group.name)
+//                } else{
+//                    cell.initGroupCell("")
+//                    return cell
+//                }
+//            }
+//            
+//            if cache.groups != nil{
+//                var theLight:PHLight! = nil
+//                for (lightId, light) in (cache.lights as! [String:PHLight]){
+//                    //Ignore lights not connected to bridge
+//                    if(light.lightState.reachable == 0){
+//                        continue
+//                    }
+//                    
+//                    if light.lightState.on == 1{
+//                        theLight = light
+//                        lightState.on = true
+//                        lightState.x = light.lightState.x
+//                        lightState.y = light.lightState.y
+//                        break
+//                    }
+//                }
+//                
+//                if(lightState.on == 1){
+//                    var point = CGPoint(x: Double(lightState.x), y: Double(lightState.y))
+//                    var color = PHUtilities.colorFromXY(point, forModel: theLight.modelNumber)
+//                    cell.turnOn(false)
+//                    cell.SetGroupColor(color)
+//                } else{
+//                    cell.turnOff(false)
+//                }
+//            }
         }
         
         return cell!
@@ -266,14 +252,15 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
             
         }
         
-        if( indexPath.section == GROUP_SECTION){
-            var identifier = "\(indexPath.row)"
-            ToggleGroupState(identifier)
-            
-        }
-        collectionView.reloadData()
+//        if( indexPath.section == GROUP_SECTION){
+//            var identifier = "\(indexPath.row)"
+//            ToggleGroupState(identifier)
+//            
+//        }
+        var index:[AnyObject] = [AnyObject]()
+        index.append(indexPath)
         
-        
+        collectionView.reloadItemsAtIndexPaths(index)
     }
     
     /**
@@ -312,7 +299,6 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
         if gestureRecognizer.state != UIGestureRecognizerState.Ended{
             return
         }
-        
         
     }
     

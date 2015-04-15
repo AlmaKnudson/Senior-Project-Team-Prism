@@ -1,29 +1,21 @@
 //
-//  BulbCollectionCell.swift
+//  GroupBulbCell.swift
 //  Prism Lights
 //
-//  Created by Cody Foltz on 12/1/14.
-//  Copyright (c) 2014 Prism. All rights reserved.
+//  Created by Cody Foltz on 4/14/15.
+//  Copyright (c) 2015 Prism. All rights reserved.
 //
 
+import Foundation
 
 
-import UIKit
-
-class BulbCollectionCell : UICollectionViewCell{
+class GroupBulbCell : UICollectionViewCell{
     
     @IBOutlet weak var top_bulb: UIImageView!
     @IBOutlet weak var bulbLabel: UILabel!
     @IBOutlet weak var bottom_bulb: UIImageView!
     @IBOutlet weak var unReachableImage: UIImageView!
     
-    
-    func initBulbCell(name:String){
-        bulbLabel!.text = name
-        top_bulb!.image = UIImage(named: "bulb_top")
-        bottom_bulb!.image = UIImage(named: "bulb_bottom")
-        unReachableImage.hidden = true
-    }
     
     func initGroupCell(name:String){
         bulbLabel!.text = name
@@ -72,11 +64,10 @@ class BulbCollectionCell : UICollectionViewCell{
         
     }
     
-    
-    
-    func SetBulbColor(color:UIColor){
-        top_bulb.image = changeTopColor("bulb_top", color)
+    func SetGroupColor(color:UIColor){
+        top_bulb.image = changeTopColor("groupTop", color)
     }
+
     
 }
 
