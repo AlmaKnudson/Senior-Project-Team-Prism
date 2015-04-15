@@ -25,7 +25,6 @@
             android:src="@drawable/ic_launcher"
             android:id="@+id/settingsButton"
             android:background="@drawable/bottom_button"
-            android:layout_marginRight="1dp"
             android:enabled="false"/>
 
         <Button
@@ -35,9 +34,7 @@
             android:text="@string/home"
             android:id="@+id/homeButton"
             android:background="@drawable/bottom_button"
-            android:layout_marginLeft="1dp"
-            android:layout_marginRight="1dp"
-            android:enabled="true" />
+            android:enabled="false" />
 
         <Button
             android:layout_width="0dp"
@@ -46,7 +43,6 @@
             android:text="@string/voice"
             android:id="@+id/voiceButton"
             android:background="@drawable/bottom_button"
-            android:layout_marginLeft="1dp"
             android:enabled="false" />
 
     </LinearLayout>

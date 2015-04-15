@@ -1,6 +1,7 @@
 package app.lights.prism.com.prismlights;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.Fragment;
@@ -10,7 +11,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
@@ -60,9 +60,12 @@ public class MainActivity extends Activity implements PHSDKListener{
     private Button voiceButton;
     private ImageButton settingsButton;
     private int connectionLostCount = 0;
-    public static int MIN_CONNECTION_LOST_COUNT=1;
     private Date sunrise;
     private Date sunset;
+    public static int MIN_CONNECTION_LOST_COUNT=1;
+    public static final String homeFragmentTag="HOME_FRAGMENT";
+    public static final String musicFragmentTag="MUSIC_FRAGMENT_TAG";
+
 
     //TODO: I might need to find better way...
     private PHSchedule currentSchedule; // this is for passing schedule from fragment to fragment.
@@ -76,7 +79,6 @@ public class MainActivity extends Activity implements PHSDKListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         //TODO: get stored sunrise sunset
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         if(settings.contains("sunrise")) {
@@ -102,34 +104,29 @@ public class MainActivity extends Activity implements PHSDKListener{
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!(getFragmentManager().findFragmentById(R.id.container) instanceof HomeFragment)) {
-                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.container, new HomeFragment());
-                    fragmentTransaction.addToBackStack("home");
-                    fragmentTransaction.commit();
-                }
+                clearBackStack();
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.container, new RealHomeFragment(), homeFragmentTag);
+                fragmentTransaction.addToBackStack(homeFragmentTag);
+                fragmentTransaction.commit();
             }
         });
         voiceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!(getFragmentManager().findFragmentById(R.id.container) instanceof VoiceFragment)) {
-                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.container, new VoiceFragment());
-                    fragmentTransaction.addToBackStack("settings");
-                    fragmentTransaction.commit();
-                }
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.container, new VoiceFragment(), musicFragmentTag);
+                fragmentTransaction.addToBackStack(musicFragmentTag);
+                fragmentTransaction.commit();
             }
         });
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!(getFragmentManager().findFragmentById(R.id.container) instanceof SettingsFragment)) {
-                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.container, new SettingsFragment());
-                    fragmentTransaction.addToBackStack("settings");
-                    fragmentTransaction.commit();
-                }
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.container, new SettingsFragment());
+                fragmentTransaction.addToBackStack("settings");
+                fragmentTransaction.commit();
             }
         });
         hueBridgeSdk = PHHueSDK.getInstance();
@@ -161,10 +158,9 @@ public class MainActivity extends Activity implements PHSDKListener{
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
         dialog.show();
-        TextView textView = new TextView(this);
-        textView.setText(waitingText);
-        textView.setTextColor(Color.WHITE);
-        dialog.setContentView(textView);
+        dialog.setContentView(R.layout.progress);
+        TextView progressText = (TextView) dialog.findViewById(R.id.progressText);
+        progressText.setText(waitingText);
         //end code from example app
     }
 
@@ -182,13 +178,14 @@ public class MainActivity extends Activity implements PHSDKListener{
         PHBridgeSearchManager bridgeSearchManager = (PHBridgeSearchManager) hueBridgeSdk.getSDKService(PHHueSDK.SEARCH_BRIDGE);
         bridgeSearchManager.search(true, true);
         CharSequence waitingText = getText(R.string.searching);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
-        dialog.show();
-        TextView textView = new TextView(this);
-        textView.setText(waitingText);
-        textView.setTextColor(Color.WHITE);
-        dialog.setContentView(textView);
+        if(!dialog.isShowing()) {
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setCancelable(false);
+            dialog.show();
+            dialog.setContentView(R.layout.progress);
+        }
+        TextView progressText = (TextView) dialog.findViewById(R.id.progressText);
+        progressText.setText(waitingText);
     }
 
 
@@ -230,7 +227,7 @@ public class MainActivity extends Activity implements PHSDKListener{
 
     private void openHomeScreen() {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.container, new HomeFragment());
+        fragmentTransaction.replace(R.id.container, new RealHomeFragment());
         fragmentTransaction.commit();
         dialog.setCancelable(true);
         dialog.cancel();
@@ -308,6 +305,7 @@ public class MainActivity extends Activity implements PHSDKListener{
             @Override
             public void run() {
                 if(code == PHHueError.BRIDGE_NOT_RESPONDING) {
+                    //TODO add message for when bridge isn't responding after access points found
                     searchForBridge();
                     return;
                 }
@@ -384,6 +382,13 @@ public class MainActivity extends Activity implements PHSDKListener{
     @Override
     public void onParsingErrors(List<PHHueParsingError> phHueParsingErrors) {
 
+    }
+
+
+    public void clearBackStack() {
+        if(getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack(getFragmentManager().getBackStackEntryAt(0).getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
     }
 
     /* this function starts recurring service.

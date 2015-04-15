@@ -19,7 +19,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@color/lightPurple"/>
+        android:background="@color/lightTeal"/>
 
     <Space
         android:layout_width="match_parent"
