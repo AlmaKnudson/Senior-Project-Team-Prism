@@ -188,11 +188,11 @@ public class AlarmFragment extends Fragment {
             String modeString = null;
             PHLightState state = alarm.getLightState();
             if (!state.isOn())
-                modeString = "Off";
+                modeString = "Mode:Off";
             else if (state.getAlertMode() == PHLight.PHLightAlertMode.ALERT_SELECT)
-                modeString = "Alert";
+                modeString = "Mode:Alert";
             else
-                modeString = "On";
+                modeString = "Mode:On";
 
             modeView.setText(modeString);
 
@@ -240,8 +240,9 @@ public class AlarmFragment extends Fragment {
             }
 
             // Create a new instance of TimePickerDialog and return it
-            return new TimePickerDialog(getActivity(), this, hour, minute,
-                    DateFormat.is24HourFormat(getActivity()));
+
+            return new TimePickerDialog(getActivity(), this, hour, minute, false);
+
         }
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {

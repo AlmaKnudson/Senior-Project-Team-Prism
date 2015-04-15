@@ -1,13 +1,26 @@
 package app.lights.prism.com.prismlights;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.graphics.Color;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -22,10 +35,24 @@ import com.philips.lighting.model.PHHueError;
 import com.philips.lighting.model.PHHueParsingError;
 import com.philips.lighting.model.PHSchedule;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
+
+import app.lights.prism.com.prismlights.receiver.BroadCastAlarmReceiver;
 
 
 public class MainActivity extends Activity implements PHSDKListener{
+
+    private static final String DEBUG_TAG = "MainActivity";
 
     private PHHueSDK hueBridgeSdk;
     private Dialog dialog;
@@ -33,17 +60,41 @@ public class MainActivity extends Activity implements PHSDKListener{
     private Button musicButton;
     private ImageButton settingsButton;
     private int connectionLostCount = 0;
+    private Date sunrise;
+    private Date sunset;
     public static int MIN_CONNECTION_LOST_COUNT=1;
+    public static final String homeFragmentTag="HOME_FRAGMENT";
+    public static final String musicFragmentTag="MUSIC_FRAGMENT_TAG";
+
 
     //TODO: I might need to find better way...
-    protected PHSchedule currentSchedule; // this is for passing schedule from fragment to fragment.
-
+    private PHSchedule currentSchedule; // this is for passing schedule from fragment to fragment.
+    public PHSchedule getCurrentSchedule(){
+        return currentSchedule;
+    }
+    public void setCurrentSchedule(PHSchedule schedule){
+        currentSchedule = schedule;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //TODO: get stored sunrise sunset
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        if(settings.contains("sunrise")) {
+            sunrise = new Date(settings.getLong("sunrise", 0));
+            sunset = new Date(settings.getLong("sunset", 0));
+        }
+        else {
+            sunrise = null;
+            sunset = null;
+        }
         currentSchedule = null;
+
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.container, new SettingsFragment());
+        fragmentTransaction.commit();
+
 
         setContentView(R.layout.activity_main);
         homeButton = (Button) findViewById(R.id.homeButton);
@@ -53,23 +104,29 @@ public class MainActivity extends Activity implements PHSDKListener{
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!(getFragmentManager().findFragmentById(R.id.container) instanceof HomeFragment)) {
-                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.container, new HomeFragment());
-                    fragmentTransaction.addToBackStack("home");
-                    fragmentTransaction.commit();
-                }
+                clearBackStack();
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.container, new RealHomeFragment(), homeFragmentTag);
+                fragmentTransaction.addToBackStack(homeFragmentTag);
+                fragmentTransaction.commit();
             }
         });
         musicButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!(getFragmentManager().findFragmentById(R.id.container) instanceof MusicFragment)) {
-                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.container, new MusicFragment());
-                    fragmentTransaction.addToBackStack("settings");
-                    fragmentTransaction.commit();
-                }
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.container, new VoiceFragment(), musicFragmentTag);
+                fragmentTransaction.addToBackStack(musicFragmentTag);
+                fragmentTransaction.commit();
+            }
+        });
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.container, new SettingsFragment());
+                fragmentTransaction.addToBackStack("settings");
+                fragmentTransaction.commit();
             }
         });
         hueBridgeSdk = PHHueSDK.getInstance();
@@ -77,6 +134,8 @@ public class MainActivity extends Activity implements PHSDKListener{
         hueBridgeSdk.setDeviceName(Build.MODEL);
         hueBridgeSdk.getNotificationManager().registerSDKListener(this);
         CharSequence waitingText = "";
+
+
         //code from example app
         HueSharedPreferences prefs = HueSharedPreferences.getInstance(getApplicationContext());
         String lastIpAddress = prefs.getLastConnectedIPAddress();
@@ -99,24 +158,34 @@ public class MainActivity extends Activity implements PHSDKListener{
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
         dialog.show();
-        TextView textView = new TextView(this);
-        textView.setText(waitingText);
-        textView.setTextColor(Color.WHITE);
-        dialog.setContentView(textView);
+        dialog.setContentView(R.layout.progress);
+        TextView progressText = (TextView) dialog.findViewById(R.id.progressText);
+        progressText.setText(waitingText);
         //end code from example app
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(sunrise!= null && sunset != null) {
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+            settings.edit().putLong("sunrise", sunrise.getTime()).commit();
+            settings.edit().putLong("sunset", sunset.getTime()).commit();
+        }
     }
 
     public void searchForBridge() {
         PHBridgeSearchManager bridgeSearchManager = (PHBridgeSearchManager) hueBridgeSdk.getSDKService(PHHueSDK.SEARCH_BRIDGE);
         bridgeSearchManager.search(true, true);
         CharSequence waitingText = getText(R.string.searching);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
-        dialog.show();
-        TextView textView = new TextView(this);
-        textView.setText(waitingText);
-        textView.setTextColor(Color.WHITE);
-        dialog.setContentView(textView);
+        if(!dialog.isShowing()) {
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setCancelable(false);
+            dialog.show();
+            dialog.setContentView(R.layout.progress);
+        }
+        TextView progressText = (TextView) dialog.findViewById(R.id.progressText);
+        progressText.setText(waitingText);
     }
 
 
@@ -126,7 +195,7 @@ public class MainActivity extends Activity implements PHSDKListener{
             @Override
             public void run() {
                 Fragment currentFragment = getFragmentManager().findFragmentById(R.id.container);
-                if(currentFragment instanceof CacheUpdateListener) {
+                if (currentFragment instanceof CacheUpdateListener) {
                     CacheUpdateListener fragment = (CacheUpdateListener) currentFragment;
                     fragment.cacheUpdated();
                 }
@@ -142,6 +211,7 @@ public class MainActivity extends Activity implements PHSDKListener{
      * Also it is recommended you store the connected IP Address/ Username in your app here.  This will allow easy automatic connection on subsequent use.
      */
     public void onBridgeConnected(PHBridge phBridge) {
+
         hueBridgeSdk.setSelectedBridge(phBridge);
         hueBridgeSdk.enableHeartbeat(phBridge, PHHueSDK.HB_INTERVAL);
         hueBridgeSdk.getHeartbeatManager().enableLightsHeartbeat(phBridge, 2000);
@@ -149,19 +219,23 @@ public class MainActivity extends Activity implements PHSDKListener{
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.container, new HomeFragment());
-                fragmentTransaction.commit();
-                dialog.setCancelable(true);
-                dialog.cancel();
-                //enable tab buttons so we can use them
-                settingsButton.setEnabled(true);
-                musicButton.setEnabled(true);
-                homeButton.setEnabled(true);
+                openHomeScreen();
             }
         });
     }
 
+
+    private void openHomeScreen() {
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.container, new RealHomeFragment());
+        fragmentTransaction.commit();
+        dialog.setCancelable(true);
+        dialog.cancel();
+        //enable tab buttons so we can use them
+        settingsButton.setEnabled(true);
+        musicButton.setEnabled(true);
+        homeButton.setEnabled(true);
+    }
     @Override
     /**
      * From API:
@@ -180,6 +254,11 @@ public class MainActivity extends Activity implements PHSDKListener{
             }
         });
         hueBridgeSdk.startPushlinkAuthentication(accessPoint);
+
+        // TODO: find a perfect place for this.
+        //set recurring service here once. it is ok to be called multiple time, previous alarm broadcasting will be replaced.
+        Context context = this.getApplicationContext();
+        setAlarmBroadcasting(context);
     }
 
     @Override
@@ -201,7 +280,16 @@ public class MainActivity extends Activity implements PHSDKListener{
             PHAccessPoint accessPoint = accessPoints.get(0);
             accessPoint.setUsername(preferences.getUsername());
             preferences.setLastConnectedIPAddress(accessPoint.getIpAddress());
-            hueBridgeSdk.connect(accessPoints.get(0));
+            if(!hueBridgeSdk.isAccessPointConnected(accessPoint)) {
+                hueBridgeSdk.connect(accessPoints.get(0));
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        openHomeScreen();
+                    }
+                });
+            }
             dialog.setCancelable(true);
             dialog.cancel();
         }
@@ -217,6 +305,7 @@ public class MainActivity extends Activity implements PHSDKListener{
             @Override
             public void run() {
                 if(code == PHHueError.BRIDGE_NOT_RESPONDING) {
+                    //TODO add message for when bridge isn't responding after access points found
                     searchForBridge();
                     return;
                 }
@@ -286,8 +375,190 @@ public class MainActivity extends Activity implements PHSDKListener{
         }
     }
 
+    public Dialog getDialog() {
+        return dialog;
+    }
+
     @Override
     public void onParsingErrors(List<PHHueParsingError> phHueParsingErrors) {
 
     }
+
+
+    public void clearBackStack() {
+        if(getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack(getFragmentManager().getBackStackEntryAt(0).getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
+    }
+
+    /* this function starts recurring service.
+    *  Once this is called, SmartSunService will be triggered every day.
+    */
+    private void setAlarmBroadcasting(Context context) {
+        Calendar updateTime = Calendar.getInstance();
+        updateTime.setTimeZone(TimeZone.getDefault());
+        updateTime.set(Calendar.HOUR_OF_DAY, 01);
+        updateTime.set(Calendar.MINUTE, 00);
+
+        Intent downloader = new Intent(context, BroadCastAlarmReceiver.class);
+        PendingIntent recurringDownload = PendingIntent.getBroadcast(context,
+                0, downloader, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarms = (AlarmManager) this.getSystemService(
+                Context.ALARM_SERVICE);
+        alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                updateTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY,
+                recurringDownload);
+//        alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+//                updateTime.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+//                recurringDownload);
+//        alarms.setRepeating(AlarmManager.RTC_WAKEUP,
+//                updateTime.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+//                recurringDownload);
+    }
+
+    //TODO: add enable or disable SmartSun option in general option.
+    /*
+     this function cancel recurring service.
+     */
+    private void cancelAlarmBroadcasting(Context context) {
+        Intent downloader = new Intent(context, BroadCastAlarmReceiver.class);
+        PendingIntent recurringDownload = PendingIntent.getBroadcast(context,
+                0, downloader, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarms = (AlarmManager) this.getSystemService(
+                Context.ALARM_SERVICE);
+        alarms.cancel(recurringDownload);
+    }
+
+    public Date getSunrise(){
+        // if sunrise is yesterday, get new one other wise just return sunrise
+        if(sunrise == null || !DateUtils.isToday(sunrise.getTime())) {
+            updateSunTime();
+        }
+        return sunrise;
+    }
+
+    public Date getSunset(){
+        // if sunset is yesterday, get new one other wise just return sunrise
+        if(sunrise == null || !DateUtils.isToday(sunset.getTime())) {
+            updateSunTime();
+        }
+        return sunset;
+    }
+
+    private void updateSunTime() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        List<String> providers = locationManager.getProviders(true);
+
+        Location location = locationManager.getLastKnownLocation(providers.get(0));
+        Date date = new Date();
+
+        URL url;
+
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            try {
+                url = new URL("http://www.earthtools.org/sun/" + location.getLatitude() + "/"
+                        + location.getLongitude() + "/" + date.getMonth() + "/" + date.getDate() + "/99/1");
+                DownloaderTask downloaderTask = new DownloaderTask();
+                downloaderTask.execute(url);
+            } catch (MalformedURLException e) {
+                Log.e(DEBUG_TAG, "Bad URL getting sunset and sunrise", e);
+            }
+        } else {
+            Log.e(DEBUG_TAG, "No network connection available.");
+        }
+    }
+
+    private class DownloaderTask extends AsyncTask<URL, Void, Boolean> {
+
+        private static final String DEBUG_TAG = "MainActivity$DownloaderTask";
+
+        @Override
+        protected Boolean doInBackground(URL... params) {
+            boolean succeeded = false;
+            URL downloadPath = params[0];
+
+            if (downloadPath != null) {
+                succeeded = xmlParse(downloadPath);
+            }
+            return succeeded;
+        }
+
+        private boolean xmlParse(URL downloadPath) {
+
+            boolean succeeded = false;
+
+            XmlPullParser parser;
+
+            try {
+                parser = XmlPullParserFactory.newInstance().newPullParser();
+                parser.setInput(downloadPath.openStream(), null);
+                int eventType = -1;
+
+                while (eventType != XmlPullParser.END_DOCUMENT) {
+                    if (eventType == XmlPullParser.START_TAG) {
+                        String tagName = parser.getName();
+                        if (tagName.equals("sunrise")) {
+                            parser.next();
+                            String time = parser.getText();
+                            Log.d(DEBUG_TAG, "sunrise: " + time);
+                            sunrise = new Date();
+
+                            int hour, min, sec;
+                            try {
+                                hour = Integer.parseInt(time.substring(0, 2));
+                                min = Integer.parseInt(time.substring(3, 5));
+                                sec = Integer.parseInt(time.substring(6, 8));
+
+                                sunrise.setHours(hour);
+                                sunrise.setMinutes(min);
+                                sunrise.setSeconds(sec);
+                            } catch (NumberFormatException e) {
+                                Log.d(DEBUG_TAG, "Parsing Error: sunrise");
+                            }
+
+                        } else if (tagName.equals("sunset")) {
+                            parser.next();
+                            String time = parser.getText();
+                            Log.d(DEBUG_TAG,
+                                    "sunset: " + time);
+                            sunset = new Date();
+
+                            int hour, min, sec;
+                            try {
+                                hour = Integer.parseInt(time.substring(0, 2));
+                                min = Integer.parseInt(time.substring(3, 5));
+                                sec = Integer.parseInt(time.substring(6, 8));
+
+                                sunset.setHours(hour);
+                                sunset.setMinutes(min);
+                                sunset.setSeconds(sec);
+                            } catch (NumberFormatException e) {
+                                Log.d(DEBUG_TAG, "Parsing Error: sunset");
+                            }
+                        }
+                    }
+                    eventType = parser.next();
+                }
+                // no exceptions during parsing
+                succeeded = true;
+            } catch (XmlPullParserException e) {
+                Log.e(DEBUG_TAG, "Error during parsing", e);
+            } catch (IOException e) {
+                Log.e(DEBUG_TAG, "IO Error during parsing", e);
+            }
+
+            return succeeded;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            if (!result) {
+                Log.w(DEBUG_TAG, "XML download and parse had errors");
+            }
+        }
+    }
+
 }

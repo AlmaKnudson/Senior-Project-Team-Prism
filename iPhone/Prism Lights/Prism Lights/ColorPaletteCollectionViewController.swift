@@ -53,7 +53,7 @@ class ColorPaletteCollectionViewController: UICollectionViewController {
     }
 
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell:ColorViewCell  = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as ColorViewCell
+        let cell:ColorViewCell  = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! ColorViewCell
     
         // Configure the cell
         cell.backgroundColor = UIColor.redColor()

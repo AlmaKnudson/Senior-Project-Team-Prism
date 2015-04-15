@@ -42,8 +42,8 @@ class EstViewController:UIViewController, ESTBeaconManagerDelegate{
         
         
         var defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setObject(bbtString, forKey: currentBeaconIdentifier)
-        defaults.removeObjectForKey(currentBeaconIdentifier)
+        defaults.setObject(bbtString, forKey: currentBeaconIdentifier as String)
+        defaults.removeObjectForKey(currentBeaconIdentifier as String)
     }
     
     @IBAction func onTrackingDown(sender: UIButton) {
@@ -64,7 +64,7 @@ class EstViewController:UIViewController, ESTBeaconManagerDelegate{
         
         
         var defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setObject(bbtString, forKey: currentBeaconIdentifier)
+        defaults.setObject(bbtString, forKey: currentBeaconIdentifier as String)
 //         defaults.removeObjectForKey(currentBeaconIdentifier)
         
         
@@ -111,11 +111,11 @@ class EstViewController:UIViewController, ESTBeaconManagerDelegate{
     
     
     
-    
-    func beaconManager(manager: ESTBeaconRegion, didRangeBeacons: [ESTBeacon], inRegion: ESTBeaconRegion){
+    func beaconManager(manager: ESTBeaconManager!, didRangeBeacons beacons: [AnyObject]!, inRegion region: ESTBeaconRegion!) {
+    //func beaconManager(manager: ESTBeaconRegion, didRangeBeacons: [ESTBeacon], inRegion: ESTBeaconRegion){
 //                println("I've found \(didRangeBeacons.count) beacons in range.")
-        
-        if(didRangeBeacons.count > 0) {
+        let ESTbeacons:[ESTBeacon] = beacons as! [ESTBeacon]
+        if(ESTbeacons.count > 0) {
             //Keeping track of all beacon macAddresses in beaconMA set
             
 //            for b in didRangeBeacons{
@@ -123,11 +123,11 @@ class EstViewController:UIViewController, ESTBeaconManagerDelegate{
 //            }
             
             //Closest beacon is at index 0
-            var closestBeacon:ESTBeacon = didRangeBeacons.first!
+            var closestBeacon:ESTBeacon = ESTbeacons.first!
             loadingCircle.stopAnimating()
             if (notTracking) {
                 currentBeaconIdentifier  = "\(closestBeacon.major)_\(closestBeacon.minor)"
-                searchingLabel.text = currentBeaconIdentifier
+                searchingLabel.text = currentBeaconIdentifier as String
             }
 //            else {
 //                for b in didRangeBeacons {

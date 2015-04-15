@@ -82,7 +82,7 @@ class ColorView: UIView {
     
     // Helper to return the main layer as CAGradientLayer
     var gradientLayer: CAGradientLayer {
-        return layer as CAGradientLayer
+        return layer as! CAGradientLayer
     }
     
     

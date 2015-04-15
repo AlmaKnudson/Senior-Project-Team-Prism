@@ -18,14 +18,15 @@ class ColorPickerView: UIViewController {
     
     //MARK - Touch Events
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         touchesMoved(touches, withEvent: event)
     }
     
-    override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
-        var touch = (touches.allObjects[0]) as UITouch
+    
+    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+        var touch = (touches.first) as! UITouch
         var point = touch.locationInView(self.colorPicker)
-        touch = event.allTouches()?.anyObject() as UITouch
+        touch = event.allTouches()?.first as! UITouch
         if touch.view == self.colorPicker{
             point = touch.locationInView(self.colorPicker)
         }
@@ -34,9 +35,9 @@ class ColorPickerView: UIViewController {
         colorSelected.backgroundColor = color
     }
     
-    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
         
-        var touch = (touches.allObjects[0]) as UITouch
+        var touch = (touches.first) as! UITouch
         var point = touch.locationInView(self.colorPicker)
         var color = getPixelColorAtLocation(point)
         colorSelected.backgroundColor = color
@@ -105,7 +106,7 @@ class ColorPickerView: UIViewController {
             color = UIColor(red:rf, green:gf, blue:bf, alpha:af)
         }
 
-        return color?
+        return color
     }
     
     

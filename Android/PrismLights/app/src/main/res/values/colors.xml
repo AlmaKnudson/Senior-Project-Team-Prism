@@ -3,8 +3,12 @@
     <color name="darkPurple">#9999ff</color>
     <color name="lightPurple">#ccccff</color>
     <color name="darkGray">#333333</color>
+    <color name="lighterGray">#666666</color>
     <color name="lightGray">#c8b7b7</color>
     <color name="mediumGray">#916f6f</color>
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="transparent">#00ffffff</color>
+    <color name="darkTeal">#6d7c7a</color>
+    <color name="lightTeal">#bcd3d1</color>
 </resources>

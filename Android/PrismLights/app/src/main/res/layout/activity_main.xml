@@ -12,15 +12,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:id="@+id/container">
-
-        <fragment
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="app.lights.prism.com.prismlights.SettingsFragment"
-        tools:layout="@layout/settings_fragment"
-        android:id="@+id/settings_fragment">
-
-        </fragment></FrameLayout>
+    </FrameLayout>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -33,8 +25,6 @@
             android:src="@drawable/ic_launcher"
             android:id="@+id/settingsButton"
             android:background="@drawable/bottom_button"
-            android:layout_marginRight="1dp"
-            android:layout_marginEnd="1dp"
             android:enabled="false"/>
 
         <Button
@@ -44,10 +34,6 @@
             android:text="@string/home"
             android:id="@+id/homeButton"
             android:background="@drawable/bottom_button"
-            android:layout_marginLeft="1dp"
-            android:layout_marginEnd="1dp"
-            android:layout_marginRight="1dp"
-            android:layout_marginStart="1dp"
             android:enabled="false" />
 
         <Button
@@ -57,8 +43,6 @@
             android:text="@string/music"
             android:id="@+id/musicButton"
             android:background="@drawable/bottom_button"
-            android:layout_marginLeft="1dp"
-            android:layout_marginStart="1dp"
             android:enabled="false" />
 
     </LinearLayout>

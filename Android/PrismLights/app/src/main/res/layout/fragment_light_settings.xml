@@ -32,11 +32,23 @@
                 android:inputType="textCapWords" />
         </LinearLayout>
 
-        <Switch
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/change_state"
-            android:id="@+id/bulbOnState" />
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/change_state"
+                android:textSize="17sp"
+                android:textColor="@android:color/white"
+                android:layout_centerVertical="true" />
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/bulbOnState"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"/>
+        </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"

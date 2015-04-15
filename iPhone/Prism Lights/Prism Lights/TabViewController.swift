@@ -14,9 +14,6 @@ class TabViewController : UITabBarController{
         super.init(coder: aDecoder)
     }
     
-    override init() {
-        super.init()
-    }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nil, bundle: nil)
