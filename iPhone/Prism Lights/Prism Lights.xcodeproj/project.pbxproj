@@ -81,6 +81,8 @@
 		CC89CA011ADD8E0B00E25DCD /* HomePageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC89CA001ADD8E0B00E25DCD /* HomePageController.swift */; };
 		CC89CA031ADD903D00E25DCD /* GroupCollectionControlller.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC89CA021ADD903D00E25DCD /* GroupCollectionControlller.swift */; };
 		CC89CA051ADD904F00E25DCD /* FavioriteCollectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC89CA041ADD904F00E25DCD /* FavioriteCollectionController.swift */; };
+		CC89CA071ADDF16800E25DCD /* GroupBulbCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC89CA061ADDF16800E25DCD /* GroupBulbCell.swift */; };
+		CC89CA091ADDF1F000E25DCD /* ColorUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC89CA081ADDF1F000E25DCD /* ColorUtil.swift */; };
 		CC96AD941ABE26E00025896F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CCB135A81AAD5606006E464F /* Main.storyboard */; };
 		CC96AD951ABE26E60025896F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D98625E1A1D2C0B00FAD175 /* LaunchScreen.xib */; };
 		CC9E5ECD1A89A16100B19DF6 /* AlarmsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9E5ECC1A89A16100B19DF6 /* AlarmsTable.swift */; };
@@ -233,6 +235,8 @@
 		CC89CA001ADD8E0B00E25DCD /* HomePageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageController.swift; sourceTree = "<group>"; };
 		CC89CA021ADD903D00E25DCD /* GroupCollectionControlller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupCollectionControlller.swift; sourceTree = "<group>"; };
 		CC89CA041ADD904F00E25DCD /* FavioriteCollectionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavioriteCollectionController.swift; sourceTree = "<group>"; };
+		CC89CA061ADDF16800E25DCD /* GroupBulbCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupBulbCell.swift; sourceTree = "<group>"; };
+		CC89CA081ADDF1F000E25DCD /* ColorUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorUtil.swift; sourceTree = "<group>"; };
 		CC9E5ECC1A89A16100B19DF6 /* AlarmsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmsTable.swift; sourceTree = "<group>"; };
 		CC9E5ECE1A89B95300B19DF6 /* AlarmCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmCell.swift; sourceTree = "<group>"; };
 		CCB135A31AAB9601006E464F /* libEstimoteSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libEstimoteSDK.a; path = EstimoteSDK/libEstimoteSDK.a; sourceTree = "<group>"; };
@@ -294,6 +298,7 @@
 			children = (
 				0D0A26D91A38AFA10033550D /* Bulb Settings */,
 				0D9357E61A2D4BB100AAD52D /* BulbCollectionCell.swift */,
+				CC89CA061ADDF16800E25DCD /* GroupBulbCell.swift */,
 				0D9862551A1D2C0B00FAD175 /* BulbsCollectionController.swift */,
 				CC89CA001ADD8E0B00E25DCD /* HomePageController.swift */,
 				CC89CA021ADD903D00E25DCD /* GroupCollectionControlller.swift */,
@@ -400,6 +405,7 @@
 				0D9862681A1D2C0B00FAD175 /* Prism LightsTests */,
 				0D799B191A392D8000E9DDF2 /* Frameworks */,
 				0D98624F1A1D2C0B00FAD175 /* Products */,
+				0D9862511A1D2C0B00FAD175 /* Supporting Files */,
 				0D3A79011A26A716003AC6D4 /* Lumberjack */,
 			);
 			sourceTree = "<group>";
@@ -425,7 +431,6 @@
 				0D0A26D81A376D510033550D /* Main Settings */,
 				0D0A26D61A376D410033550D /* Home */,
 				0D0A26D71A376D4A0033550D /* Music */,
-				0D9862511A1D2C0B00FAD175 /* Supporting Files */,
 				117F49651A96DB8B00A31746 /* PrefixHeader.pch */,
 				CCB135A11AAB8095006E464F /* ColorPicker */,
 				CCB135A21AAB8261006E464F /* HueSDK_API */,
@@ -442,6 +447,7 @@
 				0D9862521A1D2C0B00FAD175 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			path = "Prism Lights";
 			sourceTree = "<group>";
 		};
 		0D9862681A1D2C0B00FAD175 /* Prism LightsTests */ = {
@@ -605,6 +611,7 @@
 				CCB707831AA68A73002BF12B /* ColorSelectorView.swift */,
 				CCB707841AA68A73002BF12B /* NewColorPickerView.swift */,
 				CCB135AB1AAF5727006E464F /* ColorPickerController.swift */,
+				CC89CA081ADDF1F000E25DCD /* ColorUtil.swift */,
 			);
 			name = ColorPicker;
 			sourceTree = "<group>";
@@ -827,12 +834,14 @@
 				CC89CA031ADD903D00E25DCD /* GroupCollectionControlller.swift in Sources */,
 				0D0A26D51A3766C70033550D /* TabViewController.swift in Sources */,
 				CCB135AC1AAF5727006E464F /* ColorPickerController.swift in Sources */,
+				CC89CA071ADDF16800E25DCD /* GroupBulbCell.swift in Sources */,
 				117F49581A96DA4500A31746 /* EZAudioPlotGL.m in Sources */,
 				1168EAD71ABF973300FC7CD9 /* ColorView.swift in Sources */,
 				CCC54A381AC0FAC5003FF0E2 /* Info_API.swift in Sources */,
 				CCC54A371ABF1AC4003FF0E2 /* Lights.swift in Sources */,
 				117F495E1A96DA4500A31746 /* TPCircularBuffer.c in Sources */,
 				0D3A791B1A26A716003AC6D4 /* ContextFilterLogFormatter.m in Sources */,
+				CC89CA091ADDF1F000E25DCD /* ColorUtil.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

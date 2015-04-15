@@ -15,3 +15,5 @@ protocol BulbSettingsProtocol{
 protocol DismissPresentedController{
     func DismissMe()
 }
+
+let MAX_HUE:UInt32 = 65535

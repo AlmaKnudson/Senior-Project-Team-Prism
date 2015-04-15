@@ -67,6 +67,14 @@ class ConnectingViewController : UIViewController, DismissPresentedController {
     }
     
     override func viewDidAppear(animated: Bool) {
+        
+        if(BRIDGELESS){
+            performSegueWithIdentifier( "HomeTabView", sender: self)
+        }
+        
+        
+        
+        
         //Subscribe to the notifications about connection
         var manager = PHNotificationManager.defaultManager()
         manager!.registerObject(self, withSelector: "HeartBeatReceived", forNotification: "LOCAL_CONNECTION_NOTIFICATION")
