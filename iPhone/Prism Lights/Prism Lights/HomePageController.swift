@@ -18,12 +18,6 @@ class HomePageController : UIViewController, UIPageViewControllerDataSource, UIP
     var index:Int = 0
     var PAGE_COUNT:Int = 3
     
-    
-    
-    
-    
-    
-    
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,7 +76,7 @@ class HomePageController : UIViewController, UIPageViewControllerDataSource, UIP
         case 0:
             return self.storyboard?.instantiateViewControllerWithIdentifier("BulbCollection") as! BulbsCollectionController
         case 1:
-            index--
+
             return
                 self.storyboard?.instantiateViewControllerWithIdentifier("GroupCollection") as! GroupCollectionController
         case 2:

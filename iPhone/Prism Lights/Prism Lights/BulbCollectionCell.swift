@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Prism. All rights reserved.
 //
 
-
-
 import UIKit
 
 class BulbCollectionCell : UICollectionViewCell{
@@ -36,13 +34,13 @@ class BulbCollectionCell : UICollectionViewCell{
         if animate {
             var pulseAnimation:CABasicAnimation = CABasicAnimation(keyPath: "opacity");
             pulseAnimation.duration = 3.0;
-            pulseAnimation.toValue = NSNumber(float: 0.4);
+            pulseAnimation.toValue = NSNumber(float: 0.5);
             pulseAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut);
             pulseAnimation.autoreverses = false;
             pulseAnimation.repeatCount = 0;
             self.top_bulb.layer.addAnimation(pulseAnimation, forKey: nil)
         } else {
-            top_bulb.layer.opacity = 0.4
+            top_bulb.layer.opacity = 0.5
             bottom_bulb.layer.opacity = 1.0
         }
     }
@@ -69,7 +67,7 @@ class BulbCollectionCell : UICollectionViewCell{
         self.top_bulb!.layer.opacity = 0.5
         self.bottom_bulb!.layer.opacity = 0.5
         unReachableImage.hidden = false
-        
+
     }
     
     
