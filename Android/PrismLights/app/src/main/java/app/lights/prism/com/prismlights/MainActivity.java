@@ -45,6 +45,7 @@ import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 
 import app.lights.prism.com.prismlights.receiver.BroadCastAlarmReceiver;
@@ -69,6 +70,8 @@ public class MainActivity extends Activity implements PHSDKListener{
 
     //TODO: I might need to find better way...
     private PHSchedule currentSchedule; // this is for passing schedule from fragment to fragment.
+    private static final String settingsFragmentTag = "SETTINGS_FRAGMENT";
+
     public PHSchedule getCurrentSchedule(){
         return currentSchedule;
     }
@@ -93,6 +96,7 @@ public class MainActivity extends Activity implements PHSDKListener{
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container, new SettingsFragment());
+        fragmentTransaction.addToBackStack(settingsFragmentTag);
         fragmentTransaction.commit();
 
 
@@ -125,7 +129,7 @@ public class MainActivity extends Activity implements PHSDKListener{
             public void onClick(View v) {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.container, new SettingsFragment());
-                fragmentTransaction.addToBackStack("settings");
+                fragmentTransaction.addToBackStack(settingsFragmentTag);
                 fragmentTransaction.commit();
             }
         });
@@ -229,8 +233,10 @@ public class MainActivity extends Activity implements PHSDKListener{
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container, new RealHomeFragment());
         fragmentTransaction.commit();
-        dialog.setCancelable(true);
-        dialog.cancel();
+        if(dialog.isShowing()) {
+            dialog.setCancelable(true);
+            dialog.cancel();
+        }
         //enable tab buttons so we can use them
         settingsButton.setEnabled(true);
         voiceButton.setEnabled(true);
@@ -267,7 +273,7 @@ public class MainActivity extends Activity implements PHSDKListener{
      * Handle your bridge search results here.  Typically if multiple results are returned you will want to display them in a list
      * and let the user select their bridge.   If one is found you may opt to connect automatically to that bridge.
      */
-    public void onAccessPointsFound(List<PHAccessPoint> accessPoints) {
+    public void onAccessPointsFound(final List<PHAccessPoint> accessPoints) {
 //        runOnUiThread(new Runnable() {
 //            @Override
 //            public void run() {
@@ -275,23 +281,42 @@ public class MainActivity extends Activity implements PHSDKListener{
 //                toast.show();
 //            }
 //        });
-        if(accessPoints != null && accessPoints.size() == 1) {
-            HueSharedPreferences preferences = HueSharedPreferences.getInstance(this.getApplicationContext());
-            PHAccessPoint accessPoint = accessPoints.get(0);
-            accessPoint.setUsername(preferences.getUsername());
-            preferences.setLastConnectedIPAddress(accessPoint.getIpAddress());
-            if(!hueBridgeSdk.isAccessPointConnected(accessPoint)) {
-                hueBridgeSdk.connect(accessPoints.get(0));
+        if(accessPoints != null) {
+            if(accessPoints.size() == 1) {
+                PHAccessPoint accessPoint = accessPoints.get(0);
+                connectToAccessPoint(accessPoint);
             } else {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        openHomeScreen();
+                        if(dialog.isShowing()) {
+                            dialog.setCancelable(true);
+                            dialog.cancel();
+                        }
+                        Fragment fragment = getFragmentManager().findFragmentById(R.id.container);
+                        if(fragment instanceof SettingsFragment) {
+                            SettingsFragment settingsFragment = (SettingsFragment) fragment;
+                            settingsFragment.setAccessPoints(accessPoints);
+                        }
                     }
                 });
             }
-            dialog.setCancelable(true);
-            dialog.cancel();
+        }
+    }
+
+    public void connectToAccessPoint(PHAccessPoint accessPoint) {
+        HueSharedPreferences preferences = HueSharedPreferences.getInstance(this.getApplicationContext());
+        accessPoint.setUsername(preferences.getUsername());
+        preferences.setLastConnectedIPAddress(accessPoint.getIpAddress());
+        if(!hueBridgeSdk.isAccessPointConnected(accessPoint)) {
+            hueBridgeSdk.connect(accessPoint);
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    openHomeScreen();
+                }
+            });
         }
     }
 
