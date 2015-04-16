@@ -7,7 +7,6 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:id="@+id/homeGridView"
-        android:paddingTop="5dp"
         style="@style/GridView"/>
 
 </LinearLayout>

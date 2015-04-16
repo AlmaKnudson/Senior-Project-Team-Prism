@@ -4,10 +4,13 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -92,20 +95,31 @@ public class AddLightFragment extends Fragment {
                 if(addSerialCodeDialog == null) {
                     addSerialCodeDialog = new ProgressDialog(getActivity());
                     addSerialCodeDialog.show();
+                    addSerialCodeDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM|WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
                     addSerialCodeDialog.setContentView(R.layout.enter_text_dialog);
                     TextView dialogTitle = (TextView) addSerialCodeDialog.findViewById(R.id.dialog_title);
                     dialogTitle.setText(getText(R.string.add_serial_code));
                     serialCode = (EditText) addSerialCodeDialog.findViewById(R.id.editText);
+                    addSerialCodeDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                     doneButton = (Button) addSerialCodeDialog.findViewById(R.id.doneButton);
-                    serialCode.setOnKeyListener(new View.OnKeyListener() {
+                    serialCode.addTextChangedListener(new TextWatcher() {
                         @Override
-                        public boolean onKey(View v, int keyCode, KeyEvent event) {
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
                             if(serialCode.getText().length() == 6) {
                                 doneButton.setEnabled(true);
                             } else {
                                 doneButton.setEnabled(false);
                             }
-                            return false;
                         }
                     });
                     doneButton.setOnClickListener(new View.OnClickListener() {

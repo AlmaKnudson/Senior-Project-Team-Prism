@@ -84,6 +84,16 @@ public class RealHomeFragment extends Fragment implements ViewPager.OnPageChange
                         fragmentTransaction.commit();
                     }
                 });
+                editButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
+                        LightsEditFragment editLightsFragment = new LightsEditFragment();
+                        fragmentTransaction.replace(R.id.container, editLightsFragment);
+                        fragmentTransaction.addToBackStack("lightsettings");
+                        fragmentTransaction.commit();
+                    }
+                });
                 return;
             case 1:
                 turnOnView(groupIconSelected, groupIconDeselected);
