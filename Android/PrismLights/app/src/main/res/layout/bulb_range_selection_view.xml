@@ -3,4 +3,67 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Medium Text"
+            android:contentDescription="0"
+            android:ellipsize="end"
+            android:id="@+id/textView"/>
+
+
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:text="None"
+            android:id="@+id/noneButton"
+            style="@style/TabLikeButton"
+            android:textOff="None"
+            android:textOn="None"
+            android:textStyle="bold" />
+
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:text="Low"
+            android:id="@+id/lowsButton"
+            style="@style/TabLikeButton"
+            android:textOff="Low"
+            android:textOn="Low"
+            android:textStyle="bold" />
+
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:text="Mid"
+            android:id="@+id/midsButton"
+            style="@style/TabLikeButton"
+            android:textOff="Mid"
+            android:textOn="Mid"
+            android:textStyle="bold" />
+
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:text="High"
+            android:id="@+id/highsButton"
+            style="@style/TabLikeButton"
+            android:textOn="High"
+            android:textOff="High"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
 </LinearLayout>

@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -38,6 +39,11 @@ public class HueBulbChangeUtility {
 
     public static PHLight getLightFromId(String identifier, PHBridge bridge) {
         return bridge.getResourceCache().getLights().get(identifier);
+    }
+
+    public static Map<String, PHLight> getLightMap(){
+        PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
+        return bridge.getResourceCache().getLights();
     }
 
     private static PHGroup getGroupFromId(String identifier, PHBridge bridge) {
@@ -168,6 +174,15 @@ public class HueBulbChangeUtility {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
         PHLight light = getLightFromId(lightId, bridge);
         musicChangeBulbColor(light, xY, transitionTime, brightness);
+    }
+
+
+    public static void musicChangeBulbsColor(ArrayList<String> lightIds, float[] xY, int transitionTime, int brightness) {
+        PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
+        for(String id: lightIds) {
+            PHLight light = getLightFromId(id, bridge);
+            musicChangeBulbColor(light, xY, transitionTime, brightness);
+        }
     }
 
 
@@ -491,7 +506,7 @@ public class HueBulbChangeUtility {
         Collections.sort(ids, new Comparator<String>() {
             @Override
             public int compare(String lhs, String rhs) {
-                try{
+                try {
                     int l = Integer.parseInt(lhs);
                     int r = Integer.parseInt(rhs);
                     return l - r;
@@ -569,7 +584,7 @@ public class HueBulbChangeUtility {
 
             @Override
             public void onSearchComplete() {
-                if(onCompletedListener != null) {
+                if (onCompletedListener != null) {
                     onCompletedListener.onCompleted();
                 }
             }
@@ -581,7 +596,7 @@ public class HueBulbChangeUtility {
 
             @Override
             public void onError(int i, String s) {
-                if(onCompletedListener != null) {
+                if (onCompletedListener != null) {
                     onCompletedListener.onCompleted();
                 }
             }

@@ -14,5 +14,6 @@
             android:layout_height="match_parent"
             android:id="@+id/bulbsListView"
             android:layout_gravity="center_horizontal" />
+
     </LinearLayout>
 </LinearLayout>

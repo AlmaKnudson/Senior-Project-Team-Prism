@@ -41,6 +41,7 @@ public class AdvancedSettingFragment extends Fragment {
     private TextView alarmText;
     private TextView timerText;
     private TextView scheduleText;
+    private TextView beaconsText;
     private Switch sunriseSwitch;
     private Switch sunsetSwitch;
     private PHLight currentBulb;
@@ -91,6 +92,7 @@ public class AdvancedSettingFragment extends Fragment {
         alarmText = (TextView)view.findViewById(R.id.alarmTextAdvancedSetting);
         timerText = (TextView)view.findViewById(R.id.timerTextAdvancedSetting);
         scheduleText = (TextView)view.findViewById(R.id.scheduleTextAdvancedSetting);
+        beaconsText = (TextView)view.findViewById(R.id.beaconsText);
         sunriseSwitch = (Switch)view.findViewById(R.id.SunriseSwitch);
         sunsetSwitch = (Switch)view.findViewById(R.id.SunsetSwitch);
 
@@ -138,6 +140,23 @@ public class AdvancedSettingFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
+
+        beaconsText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putInt(lightPositionString, currentBulbId);
+
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                BeaconFragment beaconFragment = new BeaconFragment();
+                System.out.println();
+                beaconFragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.container, beaconFragment);
+                fragmentTransaction.addToBackStack("BeaconFragment");
+                fragmentTransaction.commit();
+            }
+        });
+
 
         if (sunriseSchedules.size() == 0) {
             sunriseSwitch.setChecked(false);

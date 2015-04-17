@@ -1,6 +1,7 @@
 package app.lights.prism.com.prismlights;
 
 
+import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.CountDownTimer;
 
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -18,6 +20,8 @@ import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 
@@ -36,12 +40,14 @@ import be.tarsos.dsp.pitch.PitchProcessor;
 
 public class MusicFragment extends Fragment implements OnsetHandler {
 
+    public static final String musicSelectBulbsTag = "BULB_RANGE_FRAGMENT_TAG";
     private  AudioProcessor p;
     private PercussionOnsetDetector pOC;
     private ComplexOnsetDetector cOP;
     private AudioDispatcher dispatcher;
     private WaveformView mWaveformView;
     private ToggleButton toggleButton;
+    private Button selectLightsButton;
     private SeekBar bPM;
     private SeekBar maxBrightnessSlider;
     private SeekBar lowRangeSlider;
@@ -54,7 +60,13 @@ public class MusicFragment extends Fragment implements OnsetHandler {
     private TextView midRangeMaxLabel;
     private TextView highRangeMinLabel;
 
-    private TextView currentFrequencyLabel;
+    //These lists will be SMALL
+    private ArrayList<String> lows;
+    private ArrayList<String> mids;
+    private ArrayList<String> highs;
+
+
+
     private Random rng;
     private double mostRecentPitch;
 
@@ -91,9 +103,26 @@ public class MusicFragment extends Fragment implements OnsetHandler {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        HashMap<String, String> map = LightRangeMap.getLightRangeMap().getMap();
+        lows = new ArrayList<String>();
+        mids = new ArrayList<String>();
+        highs = new ArrayList<String>();
+
+        for(String s : map.keySet()){
+            if(map.get(s).equals("LOW")){
+                lows.add(s);
+            } else if(map.get(s).equals("MID")){
+                mids.add(s);
+            } else if(map.get(s).equals("HIGH")){
+                highs.add(s);
+            }
+        }
+
         View layout = inflater.inflate(R.layout.fragment_music, container, false);
         mWaveformView = (WaveformView) layout.findViewById(R.id.waveformView);
         toggleButton = (ToggleButton) layout.findViewById(R.id.toggleButton);
+        selectLightsButton = (Button) layout.findViewById(R.id.selectLightsButton);
         bPM = (SeekBar) layout.findViewById(R.id.sensitivitySlider);
         lowRangeSlider = (SeekBar) layout.findViewById(R.id.lowRangeSlider);
         midRangeSlider = (SeekBar) layout.findViewById(R.id.midRangeSlider);
@@ -105,7 +134,6 @@ public class MusicFragment extends Fragment implements OnsetHandler {
         midRangeMinLabel = (TextView) layout.findViewById(R.id.midRangeMinLabel);
         midRangeMaxLabel = (TextView) layout.findViewById(R.id.midRangeMaxLabel);
         highRangeMinLabel = (TextView) layout.findViewById(R.id.highRangeMinLabel);
-        currentFrequencyLabel = (TextView) layout.findViewById(R.id.currentFrequencyLabel);
         //Initialize rng with the max hue value: 65280.... Hue Color range [0-65280]
         rng = new Random();
 
@@ -224,13 +252,7 @@ public class MusicFragment extends Fragment implements OnsetHandler {
 
         //doesn't used onCheckedChanged to avoid programmatic sending
         View.OnClickListener listener = new View.OnClickListener() {
-            CountDownTimer lowTimer;
-            CountDownTimer midTimer;
-            CountDownTimer highTimer;
-            CountDownTimer decrementTimer;
             ToggleButton startRecording;
-
-//            sensitivity = 60;
             @Override
             public void onClick(View v) {
                 startRecording = (ToggleButton) v;
@@ -238,86 +260,26 @@ public class MusicFragment extends Fragment implements OnsetHandler {
                 if(startRecording.isChecked()) {
                     dispatcher.addAudioProcessor(p);
                     dispatcher.addAudioProcessor(cOP);
-                    /**
-                     * Processing mic audio
-                     */
-//                    lowTimer = new CountDownTimer(10000, 1000) {
-//
-//                        public void onTick(long millisUntilFinished) {
-//                            System.out.println("seconds remaining: " + millisUntilFinished / 1000);
-//                        }
-//
-//                        public void onFinish() {
-//
-//                            dispatcher.removeAudioProcessor(p);
-//                            lowTimer.cancel();
-//                            midTimer.cancel();
-//                            highTimer.cancel();
-//                            decrementTimer.cancel();
-//                            startRecording.setChecked(false);
-//                            System.out.println("DONE");
-//                        }
-//                    }.start();
-//
-//                    midTimer = new CountDownTimer(10000, 1000) {
-//
-//                        public void onTick(long millisUntilFinished) {
-//                            System.out.println("seconds remaining: " + millisUntilFinished / 1000);
-//                        }
-//
-//                        public void onFinish() {
-//                            dispatcher.removeAudioProcessor(p);
-//                            lowTimer.cancel();
-//                            midTimer.cancel();
-//                            highTimer.cancel();
-//                            decrementTimer.cancel();
-//                            startRecording.setChecked(false);
-//                            System.out.println("DONE");
-//                        }
-//                    }.start();
-//
-//                    highTimer = new CountDownTimer(10000, 1000) {
-//
-//                        public void onTick(long millisUntilFinished) {
-//                            System.out.println("seconds remaining: " + millisUntilFinished / 1000);
-//                        }
-//
-//                        public void onFinish() {
-//
-//
-//                            dispatcher.removeAudioProcessor(p);
-//                            lowTimer.cancel();
-//                            midTimer.cancel();
-//                            highTimer.cancel();
-//                            decrementTimer.cancel();
-//                            startRecording.setChecked(false);
-//                            System.out.println("DONE");
-//                        }
-//                    }.start();
-//
-//
-//                    decrementTimer = new CountDownTimer(10000, 1000) {
-//
-//                        public void onTick(long millisUntilFinished) {
-//                            System.out.println("seconds remaining: " + millisUntilFinished / 1000);
-//                        }
-//
-//                        public void onFinish() {
-//                            System.out.println("DONE");
-//                        }
-//                    }.start();
 
                 } else {
                     dispatcher.removeAudioProcessor(p);
                     dispatcher.removeAudioProcessor(cOP);
-//                    lowTimer.cancel();
-//                    midTimer.cancel();
-//                    highTimer.cancel();
-//                    decrementTimer.cancel();
                 }
             }
         };
 
+        View.OnClickListener selectLightsListener = new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.container, new BulbRangeFragment(), musicSelectBulbsTag);
+                fragmentTransaction.addToBackStack(musicSelectBulbsTag);
+                fragmentTransaction.commit();
+            }
+        };
+
+        selectLightsButton.setOnClickListener(selectLightsListener);
         toggleButton.setOnClickListener(listener);
         return layout;
     }
@@ -335,22 +297,23 @@ public class MusicFragment extends Fragment implements OnsetHandler {
         int midThreshold = ( Integer.parseInt(midRangeMaxLabel.getText().toString().replace("hz", "")) );
 //        currentFrequencyLabel.setText(mostRecentPitch + "hz");
 //        System.out.println(mostRecentPitch);
-        int light = 0;
+        ArrayList<String> lightsToChange = null;
         if(mostRecentPitch < lowThreshold){
             //Send request to low bulbs
-           light = 1;
+            lightsToChange = lows;
         } else if (mostRecentPitch < midThreshold){
             //Send request to mid bulbs
-            light = 2;
+            lightsToChange = mids;
         } else {
             //Send request to high bulbs
-            light = 5;
+            lightsToChange = highs;
         }
-
-        float[] xY = {rng.nextFloat(), rng.nextFloat()};
-        HueBulbChangeUtility.musicChangeBulbColor(light, xY, 1, 254*(Integer.parseInt(brightnessLabel.getText().toString().replace("%", "") )/ 100) );
-        //Fade out slowly
-        HueBulbChangeUtility.musicChangeBulbColor(light, xY, 20, 0);
+        if(lightsToChange != null && lightsToChange.size() != 0) {
+            float[] xY = {rng.nextFloat(), rng.nextFloat()};
+            HueBulbChangeUtility.musicChangeBulbsColor(lightsToChange, xY, 1, 254 * (Integer.parseInt(brightnessLabel.getText().toString().replace("%", "")) / 100));
+            //Fade out slowly
+            HueBulbChangeUtility.musicChangeBulbsColor(lightsToChange, xY, 20, 0);
+        }
 
 
     }

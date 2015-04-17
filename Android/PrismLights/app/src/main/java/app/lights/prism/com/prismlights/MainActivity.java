@@ -115,7 +115,7 @@ public class MainActivity extends Activity implements PHSDKListener{
             @Override
             public void onClick(View v) {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.container, new VoiceFragment(), musicFragmentTag);
+                fragmentTransaction.replace(R.id.container, new MusicFragment(), musicFragmentTag);
                 fragmentTransaction.addToBackStack(musicFragmentTag);
                 fragmentTransaction.commit();
             }
