@@ -1,6 +1,7 @@
 package app.lights.prism.com.prismlights;
 
 
+import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ public class LightsFragment extends Fragment implements CacheUpdateListener {
     private List<String> currentLightIdOrder;
     private Map<String, PHLight> currentLights;
     private PHHueSDK hueSDK;
+    private LayoutIdOrder layoutIdOrder;
 
 
 
@@ -46,6 +48,11 @@ public class LightsFragment extends Fragment implements CacheUpdateListener {
         hueSDK = PHHueSDK.getInstance();
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        layoutIdOrder = LayoutIdOrder.getInstance(activity.getFilesDir());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,7 +74,6 @@ public class LightsFragment extends Fragment implements CacheUpdateListener {
 //                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
                 Bundle bundle = new Bundle();
                 bundle.putString(RealHomeFragment.lightPositionString, currentLightIdOrder.get(position));
-                bundle.putBoolean(RealHomeFragment.groupOrLightString, false);
 
                 FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
                 LightSettingsFragment lightSettingFragment = new LightSettingsFragment();
@@ -99,8 +105,7 @@ public class LightsFragment extends Fragment implements CacheUpdateListener {
 
     private void updateFromCache() {
         currentLights = hueSDK.getSelectedBridge().getResourceCache().getLights();
-        currentLightIdOrder = new ArrayList<String>(currentLights.keySet());
-        HueBulbChangeUtility.sortIds(currentLightIdOrder);
+        currentLightIdOrder = layoutIdOrder.getLightsFromBridgeOrder(currentLights.keySet());
     }
 
 
@@ -146,8 +151,10 @@ public class LightsFragment extends Fragment implements CacheUpdateListener {
             if(!currentLight.getLastKnownLightState().isReachable()) {
                 bulbBottom.setColorFilter(RealHomeFragment.disabledOverlay);
                 bulbTop.setColorFilter(RealHomeFragment.disabledOverlay);
+                currentView.findViewById(R.id.warning).setVisibility(View.VISIBLE);
                 return currentView;
             } else {
+                currentView.findViewById(R.id.warning).setVisibility(View.GONE);
                 bulbBottom.clearColorFilter();
             }
             if(!currentLight.getLastKnownLightState().isOn()) {

@@ -22,9 +22,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A data model for favorites because scenes aren't guaranteed to stay on the bridge,
@@ -67,7 +69,7 @@ public class FavoritesDataModel {
                     favoritesDataModel.directory = directory;
                 }
                 bufferedFileReader.close();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 favoritesDataModel = new FavoritesDataModel();
                 favoritesDataModel.directory = directory;
                 favoritesDataModel.loadDefaultFavorites();
@@ -136,6 +138,26 @@ public class FavoritesDataModel {
 
     public void modifyFavorite(int favoritePosition, String name, PHLightState lightState) {
         favorites.set(favoritePosition, new Favorite(name, lightState));
+        saveToFile();
+    }
+
+    public void reorderFavorites(int shiftedFrom, int shiftedTo) {
+        favorites.add(shiftedTo, favorites.remove(shiftedFrom));
+    }
+
+    public void doneReordering() {
+        saveToFile();
+    }
+
+    public void removeFavorites(Set<Integer> toRemove) {
+        Set<Favorite> removeFavorites = new HashSet<Favorite>();
+
+        for(int toRemovePos: toRemove) {
+            removeFavorites.add(favorites.get(toRemovePos));
+        }
+        for(Favorite favorite: removeFavorites) {
+            favorites.remove(favorite);
+        }
         saveToFile();
     }
 

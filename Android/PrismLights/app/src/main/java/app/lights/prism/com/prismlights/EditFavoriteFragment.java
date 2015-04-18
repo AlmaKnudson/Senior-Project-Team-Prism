@@ -1,5 +1,6 @@
 package app.lights.prism.com.prismlights;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,16 +19,23 @@ public class EditFavoriteFragment extends Fragment implements CacheUpdateListene
     private FavoritesDataModel favoritesDataModel;
     private int favoritePosition;
     private Favorite favorite;
+    private boolean done;
 
     public EditFavoriteFragment() {
+        done = false;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        favoritesDataModel = FavoritesDataModel.getInstance(getActivity().getFilesDir());
         favoritePosition = getArguments().getInt(RealHomeFragment.favoritePosition);
         favorite = favoritesDataModel.getFavoriteAtIndex(favoritePosition);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        favoritesDataModel = FavoritesDataModel.getInstance(getActivity().getFilesDir());
     }
 
     @Override
@@ -38,8 +46,12 @@ public class EditFavoriteFragment extends Fragment implements CacheUpdateListene
         TextView title = (TextView) layout.findViewById(R.id.title);
         title.setText(R.string.edit_favorite);
         bulbSelectionFragment = (BulbSelectionFragment) getFragmentManager().findFragmentById(R.id.selectBulbFragment);
+        if(bulbSelectionFragment == null) {
+            bulbSelectionFragment = (BulbSelectionFragment) getChildFragmentManager().findFragmentById(R.id.selectBulbFragment);
+        }
         bulbSelectionFragment.allowLongClick(true);
         nameEditor = (EditText) layout.findViewById(R.id.nameEditor);
+        //also figure out why after 3 back and forths it stops working correctly
         nameEditor.setText(favorite.getName());
         doneButton = (Button) layout.findViewById(R.id.doneButton);
         bulbSelectionFragment.setOnCheckedNumberChanged(new CheckedNumberChangedListener() {
@@ -61,16 +73,19 @@ public class EditFavoriteFragment extends Fragment implements CacheUpdateListene
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(bulbSelectionFragment.getAllChecked()) {
-                    PHLightState lightState = bulbSelectionFragment.allBulbsSameState();
-                    if(lightState == null) {
-                        favoritesDataModel.modifyFavorite(favoritePosition, bulbSelectionFragment.getSelectedLightIds(), nameEditor.getText().toString());
+                //avoid popping the backstack twice
+                if (!done)
+                    done = true;
+                    if (bulbSelectionFragment.getAllChecked()) {
+                        PHLightState lightState = bulbSelectionFragment.allBulbsSameState();
+                        if (lightState == null) {
+                            favoritesDataModel.modifyFavorite(favoritePosition, bulbSelectionFragment.getSelectedLightIds(), nameEditor.getText().toString());
+                        } else {
+                            favoritesDataModel.modifyFavorite(favoritePosition, nameEditor.getText().toString(), lightState);
+                        }
                     } else {
-                        favoritesDataModel.modifyFavorite(favoritePosition, nameEditor.getText().toString(), lightState);
+                        favoritesDataModel.modifyFavorite(favoritePosition, bulbSelectionFragment.getSelectedLightIds(), nameEditor.getText().toString());
                     }
-                } else {
-                    favoritesDataModel.modifyFavorite(favoritePosition, bulbSelectionFragment.getSelectedLightIds(), nameEditor.getText().toString());
-                }
                 getFragmentManager().popBackStack();
             }
         });

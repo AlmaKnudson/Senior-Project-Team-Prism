@@ -72,4 +72,7 @@
     <string name="add_serial_code">Add Serial Code</string>
     <string name="searching_for_new_lights">Searching for lights...</string>
     <string name="select_all">Select All</string>
+    <string name="group_label">Group:</string>
+    <string name="editing_group">Editing Group...</string>
+    <string name="edit_group">Edit Group</string>
 </resources>

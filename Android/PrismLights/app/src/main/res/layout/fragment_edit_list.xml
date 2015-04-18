@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/grad_background">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="end">
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:src="@drawable/trash_button"
+            android:background="@drawable/top_button"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
+            android:id="@+id/trashButton"/>
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:src="@drawable/done_button"
+            android:background="@drawable/top_button"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
+            android:id="@+id/doneButton"/>
+    </LinearLayout>
+    <app.lights.prism.com.prismlights.ReorderGridView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        style="@style/GridView"
+        android:paddingTop="5dp"
+        android:id="@+id/reorderGridView"/>
+</LinearLayout>

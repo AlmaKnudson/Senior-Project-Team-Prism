@@ -9,18 +9,11 @@
 
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:text="Advanced Light Settings"
         android:id="@+id/textView5"
-        android:textSize="30sp"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
-        android:textColor="@color/white"/>
+        style="@style/TitleTextView"/>
     <View
-        android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:background="@color/darkPurple"/>
+        style="@style/TitleUnderline"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,9 +25,7 @@
         android:paddingBottom="10dp"
         android:background="@drawable/grid_background"/>
     <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/darkGray"/>
+        style="@style/ListSeparator"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -48,9 +39,7 @@
         android:paddingBottom="10dp"
         android:background="@drawable/grid_background"/>
     <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/darkGray"/>
+        style="@style/ListSeparator"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -65,83 +54,65 @@
         android:background="@drawable/grid_background"/>
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/darkGray"/>
+        style="@style/ListSeparator"/>
 
-    <RelativeLayout
+    <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:weightSum="1">
+        android:layout_height="wrap_content">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="59dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Smart Sunset"
             android:layout_gravity="center_horizontal"
             android:textSize="20sp"
             android:textColor="@color/white"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:id="@+id/sunsetText"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/SunsetSwitch"
-            android:layout_toStartOf="@+id/SunsetSwitch" />
+            android:id="@+id/sunsetText"/>
 
-        <Switch
+        <ToggleButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/SunsetSwitch"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignBottom="@+id/sunsetText"
-            android:checked="false" />
+            android:checked="false"
+            style="@style/ToggleButton"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"/>
 
-    </RelativeLayout>
+    </LinearLayout>
     <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/darkGray"/>
+        style="@style/ListSeparator"/>
 
-    <RelativeLayout
+    <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:weightSum="1">
+        android:layout_height="wrap_content">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="59dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Smart Sunrise"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center_vertical"
             android:textSize="20sp"
             android:textColor="@color/white"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:id="@+id/sunriseText"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/SunriseSwitch"
-            android:layout_toStartOf="@+id/SunriseSwitch" />
+            android:id="@+id/sunriseText" />
 
-        <Switch
+        <ToggleButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/SunriseSwitch"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignBottom="@+id/sunriseText"
-            android:checked="false" />
+            android:checked="false"
+            style="@style/ToggleButton"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 
     <RelativeLayout
@@ -169,8 +140,6 @@
     </RelativeLayout>
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/darkGray"/>
+        style="@style/ListSeparator"/>
 
 </LinearLayout>

@@ -9,7 +9,7 @@
 import UIKit
 
 var DEBUG :Bool = false
-var BRIDGELESS :Bool = false
+var BRIDGELESS :Bool = true
 var DEMO :Bool = false
 var BRIDGELOGGING :Bool = false;
 

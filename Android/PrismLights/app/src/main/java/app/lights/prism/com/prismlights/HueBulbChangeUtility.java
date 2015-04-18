@@ -303,10 +303,10 @@ public class HueBulbChangeUtility {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
         Map<String, PHLight> lights = getAllLights();
         List<String> lightIds = group.getLightIdentifiers();
-        boolean shouldSetOn = false;
+        boolean shouldSetOn = true;
         for(String id : lightIds) {
-            if(lights.get(id).getLastKnownLightState().isReachable() && !lights.get(id).getLastKnownLightState().isOn()) {
-                shouldSetOn = true;
+            if(lights.get(id).getLastKnownLightState().isReachable() && lights.get(id).getLastKnownLightState().isOn()) {
+                shouldSetOn = false;
                 break;
             }
         }
@@ -467,12 +467,20 @@ public class HueBulbChangeUtility {
 //        });
     }
 
-    public static void deleteGroup(PHGroup phGroup) {
+    public static void deleteGroup(PHGroup phGroup, final OnCompletedListener onCompletedListener) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
+        if(phGroup == null) {
+            if(onCompletedListener != null) {
+                onCompletedListener.onCompleted();
+            }
+            return;
+        }
         bridge.deleteGroup(phGroup.getIdentifier(), new PHGroupListener() {
             @Override
             public void onCreated(PHGroup phGroup) {
-
+                if(onCompletedListener != null) {
+                    onCompletedListener.onCompleted();
+                }
             }
 
             @Override
@@ -487,12 +495,16 @@ public class HueBulbChangeUtility {
 
             @Override
             public void onSuccess() {
-
+                if(onCompletedListener != null) {
+                    onCompletedListener.onCompleted();
+                }
             }
 
             @Override
             public void onError(int i, String s) {
-
+                if(onCompletedListener != null) {
+                    onCompletedListener.onCompleted();
+                }
             }
 
             @Override
@@ -606,5 +618,69 @@ public class HueBulbChangeUtility {
 
             }
         });
+    }
+
+    public static void editGroup(String groupId, List<String> lightIdentifiers, final OnCompletedListener onCompletedListener) {
+        PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
+        PHGroup group = bridge.getResourceCache().getGroups().get(groupId);
+        group.setLightIdentifiers(lightIdentifiers);
+        bridge.updateGroup(group, new PHGroupListener() {
+            @Override
+            public void onCreated(PHGroup phGroup) {
+                System.out.println("Created Group");
+                if(onCompletedListener != null) {
+                    onCompletedListener.onCompleted();
+                    onCompletedListener.onCompleted();
+                }
+            }
+
+            @Override
+            public void onReceivingGroupDetails(PHGroup phGroup) {
+                System.out.println("recieving group details");
+            }
+
+            @Override
+            public void onReceivingAllGroups(List<PHBridgeResource> phBridgeResources) {
+                System.out.println("recieving all groups");
+            }
+
+            @Override
+            public void onSuccess() {
+                System.out.println("Success Group");
+
+                if(onCompletedListener != null) {
+                    onCompletedListener.onCompleted();
+                }
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                System.out.println("Error Group");
+                //TOOD handle error when
+                if(onCompletedListener != null) {
+                    onCompletedListener.onCompleted();
+                }
+            }
+
+            @Override
+            public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
+                System.out.println("State update");
+            }
+        });
+    }
+
+    public static void deleteGroups(Set<String> checked, OnCompletedListener onCompletedListener) {
+        PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
+        final CompletedMap completedMap = new CompletedMap(checked, onCompletedListener);
+        for(final String groupId: checked) {
+            PHGroup group = bridge.getResourceCache().getGroups().get(groupId);
+            deleteGroup(group, new OnCompletedListener() {
+                @Override
+                public void onCompleted() {
+                    completedMap.complete(groupId);
+                }
+            });
+        }
+
     }
 }

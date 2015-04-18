@@ -1,5 +1,6 @@
 package app.lights.prism.com.prismlights;
 
+import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -26,11 +27,18 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
     private List<String> currentGroupIdOrder;
     private Map<String, PHGroup> currentGroups;
     private PHHueSDK hueSDK;
+    private LayoutIdOrder layoutIdOrder;
 
     public GroupsFragment() {
         hueSDK = PHHueSDK.getInstance();
     }
 
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        layoutIdOrder = LayoutIdOrder.getInstance(activity.getFilesDir());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,13 +59,12 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
 //                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
                 Bundle bundle = new Bundle();
                 bundle.putString(RealHomeFragment.lightPositionString, currentGroupIdOrder.get(position));
-                bundle.putBoolean(RealHomeFragment.groupOrLightString, true);
 
                 FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
-                LightSettingsFragment lightSettingFragment = new LightSettingsFragment();
-                lightSettingFragment.setArguments(bundle);
-                fragmentTransaction.replace(R.id.container, lightSettingFragment);
-                fragmentTransaction.addToBackStack("lightsettings");
+                GroupSettingsFragment groupSettingsFragment = new GroupSettingsFragment();
+                groupSettingsFragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.container, groupSettingsFragment);
+                fragmentTransaction.addToBackStack("groupSettings");
                 fragmentTransaction.commit();
 
                 return false;
@@ -75,8 +82,7 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
 
     private void updateFromCache() {
         currentGroups = hueSDK.getSelectedBridge().getResourceCache().getGroups();
-        currentGroupIdOrder = new ArrayList<String>(currentGroups.keySet());
-        HueBulbChangeUtility.sortIds(currentGroupIdOrder);
+        currentGroupIdOrder = layoutIdOrder.getGroupsFromBridgeOrder(currentGroups.keySet());
     }
 
     @Override
@@ -129,15 +135,15 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
             ImageView groupTop;
             ImageView groupBottom;
             if(currentGroup.getLightIdentifiers().size() > 2) {
-                group2Top.setVisibility(View.INVISIBLE);
-                group2Bottom.setVisibility(View.INVISIBLE);
+                group2Top.setVisibility(View.GONE);
+                group2Bottom.setVisibility(View.GONE);
                 group3Top.setVisibility(View.VISIBLE);
                 group3Bottom.setVisibility(View.VISIBLE);
                 groupTop = group3Top;
                 groupBottom = group3Bottom;
             } else {
-                group3Bottom.setVisibility(View.INVISIBLE);
-                group3Top.setVisibility(View.INVISIBLE);
+                group3Bottom.setVisibility(View.GONE);
+                group3Top.setVisibility(View.GONE);
                 group2Bottom.setVisibility(View.VISIBLE);
                 group2Top.setVisibility(View.VISIBLE);
                 groupTop = group2Top;
@@ -146,9 +152,11 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
             if(!HueBulbChangeUtility.isGroupReachable(currentGroup)) {
                 groupBottom.setColorFilter(RealHomeFragment.disabledOverlay);
                 groupTop.setColorFilter(RealHomeFragment.disabledOverlay);
+                currentView.findViewById(R.id.warning).setVisibility(View.VISIBLE);
                 return currentView;
             } else {
                 groupBottom.clearColorFilter();
+                currentView.findViewById(R.id.warning).setVisibility(View.GONE);
             }
             if(HueBulbChangeUtility.isGroupOff(currentGroup)) {
                 groupTop.setColorFilter(RealHomeFragment.offOverlay);

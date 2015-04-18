@@ -31,11 +31,12 @@
                 android:inputType="textCapWords" />
         </LinearLayout>
 
-        <Switch
+        <ToggleButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/change_state"
-            android:id="@+id/bulbOnState" />
+            android:id="@+id/bulbOnState"
+            style="@style/ToggleButton"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -54,7 +55,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:id="@+id/brightness" />
+                android:id="@+id/brightness"
+                style="@style/Slider"/>
 
             <TextView
                 android:layout_width="45dp"

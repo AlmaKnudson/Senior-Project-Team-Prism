@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Prism. All rights reserved.
 //
 
-
-
 import UIKit
 
 class BulbCollectionCell : UICollectionViewCell{
@@ -36,13 +34,13 @@ class BulbCollectionCell : UICollectionViewCell{
         if animate {
             var pulseAnimation:CABasicAnimation = CABasicAnimation(keyPath: "opacity");
             pulseAnimation.duration = 3.0;
-            pulseAnimation.toValue = NSNumber(float: 0.1);
+            pulseAnimation.toValue = NSNumber(float: 0.5);
             pulseAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut);
             pulseAnimation.autoreverses = false;
             pulseAnimation.repeatCount = 0;
             self.top_bulb.layer.addAnimation(pulseAnimation, forKey: nil)
         } else {
-            top_bulb.layer.opacity = 0.2
+            top_bulb.layer.opacity = 0.5
             bottom_bulb.layer.opacity = 1.0
         }
     }
@@ -69,44 +67,13 @@ class BulbCollectionCell : UICollectionViewCell{
         self.top_bulb!.layer.opacity = 0.5
         self.bottom_bulb!.layer.opacity = 0.5
         unReachableImage.hidden = false
-        
+
     }
     
-    private func changeTopColor(imageName:String, color:UIColor){
-        //Load image
-        var image = UIImage(named: imageName)
-        UIGraphicsBeginImageContextWithOptions(image!.size, false, 0.0)
-        var context = UIGraphicsGetCurrentContext()
-        color.setFill()
-        
-        // translate/flip the graphics context (for transforming from CG* coords to UI* coords
-        CGContextTranslateCTM(context, 0, image!.size.height)
-        CGContextScaleCTM(context, 1.0, -1.0)
-        
-        // set the blend mode to color burn, and the original image
-        CGContextSetBlendMode(context, kCGBlendModeColorBurn)
-        var rect = CGRect(x: 0, y: 0, width: image!.size.width, height: image!.size.height)
-        CGContextDrawImage(context, rect, image!.CGImage)
-        
-        // set a mask that matches the shape of the image, then draw (color burn) a colored rectangle
-        CGContextClipToMask(context, rect, image!.CGImage)
-        CGContextAddRect(context, rect);
-        CGContextDrawPath(context,kCGPathFill);
-        
-        // generate a new UIImage from the graphics context we drew onto
-        var coloredImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext();
-        
-        top_bulb!.image = coloredImage
-    }
-    
-    func SetGroupColor(color:UIColor){
-        changeTopColor("groupTop", color: color)
-    }
     
     
     func SetBulbColor(color:UIColor){
-        changeTopColor("bulb_top", color: color)
+        top_bulb.image = changeTopColor("bulb_top", color)
     }
     
 }

@@ -20,13 +20,11 @@
             android:src="@drawable/bulb_bottom"
             android:adjustViewBounds="true"/>
         <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|end"
-            android:id="@+id/selectBulbCheck"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:clickable="false"/>
+            style="@style/CheckBox"
+            android:id="@+id/selectBulbCheck"/>
+        <ImageView
+            style="@style/WarningImage"
+            android:id="@+id/warning"/>
     </FrameLayout>
 
 

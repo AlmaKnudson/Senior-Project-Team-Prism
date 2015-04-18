@@ -1,5 +1,5 @@
 //
-//  HomeController.swift
+//  BulbsCollectionController.swift
 //  Prism Lights
 //
 //  Created by Cody Foltz on 11/19/14.
@@ -7,22 +7,14 @@
 //
 
 import UIKit
-let MAX_HUE:UInt32 = 65535
 
 
-
-protocol BulbSettingsProtocol{
-    /*mutating*/ func ApplySettings()
-}
-
-
-
-class HomeController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, BulbSettingsProtocol, ESTBeaconManagerDelegate {
+class BulbsCollectionController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, BulbSettingsProtocol, DismissPresentedController, ESTBeaconManagerDelegate {
     
-    let lastBridgeMessage = "Looking for Bridge..."
-    let SCANNING_MESSAGE = "Scanning for New Bridge..."
-    let GROUP_SECTION = 0
-    let BULB_SECTION = 1
+    
+    let BULB_SECTION = 0
+    let GROUP_SECTION = 1
+    let NUM_OF_SECTIONS = 1
     
     
     var retryConnection = true
@@ -37,24 +29,9 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     
     
     var lightCount :Int = 0;
-    var groupCount :Int = 1;
     
-    var activityIndicator: BulbActivity!
-    
-    
-    @IBOutlet weak var loadingMessageLabel: UILabel!
-    @IBOutlet weak var rescanButton: UIButton!
-    @IBOutlet weak var loadingView: HomeLoadingView!
     @IBOutlet weak var bulbCollectionView: UICollectionView!
     
-    @IBAction func StartRescan(sender: UIButton) {
-        
-        (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.enableLocalConnection()
-        self.loadingMessageLabel.text = lastBridgeMessage
-        //        SearchForBridge(true, portalSearch: false, ipAddressSearch: false)
-        sender.hidden = true
-        activityIndicator.StartActivityIndicator()
-    }
     
     //MARK: - UIViewController Methods
     override func viewDidLoad() {
@@ -85,25 +62,11 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
                 lightCount = (cache?.lights.count)!
             }
         }
-        
-        //Button look and feel
-        rescanButton.backgroundColor = UIColor.whiteColor()
-        rescanButton.layer.cornerRadius = 10
-        rescanButton.layer.borderWidth = 2
-        rescanButton.layer.borderColor = UIColor.darkGrayColor().CGColor
-        
-        var frame = CGRect(x: 0, y: 0, width: 50, height: 50)
-        activityIndicator = BulbActivity(frame: frame)
-        self.loadingView.addSubview(activityIndicator)
-        
-        
+
     }
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
-        
-        
     }
     
     
@@ -112,70 +75,21 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     }
     
     
-    
     /**
     View Will Appear
     Registers the controller with the PHManager for bridge connections
     Then tries to connect to the bridge
     */
     override func viewWillAppear(animated: Bool) {
-        
-        
-        
-        
-        var manager = PHNotificationManager.defaultManager()
-        manager!.registerObject(self, withSelector: "HeartBeatReceived", forNotification: "LOCAL_CONNECTION_NOTIFICATION")
-        manager!.registerObject(self, withSelector: "NetworkConnectionLost", forNotification: "NO_LOCAL_CONNECTION_NOTIFICATION")
-        manager!.registerObject(self, withSelector: "NotAuthorized", forNotification: "NO_LOCAL_AUTHENTICATION_NOTIFICATION")
-        
-        
-        //Check for previous bridge connection
-        var cache:PHBridgeResourcesCache! = PHBridgeResourcesReader.readBridgeResourcesCache()
-        if(cache != nil){
-            
-            if(cache.bridgeConfiguration == nil || cache.bridgeConfiguration.ipaddress == nil ){
-                
-                //This line is here so that there is always an IP set if they haven't connected to a bridge in the past.
-                (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.setBridgeToUseWithIpAddress("1.1.1.1", macAddress: "ab:ab:ab:ab:ab:ab")
-            }
-            
-        }
-        
-        //Check that we are connected to bridge.
-        if !((UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.localConnected()){
-            //Connect to bridge
-            (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.enableLocalConnection()
-            self.loadingMessageLabel.text = lastBridgeMessage
-            activityIndicator.StartActivityIndicator()
-        } else{
-            bulbCollectionView.reloadData()
-        }
-        
-        
-        if(BRIDGELESS){
-            HideConnectingView()
-        }
-        
-        activityIndicator.center = self.loadingView.center
-        
     }
     
     override func viewDidAppear(animated: Bool) {
-        bulbCollectionView.reloadData()
-        
     }
     
     override func viewWillDisappear(animated: Bool) {
         PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
-
-        if(DEBUG){
-            println("Home Controller will disappeared")
-        }
     }
     override func viewDidDisappear(animated: Bool) {
-                if(DEBUG){
-            println("Home disappeared")
-        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -226,24 +140,24 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             
             return lightCount;
         }
-        
-        if section == GROUP_SECTION {
-            if(cache.groups != nil){
-                //count doesn't account for group number 0. So +1 to account for it.
-                groupCount = cache.groups.count + 1
-            } else {
-                groupCount = 1
-            }
-            if(BRIDGELESS){
-                groupCount = 1
-            }
-            return groupCount
-        }
+//        
+//        if section == GROUP_SECTION {
+//            if(cache.groups != nil){
+//                //count doesn't account for group number 0. So +1 to account for it.
+//                groupCount = cache.groups.count + 1
+//            } else {
+//                groupCount = 1
+//            }
+//            if(BRIDGELESS){
+//                groupCount = 1
+//            }
+//            return groupCount
+//        }
         return 0
     }
     
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        return 2
+        return NUM_OF_SECTIONS
     }
     
     
@@ -277,50 +191,50 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             } else{
                 cell.initBulbCell("")
             }
-        } else if indexPath.section == GROUP_SECTION {
-            var groupId = indexPath.row
-            var lightState = PHLightState()
-            lightState.on = false
-            
-            if groupId == 0 {
-                cell.initGroupCell("All Lights")
-            } else {
-                
-                var group:PHGroup! = cache?.groups?["\(groupId)"] as? PHGroup
-                if group != nil {
-                    cell.initGroupCell(group.name)
-                } else{
-                    cell.initGroupCell("")
-                    return cell
-                }
-            }
-            
-            if cache.groups != nil{
-                var theLight:PHLight! = nil
-                for (lightId, light) in (cache.lights as! [String:PHLight]){
-                    //Ignore lights not connected to bridge
-                    if(light.lightState.reachable == 0){
-                        continue
-                    }
-                    
-                    if light.lightState.on == 1{
-                        theLight = light
-                        lightState.on = true
-                        lightState.x = light.lightState.x
-                        lightState.y = light.lightState.y
-                        break
-                    }
-                }
-                
-                if(lightState.on == 1){
-                    var point = CGPoint(x: Double(lightState.x), y: Double(lightState.y))
-                    var color = PHUtilities.colorFromXY(point, forModel: theLight.modelNumber)
-                    cell.turnOn(false)
-                    cell.SetGroupColor(color)
-                } else{
-                    cell.turnOff(false)
-                }
-            }
+//        } else if indexPath.section == GROUP_SECTION {
+//            var groupId = indexPath.row
+//            var lightState = PHLightState()
+//            lightState.on = false
+//            
+//            if groupId == 0 {
+//                cell.initGroupCell("All Lights")
+//            } else {
+//                
+//                var group:PHGroup! = cache?.groups?["\(groupId)"] as? PHGroup
+//                if group != nil {
+//                    cell.initGroupCell(group.name)
+//                } else{
+//                    cell.initGroupCell("")
+//                    return cell
+//                }
+//            }
+//            
+//            if cache.groups != nil{
+//                var theLight:PHLight! = nil
+//                for (lightId, light) in (cache.lights as! [String:PHLight]){
+//                    //Ignore lights not connected to bridge
+//                    if(light.lightState.reachable == 0){
+//                        continue
+//                    }
+//                    
+//                    if light.lightState.on == 1{
+//                        theLight = light
+//                        lightState.on = true
+//                        lightState.x = light.lightState.x
+//                        lightState.y = light.lightState.y
+//                        break
+//                    }
+//                }
+//                
+//                if(lightState.on == 1){
+//                    var point = CGPoint(x: Double(lightState.x), y: Double(lightState.y))
+//                    var color = PHUtilities.colorFromXY(point, forModel: theLight.modelNumber)
+//                    cell.turnOn(false)
+//                    cell.SetGroupColor(color)
+//                } else{
+//                    cell.turnOff(false)
+//                }
+//            }
         }
         
         return cell!
@@ -338,14 +252,15 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             
         }
         
-        if( indexPath.section == GROUP_SECTION){
-            var identifier = "\(indexPath.row)"
-            ToggleGroupState(identifier)
-            
-        }
-        collectionView.reloadData()
+//        if( indexPath.section == GROUP_SECTION){
+//            var identifier = "\(indexPath.row)"
+//            ToggleGroupState(identifier)
+//            
+//        }
+        var index:[AnyObject] = [AnyObject]()
+        index.append(indexPath)
         
-        
+        collectionView.reloadItemsAtIndexPaths(index)
     }
     
     /**
@@ -385,11 +300,10 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             return
         }
         
-        
     }
     
     
-    //MARK: Notification Methods
+    //MARK: - Notification Methods
     
     /**
     Handles the heartbeat event from the PHNotification
@@ -410,11 +324,6 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         //Successful connect to bridge has been made
         retryConnection = true
         beenConnected = true
-        if(beenConnected){
-            if(loadingView.hidden != true){
-                HideConnectingView()
-            }
-        }
         
         self.bulbCollectionView.reloadData()
     }
@@ -448,51 +357,29 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     func NetworkConnectionLost(){
         
         var hueSDK = (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!
-        
-        //Has been connected to the bridge at least once during this session
-        if(beenConnected){
-            //returns for one more heartbeat timer
-            if(retryConnection){
-                retryConnection = false
-                return
-            }
-            hueSDK.disableLocalConnection()
-            beenConnected = false
-            //Create the alert
-            var alert = UIAlertController(title: "No Connection", message: "Connection to bridge lost. Insure the bridge is available and your network is working", preferredStyle: UIAlertControllerStyle.Alert)
-            let reScan = UIAlertAction(title: "Re-Connect", style: UIAlertActionStyle.Default) {
-                (scan) -> Void in
-                
-                
-            }
-            let cancelButton = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Cancel) { (cancelButton) -> Void in     }
-            alert.addAction(cancelButton)
-            //Show the alert to the user
-            self.presentViewController(alert, animated: true) { () -> Void in}
-        } else{
-            hueSDK.disableLocalConnection()
-            if !BRIDGELESS {
-                if loadingView.hidden == true {
-                    ShowConnectingView()
-                }
-                loadingMessageLabel.text = SCANNING_MESSAGE
-                SearchForBridge(true, portalSearch: false, ipAddressSearch: false)
-            }
+        //returns for one more heartbeat timer
+        if(retryConnection){
+            retryConnection = false
+            return
         }
+        hueSDK.disableLocalConnection()
+        beenConnected = false
+        //Create the alert
+        var alert = UIAlertController(title: "No Connection", message: "Connection to bridge lost. Insure the bridge is available and your network is working", preferredStyle: UIAlertControllerStyle.Alert)
+        let reScan = UIAlertAction(title: "Re-Connect", style: UIAlertActionStyle.Default) {
+            (scan) -> Void in
+            
+            
+        }
+        let cancelButton = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Cancel) { (cancelButton) -> Void in     }
+        alert.addAction(cancelButton)
+        //Show the alert to the user
+        self.presentViewController(alert, animated: true) { () -> Void in}
+        
         
     }
     
-    //MARK: Helper Methods
-    
-    func HideConnectingView(){
-        loadingView.hidden = true
-        activityIndicator.StopActivityIndicator()
-        self.bulbCollectionView.reloadData()
-    }
-    
-    func ShowConnectingView(){
-        loadingView.hidden = false
-    }
+    //MARK: - Helper Methods
     
     
     func ToggleLightState(identifier:String) -> Bool {
@@ -593,49 +480,19 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
     
     
     
-    func SearchForBridge(upnpSearch:Bool, portalSearch:Bool, ipAddressSearch:Bool){
-        
-        var hueSDK = (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!
-        let bridgeSearch = PHBridgeSearching(upnpSearch: upnpSearch, andPortalSearch: portalSearch, andIpAdressSearch: ipAddressSearch)
-        
-        bridgeSearch.startSearchWithCompletionHandler { (dict:[NSObject : AnyObject]!) -> Void in
-            self.activityIndicator.StopActivityIndicator()
-            var addresses = dict as! [String:String]
-            var macAddresses = [String](addresses.keys)
-            if(addresses.count == 1){
-                self.loadingMessageLabel.text = "Connected!"
-                var mac = macAddresses[0]
-                var ipaddress = addresses[mac]
-                hueSDK.setBridgeToUseWithIpAddress(ipaddress, macAddress: mac)
-                hueSDK.enableLocalConnection()
-            } else if(addresses.count > 1){
-                //TODO: Present choices
-                var alert = UIAlertController(title: "1+ Bridges Found", message: "More than 1 bridge has been dectected.", preferredStyle: UIAlertControllerStyle.Alert)
-                let cancelButton = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Cancel) { (cancelButton) -> Void in     }
-                alert.addAction(cancelButton)
-                //Show the alert to the user
-                self.presentViewController(alert, animated: true) { () -> Void in}
-                
-            } else{
-                
-                self.rescanButton.hidden = false
-                self.loadingMessageLabel.text = "No Bridges Found."
-                var alert = UIAlertController(title: "No Bridge Found", message: "Please ensure you are connected to the wireless.", preferredStyle: UIAlertControllerStyle.Alert)
-                let cancelButton = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Cancel) { (cancelButton) -> Void in     }
-                alert.addAction(cancelButton)
-                //Show the alert to the user
-                self.presentViewController(alert, animated: true) { () -> Void in}
-                
-            }
-        }
-    }
+    
     
     func ApplySettings(){
         self.dismissViewControllerAnimated(true, completion: nil)
-        HideConnectingView()
         self.bulbCollectionView.reloadData()
-        //TODO: Need protocol for pushAuth
     }
+    
+    func DismissMe() {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    
+    
     
     //- (void)beaconManager:(ESTBeaconManager *)manager
 //    didStartMonitoringForRegion:(ESTBeaconRegion *)region;

@@ -1,117 +1,99 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="app.lights.prism.com.prismlights.LightSettingsFragment"
-    android:background="@android:color/black">
+    android:background="@android:color/black"
+    android:orientation="vertical"
+    android:padding="5dp">
 
-
+    <app.lights.prism.com.prismlights.ColorPickerViewGroup
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.82"
+        android:id="@+id/colorPickerView"/>
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <SeekBar
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/brightness"
+            android:layout_gravity="center_vertical"
+            style="@style/Slider"
+            android:progress="50"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/name_label"
-                android:id="@+id/textView3"
-                android:textSize="17sp"
-                android:textColor="@android:color/white"
-                android:gravity="center_vertical" />
 
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:id="@+id/nameEditor"
-                android:inputType="textCapWords" />
-        </LinearLayout>
+        <TextView
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:text="100%"
+            android:id="@+id/brightnessLabel"
+            android:textSize="17sp"
+            android:textColor="@android:color/white"
+            android:gravity="center_vertical|end"/>
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/bulbOnState"
+            android:layout_gravity="center_vertical"
+            style="@style/ToggleButton"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/change_state"
-                android:textSize="17sp"
-                android:textColor="@android:color/white"
-                android:layout_centerVertical="true" />
-            <ToggleButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/bulbOnState"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"/>
-        </RelativeLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/brightness"
-            android:id="@+id/textView4"
+            android:layout_height="match_parent"
+            android:text="@string/name_label"
+            android:id="@+id/textView3"
             android:textSize="17sp"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:gravity="center_vertical"
+            android:layout_marginRight="3dp"/>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <SeekBar
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:id="@+id/brightness"
-                android:indeterminate="false" />
-
-            <TextView
-                android:layout_width="45dp"
-                android:layout_height="wrap_content"
-                android:text="100%"
-                android:id="@+id/brightnessLabel"
-                android:textSize="17sp"
-                android:textColor="@android:color/white"
-                android:gravity="center_vertical|bottom|end"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="@string/select_color"
-                android:id="@+id/colorLabel"
-                android:textSize="17sp"
-                android:textColor="@android:color/white" />
-
-        </LinearLayout>
-
-        <app.lights.prism.com.prismlights.ColorPickerViewGroup
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="40dp"
             android:layout_weight="1"
-            android:id="@+id/colorPickerView"/>
+            android:id="@+id/nameEditor"
+            android:inputType="textCapWords" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2">
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="@string/advanced_setting"
             android:id="@+id/advancedSettingButton"
             android:layout_gravity="center"
             android:background="@drawable/buttons"
-            android:padding="15dp"
-            android:layout_marginBottom="15dp"/>
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Color Cycle"
+            android:id="@+id/colorCycleButton"
+            android:layout_gravity="center"
+            android:background="@drawable/buttons"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"/>
 
     </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>

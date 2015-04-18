@@ -80,7 +80,17 @@ public class RealHomeFragment extends Fragment implements ViewPager.OnPageChange
                         FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
                         AddLightFragment addLightFragment = new AddLightFragment();
                         fragmentTransaction.replace(R.id.container, addLightFragment);
-                        fragmentTransaction.addToBackStack("lightsettings");
+                        fragmentTransaction.addToBackStack("addLightFragment");
+                        fragmentTransaction.commit();
+                    }
+                });
+                editButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
+                        LightsEditFragment editLightsFragment = new LightsEditFragment();
+                        fragmentTransaction.replace(R.id.container, editLightsFragment);
+                        fragmentTransaction.addToBackStack("editLightsFragment");
                         fragmentTransaction.commit();
                     }
                 });
@@ -95,7 +105,17 @@ public class RealHomeFragment extends Fragment implements ViewPager.OnPageChange
                         FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
                         AddGroupFragment addGroupFragment = new AddGroupFragment();
                         fragmentTransaction.replace(R.id.container, addGroupFragment);
-                        fragmentTransaction.addToBackStack("lightsettings");
+                        fragmentTransaction.addToBackStack("addGroupFragment");
+                        fragmentTransaction.commit();
+                    }
+                });
+                editButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
+                        GroupsEditFragment groupsEditFragment = new GroupsEditFragment();
+                        fragmentTransaction.replace(R.id.container, groupsEditFragment);
+                        fragmentTransaction.addToBackStack("groupsEditFragment");
                         fragmentTransaction.commit();
                     }
                 });
@@ -110,7 +130,17 @@ public class RealHomeFragment extends Fragment implements ViewPager.OnPageChange
                         FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
                         AddFavoriteFragment addFavoriteFragment = new AddFavoriteFragment();
                         fragmentTransaction.replace(R.id.container, addFavoriteFragment);
-                        fragmentTransaction.addToBackStack("lightsettings");
+                        fragmentTransaction.addToBackStack("addFavoriteFragment");
+                        fragmentTransaction.commit();
+                    }
+                });
+                editButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
+                        FavoritesEditFragment favoritesEditFragment = new FavoritesEditFragment();
+                        fragmentTransaction.replace(R.id.container, favoritesEditFragment);
+                        fragmentTransaction.addToBackStack("favoritesEditFragment");
                         fragmentTransaction.commit();
                     }
                 });

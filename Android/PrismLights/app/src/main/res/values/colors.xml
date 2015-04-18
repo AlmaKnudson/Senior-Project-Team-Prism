@@ -11,4 +11,5 @@
     <color name="transparent">#00ffffff</color>
     <color name="darkTeal">#6d7c7a</color>
     <color name="lightTeal">#bcd3d1</color>
+    <color name="yellow">#ffff00</color>
 </resources>

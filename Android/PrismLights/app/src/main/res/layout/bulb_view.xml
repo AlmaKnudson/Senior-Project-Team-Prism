@@ -20,6 +20,9 @@
             android:id="@+id/bulbBottom"
             android:src="@drawable/bulb_bottom"
             android:adjustViewBounds="true"/>
+        <ImageView
+            style="@style/WarningImage"
+            android:id="@+id/warning"/>
         </FrameLayout>
 
 

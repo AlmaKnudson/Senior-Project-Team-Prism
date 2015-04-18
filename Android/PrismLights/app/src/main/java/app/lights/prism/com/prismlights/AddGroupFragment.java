@@ -35,6 +35,9 @@ public class AddGroupFragment extends Fragment implements CacheUpdateListener {
         TextView title = (TextView) layout.findViewById(R.id.title);
         title.setText(R.string.add_group);
         bulbSelectionFragment = (BulbSelectionFragment) getFragmentManager().findFragmentById(R.id.selectBulbFragment);
+        if(bulbSelectionFragment == null) {
+            bulbSelectionFragment = (BulbSelectionFragment) getChildFragmentManager().findFragmentById(R.id.selectBulbFragment);
+        }
         bulbSelectionFragment.allowLongClick(false);
         doneButton = (Button) layout.findViewById(R.id.doneButton);
         bulbSelectionFragment.setOnCheckedNumberChanged(new CheckedNumberChangedListener() {

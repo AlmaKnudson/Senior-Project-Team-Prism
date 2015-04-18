@@ -26,14 +26,17 @@
             android:id="@+id/group3Top"
             android:src="@drawable/group_3_bulb_top"
             android:adjustViewBounds="true"
-            android:visibility="invisible"/>
+            android:visibility="gone"/>
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:id="@+id/group3Bottom"
             android:src="@drawable/group_3_bulb_bottom"
             android:adjustViewBounds="true"
-            android:visibility="invisible"/>
+            android:visibility="gone"/>
+        <ImageView
+            style="@style/WarningImage"
+            android:id="@+id/warning"/>
     </FrameLayout>
 
 

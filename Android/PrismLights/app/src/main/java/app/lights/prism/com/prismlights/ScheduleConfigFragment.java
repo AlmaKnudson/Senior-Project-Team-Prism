@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.SeekBar;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.ToggleButton;
@@ -38,14 +37,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ScheduleConfigFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ScheduleConfigFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ScheduleConfigFragment extends Fragment {
 
     private int bulbID; // The number for the chosen Light
@@ -55,7 +46,7 @@ public class ScheduleConfigFragment extends Fragment {
 
     private PHSchedule currentSchedule;
     private EditText nameEditor;
-    private Switch bulbOnState;
+    private ToggleButton bulbOnState;
     private SeekBar brightness;
     private TextView brightnessPercentage;
     private int currentColor;
@@ -135,7 +126,7 @@ public class ScheduleConfigFragment extends Fragment {
         // Inflate the layout for this fragment
         FrameLayout frame = (FrameLayout) inflater.inflate(R.layout.fragment_schedule_config, container, false);
         nameEditor = (EditText) frame.findViewById(R.id.nameEditor);
-        bulbOnState = (Switch) frame.findViewById(R.id.bulbOnState);
+        bulbOnState = (ToggleButton) frame.findViewById(R.id.bulbOnState);
         brightness = (SeekBar) frame.findViewById(R.id.brightness);
         brightnessPercentage = (TextView) frame.findViewById(R.id.brightnessLabel);
         colorPicker = (ColorPickerViewGroup) frame.findViewById(R.id.scheduleColorPicker);

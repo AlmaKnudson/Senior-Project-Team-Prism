@@ -1,5 +1,6 @@
 package app.lights.prism.com.prismlights;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,22 +17,32 @@ public class AddFavoriteFragment extends Fragment implements CacheUpdateListener
     private EditText nameEditor;
     private Button doneButton;
     private FavoritesDataModel favoritesDataModel;
+    private boolean done;
 
 
 
     public AddFavoriteFragment() {
+        done = false;
     }
 
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        favoritesDataModel = FavoritesDataModel.getInstance(getActivity().getFilesDir());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        favoritesDataModel = FavoritesDataModel.getInstance(getActivity().getFilesDir());
         View layout = inflater.inflate(R.layout.fragment_add_multi, container, false);
         TextView title = (TextView) layout.findViewById(R.id.title);
         title.setText(R.string.add_favorite);
         bulbSelectionFragment = (BulbSelectionFragment) getFragmentManager().findFragmentById(R.id.selectBulbFragment);
+        if(bulbSelectionFragment == null) {
+            bulbSelectionFragment = (BulbSelectionFragment) getChildFragmentManager().findFragmentById(R.id.selectBulbFragment);
+        }
         bulbSelectionFragment.allowLongClick(true);
         nameEditor = (EditText) layout.findViewById(R.id.nameEditor);
         nameEditor.setText(favoritesDataModel.getNextFavoriteName());
@@ -49,17 +60,20 @@ public class AddFavoriteFragment extends Fragment implements CacheUpdateListener
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(bulbSelectionFragment.getAllChecked()) {
-                    PHLightState lightState = bulbSelectionFragment.allBulbsSameState();
-                    if(lightState == null) {
-                        favoritesDataModel.addStateAsFavorite(bulbSelectionFragment.getSelectedLightIds(), nameEditor.getText().toString());
+                if(!done) {
+                    done = true;
+                    if (bulbSelectionFragment.getAllChecked()) {
+                        PHLightState lightState = bulbSelectionFragment.allBulbsSameState();
+                        if (lightState == null) {
+                            favoritesDataModel.addStateAsFavorite(bulbSelectionFragment.getSelectedLightIds(), nameEditor.getText().toString());
+                        } else {
+                            favoritesDataModel.addStateAsFavorite(nameEditor.getText().toString(), lightState);
+                        }
                     } else {
-                        favoritesDataModel.addStateAsFavorite(nameEditor.getText().toString(), lightState);
+                        favoritesDataModel.addStateAsFavorite(bulbSelectionFragment.getSelectedLightIds(), nameEditor.getText().toString());
                     }
-                } else {
-                    favoritesDataModel.addStateAsFavorite(bulbSelectionFragment.getSelectedLightIds(), nameEditor.getText().toString());
+                    getFragmentManager().popBackStack();
                 }
-                getFragmentManager().popBackStack();
             }
         });
         return layout;
