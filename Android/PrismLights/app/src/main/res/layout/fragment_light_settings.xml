@@ -9,7 +9,7 @@
     <app.lights.prism.com.prismlights.ColorPickerViewGroup
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="0.82"
         android:id="@+id/colorPickerView"/>
     <LinearLayout
         android:orientation="horizontal"
@@ -41,6 +41,8 @@
             android:id="@+id/bulbOnState"
             android:layout_gravity="center_vertical"
             style="@style/ToggleButton"/>
+
+
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
@@ -65,14 +67,33 @@
             android:inputType="textCapWords" />
     </LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/advanced_setting"
-        android:id="@+id/advancedSettingButton"
-        android:layout_gravity="center"
-        android:background="@drawable/buttons"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"/>
+        android:weightSum="2">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/advanced_setting"
+            android:id="@+id/advancedSettingButton"
+            android:layout_gravity="center"
+            android:background="@drawable/buttons"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Color Cycle"
+            android:id="@+id/colorCycleButton"
+            android:layout_gravity="center"
+            android:background="@drawable/buttons"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"/>
+
+    </LinearLayout>
 
 </LinearLayout>

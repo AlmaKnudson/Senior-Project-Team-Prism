@@ -31,13 +31,15 @@ import java.util.Map;
 public class AdvancedSettingFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    public static String lightPositionString = "CURRENT_BULB_POSITION";
+    public static String lightPositionString = RealHomeFragment.lightPositionString;
     private static final String DEBUG_TAG = "AdvancedSettingFragment";
 
 
     private PHHueSDK hueBridgeSdk;
     private PHBridge bridge;
-    private int currentBulbId; // ID of the chosen Light
+    private String identification; // ID of the chosen Light
+    private Boolean isGroup;
+
     private TextView alarmText;
     private TextView timerText;
     private TextView scheduleText;
@@ -56,11 +58,12 @@ public class AdvancedSettingFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            currentBulbId = getArguments().getInt(lightPositionString);
+            identification = getArguments().getString(lightPositionString);
+            isGroup = getArguments().getBoolean(RealHomeFragment.groupOrLightString);
         }
         hueBridgeSdk = PHHueSDK.getInstance();
         bridge = hueBridgeSdk.getSelectedBridge();
-        currentBulb = bridge.getResourceCache().getAllLights().get(currentBulbId);
+        currentBulb = hueBridgeSdk.getSelectedBridge().getResourceCache().getLights().get(identification);
 
         getSunSchedules();
     }
@@ -72,10 +75,10 @@ public class AdvancedSettingFragment extends Fragment {
 
         for (int i = 0; i < schedules.size(); i++) {
             PHSchedule schedule = schedules.get(i);
-            if (schedule.getDescription().equals("sunset") && schedule.getLightIdentifier().equals(currentBulb.getIdentifier())) {
+            if (schedule.getDescription().equals("sunset") && schedule.getLightIdentifier().equals(identification)) {
                 sunsetSchedules.add(schedule);
             }
-            else if (schedule.getDescription().equals("sunrise") && schedule.getLightIdentifier().equals(currentBulb.getIdentifier())) {
+            else if (schedule.getDescription().equals("sunrise") && schedule.getLightIdentifier().equals(identification)) {
                 sunriseSchedules.add(schedule);
             }
         }
@@ -98,7 +101,7 @@ public class AdvancedSettingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putInt(lightPositionString, currentBulbId);
+                bundle.putString(lightPositionString, identification);
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 AlarmFragment alarmFragment = new AlarmFragment();
@@ -113,7 +116,7 @@ public class AdvancedSettingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putInt(lightPositionString, currentBulbId);
+                bundle.putString(lightPositionString, identification);
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 TimerFragment timerFragment = new TimerFragment();
@@ -128,7 +131,7 @@ public class AdvancedSettingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putInt(lightPositionString, currentBulbId);
+                bundle.putString(lightPositionString, identification);
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 ScheduleFragment scheduleFragment = new ScheduleFragment();
@@ -147,7 +150,7 @@ public class AdvancedSettingFragment extends Fragment {
             else
                 sunriseSwitch.setChecked(false);
         } else
-            Log.e(DEBUG_TAG, "There were more than 1 sunrise schedule for bulb" + currentBulbId);
+            Log.e(DEBUG_TAG, "There were more than 1 sunrise schedule for bulb" + identification);
 
         if (sunsetSchedules.size() == 0) {
             sunsetSwitch.setChecked(false);
@@ -157,7 +160,7 @@ public class AdvancedSettingFragment extends Fragment {
             else
                 sunsetSwitch.setChecked(false);
         } else
-            Log.e(DEBUG_TAG, "There were more than 1 sunset schedule for bulb" + currentBulbId);
+            Log.e(DEBUG_TAG, "There were more than 1 sunset schedule for bulb" + identification);
 
 
 

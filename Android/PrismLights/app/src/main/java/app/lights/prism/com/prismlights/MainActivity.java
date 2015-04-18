@@ -39,14 +39,21 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.concurrent.ScheduledFuture;
 
 import app.lights.prism.com.prismlights.receiver.BroadCastAlarmReceiver;
 
@@ -66,12 +73,33 @@ public class MainActivity extends Activity implements PHSDKListener{
     public static int MIN_CONNECTION_LOST_COUNT=1;
     public static final String homeFragmentTag="HOME_FRAGMENT";
     public static final String musicFragmentTag="MUSIC_FRAGMENT_TAG";
-
-
-    //TODO: I might need to find better way...
-    private PHSchedule currentSchedule; // this is for passing schedule from fragment to fragment.
     private static final String settingsFragmentTag = "SETTINGS_FRAGMENT";
+    //colorCycle utilities
+    private List<ColorCycle> colorCycles;
+    public List<ColorCycle> getAllColorCycles(){
+        return  colorCycles;
+    }
+    public void setColorCycle(int i, ColorCycle colorCycle) {
+        colorCycles.set(i, colorCycle);
+    }
+    public void deleteColorCycle(int i){
+        colorCycles.remove(i);
+    }
+    public void addColorCycle(ColorCycle colorCycle){
+        colorCycles.add(colorCycle);
+    }
 
+    //for passing colorCycleTasks
+    private Map<String,List<ScheduledFuture>> colorCycleTasks;
+    public void setColorCycleTasks(String identifier, List<ScheduledFuture> tasks){
+        colorCycleTasks.put(identifier, tasks);
+    }
+    public List<ScheduledFuture> getColorCycleTasks(String identifier){
+        return colorCycleTasks.get(identifier);
+    }
+
+    // for passing schedule between fragments
+    private PHSchedule currentSchedule;
     public PHSchedule getCurrentSchedule(){
         return currentSchedule;
     }
@@ -82,7 +110,8 @@ public class MainActivity extends Activity implements PHSDKListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //TODO: get stored sunrise sunset
+
+        // get Stored sunrise and sunset time
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         if(settings.contains("sunrise")) {
             sunrise = new Date(settings.getLong("sunrise", 0));
@@ -92,6 +121,20 @@ public class MainActivity extends Activity implements PHSDKListener{
             sunrise = null;
             sunset = null;
         }
+
+        // get Stored colorCycles
+        try {
+            FileInputStream in = new FileInputStream("colorCycle.out");
+            ObjectInputStream ois = new ObjectInputStream(in);
+            colorCycles = (ArrayList<ColorCycle>) (ois.readObject());
+            ois.close();
+            in.close();
+
+        } catch (Exception e) {
+            Log.e(DEBUG_TAG, "Getting colorCycle info failed: "+ e);
+            colorCycles = new ArrayList<>();
+        }
+
         currentSchedule = null;
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -175,6 +218,18 @@ public class MainActivity extends Activity implements PHSDKListener{
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
             settings.edit().putLong("sunrise", sunrise.getTime()).commit();
             settings.edit().putLong("sunset", sunset.getTime()).commit();
+        }
+        if(colorCycles != null){
+            try {
+                FileOutputStream out = new FileOutputStream("colorCycle.out");
+                ObjectOutputStream oos = new ObjectOutputStream(out);
+                oos.writeObject(colorCycles);
+                oos.flush();
+                oos.close();
+                out.close();
+            } catch (Exception e) {
+                System.out.println("Problem serializing colorCycle: " + e);
+            }
         }
     }
 

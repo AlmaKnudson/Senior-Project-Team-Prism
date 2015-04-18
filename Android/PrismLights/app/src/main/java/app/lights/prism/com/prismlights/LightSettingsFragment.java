@@ -22,8 +22,6 @@ import java.util.List;
 
 public class LightSettingsFragment extends Fragment implements CacheUpdateListener{
 
-
-    private String identifier; // The id of the chosen Light
     private EditText nameEditor;
     private ToggleButton bulbOnState;
     private SeekBar brightness;
@@ -32,9 +30,15 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
     private ColorPickerViewGroup colorPicker;
 
     private Button advancedSettingButton;
+    private Button colorCycleButton;
 
     private PHHueSDK hueSDK;
 
+    private List<PHLight> currentLights;
+    private String[] lightNames;
+    private List<PHGroup> currentGroups;
+    private String[] groupNames;
+    private String identifier;
 
 
     public LightSettingsFragment() {
@@ -60,6 +64,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
         colorPicker = (ColorPickerViewGroup) frame.findViewById(R.id.colorPickerView);
 
         advancedSettingButton = (Button)frame.findViewById(R.id.advancedSettingButton);
+        colorCycleButton = (Button)frame.findViewById(R.id.colorCycleButton);
 
         updateState();
         nameEditor.setOnKeyListener(new View.OnKeyListener() {
@@ -119,6 +124,22 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
                 fragmentTransaction.commit();
             }
         });
+
+        colorCycleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString(RealHomeFragment.lightPositionString, identifier);
+                bundle.putBoolean(RealHomeFragment.groupOrLightString, false);
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                ColorCycleFragment colorCycleFragment = new ColorCycleFragment();
+                colorCycleFragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.container, colorCycleFragment);
+                fragmentTransaction.addToBackStack("colorCycle");
+                fragmentTransaction.commit();
+            }
+        });
+        
         return frame;
     }
 
