@@ -9,6 +9,47 @@
 import Foundation
 
 
+func GetBulbName(bulbId:String) -> String? {
+    
+    let cache:PHBridgeResourcesCache = PHBridgeResourcesReader.readBridgeResourcesCache()
+    
+    let lights = cache.lights as! [String:PHLight]
+    let light:PHLight? = lights[bulbId]
+    let name:String? = light?.identifier
+    
+    return name
+}
+
+
+func GetBulbColorType(bulbId:String) -> PHLightColormode? {
+    let cache:PHBridgeResourcesCache = PHBridgeResourcesReader.readBridgeResourcesCache()
+    let lights = cache.lights as! [String:PHLight]
+    let light:PHLight? = lights[bulbId]
+    
+    let colorMode:PHLightColormode? = light?.lightState?.colormode
+    
+    return colorMode
+}
+
+func GetBulbColorXY(bulbId:String) -> (x:Double?, y:Double?){
+    let cache:PHBridgeResourcesCache = PHBridgeResourcesReader.readBridgeResourcesCache()
+    let lights = cache.lights as! [String:PHLight]
+    let light:PHLight? = lights[bulbId]
+    
+    let x:Double? = light?.lightState?.x.doubleValue
+    let y:Double? = light?.lightState?.y.doubleValue
+    
+    return (x,y)
+}
+
+
+
+
+
+// var hueSDK = (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!
+
+
+
 
 //
 //    
