@@ -73,6 +73,7 @@ public class VoiceFragment extends Fragment implements IWitListener {
 
     @Override
     public void witDidGraspIntent(ArrayList<WitOutcome> witOutcomes, String s, Error error) {
+        //TODO: handle recieving this after the view has disappeared
         System.out.println(witOutcomes);
         if(witOutcomes != null && !witOutcomes.isEmpty() && error == null) {
             WitOutcome outcome = witOutcomes.get(0);

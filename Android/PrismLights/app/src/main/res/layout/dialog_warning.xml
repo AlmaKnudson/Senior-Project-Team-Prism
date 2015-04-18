@@ -7,19 +7,12 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        style="@style/TitleTextView"
         android:text="@string/no_bridge_found"
         android:id="@+id/dialogTitle" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_gravity="center_horizontal" />
-
     <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/lightPurple"/>
+        style="@style/TitleUnderline"/>
 
     <Space
         android:layout_width="match_parent"

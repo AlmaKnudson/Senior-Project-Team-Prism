@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.Switch;
+import android.widget.ToggleButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,8 +41,8 @@ public class AdvancedSettingFragment extends Fragment {
     private TextView alarmText;
     private TextView timerText;
     private TextView scheduleText;
-    private Switch sunriseSwitch;
-    private Switch sunsetSwitch;
+    private ToggleButton sunriseSwitch;
+    private ToggleButton sunsetSwitch;
     private PHLight currentBulb;
     ArrayList<PHSchedule> sunsetSchedules;
     ArrayList<PHSchedule> sunriseSchedules;
@@ -91,8 +91,8 @@ public class AdvancedSettingFragment extends Fragment {
         alarmText = (TextView)view.findViewById(R.id.alarmTextAdvancedSetting);
         timerText = (TextView)view.findViewById(R.id.timerTextAdvancedSetting);
         scheduleText = (TextView)view.findViewById(R.id.scheduleTextAdvancedSetting);
-        sunriseSwitch = (Switch)view.findViewById(R.id.SunriseSwitch);
-        sunsetSwitch = (Switch)view.findViewById(R.id.SunsetSwitch);
+        sunriseSwitch = (ToggleButton)view.findViewById(R.id.SunriseSwitch);
+        sunsetSwitch = (ToggleButton)view.findViewById(R.id.SunsetSwitch);
 
         alarmText.setOnClickListener(new View.OnClickListener() {
             @Override

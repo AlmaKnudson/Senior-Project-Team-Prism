@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -42,6 +43,7 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
 
     private GridView gridView;
     private ImageView trash;
+    private Button addFavoriteButton;
 
     private static int disabledOverlay = Color.argb(125, 0, 0, 0);
     private static int offOverlay = Color.argb(50, 0, 0, 0);
@@ -68,12 +70,22 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
         gridView= (GridView) frame.findViewById(R.id.homeGridView);
         gridView.setAdapter(new HomeGridAdapter());
         trash = (ImageView) frame.findViewById(R.id.homeTrashImage);
-
+        addFavoriteButton = (Button) frame.findViewById(R.id.addFavoriteButton);
+        addFavoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
+                BulbSelectionFragment bulbSelectionFragment = new BulbSelectionFragment();
+                fragmentTransaction.replace(R.id.container, bulbSelectionFragment);
+                fragmentTransaction.addToBackStack("bulbSelection");
+                fragmentTransaction.commit();
+            }
+        });
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 //                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
                 if(position < currentLights.size()) {
-                    HueBulbChangeUtility.toggleBulbState(position);
+//                    HueBulbChangeUtility.toggleBulbState(position);
                 } else {
                     HueBulbChangeUtility.toggleBulbGroupState((PHGroup) gridView.getAdapter().getItem(position));
                 }
@@ -95,7 +107,7 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
                 }
                 dragPosition = null;
 
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
                 LightSettingsFragment lightSettingFragment = new LightSettingsFragment();
                 lightSettingFragment.setArguments(bundle);
                 fragmentTransaction.replace(R.id.container, lightSettingFragment);
@@ -137,14 +149,14 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
                     int position = gridView.pointToPosition((int) event.getX(), (int) event.getY());
                     if(position != dragPosition && position >= 0 && position < currentLights.size() + currentGroups.size()) {
                         if(position < currentLights.size() && dragPosition < currentLights.size()) {
-                            HueBulbChangeUtility.createGroup(currentLights.get(position), currentLights.get(dragPosition));
+//                            HueBulbChangeUtility.createGroup(currentLights.get(position), currentLights.get(dragPosition));
                         } else if(position >= currentLights.size() && dragPosition >= currentLights.size()) {
-                            HueBulbChangeUtility.createGroup(currentGroups.get(position - currentLights.size()), currentGroups.get(dragPosition - currentLights.size()));
+//                            HueBulbChangeUtility.createGroup(currentGroups.get(position - currentLights.size()), currentGroups.get(dragPosition - currentLights.size()));
                         } else {
                             if(position >= currentLights.size()) {
-                                HueBulbChangeUtility.createGroup(currentLights.get(dragPosition), currentGroups.get(position - currentLights.size()));
+//                                HueBulbChangeUtility.createGroup(currentLights.get(dragPosition), currentGroups.get(position - currentLights.size()));
                             } else {
-                                HueBulbChangeUtility.createGroup(currentLights.get(position), currentGroups.get(dragPosition - currentLights.size()));
+//                                HueBulbChangeUtility.createGroup(currentLights.get(position), currentGroups.get(dragPosition - currentLights.size()));
                             }
                         }
                     }
@@ -278,8 +290,8 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
             bulbName.setText(groupName);
 
             ImageView bulbBottom = (ImageView) currentView.findViewById(R.id.bulbBottom);
-            bulbTop.setImageResource(R.drawable.group_top);
-            bulbBottom.setImageResource(R.drawable.group_bottom);
+//            bulbTop.setImageResource(R.drawable.group_top);
+//            bulbBottom.setImageResource(R.drawable.group_bottom);
             if(!HueBulbChangeUtility.isGroupReachable(currentGroup)) {
                 bulbBottom.setColorFilter(disabledOverlay);
                 bulbTop.setColorFilter(disabledOverlay);

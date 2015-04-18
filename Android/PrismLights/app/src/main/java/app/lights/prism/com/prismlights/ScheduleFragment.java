@@ -18,7 +18,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
+import android.widget.ToggleButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -31,22 +31,12 @@ import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
 import com.philips.lighting.model.PHSchedule;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ScheduleFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ScheduleFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ScheduleFragment extends Fragment {
     public static String lightPositionString = "CURRENT_BULB_POSITION";
     private static final String ARG_PARAM2 = "CURRENT_SCHEDULE";
@@ -60,7 +50,7 @@ public class ScheduleFragment extends Fragment {
     private static PHBridge bridge;
     String delegate;
     List<PHSchedule> phSchedules; // this List of schedules in bridge whose description is Schedule.
-    Switch currentSwitch;
+    ToggleButton currentSwitch;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -235,7 +225,7 @@ public class ScheduleFragment extends Fragment {
             colorImage.setBackgroundColor(color);
 
 
-            final Switch scheduleSwitch = (Switch)currentView.findViewById(R.id.singleScheduleSwitch);
+            final ToggleButton scheduleSwitch = (ToggleButton)currentView.findViewById(R.id.singleScheduleSwitch);
             if(phSchedule.getStatus().equals(PHSchedule.PHScheduleStatus.ENABLED))
                 scheduleSwitch.setChecked(true);
             else

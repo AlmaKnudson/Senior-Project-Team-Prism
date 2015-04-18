@@ -13,4 +13,44 @@
         <item name="android:shadowDy">-2</item>
         <item name="android:shadowColor">#000</item>
     </style>
+    <style name="Slider" parent="@android:style/Widget.Holo.SeekBar">
+
+    </style>
+
+    <style name="ToggleButton" parent="@android:style/Widget.Holo.Button.Toggle">
+
+    </style>
+
+    <style name="TitleTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="TitleUnderline">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">5dp</item>
+        <item name="android:background">@color/lightTeal</item>
+    </style>
+    <style name="ListSeparator">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">2dp</item>
+        <item name="android:background">@color/darkGray</item>
+    </style>
+    <style name="GridView">
+        <item name="android:layout_gravity">start|top</item>
+        <item name="android:columnWidth">100dp</item>
+        <item name="android:numColumns">auto_fit</item>
+        <item name="android:verticalSpacing">10dp</item>
+        <item name="android:horizontalSpacing">10dp</item>
+        <item name="android:stretchMode">columnWidth</item>
+        <item name="android:listSelector">@drawable/grid_background</item>
+    </style>
+    <style name="ListView">
+        <item name="android:dividerHeight">5dp</item>
+        <item name="android:listSelector">@drawable/grid_background</item>
+    </style>
 </resources>
