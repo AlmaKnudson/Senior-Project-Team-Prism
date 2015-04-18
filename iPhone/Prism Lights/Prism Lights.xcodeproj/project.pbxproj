@@ -76,6 +76,7 @@
 		CC26D25B1AD9F71F00AEE7F7 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC26D25A1AD9F71F00AEE7F7 /* Protocols.swift */; };
 		CC27D7FF1A802E9C00346F47 /* PrismSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC27D7FE1A802E9C00346F47 /* PrismSDK.swift */; };
 		CC391F411A7D91F9004C94B5 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC391F401A7D91F9004C94B5 /* Networking.swift */; };
+		CC4156B01AE310CE00CD5902 /* BridgeSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4156AF1AE310CE00CD5902 /* BridgeSelect.swift */; };
 		CC4A46E51A8912FD007DC0F2 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A46E41A8912FD007DC0F2 /* Settings.swift */; };
 		CC4A46E71A89130F007DC0F2 /* ModeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A46E61A89130F007DC0F2 /* ModeCell.swift */; };
 		CC89CA011ADD8E0B00E25DCD /* HomePageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC89CA001ADD8E0B00E25DCD /* HomePageController.swift */; };
@@ -230,6 +231,7 @@
 		CC26D25A1AD9F71F00AEE7F7 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		CC27D7FE1A802E9C00346F47 /* PrismSDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrismSDK.swift; sourceTree = "<group>"; };
 		CC391F401A7D91F9004C94B5 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
+		CC4156AF1AE310CE00CD5902 /* BridgeSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BridgeSelect.swift; sourceTree = "<group>"; };
 		CC4A46E41A8912FD007DC0F2 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		CC4A46E61A89130F007DC0F2 /* ModeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModeCell.swift; sourceTree = "<group>"; };
 		CC89CA001ADD8E0B00E25DCD /* HomePageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageController.swift; sourceTree = "<group>"; };
@@ -437,6 +439,7 @@
 				CCC54A391AC1EA39003FF0E2 /* BulbActivity.swift */,
 				CC26D2581AD990EB00AEE7F7 /* ConnectingViewController.swift */,
 				CC26D25A1AD9F71F00AEE7F7 /* Protocols.swift */,
+				CC4156AF1AE310CE00CD5902 /* BridgeSelect.swift */,
 			);
 			path = "Prism Lights";
 			sourceTree = "<group>";
@@ -800,6 +803,7 @@
 				0D9862541A1D2C0B00FAD175 /* AppDelegate.swift in Sources */,
 				CCC54A3A1AC1EA39003FF0E2 /* BulbActivity.swift in Sources */,
 				117F495C1A96DA4500A31746 /* EZPlot.m in Sources */,
+				CC4156B01AE310CE00CD5902 /* BridgeSelect.swift in Sources */,
 				0D3A791D1A26A716003AC6D4 /* DispatchQueueLogFormatter.m in Sources */,
 				0DB347431A2D5BCE00B91EF2 /* PushAuthController.swift in Sources */,
 				11FDAB581AB109510055C2AD /* BeaconBulbTracking.swift in Sources */,
