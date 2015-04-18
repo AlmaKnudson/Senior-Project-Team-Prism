@@ -29,13 +29,13 @@ public class EditFavoriteFragment extends Fragment implements CacheUpdateListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         favoritePosition = getArguments().getInt(RealHomeFragment.favoritePosition);
+        favorite = favoritesDataModel.getFavoriteAtIndex(favoritePosition);
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         favoritesDataModel = FavoritesDataModel.getInstance(getActivity().getFilesDir());
-        favorite = favoritesDataModel.getFavoriteAtIndex(favoritePosition);
     }
 
     @Override
@@ -51,6 +51,7 @@ public class EditFavoriteFragment extends Fragment implements CacheUpdateListene
         }
         bulbSelectionFragment.allowLongClick(true);
         nameEditor = (EditText) layout.findViewById(R.id.nameEditor);
+        //also figure out why after 3 back and forths it stops working correctly
         nameEditor.setText(favorite.getName());
         doneButton = (Button) layout.findViewById(R.id.doneButton);
         bulbSelectionFragment.setOnCheckedNumberChanged(new CheckedNumberChangedListener() {

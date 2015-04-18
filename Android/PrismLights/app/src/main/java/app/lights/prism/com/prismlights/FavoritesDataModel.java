@@ -22,6 +22,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -149,8 +150,13 @@ public class FavoritesDataModel {
     }
 
     public void removeFavorites(Set<Integer> toRemove) {
+        Set<Favorite> removeFavorites = new HashSet<Favorite>();
+
         for(int toRemovePos: toRemove) {
-            favorites.remove(toRemovePos);
+            removeFavorites.add(favorites.get(toRemovePos));
+        }
+        for(Favorite favorite: removeFavorites) {
+            favorites.remove(favorite);
         }
         saveToFile();
     }

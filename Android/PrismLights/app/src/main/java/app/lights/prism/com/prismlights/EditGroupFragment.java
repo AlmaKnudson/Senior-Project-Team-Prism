@@ -44,7 +44,7 @@ public class EditGroupFragment extends Fragment implements CacheUpdateListener {
         // Inflate the layout for this fragment
         View layout = inflater.inflate(R.layout.edit_group, container, false);
         TextView title = (TextView) layout.findViewById(R.id.title);
-        title.setText(R.string.edit_favorite);
+        title.setText(R.string.edit_group);
         bulbSelectionFragment = (BulbSelectionFragment) getFragmentManager().findFragmentById(R.id.selectBulbFragment);
         if(bulbSelectionFragment == null) {
             bulbSelectionFragment = (BulbSelectionFragment) getChildFragmentManager().findFragmentById(R.id.selectBulbFragment);
