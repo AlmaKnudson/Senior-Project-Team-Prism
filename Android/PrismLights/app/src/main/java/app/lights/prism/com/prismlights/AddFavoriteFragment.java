@@ -1,5 +1,6 @@
 package app.lights.prism.com.prismlights;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,10 +27,15 @@ public class AddFavoriteFragment extends Fragment implements CacheUpdateListener
 
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        favoritesDataModel = FavoritesDataModel.getInstance(getActivity().getFilesDir());
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        favoritesDataModel = FavoritesDataModel.getInstance(getActivity().getFilesDir());
         View layout = inflater.inflate(R.layout.fragment_add_multi, container, false);
         TextView title = (TextView) layout.findViewById(R.id.title);
         title.setText(R.string.add_favorite);

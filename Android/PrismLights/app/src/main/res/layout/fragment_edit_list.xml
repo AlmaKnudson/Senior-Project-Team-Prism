@@ -11,7 +11,7 @@
         <ImageButton
             android:layout_width="50dp"
             android:layout_height="30dp"
-            android:src="@drawable/edit_button"
+            android:src="@drawable/trash_button"
             android:background="@drawable/top_button"
             android:adjustViewBounds="true"
             android:scaleType="centerInside"
@@ -19,7 +19,7 @@
         <ImageButton
             android:layout_width="50dp"
             android:layout_height="30dp"
-            android:src="@drawable/plus_button"
+            android:src="@drawable/done_button"
             android:background="@drawable/top_button"
             android:adjustViewBounds="true"
             android:scaleType="centerInside"

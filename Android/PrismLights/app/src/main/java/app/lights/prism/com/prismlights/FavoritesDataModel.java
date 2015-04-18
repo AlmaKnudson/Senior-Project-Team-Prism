@@ -68,7 +68,7 @@ public class FavoritesDataModel {
                     favoritesDataModel.directory = directory;
                 }
                 bufferedFileReader.close();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 favoritesDataModel = new FavoritesDataModel();
                 favoritesDataModel.directory = directory;
                 favoritesDataModel.loadDefaultFavorites();

@@ -1,5 +1,6 @@
 package app.lights.prism.com.prismlights;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
@@ -30,6 +31,7 @@ public class GroupsEditFragment extends Fragment implements OnItemShiftedListene
     private PHHueSDK hueSDK;
     private Set<String> checked;
     private Dialog progressDialog;
+    private LayoutIdOrder layoutIdOrder;
 
 
     public GroupsEditFragment() {
@@ -37,6 +39,11 @@ public class GroupsEditFragment extends Fragment implements OnItemShiftedListene
         checked = new HashSet<String>();
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        layoutIdOrder = LayoutIdOrder.getInstance(activity.getFilesDir());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,6 +99,11 @@ public class GroupsEditFragment extends Fragment implements OnItemShiftedListene
         return layout;
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        layoutIdOrder.saveToFile();
+    }
 
     private void updateChecked(CheckBox checkBox, String id) {
         if(checked.contains(id)) {
@@ -105,15 +117,14 @@ public class GroupsEditFragment extends Fragment implements OnItemShiftedListene
 
     @Override
     public void onItemShifted(int shiftedFrom, int shiftedTo) {
-        currentGroupIdOrder.add(shiftedTo, currentGroupIdOrder.remove(shiftedFrom));
+        currentGroupIdOrder = layoutIdOrder.updateGroupIdOrder(shiftedFrom, shiftedTo);
         ((BaseAdapter)gridView.getAdapter()).notifyDataSetChanged();
     }
 
 
     private void updateFromCache() {
         currentGroups = hueSDK.getSelectedBridge().getResourceCache().getGroups();
-        currentGroupIdOrder = new ArrayList<String>(currentGroups.keySet());
-        HueBulbChangeUtility.sortIds(currentGroupIdOrder);
+        currentGroupIdOrder = layoutIdOrder.getGroupsFromBridgeOrder(currentGroups.keySet());
     }
     private class GroupViewAdapter extends BaseAdapter {
 

@@ -1,5 +1,6 @@
 package app.lights.prism.com.prismlights;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,8 +28,13 @@ public class EditFavoriteFragment extends Fragment implements CacheUpdateListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        favoritesDataModel = FavoritesDataModel.getInstance(getActivity().getFilesDir());
         favoritePosition = getArguments().getInt(RealHomeFragment.favoritePosition);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        favoritesDataModel = FavoritesDataModel.getInstance(getActivity().getFilesDir());
         favorite = favoritesDataModel.getFavoriteAtIndex(favoritePosition);
     }
 

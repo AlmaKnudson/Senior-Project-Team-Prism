@@ -2,6 +2,7 @@ package app.lights.prism.com.prismlights;
 
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
+import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ public class LightsEditFragment extends Fragment implements OnItemShiftedListene
     private List<String> currentLightIdOrder;
     private Map<String, PHLight> currentLights;
     private PHHueSDK hueSDK;
+    private LayoutIdOrder layoutIdOrder;
 
 
 
@@ -35,6 +37,12 @@ public class LightsEditFragment extends Fragment implements OnItemShiftedListene
         hueSDK = PHHueSDK.getInstance();
     }
 
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        layoutIdOrder = LayoutIdOrder.getInstance(activity.getFilesDir());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,16 +63,21 @@ public class LightsEditFragment extends Fragment implements OnItemShiftedListene
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+        layoutIdOrder.saveToFile();
+    }
+
+    @Override
     public void onItemShifted(int shiftedFrom, int shiftedTo) {
-        currentLightIdOrder.add(shiftedTo, currentLightIdOrder.remove(shiftedFrom));
+        currentLightIdOrder = layoutIdOrder.updateLightIdOrder(shiftedFrom, shiftedTo);
         ((BaseAdapter)gridView.getAdapter()).notifyDataSetChanged();
     }
 
 
     private void updateFromCache() {
         currentLights = hueSDK.getSelectedBridge().getResourceCache().getLights();
-        currentLightIdOrder = new ArrayList<String>(currentLights.keySet());
-        HueBulbChangeUtility.sortIds(currentLightIdOrder);
+        currentLightIdOrder = layoutIdOrder.getLightsFromBridgeOrder(currentLights.keySet());
     }
 
     private class LightViewAdapter extends BaseAdapter {

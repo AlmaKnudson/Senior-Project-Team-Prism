@@ -1,5 +1,6 @@
 package app.lights.prism.com.prismlights;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -70,11 +71,16 @@ public class FavoritesEditFragment extends Fragment implements OnItemShiftedList
         ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        favoritesDataModel = FavoritesDataModel.getInstance(getActivity().getFilesDir());
+    }
+
     private class FavoriteViewAdapter extends BaseAdapter {
 
         public FavoriteViewAdapter() {
             super();
-            favoritesDataModel = FavoritesDataModel.getInstance(getActivity().getFilesDir());
         }
         @Override
         public int getCount() {

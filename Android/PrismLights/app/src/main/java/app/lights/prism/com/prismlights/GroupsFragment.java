@@ -1,5 +1,6 @@
 package app.lights.prism.com.prismlights;
 
+import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -26,11 +27,18 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
     private List<String> currentGroupIdOrder;
     private Map<String, PHGroup> currentGroups;
     private PHHueSDK hueSDK;
+    private LayoutIdOrder layoutIdOrder;
 
     public GroupsFragment() {
         hueSDK = PHHueSDK.getInstance();
     }
 
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        layoutIdOrder = LayoutIdOrder.getInstance(activity.getFilesDir());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,8 +82,7 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
 
     private void updateFromCache() {
         currentGroups = hueSDK.getSelectedBridge().getResourceCache().getGroups();
-        currentGroupIdOrder = new ArrayList<String>(currentGroups.keySet());
-        HueBulbChangeUtility.sortIds(currentGroupIdOrder);
+        currentGroupIdOrder = layoutIdOrder.getGroupsFromBridgeOrder(currentGroups.keySet());
     }
 
     @Override
