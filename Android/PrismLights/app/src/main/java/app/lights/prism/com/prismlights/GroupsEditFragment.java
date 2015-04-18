@@ -1,15 +1,16 @@
 package app.lights.prism.com.prismlights;
 
-import android.app.FragmentTransaction;
+import android.app.Dialog;
+import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,18 +18,23 @@ import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.model.PHGroup;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-public class GroupsFragment extends Fragment implements CacheUpdateListener {
-
-    private GridView gridView;
+public class GroupsEditFragment extends Fragment implements OnItemShiftedListener {
+    private ReorderGridView gridView;
     private List<String> currentGroupIdOrder;
     private Map<String, PHGroup> currentGroups;
     private PHHueSDK hueSDK;
+    private Set<String> checked;
+    private Dialog progressDialog;
 
-    public GroupsFragment() {
+
+    public GroupsEditFragment() {
         hueSDK = PHHueSDK.getInstance();
+        checked = new HashSet<String>();
     }
 
 
@@ -36,55 +42,79 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View layout = inflater.inflate(R.layout.fragment_lights, container, false);
-        gridView= (GridView) layout.findViewById(R.id.homeGridView);
+        View layout = inflater.inflate(R.layout.fragment_edit_list, container, false);
+        gridView = (ReorderGridView) layout.findViewById(R.id.reorderGridView);
         gridView.setAdapter(new GroupViewAdapter());
+        gridView.setOnItemShiftedListener(this);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-//                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
-                HueBulbChangeUtility.toggleBulbGroupState((PHGroup) gridView.getAdapter().getItem(position));
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                updateChecked((CheckBox) view.findViewById(R.id.selectCheck), ((PHGroup)gridView.getAdapter().getItem(position)).getIdentifier());
             }
         });
-        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        layout.findViewById(R.id.trashButton).setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
-                Bundle bundle = new Bundle();
-                bundle.putString(RealHomeFragment.lightPositionString, currentGroupIdOrder.get(position));
-
-                FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
-                GroupSettingsFragment groupSettingsFragment = new GroupSettingsFragment();
-                groupSettingsFragment.setArguments(bundle);
-                fragmentTransaction.replace(R.id.container, groupSettingsFragment);
-                fragmentTransaction.addToBackStack("groupSettings");
-                fragmentTransaction.commit();
-
-                return false;
+            public void onClick(View v) {
+                if (progressDialog == null) {
+                    progressDialog = new ProgressDialog(getActivity());
+                    progressDialog.show();
+                    progressDialog.setContentView(R.layout.progress);
+                    TextView progressText = (TextView) progressDialog.findViewById(R.id.progressText);
+                    progressText.setText(getText(R.string.adding_group));
+                } else {
+                    progressDialog.show();
+                }
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.setCancelable(false);
+                HueBulbChangeUtility.deleteGroups(checked, new OnCompletedListener() {
+                    @Override
+                    public void onCompleted() {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (progressDialog.isShowing()) {
+                                    progressDialog.hide();
+                                    updateFromCache();
+                                    ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
+        layout.findViewById(R.id.doneButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().popBackStack();
             }
         });
         return layout;
     }
 
-    @Override
-    public void cacheUpdated() {
-        updateFromCache();
-        ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
 
+    private void updateChecked(CheckBox checkBox, String id) {
+        if(checked.contains(id)) {
+            checked.remove(id);
+            checkBox.setChecked(false);
+        } else {
+            checked.add(id);
+            checkBox.setChecked(true);
+        }
     }
+
+    @Override
+    public void onItemShifted(int shiftedFrom, int shiftedTo) {
+        currentGroupIdOrder.add(shiftedTo, currentGroupIdOrder.remove(shiftedFrom));
+        ((BaseAdapter)gridView.getAdapter()).notifyDataSetChanged();
+    }
+
 
     private void updateFromCache() {
         currentGroups = hueSDK.getSelectedBridge().getResourceCache().getGroups();
         currentGroupIdOrder = new ArrayList<String>(currentGroups.keySet());
         HueBulbChangeUtility.sortIds(currentGroupIdOrder);
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        updateFromCache();
-        ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
-    }
-
     private class GroupViewAdapter extends BaseAdapter {
 
 
@@ -111,13 +141,14 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
         public View getView(int position, View convertView, ViewGroup parent) {
             View currentView;
             if(convertView == null) {
-                currentView = LayoutInflater.from(GroupsFragment.this.getActivity()).inflate(R.layout.group_view, parent, false);
+                currentView = LayoutInflater.from(GroupsEditFragment.this.getActivity()).inflate(R.layout.group_view_select, parent, false);
             } else {
                 currentView =convertView;
             }
             PHGroup currentGroup = (PHGroup) getItem(position);
 
             String lightName = currentGroup.getName();
+            ((CheckBox) currentView.findViewById(R.id.selectCheck)).setChecked(false);
 
             ImageView group2Top = (ImageView) currentView.findViewById(R.id.group2Top);
             ImageView group2Bottom = (ImageView) currentView.findViewById(R.id.group2Bottom);
@@ -128,15 +159,15 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
             ImageView groupTop;
             ImageView groupBottom;
             if(currentGroup.getLightIdentifiers().size() > 2) {
-                group2Top.setVisibility(View.GONE);
-                group2Bottom.setVisibility(View.GONE);
+                group2Top.setVisibility(View.INVISIBLE);
+                group2Bottom.setVisibility(View.INVISIBLE);
                 group3Top.setVisibility(View.VISIBLE);
                 group3Bottom.setVisibility(View.VISIBLE);
                 groupTop = group3Top;
                 groupBottom = group3Bottom;
             } else {
-                group3Bottom.setVisibility(View.GONE);
-                group3Top.setVisibility(View.GONE);
+                group3Bottom.setVisibility(View.INVISIBLE);
+                group3Top.setVisibility(View.INVISIBLE);
                 group2Bottom.setVisibility(View.VISIBLE);
                 group2Top.setVisibility(View.VISIBLE);
                 groupTop = group2Top;
@@ -148,8 +179,8 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
                 currentView.findViewById(R.id.warning).setVisibility(View.VISIBLE);
                 return currentView;
             } else {
-                groupBottom.clearColorFilter();
                 currentView.findViewById(R.id.warning).setVisibility(View.GONE);
+                groupBottom.clearColorFilter();
             }
             if(HueBulbChangeUtility.isGroupOff(currentGroup)) {
                 groupTop.setColorFilter(RealHomeFragment.offOverlay);
@@ -169,3 +200,5 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
 
 
 }
+
+

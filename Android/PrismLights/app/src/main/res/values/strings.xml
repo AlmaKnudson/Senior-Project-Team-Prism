@@ -74,4 +74,5 @@
     <string name="select_all">Select All</string>
     <string name="group_label">Group:</string>
     <string name="editing_group">Editing Group...</string>
+    <string name="edit_group">Edit Group</string>
 </resources>

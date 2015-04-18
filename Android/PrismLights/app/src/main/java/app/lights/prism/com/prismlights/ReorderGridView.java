@@ -38,6 +38,7 @@ public class ReorderGridView extends GridView {
 //                }
                 View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
                 view.startDrag(null, shadowBuilder, null, 0);
+                view.setVisibility(INVISIBLE);
                 return false;
             }
         });
@@ -45,6 +46,7 @@ public class ReorderGridView extends GridView {
             @Override
             public boolean onDrag(View v, DragEvent event) {
                 if(event.getAction() == DragEvent.ACTION_DROP) {
+                    getChildAt(dragPosition).setVisibility(VISIBLE);
                     int position = pointToPosition((int) event.getX(), (int) event.getY());
                     if(position >= 0) {
                         if(position != dragPosition) {

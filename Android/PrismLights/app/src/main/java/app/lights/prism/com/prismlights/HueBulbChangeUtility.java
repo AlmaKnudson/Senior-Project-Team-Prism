@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -431,12 +432,20 @@ public class HueBulbChangeUtility {
 //        });
     }
 
-    public static void deleteGroup(PHGroup phGroup) {
+    public static void deleteGroup(PHGroup phGroup, final OnCompletedListener onCompletedListener) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
+        if(phGroup == null) {
+            if(onCompletedListener != null) {
+                onCompletedListener.onCompleted();
+            }
+            return;
+        }
         bridge.deleteGroup(phGroup.getIdentifier(), new PHGroupListener() {
             @Override
             public void onCreated(PHGroup phGroup) {
-
+                if(onCompletedListener != null) {
+                    onCompletedListener.onCompleted();
+                }
             }
 
             @Override
@@ -451,12 +460,16 @@ public class HueBulbChangeUtility {
 
             @Override
             public void onSuccess() {
-
+                if(onCompletedListener != null) {
+                    onCompletedListener.onCompleted();
+                }
             }
 
             @Override
             public void onError(int i, String s) {
-
+                if(onCompletedListener != null) {
+                    onCompletedListener.onCompleted();
+                }
             }
 
             @Override
@@ -619,5 +632,20 @@ public class HueBulbChangeUtility {
                 System.out.println("State update");
             }
         });
+    }
+
+    public static void deleteGroups(Set<String> checked, OnCompletedListener onCompletedListener) {
+        PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
+        final CompletedMap completedMap = new CompletedMap(checked, onCompletedListener);
+        for(final String groupId: checked) {
+            PHGroup group = bridge.getResourceCache().getGroups().get(groupId);
+            deleteGroup(group, new OnCompletedListener() {
+                @Override
+                public void onCompleted() {
+                    completedMap.complete(groupId);
+                }
+            });
+        }
+
     }
 }

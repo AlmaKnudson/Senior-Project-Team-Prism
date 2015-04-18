@@ -180,7 +180,7 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
                     if(dragPosition < currentLights.size()) {
                         HueBulbChangeUtility.deleteLight(currentLights.get(dragPosition));
                     } else {
-                        HueBulbChangeUtility.deleteGroup(currentGroups.get(dragPosition - currentLights.size()));
+//                        HueBulbChangeUtility.deleteGroup(currentGroups.get(dragPosition - currentLights.size()));
                     }
                 }
 //                shouldUpdateFromCache = 3;

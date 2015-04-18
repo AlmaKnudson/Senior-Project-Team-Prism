@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A data model for favorites because scenes aren't guaranteed to stay on the bridge,
@@ -136,6 +137,21 @@ public class FavoritesDataModel {
 
     public void modifyFavorite(int favoritePosition, String name, PHLightState lightState) {
         favorites.set(favoritePosition, new Favorite(name, lightState));
+        saveToFile();
+    }
+
+    public void reorderFavorites(int shiftedFrom, int shiftedTo) {
+        favorites.add(shiftedTo, favorites.remove(shiftedFrom));
+    }
+
+    public void doneReordering() {
+        saveToFile();
+    }
+
+    public void removeFavorites(Set<Integer> toRemove) {
+        for(int toRemovePos: toRemove) {
+            favorites.remove(toRemovePos);
+        }
         saveToFile();
     }
 

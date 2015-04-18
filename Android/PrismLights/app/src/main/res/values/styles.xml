@@ -53,4 +53,21 @@
         <item name="android:dividerHeight">5dp</item>
         <item name="android:listSelector">@drawable/grid_background</item>
     </style>
+    <style name="WarningImage">
+        <item name="android:layout_width">20dp</item>
+        <item name="android:layout_height">20dp</item>
+        <item name="android:tint">@color/lightPurple</item>
+        <item name="android:src">@android:drawable/ic_secure</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:visibility">gone</item>
+    </style>
+    <style name="CheckBox" parent="android:style/Widget.Holo.CompoundButton.CheckBox">
+        <item name="android:focusable">false</item>
+        <item name="android:focusableInTouchMode">false</item>
+        <item name="android:clickable">false</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">top|end</item>
+    </style>
 </resources>

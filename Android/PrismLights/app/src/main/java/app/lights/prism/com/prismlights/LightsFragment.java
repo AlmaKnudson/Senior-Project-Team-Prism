@@ -145,8 +145,10 @@ public class LightsFragment extends Fragment implements CacheUpdateListener {
             if(!currentLight.getLastKnownLightState().isReachable()) {
                 bulbBottom.setColorFilter(RealHomeFragment.disabledOverlay);
                 bulbTop.setColorFilter(RealHomeFragment.disabledOverlay);
+                currentView.findViewById(R.id.warning).setVisibility(View.VISIBLE);
                 return currentView;
             } else {
+                currentView.findViewById(R.id.warning).setVisibility(View.GONE);
                 bulbBottom.clearColorFilter();
             }
             if(!currentLight.getLastKnownLightState().isOn()) {

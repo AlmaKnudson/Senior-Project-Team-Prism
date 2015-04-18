@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -10,18 +11,32 @@
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:id="@+id/bulbTop"
-            android:src="@drawable/bulb_top"
+            android:id="@+id/group2Top"
+            android:src="@drawable/group_2_bulb_top"
             android:adjustViewBounds="true"/>
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:id="@+id/bulbBottom"
-            android:src="@drawable/bulb_bottom"
+            android:id="@+id/group2Bottom"
+            android:src="@drawable/group_2_bulb_bottom"
             android:adjustViewBounds="true"/>
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/group3Top"
+            android:src="@drawable/group_3_bulb_top"
+            android:adjustViewBounds="true"
+            android:visibility="gone"/>
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/group3Bottom"
+            android:src="@drawable/group_3_bulb_bottom"
+            android:adjustViewBounds="true"
+            android:visibility="gone"/>
         <CheckBox
             style="@style/CheckBox"
-            android:id="@+id/selectBulbCheck"/>
+            android:id="@+id/selectCheck"/>
         <ImageView
             style="@style/WarningImage"
             android:id="@+id/warning"/>
@@ -34,7 +49,7 @@
         android:layout_gravity="center"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:maxLines="1"
-        android:id="@+id/bulbName"
+        android:id="@+id/groupName"
         android:gravity="center"
         android:textColor="#ffffffff"
         android:text="this is a very long name"

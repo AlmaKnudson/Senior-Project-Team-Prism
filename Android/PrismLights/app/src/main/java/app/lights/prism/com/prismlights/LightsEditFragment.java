@@ -1,11 +1,15 @@
 package app.lights.prism.com.prismlights;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -40,6 +44,13 @@ public class LightsEditFragment extends Fragment implements OnItemShiftedListene
         gridView = (ReorderGridView) layout.findViewById(R.id.reorderGridView);
         gridView.setAdapter(new LightViewAdapter());
         gridView.setOnItemShiftedListener(this);
+        layout.findViewById(R.id.doneButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().popBackStack();
+            }
+        });
+        layout.findViewById(R.id.trashButton).setVisibility(View.GONE);
         return layout;
     }
 
@@ -98,9 +109,11 @@ public class LightsEditFragment extends Fragment implements OnItemShiftedListene
             if(!currentLight.getLastKnownLightState().isReachable()) {
                 bulbBottom.setColorFilter(RealHomeFragment.disabledOverlay);
                 bulbTop.setColorFilter(RealHomeFragment.disabledOverlay);
+                currentView.findViewById(R.id.warning).setVisibility(View.VISIBLE);
                 return currentView;
             } else {
                 bulbBottom.clearColorFilter();
+                currentView.findViewById(R.id.warning).setVisibility(View.GONE);
             }
             if(!currentLight.getLastKnownLightState().isOn()) {
                 bulbTop.setColorFilter(RealHomeFragment.offOverlay);
@@ -112,6 +125,10 @@ public class LightsEditFragment extends Fragment implements OnItemShiftedListene
             int currentColor = PHUtilities.colorFromXY(new float[]{x, y}, HueBulbChangeUtility.colorXYModelForHue);
             currentColor = Color.argb(300, Color.red(currentColor), Color.green(currentColor), Color.blue(currentColor));
             bulbTop.setColorFilter(currentColor);
+//            Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.moving_light);
+//            animation.setRepeatCount(Animation.INFINITE);
+//            animation.setRepeatMode(Animation.REVERSE);
+//            currentView.findViewById(R.id.bulbImage).startAnimation(animation);
             return currentView;
         }
     }
