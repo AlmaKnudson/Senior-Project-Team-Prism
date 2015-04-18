@@ -5,11 +5,15 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 import com.philips.lighting.hue.sdk.connection.impl.PHBridgeInternal;
+
+import java.util.Scanner;
+
 //this class can be found in the example app
 public class HueSharedPreferences {
     private static final String HUE_SHARED_PREFERENCES_STORE = "HueSharedPrefs";
     private static final String LAST_CONNECTED_USERNAME      = "LastConnectedUsername";
     private static final String LAST_CONNECTED_IP            = "LastConnectedIP";
+    private static final String BEACON_ASSOCIATIONS = "BeaconAssociations";
     private static HueSharedPreferences instance = null;
     private SharedPreferences mSharedPreferences = null;
 
@@ -55,4 +59,65 @@ public class HueSharedPreferences {
         mSharedPreferencesEditor.putString(LAST_CONNECTED_IP, ipAddress);
         return (mSharedPreferencesEditor.commit());
     }
+
+    /**
+     * Takes string: <BeaconID>~!~<LightId>~!~<Range>
+     * @param association
+     * @return
+     */
+    public boolean addBeaconAssociation(String association){
+        String[] parsedAssocation = association.split("~!~");
+        String beaconId = parsedAssocation[0];
+        String lightId = parsedAssocation[1];
+        String range = parsedAssocation[2];
+        String currentAssociations = getBeaconOrBulbAssociations(beaconId);
+        String associations = mSharedPreferences.getString(BEACON_ASSOCIATIONS, "");
+        if(currentAssociations.trim().equals("")) {
+            mSharedPreferencesEditor.putString(BEACON_ASSOCIATIONS, associations + "\n" + association);
+            return mSharedPreferencesEditor.commit();
+        } else  /* There are already associations for this bulb */{
+            Scanner s = new Scanner(currentAssociations);
+            while(s.hasNextLine()){
+                String currentLine = s.nextLine();
+                String[] tempParsedAssocation = currentLine.split("~!~");
+                String tempbeaconId= parsedAssocation[0];
+                String tempLightId = parsedAssocation[1];
+                String tempRange = parsedAssocation[2];
+                if (lightId.equals(tempLightId)){
+                    //There is currently an association between this beacon & bulb. Lets replace this.
+                    associations.replace(currentLine, association);
+                    return mSharedPreferencesEditor.commit();
+                }
+            }
+        }
+        return mSharedPreferencesEditor.commit();
+    }
+
+    public boolean removeBulbAssociation(String association){
+        String associations = mSharedPreferences.getString(BEACON_ASSOCIATIONS, "");
+        Scanner s = new Scanner(associations);
+        while(s.hasNextLine()){
+            String currentLine = s.nextLine();
+            if (currentLine.contains(association)){
+                associations.replace(currentLine, "");
+            }
+        }
+        mSharedPreferencesEditor.putString(BEACON_ASSOCIATIONS, associations);
+        return mSharedPreferencesEditor.commit();
+    }
+
+    public String getBeaconOrBulbAssociations(String beaconOrBulbIdentifier){
+        String associations = mSharedPreferences.getString(BEACON_ASSOCIATIONS, "");
+        String beaconAssociations = "";
+        Scanner s = new Scanner(associations);
+        while(s.hasNextLine()){
+            String currentLine = s.nextLine();
+            if (currentLine.contains(beaconOrBulbIdentifier)){
+                beaconAssociations += currentLine + "\n";
+            }
+        }
+        return beaconAssociations;
+    }
+
+
 }

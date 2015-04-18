@@ -18,6 +18,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -26,6 +27,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.estimote.sdk.Beacon;
+import com.estimote.sdk.BeaconManager;
+import com.estimote.sdk.Region;
+import com.estimote.sdk.Utils;
 import com.philips.lighting.hue.sdk.PHAccessPoint;
 import com.philips.lighting.hue.sdk.PHBridgeSearchManager;
 import com.philips.lighting.hue.sdk.PHHueSDK;
@@ -45,12 +50,19 @@ import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 import java.util.TimeZone;
 
 import app.lights.prism.com.prismlights.receiver.BroadCastAlarmReceiver;
 
 
 public class MainActivity extends Activity implements PHSDKListener{
+
+
+    private static final String ESTIMOTE_PROXIMITY_UUID = "B9407F30-F5F8-466E-AFF9-25556B57FE6D";
+    private static final Region ALL_ESTIMOTE_BEACONS = new Region("Prism Lights", ESTIMOTE_PROXIMITY_UUID, null, null);
+    private BeaconManager beaconManager;
+
 
     private static final String DEBUG_TAG = "MainActivity";
 
@@ -79,6 +91,70 @@ public class MainActivity extends Activity implements PHSDKListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /* BEACON/BLUETOOTH START */
+        beaconManager = new BeaconManager(this.getApplicationContext());
+        beaconManager.setRangingListener(new BeaconManager.RangingListener() {
+            @Override
+            public void onBeaconsDiscovered(Region region, final List<Beacon> rangedBeacons) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(rangedBeacons.size() == 0)
+                            return;
+                        else {
+                            for(Beacon beacon : rangedBeacons){
+                                String associations = HueSharedPreferences.getInstance(getApplicationContext()).getBeaconOrBulbAssociations(getBeaconId(beacon));
+                                Scanner s = new Scanner(associations);
+                                while(s.hasNextLine()){
+
+                                    String currentLine = s.nextLine();
+                                    if(currentLine.trim().equals(""))
+                                        return;
+                                    String[] result = currentLine.split("~!~");
+                                    String beaconId = result[0];
+                                    String bulbId = result[1];
+                                    String range = result[2];
+
+                                    double distance = Utils.computeAccuracy(beacon);
+                                    if( ((int) (distance*3)) <= Integer.parseInt(range) ) {
+                                        HueBulbChangeUtility.turnBulbOnOff(bulbId, true);
+                                    } else {
+                                        HueBulbChangeUtility.turnBulbOnOff(bulbId, false);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            private String getBeaconId(Beacon beacon){
+                return beacon.getMajor() + "." + beacon.getMinor();
+            }
+        });
+
+
+
+        //Start bluetooth beacon ranging:
+        beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
+            @Override public void onServiceReady() {
+                try {
+//                    addAssociation = true;
+                    beaconManager.setBackgroundScanPeriod(100, 100);
+                    if(beaconManager.isBluetoothEnabled()) {
+                        beaconManager.startRanging(ALL_ESTIMOTE_BEACONS);
+                    } else {
+                        System.out.println("NEED TO ENABLE BLUETOOTH");
+                    }
+                } catch (RemoteException e) {
+                    System.out.println("Cannot start ranging" + e);
+                }
+            }
+        });
+        /* BEACON/BLUETOOTH END */
+
+
         //TODO: get stored sunrise sunset
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         if(settings.contains("sunrise")) {
