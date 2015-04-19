@@ -78,6 +78,7 @@ public class MainActivity extends Activity implements PHSDKListener{
     private Dialog dialog;
     private Button homeButton;
     private Button musicButton;
+    private Button voiceButton;
     private ImageButton settingsButton;
     private int connectionLostCount = 0;
     private Date sunrise;
@@ -85,6 +86,7 @@ public class MainActivity extends Activity implements PHSDKListener{
     public static int MIN_CONNECTION_LOST_COUNT=1;
     public static final String homeFragmentTag="HOME_FRAGMENT";
     public static final String musicFragmentTag="MUSIC_FRAGMENT_TAG";
+    public static final String voiceFragmentTag="VOICE_FRAGMENT_TAG";
     private static final String settingsFragmentTag = "SETTINGS_FRAGMENT";
     //colorCycle utilities
     private List<ColorCycle> colorCycles;
@@ -229,6 +231,7 @@ public class MainActivity extends Activity implements PHSDKListener{
         settingsButton = (ImageButton) findViewById(R.id.settingsButton);
         settingsButton.setEnabled(false);//TODO do this in the xml if possible
         musicButton = (Button) findViewById(R.id.musicButton);
+        voiceButton = (Button) findViewById(R.id.voiceButton);
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -245,6 +248,15 @@ public class MainActivity extends Activity implements PHSDKListener{
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.container, new MusicFragment(), musicFragmentTag);
                 fragmentTransaction.addToBackStack(musicFragmentTag);
+                fragmentTransaction.commit();
+            }
+        });
+        voiceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.container, new VoiceFragment(), voiceFragmentTag);
+                fragmentTransaction.addToBackStack(voiceFragmentTag);
                 fragmentTransaction.commit();
             }
         });
