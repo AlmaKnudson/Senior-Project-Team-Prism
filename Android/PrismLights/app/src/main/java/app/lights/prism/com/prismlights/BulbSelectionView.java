@@ -1,16 +1,18 @@
 package app.lights.prism.com.prismlights;
 
-
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,36 +29,37 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class BulbSelectionFragment extends Fragment implements CacheUpdateListener {
-
-
+public class BulbSelectionView extends FrameLayout implements CacheUpdateListener{
     private GridView gridView;
     private List<String> currentLightIdOrder;
     private Map<String, PHLight> currentLights;
     private PHHueSDK hueSDK;
     private Set<String> checked;
-    private boolean shouldAllowLongClick;
     private boolean allChecked;
     private CheckBox selectAllCheckBox;
     private CheckedNumberChangedListener checkedNumberChangedListener;
 
+    public BulbSelectionView(Context context) {
+        super(context);
+        construct();
+    }
 
-    public BulbSelectionFragment() {
+    public BulbSelectionView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        construct();
+    }
+
+    public BulbSelectionView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        construct();
+    }
+
+    private void construct() {
+        LayoutInflater.from(getContext()).inflate(R.layout.fragment_bulb_selection, this);
         hueSDK = PHHueSDK.getInstance();
         checked = new HashSet<String>();
         allChecked = false;
-    }
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View layout =  inflater.inflate(R.layout.fragment_bulb_selection, container, false);
-        gridView = (GridView) layout.findViewById(R.id.selectionGridView);
+        gridView = (GridView) findViewById(R.id.selectionGridView);
         gridView.setAdapter(new SelectGridAdapter());
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -66,10 +69,7 @@ public class BulbSelectionFragment extends Fragment implements CacheUpdateListen
                 changeChecked(checkBox, currentLightIdOrder.get(position));
             }
         });
-        if(shouldAllowLongClick) {
-            setGridViewLongClickListener();
-        }
-        selectAllCheckBox = (CheckBox) layout.findViewById(R.id.selectAllCheckBox);
+        selectAllCheckBox = (CheckBox) findViewById(R.id.selectAllCheckBox);
         selectAllCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +85,6 @@ public class BulbSelectionFragment extends Fragment implements CacheUpdateListen
                 callCheckedNumberChangedListener();
             }
         });
-        return layout;
     }
 
     private void changeChecked(CheckBox checkBox, String id) {
@@ -114,31 +113,29 @@ public class BulbSelectionFragment extends Fragment implements CacheUpdateListen
         HueBulbChangeUtility.sortIds(currentLightIdOrder);
     }
 
-    public void allowLongClick(boolean shouldAllowLongClick) {
-        this.shouldAllowLongClick = shouldAllowLongClick;
+    public void allowLongClick(boolean shouldAllowLongClick, FragmentManager fragmentManager) {
         if(gridView != null) {
             if(shouldAllowLongClick) {
-                setGridViewLongClickListener();
+                setGridViewLongClickListener(fragmentManager);
             } else {
                 gridView.setOnItemLongClickListener(null);
             }
         }
     }
 
-    private void setGridViewLongClickListener() {
+    private void setGridViewLongClickListener(final FragmentManager fragmentManager) {
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
                 Bundle bundle = new Bundle();
                 bundle.putString(RealHomeFragment.lightPositionString, currentLightIdOrder.get(position));
                 bundle.putBoolean(RealHomeFragment.groupOrLightString, false);
 
-                FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 LightSettingsFragment lightSettingFragment = new LightSettingsFragment();
                 lightSettingFragment.setArguments(bundle);
                 fragmentTransaction.replace(R.id.container, lightSettingFragment);
-                fragmentTransaction.addToBackStack("lightsettings");
+                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
 
                 return false;
@@ -170,9 +167,9 @@ public class BulbSelectionFragment extends Fragment implements CacheUpdateListen
             } else {
                 if(!HueBulbChangeUtility.colorsEqual(currentColor, new float[]{lightState.getX(), lightState.getY()}) ||
                         ((returnState.getBrightness() != null && returnState.getBrightness().equals(lightState.getBrightness())) ||
-                            returnState.getBrightness() == null && lightState.getBrightness() != null) ||
+                                returnState.getBrightness() == null && lightState.getBrightness() != null) ||
                         (returnState.isOn() != null && returnState.isOn().equals(lightState.isOn())) ||
-                            returnState.isOn() == null && lightState.isOn() != null) {
+                        returnState.isOn() == null && lightState.isOn() != null) {
                     return null;
                 }
             }
@@ -234,7 +231,7 @@ public class BulbSelectionFragment extends Fragment implements CacheUpdateListen
         public View getView(int position, View convertView, ViewGroup parent) {
             View currentView;
             if(convertView == null) {
-                currentView = LayoutInflater.from(BulbSelectionFragment.this.getActivity()).inflate(R.layout.bulb_select_view, parent, false);
+                currentView = LayoutInflater.from(BulbSelectionView.this.getContext()).inflate(R.layout.bulb_select_view, parent, false);
             } else {
                 currentView = convertView;
             }
@@ -256,9 +253,11 @@ public class BulbSelectionFragment extends Fragment implements CacheUpdateListen
             if(!currentLight.getLastKnownLightState().isReachable()) {
                 bulbBottom.setColorFilter(RealHomeFragment.disabledOverlay);
                 bulbTop.setColorFilter(RealHomeFragment.disabledOverlay);
+                currentView.findViewById(R.id.warning).setVisibility(View.VISIBLE);
                 return currentView;
             } else {
                 bulbBottom.clearColorFilter();
+                currentView.findViewById(R.id.warning).setVisibility(View.GONE);
             }
             if(!currentLight.getLastKnownLightState().isOn()) {
                 bulbTop.setColorFilter(RealHomeFragment.offOverlay);
@@ -274,5 +273,8 @@ public class BulbSelectionFragment extends Fragment implements CacheUpdateListen
         }
     }
 
+
+
 }
+
 

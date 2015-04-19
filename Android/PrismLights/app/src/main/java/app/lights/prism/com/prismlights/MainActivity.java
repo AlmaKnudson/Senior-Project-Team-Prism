@@ -551,6 +551,12 @@ public class MainActivity extends Activity implements PHSDKListener{
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        System.out.println("BACK PRESSED");
+    }
+
     private class DownloaderTask extends AsyncTask<URL, Void, Boolean> {
 
         private static final String DEBUG_TAG = "MainActivity$DownloaderTask";
