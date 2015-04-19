@@ -68,31 +68,28 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:weightSum="2">
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
 
         <Button
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/advanced_setting"
             android:id="@+id/advancedSettingButton"
-            android:layout_gravity="center"
-            android:background="@drawable/buttons"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"/>
-
+            android:background="@drawable/buttons"/>
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="match_parent" />
         <Button
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="Color Cycle"
             android:id="@+id/colorCycleButton"
-            android:layout_gravity="center"
-            android:background="@drawable/buttons"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"/>
+            android:background="@drawable/buttons"/>
 
     </LinearLayout>
 
