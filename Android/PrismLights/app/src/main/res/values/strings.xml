@@ -75,4 +75,6 @@
     <string name="group_label">Group:</string>
     <string name="editing_group">Editing Group...</string>
     <string name="edit_group">Edit Group</string>
+    <string name="authenticationFailed">Authentication Failed</string>
+    <string name="authenticationFailedExplanation">You did not push the button on the bridge in time. If you would like to connect, please search for bridges again.</string>
 </resources>
