@@ -137,7 +137,7 @@ public class AdvancedSettingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putString(lightPositionString, identification);
+                bundle.putString(RealHomeFragment.lightPositionString, identification);
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 ScheduleFragment scheduleFragment = new ScheduleFragment();
@@ -152,7 +152,7 @@ public class AdvancedSettingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putString(lightPositionString, identification);
+                bundle.putString(RealHomeFragment.lightPositionString, identification);
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 BeaconFragment beaconFragment = new BeaconFragment();

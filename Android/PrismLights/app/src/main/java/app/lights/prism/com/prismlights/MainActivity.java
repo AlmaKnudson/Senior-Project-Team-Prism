@@ -73,6 +73,7 @@ public class MainActivity extends Activity implements PHSDKListener{
 
     private static final String DEBUG_TAG = "MainActivity";
 
+    private BeaconAssociationListener beaconAssociationListener;
     private PHHueSDK hueBridgeSdk;
     private Dialog dialog;
     private Button homeButton;
@@ -130,16 +131,21 @@ public class MainActivity extends Activity implements PHSDKListener{
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(rangedBeacons.size() == 0)
+
+                        if (rangedBeacons.size() == 0)
                             return;
                         else {
-                            for(Beacon beacon : rangedBeacons){
+                            if (beaconAssociationListener != null) {
+                                beaconAssociationListener.onBeaconAssociation(getBeaconId(rangedBeacons.get(0)));
+                            }
+
+                            for (Beacon beacon : rangedBeacons) {
                                 String associations = HueSharedPreferences.getInstance(getApplicationContext()).getBeaconOrBulbAssociations(getBeaconId(beacon));
                                 Scanner s = new Scanner(associations);
-                                while(s.hasNextLine()){
+                                while (s.hasNextLine()) {
 
                                     String currentLine = s.nextLine();
-                                    if(currentLine.trim().equals(""))
+                                    if (currentLine.trim().equals(""))
                                         return;
                                     String[] result = currentLine.split("~!~");
                                     String beaconId = result[0];
@@ -147,7 +153,7 @@ public class MainActivity extends Activity implements PHSDKListener{
                                     String range = result[2];
 
                                     double distance = Utils.computeAccuracy(beacon);
-                                    if( ((int) (distance*3)) <= Integer.parseInt(range) ) {
+                                    if (((int) (distance * 3)) <= Integer.parseInt(range)) {
                                         HueBulbChangeUtility.turnBulbOnOff(bulbId, true);
                                     } else {
                                         HueBulbChangeUtility.turnBulbOnOff(bulbId, false);
@@ -624,6 +630,10 @@ public class MainActivity extends Activity implements PHSDKListener{
         } else {
             Log.e(DEBUG_TAG, "No network connection available.");
         }
+    }
+
+    public void setBeaconAssociationListener(BeaconAssociationListener beaconAssociationListener) {
+        this.beaconAssociationListener = beaconAssociationListener;
     }
 
     private class DownloaderTask extends AsyncTask<URL, Void, Boolean> {

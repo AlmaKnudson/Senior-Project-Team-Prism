@@ -80,15 +80,17 @@ public class HueSharedPreferences {
             while(s.hasNextLine()){
                 String currentLine = s.nextLine();
                 String[] tempParsedAssocation = currentLine.split("~!~");
-                String tempbeaconId= parsedAssocation[0];
-                String tempLightId = parsedAssocation[1];
-                String tempRange = parsedAssocation[2];
+                String tempbeaconId= tempParsedAssocation[0];
+                String tempLightId = tempParsedAssocation[1];
+                String tempRange = tempParsedAssocation[2];
                 if (lightId.equals(tempLightId)){
                     //There is currently an association between this beacon & bulb. Lets replace this.
-                    associations.replace(currentLine, association);
+                    associations = associations.replace(currentLine, association);
+                    mSharedPreferencesEditor.putString(BEACON_ASSOCIATIONS, associations);
                     return mSharedPreferencesEditor.commit();
                 }
             }
+            mSharedPreferencesEditor.putString(BEACON_ASSOCIATIONS, associations + "\n" + association);
         }
         return mSharedPreferencesEditor.commit();
     }

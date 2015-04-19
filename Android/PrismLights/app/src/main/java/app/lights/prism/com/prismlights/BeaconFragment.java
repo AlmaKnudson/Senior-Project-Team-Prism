@@ -16,7 +16,6 @@ import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHLight;
 import com.estimote.sdk.Utils;
 import com.estimote.sdk.Beacon;
-import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
 
 import java.util.List;
@@ -26,13 +25,12 @@ import java.util.List;
  * Created by AlmaKnudson on 4/16/15.
  */
 public class BeaconFragment extends Fragment {
-    public static String lightPositionString = "CURRENT_BULB_POSITION";
 
     private static final String ESTIMOTE_PROXIMITY_UUID = "B9407F30-F5F8-466E-AFF9-25556B57FE6D";
     private static final Region ALL_ESTIMOTE_BEACONS = new Region("Prism Lights", ESTIMOTE_PROXIMITY_UUID, null, null);
-    private BeaconManager beaconManager; //= new BeaconManager(this.getActivity().getApplicationContext());
+//    private BeaconManager beaconManager; //= new BeaconManager(this.getActivity().getApplicationContext());
 
-    private int currentBulbId; // The chosen Light BULB ID
+    private String currentBulbId; // The chosen Light BULB ID
     private PHLight currentBulb;
     private static PHBridge bridge;
     private PHHueSDK hueBridgeSdk;
@@ -70,51 +68,53 @@ public class BeaconFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        beaconManager = new BeaconManager(this.getActivity());
-        beaconManager.setRangingListener(new BeaconManager.RangingListener() {
-            @Override
-            public void onBeaconsDiscovered(Region region, final List<Beacon> rangedBeacons) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(rangedBeacons.size() == 0)
-                            return;
-                        beacon = rangedBeacons.get(0);
-                        if(addAssociation){
-                            String association = getBeaconId(beacon) + "~!~" + currentBulbId + "~!~" + currentRange;
-                            HueSharedPreferences.getInstance(getActivity().getApplicationContext()).addBeaconAssociation(association);
-                            addAssociation = false;
-                            beaconManager.disconnect();
-                        }
-                        double distance = Utils.computeAccuracy(beacon);
-                        if(index == distanceInFeet.length -1){
-                            index = 0;
-                        }
-                        distanceInFeet[index++] = distance*3;
-                        int totalSamples = 0;
-                        double sum = 0;
-                        for(int i = 0; i < distanceInFeet.length; i ++){
-                            if(distanceInFeet[i] != 0){
-                                totalSamples ++;
-                                sum += distanceInFeet[i];
-                            }
-                        }
-                        currentAverageDistance = sum/totalSamples;
-                        //beaconLabel.setText("Distance: " + currentAverageDistance);
-
-                    }
-                });
-            }
-        });
-
         if (getArguments() != null) {
-            currentBulbId = getArguments().getInt(lightPositionString);
+            currentBulbId = getArguments().getString(RealHomeFragment.lightPositionString);
         }
+
+//        beaconManager = new BeaconManager(this.getActivity());
+//        beaconManager.setRangingListener(new BeaconManager.RangingListener() {
+//            @Override
+//            public void onBeaconsDiscovered(Region region, final List<Beacon> rangedBeacons) {
+//                getActivity().runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if(rangedBeacons.size() == 0)
+//                            return;
+//                        beacon = rangedBeacons.get(0);
+//                        if(addAssociation){
+//                            String association = getBeaconId(beacon) + "~!~" + currentBulbId + "~!~" + currentRange;
+//                            HueSharedPreferences.getInstance(getActivity().getApplicationContext()).addBeaconAssociation(association);
+//                            addAssociation = false;
+////                            beaconManager.setRangingListener(null);
+//                        }
+////                        double distance = Utils.computeAccuracy(beacon);
+////                        if(index == distanceInFeet.length -1){
+////                            index = 0;
+////                        }
+////                        distanceInFeet[index++] = distance*3;
+////                        int totalSamples = 0;
+////                        double sum = 0;
+////                        for(int i = 0; i < distanceInFeet.length; i ++){
+////                            if(distanceInFeet[i] != 0){
+////                                totalSamples ++;
+////                                sum += distanceInFeet[i];
+////                            }
+////                        }
+////                        currentAverageDistance = sum/totalSamples;
+//                        //beaconLabel.setText("Distance: " + currentAverageDistance);
+//
+//                    }
+//                });
+//            }
+//        });
+
+
         hueBridgeSdk = PHHueSDK.getInstance();
         bridge = hueBridgeSdk.getSelectedBridge();
-        currentBulb = bridge.getResourceCache().getAllLights().get(currentBulbId);
+//        currentBulb = bridge.getResourceCache().getAllLights().get(currentBulbId);
         //get current bulb
-        currentBulb = bridge.getResourceCache().getAllLights().get(currentBulbId);
+//        currentBulb = bridge.getResourceCache().getAllLights().get(currentBulbId);
     }
 
 
@@ -135,7 +135,7 @@ public class BeaconFragment extends Fragment {
             public void onClick(View v) {
                 String association = "~!~" + currentBulbId + "~!~";
                 HueSharedPreferences.getInstance(getActivity().getApplicationContext()).removeBulbAssociation(association);
-                beaconManager.disconnect();
+//                beaconManager.disconnect();
                 System.out.println("Stop Tracking button has been pressed. Removed association: " + association);
             }
         });
@@ -143,18 +143,27 @@ public class BeaconFragment extends Fragment {
         beaconStartTrackingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                addAssociation = true;
+
                 System.out.println("START Tracking button has been pressed.");
                 // Should be invoked in #onStart.
-                beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
-                    @Override public void onServiceReady() {
-                        try {
-                            addAssociation = true;
-                            beaconManager.startRanging(ALL_ESTIMOTE_BEACONS);
-                        } catch (RemoteException e) {
-                            System.out.println("Cannot start ranging" + e);
-                        }
-                    }
-                });
+//                beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
+//                    @Override public void onServiceReady() {
+//                        try {
+//                            addAssociation = true;
+//                            beaconManager.startRanging(ALL_ESTIMOTE_BEACONS);
+//                        } catch (RemoteException e) {
+//                            System.out.println("Cannot start ranging" + e);
+//                        }
+//                    }
+////                });
+//                try {
+//                            addAssociation = true;
+//                            beaconManager.startRanging(ALL_ESTIMOTE_BEACONS);
+//                        } catch (RemoteException e) {
+//                            System.out.println("Cannot start ranging" + e);
+//                        }
             }
         });
 
@@ -183,5 +192,31 @@ public class BeaconFragment extends Fragment {
     }
 
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
 
+//        beaconManager.disconnect();
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ((MainActivity)getActivity()).setBeaconAssociationListener(new BeaconAssociationListener() {
+            @Override
+            public void onBeaconAssociation(String beaconId) {
+                if(addAssociation) {
+                    String association = beaconId + "~!~" + currentBulbId + "~!~" + currentRange;
+                    HueSharedPreferences.getInstance(getActivity().getApplicationContext()).addBeaconAssociation(association);
+                    addAssociation = false;
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ((MainActivity)getActivity()).setBeaconAssociationListener(null);
+    }
 }
