@@ -18,7 +18,7 @@
                     <view key="view" contentMode="scaleToFill" id="Am6-8i-XEB">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Home" image="home" id="0Ur-fv-tnQ"/>
                 </viewController>
@@ -66,7 +66,7 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="0.0" height="150"/>
                                                     </variation>
                                                 </imageView>
-                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="unReachable" translatesAutoresizingMaskIntoConstraints="NO" id="u4x-UQ-nHL">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lock" translatesAutoresizingMaskIntoConstraints="NO" id="u4x-UQ-nHL">
                                                     <rect key="frame" x="29" y="15" width="25" height="25"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Kitchen" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="uwm-nL-wua">
@@ -215,7 +215,7 @@
                                                         <rect key="frame" x="0.0" y="-35" width="0.0" height="35"/>
                                                     </variation>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="unReachable" translatesAutoresizingMaskIntoConstraints="NO" id="f1V-wf-JHA">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="lock" translatesAutoresizingMaskIntoConstraints="NO" id="f1V-wf-JHA">
                                                     <rect key="frame" x="25" y="19" width="25" height="25"/>
                                                 </imageView>
                                             </subviews>
@@ -3070,10 +3070,10 @@
             </objects>
             <point key="canvasLocation" x="3043" y="407"/>
         </scene>
-        <!--Home-->
+        <!--FavoriteCollection-->
         <scene sceneID="2aC-sM-vN1">
             <objects>
-                <viewController id="HKx-Pm-wD0" customClass="BulbsCollectionController" customModule="Prism_Lights" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FavoriteCollection" title="FavoriteCollection" id="HKx-Pm-wD0" customClass="FavoriteCollectionController" customModule="Prism_Lights" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="igo-vp-K8M"/>
                         <viewControllerLayoutGuide type="bottom" id="ldx-vn-MzS"/>
@@ -3091,25 +3091,13 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="bulb" id="fBK-VR-hw0" customClass="BulbCollectionCell" customModule="Prism_Lights" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="favorite" id="fBK-VR-hw0" customClass="FavoriteCollectionCell" customModule="Prism_Lights" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="80" height="140"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bulb_top" translatesAutoresizingMaskIntoConstraints="NO" id="aKZ-Kj-cQX">
-                                                    <rect key="frame" x="0.0" y="0.0" width="80" height="116"/>
-                                                    <variation key="heightClass=regular-widthClass=regular" misplaced="YES">
-                                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="150"/>
-                                                    </variation>
-                                                </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="groupBottom" translatesAutoresizingMaskIntoConstraints="NO" id="oMe-6t-9dO">
-                                                    <rect key="frame" x="0.0" y="0.0" width="80" height="116"/>
-                                                    <variation key="heightClass=regular-widthClass=regular" misplaced="YES">
-                                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="150"/>
-                                                    </variation>
-                                                </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Kitchen" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="HKU-Wn-xnN">
                                                     <rect key="frame" x="0.0" y="105" width="80" height="35"/>
                                                     <accessibility key="accessibilityConfiguration">
@@ -3125,23 +3113,20 @@
                                                         <rect key="frame" x="0.0" y="-35" width="0.0" height="35"/>
                                                     </variation>
                                                 </label>
-                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="unReachable" translatesAutoresizingMaskIntoConstraints="NO" id="FPy-wp-g1F">
-                                                    <rect key="frame" x="20" y="8" width="42" height="42"/>
-                                                </imageView>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FKf-FK-VWu">
+                                                    <rect key="frame" x="8" y="8" width="64" height="70"/>
+                                                    <color key="backgroundColor" red="1" green="0.036118559240000001" blue="0.92075689199999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                </view>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="aKZ-Kj-cQX" firstAttribute="trailing" secondItem="HKU-Wn-xnN" secondAttribute="trailing" id="0FZ-cx-EuH"/>
-                                            <constraint firstItem="oMe-6t-9dO" firstAttribute="top" secondItem="fBK-VR-hw0" secondAttribute="top" id="0z2-ZL-Qyu"/>
-                                            <constraint firstItem="HKU-Wn-xnN" firstAttribute="leading" secondItem="oMe-6t-9dO" secondAttribute="leading" id="J5P-4o-rHh"/>
-                                            <constraint firstAttribute="trailing" secondItem="oMe-6t-9dO" secondAttribute="trailing" id="Ntb-Sf-eGV"/>
-                                            <constraint firstItem="aKZ-Kj-cQX" firstAttribute="leading" secondItem="oMe-6t-9dO" secondAttribute="leading" id="Vud-Qf-ho0"/>
-                                            <constraint firstItem="aKZ-Kj-cQX" firstAttribute="trailing" secondItem="oMe-6t-9dO" secondAttribute="trailing" id="Yrk-98-rnl"/>
-                                            <constraint firstItem="aKZ-Kj-cQX" firstAttribute="bottom" secondItem="oMe-6t-9dO" secondAttribute="bottom" id="aEP-bf-sOg"/>
+                                            <constraint firstItem="FKf-FK-VWu" firstAttribute="trailing" secondItem="fBK-VR-hw0" secondAttribute="trailingMargin" id="DUC-5V-wex"/>
+                                            <constraint firstItem="FKf-FK-VWu" firstAttribute="leading" secondItem="fBK-VR-hw0" secondAttribute="leadingMargin" id="RE9-dV-2Ui"/>
+                                            <constraint firstItem="HKU-Wn-xnN" firstAttribute="top" secondItem="FKf-FK-VWu" secondAttribute="bottom" constant="27" id="W9B-gw-TS5"/>
+                                            <constraint firstItem="FKf-FK-VWu" firstAttribute="top" secondItem="fBK-VR-hw0" secondAttribute="topMargin" id="b7t-fc-1HU"/>
                                             <constraint firstAttribute="bottom" secondItem="HKU-Wn-xnN" secondAttribute="bottom" id="fTZ-YW-RJe"/>
-                                            <constraint firstAttribute="bottomMargin" secondItem="oMe-6t-9dO" secondAttribute="bottom" constant="16" id="kO1-Zk-PdV"/>
-                                            <constraint firstItem="oMe-6t-9dO" firstAttribute="top" secondItem="aKZ-Kj-cQX" secondAttribute="top" id="lep-td-bHc"/>
+                                            <constraint firstItem="FKf-FK-VWu" firstAttribute="centerX" secondItem="HKU-Wn-xnN" secondAttribute="centerX" id="miv-zF-iQS"/>
                                             <constraint firstItem="HKU-Wn-xnN" firstAttribute="leading" secondItem="fBK-VR-hw0" secondAttribute="leading" id="o9D-SE-bvT"/>
                                             <constraint firstItem="HKU-Wn-xnN" firstAttribute="bottom" secondItem="fBK-VR-hw0" secondAttribute="bottomMargin" id="r7H-20-tCx"/>
                                         </constraints>
@@ -3151,10 +3136,7 @@
                                             </mask>
                                         </variation>
                                         <connections>
-                                            <outlet property="bottom_bulb" destination="oMe-6t-9dO" id="JUe-vh-NoH"/>
                                             <outlet property="bulbLabel" destination="HKU-Wn-xnN" id="vQU-4E-tKs"/>
-                                            <outlet property="top_bulb" destination="aKZ-Kj-cQX" id="pkQ-SV-uhZ"/>
-                                            <outlet property="unReachableImage" destination="FPy-wp-g1F" id="qwM-b9-u7y"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -3198,15 +3180,15 @@
         <image name="groupBottom" width="141" height="150"/>
         <image name="groupTop" width="141" height="150"/>
         <image name="home" width="25" height="25"/>
+        <image name="lock" width="48" height="60"/>
         <image name="note" width="25" height="25"/>
         <image name="pushAuth" width="516" height="475"/>
         <image name="second" width="30" height="30"/>
-        <image name="unReachable" width="600" height="550"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="MV1-5L-hp4"/>
-        <segue reference="QvR-CG-Niy"/>
+        <segue reference="Zij-yb-hZI"/>
+        <segue reference="VIG-4p-d0T"/>
         <segue reference="agp-MF-nMt"/>
-        <segue reference="rHY-bs-Q2p"/>
+        <segue reference="MV1-5L-hp4"/>
     </inferredMetricsTieBreakers>
 </document>
