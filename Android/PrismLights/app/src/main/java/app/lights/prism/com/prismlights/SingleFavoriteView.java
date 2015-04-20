@@ -58,6 +58,7 @@ public class SingleFavoriteView extends View{
         clipPath.reset();
         RectF clippingRect = new RectF(currentBounds);
         clipPath.addRoundRect(clippingRect, clipPathRounding, clipPathRounding, Path.Direction.CW);
+        currentBounds.inset((int) (rectangleStrokeWidth/ 2), (int) (rectangleStrokeWidth/2));
 
     }
 
