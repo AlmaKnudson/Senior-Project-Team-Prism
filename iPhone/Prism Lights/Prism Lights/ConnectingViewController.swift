@@ -38,6 +38,16 @@ class ConnectingViewController : UIViewController, DismissPresentedController {
     }
     
     //MARK: - UIViewController Methods
+    
+    /**
+    Sets the phone status bar to be light colored for dark background
+    
+    :returns: UIStatusBarStyle
+    */
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

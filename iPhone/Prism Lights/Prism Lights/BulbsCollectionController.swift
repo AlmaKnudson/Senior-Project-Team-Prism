@@ -29,6 +29,7 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
     
     
     var lightCount :Int = 0;
+    var bulbIds:[String] = [String]()
     
     @IBOutlet weak var bulbCollectionView: UICollectionView!
     
@@ -130,7 +131,10 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
         if(section == BULB_SECTION){
             
             if(cache.lights != nil){
-                lightCount = cache.lights.count
+                var lights = cache.lights as! [String:PHLight]
+                bulbIds = lights.keys.array
+                lightCount = lights.count
+                
             } else{
                 lightCount = 0
             }
@@ -172,7 +176,7 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
         var cache:PHBridgeResourcesCache! = PHBridgeResourcesReader.readBridgeResourcesCache()
         
         if indexPath.section == BULB_SECTION {
-            var lightId = indexPath.row+1
+            var lightId = bulbIds[indexPath.row]
             var light:PHLight! = cache.lights?["\(lightId)"] as? PHLight
             if(light != nil){
                 cell.initBulbCell(light.name)
@@ -247,7 +251,7 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
         }
         self.skipNextHeartbeat = true
         if( indexPath.section == BULB_SECTION){
-            var identifier = "\(indexPath.row+1)"
+            var identifier = bulbIds[indexPath.row]
             ToggleLightState(identifier)
             
         }
