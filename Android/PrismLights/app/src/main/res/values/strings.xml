@@ -77,4 +77,6 @@
     <string name="edit_group">Edit Group</string>
     <string name="authenticationFailed">Authentication Failed</string>
     <string name="authenticationFailedExplanation">You did not push the button on the bridge in time. If you would like to connect, please search for bridges again.</string>
+    <string name="no_add_group">Unable to Add Group</string>
+    <string name="no_add_group_explanation">Only 16 groups are supported. Please remove or edit an existing group.</string>
 </resources>
