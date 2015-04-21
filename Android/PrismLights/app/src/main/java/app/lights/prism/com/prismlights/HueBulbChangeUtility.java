@@ -186,6 +186,14 @@ public class HueBulbChangeUtility {
         return lightState;
     }
 
+    public static int convertBrightness(int brightness){
+        return (int) Math.round((brightness/100.0) * 254.0);
+    }
+    public static int revertBrightness(int convertedBrightness){
+        return (int) Math.round(convertedBrightness/254.0 * 100.0);
+    }
+
+
     private static PHLightState getColorState(float[]  xY, boolean shouldSetOn) {
         PHLightState lightState = new PHLightState();
 //        float[] convertedColor = PHUtilities.calculateXY(rgbColor, "rgb");

@@ -31,7 +31,7 @@ public class ColorCycleFragment extends Fragment {
 
     private static  final String DEBUG_TAG = "ColorCycleFragment";
     public static final String chosenColorCycleString = "CHOSEN_COLOR_CYCLE";
-    public static final String identifierString = "CHOSEN_IDENTIFIER";
+    public static final String isNewString = "IS_NEW";
 
     private int position; // The number for the chosen Light
     private boolean isGroup; //True if group false otherwise
@@ -55,6 +55,7 @@ public class ColorCycleFragment extends Fragment {
         if (getArguments() != null) {
             currentIdentifier = getArguments().getString(RealHomeFragment.lightPositionString);
             isGroup = getArguments().getBoolean(RealHomeFragment.groupOrLightString);
+
         }
         colorCycles = ((MainActivity)getActivity()).getAllColorCycles();
         hueSDK = PHHueSDK.getInstance();
@@ -97,6 +98,7 @@ public class ColorCycleFragment extends Fragment {
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putInt(chosenColorCycleString, -1); // indicating this is for a new colorcycle
+                bundle.putBoolean(isNewString, true);
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 ColorCycleDetailFragment colorCycleDetailFragment = new ColorCycleDetailFragment();
                 colorCycleDetailFragment.setArguments(bundle);
@@ -124,6 +126,7 @@ public class ColorCycleFragment extends Fragment {
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putInt(chosenColorCycleString, chosenColorCycle);//pass chosen colorCycle
+                bundle.putBoolean(isNewString, false);
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 ColorCycleDetailFragment colorCycleDetailFragment = new ColorCycleDetailFragment();
                 colorCycleDetailFragment.setArguments(bundle);
@@ -140,8 +143,8 @@ public class ColorCycleFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //TODO: need to get duration from user
-                List<ScheduledFuture> tasks = colorCycles.get(chosenColorCycle).startColorCycle(10, bridge, currentIdentifier, isGroup);
-                ((MainActivity)getActivity()).setColorCycleTasks(currentIdentifier,tasks);
+                List<ScheduledFuture> tasks = colorCycles.get(chosenColorCycle).startColorCycle(10, bridge, currentIdentifier, isGroup, (MainActivity)getActivity());
+                ((MainActivity)getActivity()).setColorCycleTasks(currentIdentifier,tasks, isGroup);
                 android.app.FragmentManager fm = getActivity().getFragmentManager();
                 fm.popBackStack();
             }
@@ -227,15 +230,15 @@ public class ColorCycleFragment extends Fragment {
 
             ColorCycle currentColorCycle = colorCycles.get(chosenColorCycle);
 
-            TextView color = (TextView)currentView.findViewById(R.id.colorCycleColorText);
+            View color = currentView.findViewById(R.id.colorCycleColorText);
             TextView brightness = (TextView)currentView.findViewById(R.id.colorCycleBrightnessText);
             TextView duration = (TextView)currentView.findViewById(R.id.colorCycleDurationText);
             TextView transition = (TextView)currentView.findViewById(R.id.colorCycleTransitionText);
 
             color.setBackgroundColor(currentColorCycle.getColor(position));
-            brightness.setText(currentColorCycle.getBrightness(position));
-            duration.setText(currentColorCycle.getDuration(position));
-            transition.setText(currentColorCycle.getTransition(position));
+            brightness.setText(currentColorCycle.getBrightness(position)+"%");
+            duration.setText(currentColorCycle.getDuration(position)+"s");
+            transition.setText(currentColorCycle.getTransition(position)+"s");
 
             return currentView;
         }

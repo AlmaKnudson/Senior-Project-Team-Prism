@@ -39,6 +39,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -49,6 +50,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -74,6 +76,10 @@ public class MainActivity extends Activity implements PHSDKListener{
     public static final String homeFragmentTag="HOME_FRAGMENT";
     public static final String musicFragmentTag="MUSIC_FRAGMENT_TAG";
     private static final String settingsFragmentTag = "SETTINGS_FRAGMENT";
+    private static final String colorCycleFileName = "colorCycle.out";
+    private static final String colorCycleTaskFileName = "colorCycleTask.out";
+    private static final String colorCycleTasksGroupFileName = "colorCycleTaskGroup.out";
+
     //colorCycle utilities
     private List<ColorCycle> colorCycles;
     public List<ColorCycle> getAllColorCycles(){
@@ -88,14 +94,31 @@ public class MainActivity extends Activity implements PHSDKListener{
     public void addColorCycle(ColorCycle colorCycle){
         colorCycles.add(colorCycle);
     }
+    public int containsCycleName(String newName) {
+        List<ColorCycle> list = getAllColorCycles();
+        int nameExist = -1;
+        for(int i = 0; i<list.size();i++)
+        {
+            if(list.get(i).getName().equals(newName))
+                nameExist = i;
+        }
+        return nameExist;
+    }
 
     //for passing colorCycleTasks
     private Map<String,List<ScheduledFuture>> colorCycleTasks;
-    public void setColorCycleTasks(String identifier, List<ScheduledFuture> tasks){
-        colorCycleTasks.put(identifier, tasks);
+    private Map<String,List<ScheduledFuture>> colorCycleTasksGroup;
+    public void setColorCycleTasks(String identifier, List<ScheduledFuture> tasks, boolean isGroup){
+        if (!isGroup)
+            colorCycleTasks.put(identifier, tasks);
+        else
+            colorCycleTasksGroup.put(identifier,tasks);
     }
-    public List<ScheduledFuture> getColorCycleTasks(String identifier){
-        return colorCycleTasks.get(identifier);
+    public List<ScheduledFuture> getColorCycleTasks(String identifier, boolean isGroup){
+        if(!isGroup)
+            return colorCycleTasks.get(identifier);
+        else
+            return colorCycleTasksGroup.get(identifier);
     }
 
     // for passing schedule between fragments
@@ -124,7 +147,8 @@ public class MainActivity extends Activity implements PHSDKListener{
 
         // get Stored colorCycles
         try {
-            FileInputStream in = new FileInputStream("colorCycle.out");
+            File file = new File(this.getFilesDir(), colorCycleFileName);
+            FileInputStream in = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(in);
             colorCycles = (ArrayList<ColorCycle>) (ois.readObject());
             ois.close();
@@ -133,6 +157,33 @@ public class MainActivity extends Activity implements PHSDKListener{
         } catch (Exception e) {
             Log.e(DEBUG_TAG, "Getting colorCycle info failed: "+ e);
             colorCycles = new ArrayList<>();
+        }
+
+        // get Stored colorCycleTasks
+        try {
+            File file = new File(this.getFilesDir(), colorCycleTaskFileName);
+            FileInputStream in = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(in);
+            colorCycleTasks = (Map<String,List<ScheduledFuture>>) (ois.readObject());
+            ois.close();
+            in.close();
+
+        } catch (Exception e) {
+            Log.e(DEBUG_TAG, "Getting colorCycleTasks info failed: "+ e);
+            colorCycleTasks = new HashMap<>();
+        }
+        // get Stored colorCycleTasks for Group
+        try {
+            File file = new File(this.getFilesDir(), colorCycleTasksGroupFileName);
+            FileInputStream in = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(in);
+            colorCycleTasksGroup = (Map<String,List<ScheduledFuture>>) (ois.readObject());
+            ois.close();
+            in.close();
+
+        } catch (Exception e) {
+            Log.e(DEBUG_TAG, "Getting colorCycleTaskGroup info failed: "+ e);
+            colorCycleTasksGroup = new HashMap<>();
         }
 
         currentSchedule = null;
@@ -221,14 +272,41 @@ public class MainActivity extends Activity implements PHSDKListener{
         }
         if(colorCycles != null){
             try {
-                FileOutputStream out = new FileOutputStream("colorCycle.out");
+                File file = new File(this.getFilesDir(), colorCycleFileName);
+                FileOutputStream out = new FileOutputStream(file);
                 ObjectOutputStream oos = new ObjectOutputStream(out);
                 oos.writeObject(colorCycles);
                 oos.flush();
                 oos.close();
                 out.close();
             } catch (Exception e) {
-                System.out.println("Problem serializing colorCycle: " + e);
+                System.out.println("Problem Saving colorCycle: " + e);
+            }
+        }
+        if(colorCycleTasks != null){
+            try {
+                File file = new File(this.getFilesDir(), colorCycleTaskFileName);
+                FileOutputStream out = new FileOutputStream(file);
+                ObjectOutputStream oos = new ObjectOutputStream(out);
+                oos.writeObject(colorCycleTasks);
+                oos.flush();
+                oos.close();
+                out.close();
+            } catch (Exception e) {
+                System.out.println("Problem Saving colorCycleTasks: " + e);
+            }
+        }
+        if(colorCycleTasks != null){
+            try {
+                File file = new File(this.getFilesDir(), colorCycleTasksGroupFileName);
+                FileOutputStream out = new FileOutputStream(file);
+                ObjectOutputStream oos = new ObjectOutputStream(out);
+                oos.writeObject(colorCycleTasksGroup);
+                oos.flush();
+                oos.close();
+                out.close();
+            } catch (Exception e) {
+                System.out.println("Problem Saving colorCycleTasksGroup: " + e);
             }
         }
     }
@@ -384,19 +462,19 @@ public class MainActivity extends Activity implements PHSDKListener{
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(code == PHHueError.BRIDGE_NOT_RESPONDING) {
+                if (code == PHHueError.BRIDGE_NOT_RESPONDING) {
                     //TODO add message for when bridge isn't responding after access points found
                     searchForBridge();
                     return;
                 }
                 //TODO use code rather than message
-                if(message.equals("No bridge found")) {
+                if (message.equals("No bridge found")) {
                     dialog.setCancelable(true);
                     dialog.setCanceledOnTouchOutside(true);
                     dialog.setContentView(R.layout.dialog_warning);
                     return;
                 }
-                if(code == PHHueError.NO_CONNECTION) {
+                if (code == PHHueError.NO_CONNECTION) {
                     return;
                 }
 //                Toast toast = Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT);

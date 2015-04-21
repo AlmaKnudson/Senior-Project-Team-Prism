@@ -14,10 +14,13 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.philips.lighting.hue.sdk.PHHueSDK;
+import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHGroup;
 import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
+import com.philips.lighting.model.PHSchedule;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LightSettingsFragment extends Fragment implements CacheUpdateListener{
@@ -33,12 +36,14 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
     private Button colorCycleButton;
 
     private PHHueSDK hueSDK;
+    private PHBridge bridge;
 
     private List<PHLight> currentLights;
     private String[] lightNames;
     private List<PHGroup> currentGroups;
     private String[] groupNames;
     private String identifier;
+    private ColorCycle currentColorCycle;
 
 
     public LightSettingsFragment() {
@@ -51,6 +56,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
 
         identifier = getArguments().getString(RealHomeFragment.lightPositionString);
 
+        currentColorCycle = null; // if currentColorCycle is null, that means no colorCycle is running.
     }
 
     @Override
@@ -83,6 +89,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
         bulbOnState.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                cancelColorCycle();
                 ToggleButton bulbOn = (ToggleButton) v;
                 HueBulbChangeUtility.turnBulbOnOff(identifier, bulbOn.isChecked());
             }
@@ -99,6 +106,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                cancelColorCycle();
                 HueBulbChangeUtility.changeBrightness(identifier, seekBar.getProgress());
             }
         });
@@ -106,6 +114,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
             @Override
             public void onColorChanged(float[] newColor) {
                 currentColor = newColor;
+                cancelColorCycle();
                 HueBulbChangeUtility.changeBulbColor(identifier, newColor);
             }
         });
@@ -144,6 +153,42 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
     }
 
     private void updateState() {
+
+        /****************Checking Color Cycle**************/
+        //check if there is current colorCycle going on.
+        bridge = hueSDK.getSelectedBridge();
+        List<PHSchedule> colorCycles = bridge.getResourceCache().getAllTimers(true);
+        List<PHSchedule> colorCyclesForThisBulb = new ArrayList<>();
+        for (int i = 0; i< colorCycles.size();i++){
+            if (colorCycles.get(i).getLightIdentifier().equals(identifier) && colorCycles.get(i).getDescription().startsWith("prism"))
+                colorCyclesForThisBulb.add(colorCycles.get(i));
+        }
+
+        // if there is a color cycle running, set it as current color cycle. if this is new color cycle from other device, add it to the list.
+        if (colorCyclesForThisBulb.size()!=0){
+            currentColorCycle = new ColorCycle(colorCyclesForThisBulb); // this generate ColorCycle class out of List of recurring timer schedule
+            String currentName = currentColorCycle.getName();
+            int nameExist = ((MainActivity)getActivity()).containsCycleName(currentName);
+            if(nameExist < 0){ // if nameExist is -1, this means there is no such name in current color cycles, so add new one.
+                ((MainActivity)getActivity()).addColorCycle(currentColorCycle);
+            } else{ // if the same name exist, just replace with recent one. Other user might have changed this cycle.
+                //((MainActivity)getActivity()).setColorCycle(nameExist, currentColorCycle);     //<-- this doesn't work. no replacement....
+            }
+        } else
+            currentColorCycle = null; // if currentColorCycle is null, that means no colorCycle is running.
+        /***************************************************/
+
+
+        //************** This TODO List is for Trudy!!! *******************/
+        //TODO: show name of color cycle running some Where. if currentColorCycle is null, there is no running color cycle
+        //TODO: if it's not null, the name of color cycle is currentColorCycle.getName().
+
+        //TODO: Also, I added "cancelColorCycle();" when user change (brightness, color, on/off),
+        //TODO: but I realize that you need to add this to every where. so you need to update HueBulbChangeUtility class.
+        //TODO: To cancel color cycle, you need bridge, identifier, isGroup, and MainActivity.
+        //TODO: and just call [ColorCycle.removePreviousColorCycle(bridge, identifier, isGroup, (MainActivity)getActivity());] It is Static function.
+
+
         PHLight  currentLight = hueSDK.getSelectedBridge().getResourceCache().getLights().get(identifier);
         PHLightState state = currentLight.getLastKnownLightState();
         if(!nameEditor.hasFocus()) {
@@ -164,6 +209,13 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
     @Override
     public void cacheUpdated() {
         updateState();
+    }
+
+    // this cancels any running color cycle.
+    private void cancelColorCycle(){
+        if (currentColorCycle!=null){
+            ColorCycle.removePreviousColorCycle(bridge, identifier, false, (MainActivity)getActivity());
+        }
     }
 
 }

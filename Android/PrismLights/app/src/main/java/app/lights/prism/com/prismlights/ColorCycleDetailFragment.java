@@ -1,6 +1,7 @@
 package app.lights.prism.com.prismlights;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -19,6 +20,7 @@ import android.widget.TimePicker;
 public class ColorCycleDetailFragment extends Fragment {
 
     private int chosenIndex;
+    private boolean isNew;
 
     private ColorCycle newColorCycle;
 
@@ -40,6 +42,7 @@ public class ColorCycleDetailFragment extends Fragment {
         chosenIndex = -1;
         if (getArguments() != null) {
             chosenIndex = getArguments().getInt(ColorCycleFragment.chosenColorCycleString);
+            isNew = getArguments().getBoolean(ColorCycleFragment.isNewString);
         }
         if(chosenIndex != -1) {
             ColorCycle chosenColorCycle = ((MainActivity) getActivity()).getAllColorCycles().get(chosenIndex);
@@ -67,7 +70,7 @@ public class ColorCycleDetailFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 float[] newColor = {0.39f,0.46f};
-                newColorCycle.add(newColor,100,60,0);
+                newColorCycle.add(newColor, 100, 10, 2);
                 adapter.notifyDataSetChanged();
             }
         });
@@ -102,15 +105,29 @@ public class ColorCycleDetailFragment extends Fragment {
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
                 else {
-                    newColorCycle.setName(nameEditor.getText().toString().trim());
-                    if(chosenIndex == -1) {
-                        ((MainActivity) getActivity()).addColorCycle(newColorCycle);
-                    }else{
-                        ((MainActivity) getActivity()).setColorCycle(chosenIndex, newColorCycle);
-                    }
+                    String newName = nameEditor.getText().toString().trim();
+                    // if this is new cycle, check if the name already exist or not.
+                    if(isNew && ((MainActivity) getActivity()).containsCycleName(newName) != -1) {
+                        new AlertDialog.Builder(getActivity())
+                                .setTitle("Error")
+                                .setMessage("Same Name already exits, please enter other name.")
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }else {
+                        newColorCycle.setName(newName);
+                        if (chosenIndex == -1) {
+                            ((MainActivity) getActivity()).addColorCycle(newColorCycle);
+                        } else {
+                            ((MainActivity) getActivity()).setColorCycle(chosenIndex, newColorCycle);
+                        }
 
-                    android.app.FragmentManager fm = getActivity().getFragmentManager();
-                    fm.popBackStack();
+                        android.app.FragmentManager fm = getActivity().getFragmentManager();
+                        fm.popBackStack();
+                    }
                 }
             }
         });
@@ -159,7 +176,7 @@ public class ColorCycleDetailFragment extends Fragment {
             ImageView deleteImageView = (ImageView)currentView.findViewById(R.id.deleteColorButton);
 
             color.setBackgroundColor(newColorCycle.getColor(position));
-            brightness.setText(newColorCycle.getBrightness(position)+"%");
+            brightness.setText(newColorCycle.getBrightness(position) + "%");
             duration.setText(newColorCycle.getDuration(position)+"s");
             transition.setText(newColorCycle.getTransition(position)+"s");
 
@@ -304,36 +321,90 @@ public class ColorCycleDetailFragment extends Fragment {
                 }
             });
             transition.setOnClickListener(new View.OnClickListener() {
+
+                TextView hourText = null;
+                TextView minText = null;
+                TextView secText = null;
+
+                class CustomListener implements View.OnClickListener {
+                    private final Dialog dialog;
+                    public CustomListener(Dialog dialog) {
+                        this.dialog = dialog;
+                    }
+                    @Override
+                    public void onClick(View v) {
+                        int time = Integer.parseInt(hourText.getText().toString().split("\\s")[0]) * 3600
+                                + Integer.parseInt(minText.getText().toString().split("\\s")[0]) * 60
+                                + Integer.parseInt(secText.getText().toString().split("\\s")[0]);
+                        if(time > newColorCycle.getDuration(position))
+                        {
+                            new AlertDialog.Builder(getActivity())
+                                    .setTitle("Error")
+                                    .setMessage("Transition time cannot be longer than duration of the color.")
+                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                        }
+                                    })
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
+                        } else {
+                            newColorCycle.setTransition(position, time);
+                            adapter.notifyDataSetChanged();
+                            dialog.dismiss();
+                        }
+
+
+                    }
+                }
+
                 @Override
                 public void onClick(View v) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle("Enter Brightness");
+                    builder.setTitle("Enter Duration");
 
                     LayoutInflater inflater = getActivity().getLayoutInflater();
-                    View progressView = inflater.inflate(R.layout.brightness_dialog, null);
-                    final TextView percentText = (TextView) (progressView.findViewById(R.id.percentText));
-                    final SeekBar seekBar = (SeekBar) (progressView.findViewById(R.id.seekBar));
-                    percentText.setText(newColorCycle.getBrightness(position));
+                    View transitionView = inflater.inflate(R.layout.duration_dialog, null);
+                    TimePicker timePicker = (TimePicker)transitionView.findViewById(R.id.timePicker);
+                    TimePicker timePickerSec = (TimePicker)transitionView.findViewById(R.id.timePicker_Sec);
+                    hourText = (TextView)transitionView.findViewById(R.id.hourText);
+                    minText = (TextView)transitionView.findViewById(R.id.minText);
+                    secText = (TextView)transitionView.findViewById(R.id.secText);
 
-                    seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    timePicker.setIs24HourView(true);
+                    timePickerSec.setIs24HourView(true);
+                    int timeInSeconds = newColorCycle.getTransition(position);
+                    int hour = timeInSeconds/3600;
+                    int min = (timeInSeconds%3600)/60;
+                    int sec = timeInSeconds% 60;
+                    timePicker.setCurrentHour(hour);
+                    timePicker.setCurrentMinute(min);
+                    timePickerSec.setCurrentMinute(sec);
+                    hourText.setText(hour + " h");
+                    minText.setText(min + " m");
+                    secText.setText(sec + " s");
+
+                    timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                         @Override
-                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                            percentText.setText(progress + "%");
-                        }
-
-                        @Override
-                        public void onStartTrackingTouch(SeekBar seekBar) {
-                        }
-
-                        @Override
-                        public void onStopTrackingTouch(SeekBar seekBar) {
-
+                        public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                            hourText.setText(hourOfDay + " h");
+                            minText.setText(minute + " m");
                         }
                     });
+                    timePickerSec.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+                        @Override
+                        public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                            secText.setText(minute + " s");
+                        }
+                    });
+
                     builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            newColorCycle.setBrightness(position, seekBar.getProgress());
+                            int time = Integer.parseInt(hourText.getText().toString().split("\\s")[0]) * 3600
+                                    + Integer.parseInt(minText.getText().toString().split("\\s")[0]) * 60
+                                    + Integer.parseInt(secText.getText().toString().split("\\s")[0]);
+                            newColorCycle.setTransition(position, time);
+                            adapter.notifyDataSetChanged();
                         }
                     });
                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -341,9 +412,23 @@ public class ColorCycleDetailFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int which) {
                         }
                     });
-                    builder.setView(progressView);
-                    builder.show();
+                    builder.setView(transitionView);
 
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+
+                    Button theButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                    theButton.setOnClickListener(new CustomListener(alertDialog));
+
+
+                }
+            });
+
+            deleteImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    newColorCycle.remove(position);
+                    adapter.notifyDataSetChanged();
                 }
             });
 
