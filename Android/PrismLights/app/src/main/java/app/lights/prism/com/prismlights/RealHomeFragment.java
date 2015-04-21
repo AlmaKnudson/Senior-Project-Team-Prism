@@ -3,6 +3,7 @@ package app.lights.prism.com.prismlights;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -14,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.philips.lighting.hue.sdk.PHHueSDK;
 
@@ -102,11 +104,22 @@ public class RealHomeFragment extends Fragment implements ViewPager.OnPageChange
                 addButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
-                        AddGroupFragment addGroupFragment = new AddGroupFragment();
-                        fragmentTransaction.replace(R.id.container, addGroupFragment);
-                        fragmentTransaction.addToBackStack("addGroupFragment");
-                        fragmentTransaction.commit();
+                        int groupsNumber = PHHueSDK.getInstance().getSelectedBridge().getResourceCache().getGroups().size();
+                        if(groupsNumber < 16){
+                            FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
+                            AddGroupFragment addGroupFragment = new AddGroupFragment();
+                            fragmentTransaction.replace(R.id.container, addGroupFragment);
+                            fragmentTransaction.addToBackStack("addGroupFragment");
+                            fragmentTransaction.commit();
+                        } else {
+                            ProgressDialog dialog = new ProgressDialog(getActivity());
+                            dialog.show();
+                            dialog.setContentView(R.layout.dialog_warning);
+                            TextView titleView = (TextView) dialog.findViewById(R.id.dialogTitle);
+                            titleView.setText(getText(R.string.no_add_group));
+                            TextView explanationView = (TextView) dialog.findViewById(R.id.textExplanation);
+                            explanationView.setText(getText(R.string.no_add_group_explanation));
+                        }
                     }
                 });
                 editButton.setOnClickListener(new View.OnClickListener() {

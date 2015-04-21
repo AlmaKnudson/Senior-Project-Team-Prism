@@ -62,7 +62,8 @@
             android:layout_height="40dp"
             android:layout_weight="1"
             android:id="@+id/nameEditor"
-            android:inputType="textCapWords"/>
+            android:inputType="textCapWords"
+            android:maxLength="32"/>
         <ImageButton
             android:layout_width="50dp"
             android:layout_height="30dp"
