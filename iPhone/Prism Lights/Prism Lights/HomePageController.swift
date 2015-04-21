@@ -68,7 +68,7 @@ class HomePageController : UIViewController, UIPageViewControllerDataSource, UIP
         let appearance = UIPageControl.appearance()
         appearance.pageIndicatorTintColor = UIColor.grayColor()
         appearance.currentPageIndicatorTintColor = UIColor.whiteColor()
-        appearance.backgroundColor = UIColor.darkGrayColor()
+        appearance.backgroundColor = UIColor.blackColor()
     }
     
     // MARK: - UIPageViewControllerDataSource
