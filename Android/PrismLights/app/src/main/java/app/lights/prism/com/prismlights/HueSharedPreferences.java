@@ -101,7 +101,7 @@ public class HueSharedPreferences {
         while(s.hasNextLine()){
             String currentLine = s.nextLine();
             if (currentLine.contains(association)){
-                associations.replace(currentLine, "");
+                associations = associations.replace(currentLine, "");
             }
         }
         mSharedPreferencesEditor.putString(BEACON_ASSOCIATIONS, associations);

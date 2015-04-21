@@ -80,10 +80,6 @@ public class MusicFragment extends Fragment implements OnsetHandler {
     @Override
     public void onStop(){
         super.onStop();
-//        if (dispatcher != null) {
-//            dispatcher.removeAudioProcessor(p);
-//            dispatcher.stop();
-//        }
     }
 
     @Override
@@ -223,6 +219,10 @@ public class MusicFragment extends Fragment implements OnsetHandler {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     bpmLabel.setText("" + (progress + 60) );
+                    int currentBPM = progress + 60;
+                //60 -->3
+                // 120 --> 2
+                //180 -->
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -314,11 +314,5 @@ public class MusicFragment extends Fragment implements OnsetHandler {
             //Fade out slowly
             HueBulbChangeUtility.musicChangeBulbsColor(lightsToChange, xY, 20, 0);
         }
-
-
     }
-
-
-
-
 }
