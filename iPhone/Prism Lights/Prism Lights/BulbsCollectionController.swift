@@ -44,7 +44,6 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
         var beaconRegion : ESTBeaconRegion = ESTBeaconRegion(proximityUUID: NSUUID(UUIDString:"B9407F30-F5F8-466E-AFF9-25556B57FE6D"), identifier: "regionName")
         
         beaconManager.requestWhenInUseAuthorization()
-        
         beaconManager.startRangingBeaconsInRegion(beaconRegion)
         
         //Add long press Gesture
@@ -106,7 +105,8 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
             var dest = segue.destinationViewController as! UINavigationController
             var bulbSettingsController = dest.viewControllers[0] as! BulbSettingsController
             bulbSettingsController.homeDelegate = self
-            bulbSettingsController.bulbId = "\((sender as! NSIndexPath).row+1)"
+            var bulbId = bulbIds[(sender as! NSIndexPath).row]
+            bulbSettingsController.bulbId = bulbId
             bulbSettingsController.isGroup = false
         } else if segue.identifier == "pushAuth" {
             var dest = segue.destinationViewController as! PushAuthController
@@ -292,7 +292,8 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
                 }
                 
                 var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-                var lightId = indexPath!.row+1
+                var index = indexPath!.row
+                var lightId = bulbIds[index]
                 var light = cache.lights["\(lightId)"] as! PHLight
                 if(light.lightState.reachable.boolValue){
                     self.performSegueWithIdentifier("BulbSettingsNav", sender: indexPath)

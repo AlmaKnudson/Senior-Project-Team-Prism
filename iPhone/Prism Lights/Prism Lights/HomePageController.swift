@@ -47,7 +47,6 @@ class HomePageController : UIViewController, UIPageViewControllerDataSource, UIP
         let favoriteCollection =
             self.storyboard?.instantiateViewControllerWithIdentifier("FavoriteCollection") as! FavoriteCollectionController
         controllers.append(favoriteCollection)
-        
     }
     
     
@@ -55,7 +54,6 @@ class HomePageController : UIViewController, UIPageViewControllerDataSource, UIP
         
         let pageController = self.storyboard!.instantiateViewControllerWithIdentifier("PageViewController") as! UIPageViewController
         pageController.dataSource = self
-
         
         var controller:[UIViewController] = [controllers[0]]
         pageController.setViewControllers(controller as [AnyObject], direction: UIPageViewControllerNavigationDirection.Forward, animated: false, completion: nil)
@@ -85,7 +83,6 @@ class HomePageController : UIViewController, UIPageViewControllerDataSource, UIP
         return controllers[index-1]
     }
     func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController? {
-        
         
         var index = IndexOfController(viewController)
         if index >= controllers.count-1 {
