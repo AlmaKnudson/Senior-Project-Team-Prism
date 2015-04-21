@@ -74,7 +74,7 @@ public class ColorPickerBackgroundView extends View{
                 double currentX = (maxX - minX) * xPercentage + minX;
                 xYColor[0] = (float) currentX;
                 xYColor[1] = (float) currentY;
-                currentColor.setColor(PHUtilities.colorFromXY(xYColor, HueBulbChangeUtility.colorXYModelForHue));
+                currentColor.setColor(PHUtilities.colorFromXY(xYColor, HueBulbChangeUtility.COLOR_XY_MODEL_FOR_HUE));
                 canvas.drawRect(x, y, (int) (x + colorIncrement), (int) (y + colorIncrement), currentColor);
             }
         }

@@ -25,7 +25,6 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
 
     private GridView gridView;
     private List<String> currentGroupIdOrder;
-    private Map<String, PHGroup> currentGroups;
     private PHHueSDK hueSDK;
     private LayoutIdOrder layoutIdOrder;
 
@@ -50,7 +49,7 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 //                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
-                HueBulbChangeUtility.toggleBulbGroupState((PHGroup) gridView.getAdapter().getItem(position));
+                HueBulbChangeUtility.toggleBulbGroupState((String) gridView.getAdapter().getItem(position));
             }
         });
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -81,7 +80,7 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
     }
 
     private void updateFromCache() {
-        currentGroups = hueSDK.getSelectedBridge().getResourceCache().getGroups();
+        Map<String, PHGroup> currentGroups = hueSDK.getSelectedBridge().getResourceCache().getGroups();
         currentGroupIdOrder = layoutIdOrder.getGroupsFromBridgeOrder(currentGroups.keySet());
     }
 
@@ -101,12 +100,12 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
         }
         @Override
         public int getCount() {
-            return currentGroups.size();
+            return currentGroupIdOrder.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return currentGroups.get(currentGroupIdOrder.get(position));
+            return currentGroupIdOrder.get(position);
         }
 
         @Override
@@ -122,9 +121,9 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
             } else {
                 currentView =convertView;
             }
-            PHGroup currentGroup = (PHGroup) getItem(position);
+            String currentGroup = (String) getItem(position);
 
-            String lightName = currentGroup.getName();
+            String lightName = HueBulbChangeUtility.getGroupName(currentGroup);
 
             ImageView group2Top = (ImageView) currentView.findViewById(R.id.group2Top);
             ImageView group2Bottom = (ImageView) currentView.findViewById(R.id.group2Bottom);
@@ -134,7 +133,7 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
             groupName.setText(lightName);
             ImageView groupTop;
             ImageView groupBottom;
-            if(currentGroup.getLightIdentifiers().size() > 2) {
+            if(HueBulbChangeUtility.getGroupSize(currentGroup) > 2) {
                 group2Top.setVisibility(View.GONE);
                 group2Bottom.setVisibility(View.GONE);
                 group3Top.setVisibility(View.VISIBLE);

@@ -6,9 +6,7 @@ import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -16,17 +14,12 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
-import com.philips.lighting.model.PHGroup;
 import com.philips.lighting.model.PHLight;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -164,7 +157,7 @@ public class LightsFragment extends Fragment implements CacheUpdateListener {
             //TODO make work with alternate color formats
             Float x = currentLight.getLastKnownLightState().getX();
             Float y = currentLight.getLastKnownLightState().getY();
-            int currentColor = PHUtilities.colorFromXY(new float[]{x, y}, HueBulbChangeUtility.colorXYModelForHue);
+            int currentColor = PHUtilities.colorFromXY(new float[]{x, y}, HueBulbChangeUtility.COLOR_XY_MODEL_FOR_HUE);
             currentColor = Color.argb(300, Color.red(currentColor), Color.green(currentColor), Color.blue(currentColor));
             bulbTop.setColorFilter(currentColor);
             return currentView;

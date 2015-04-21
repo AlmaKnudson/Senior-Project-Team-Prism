@@ -86,7 +86,7 @@ public class FavoritesDataModel {
         normalState.setOn(true);
         normalState.setX(0.4596f);
         normalState.setY(0.4105f);
-        normalState.setBrightness(254);
+        normalState.setBrightness(HueBulbChangeUtility.MAX_BRIGHTNESS);
         favoritesDataModel.favorites.add(new Favorite("Normal All On", normalState));
         PHLightState offState = new PHLightState();
         offState.setOn(false);

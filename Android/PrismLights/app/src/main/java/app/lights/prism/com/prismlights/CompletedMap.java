@@ -12,6 +12,9 @@ public class CompletedMap {
             completed.put(id, false);
         }
         this.onCompletedListener = onCompletedListener;
+        if(completed.isEmpty()&& onCompletedListener != null) {
+            onCompletedListener.onCompleted();
+        }
     }
 
     public void complete(String id) {

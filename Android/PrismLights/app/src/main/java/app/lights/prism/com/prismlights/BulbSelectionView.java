@@ -266,7 +266,7 @@ public class BulbSelectionView extends FrameLayout implements CacheUpdateListene
             //TODO make work with alternate color formats
             Float x = currentLight.getLastKnownLightState().getX();
             Float y = currentLight.getLastKnownLightState().getY();
-            int currentColor = PHUtilities.colorFromXY(new float[]{x, y}, HueBulbChangeUtility.colorXYModelForHue);
+            int currentColor = PHUtilities.colorFromXY(new float[]{x, y}, HueBulbChangeUtility.COLOR_XY_MODEL_FOR_HUE);
             currentColor = Color.argb(300, Color.red(currentColor), Color.green(currentColor), Color.blue(currentColor));
             bulbTop.setColorFilter(currentColor);
             return currentView;
