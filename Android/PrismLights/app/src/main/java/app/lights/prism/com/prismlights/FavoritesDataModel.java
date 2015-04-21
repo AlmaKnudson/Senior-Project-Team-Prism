@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * A data model for favorites because scenes aren't guaranteed to stay on the bridge,
@@ -149,14 +150,12 @@ public class FavoritesDataModel {
         saveToFile();
     }
 
-    public void removeFavorites(Set<Integer> toRemove) {
-        Set<Favorite> removeFavorites = new HashSet<Favorite>();
-
-        for(int toRemovePos: toRemove) {
-            removeFavorites.add(favorites.get(toRemovePos));
-        }
-        for(Favorite favorite: removeFavorites) {
-            favorites.remove(favorite);
+    public void removeFavorites(TreeSet<Integer> toRemove) {
+        int offsetIndex = 0;
+        //tree set iterator ascending insures this will work!
+        for(Integer removeIndex: toRemove) {
+            favorites.remove(removeIndex - offsetIndex);
+            offsetIndex++;
         }
         saveToFile();
     }

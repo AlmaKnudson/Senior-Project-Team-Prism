@@ -85,6 +85,11 @@ public class GroupsEditFragment extends Fragment implements OnItemShiftedListene
                                     progressDialog.hide();
                                     updateFromCache();
                                     ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
+                                    //close fragment when view only contains 1 item, the uneditable all lights
+                                    if(currentGroupIdOrder.size() < 2) {
+                                        getFragmentManager().popBackStack();
+                                    }
+                                    checked.clear();
                                 }
                             }
                         });

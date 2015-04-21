@@ -14,14 +14,15 @@ import android.widget.TextView;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class FavoritesEditFragment extends Fragment implements OnItemShiftedListener {
     private ReorderGridView gridView;
     private FavoritesDataModel favoritesDataModel;
-    private Set<Integer> checked;
+    private TreeSet<Integer> checked;
 
     public FavoritesEditFragment() {
-        checked = new HashSet<Integer>();
+        checked = new TreeSet<Integer>();
     }
 
 
@@ -50,6 +51,11 @@ public class FavoritesEditFragment extends Fragment implements OnItemShiftedList
             public void onClick(View v) {
                 favoritesDataModel.removeFavorites(checked);
                 ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
+                //close fragment when there are no more favorites to edit
+                if(favoritesDataModel.getFavoritesCount() == 0) {
+                    getFragmentManager().popBackStack();
+                }
+                checked.clear();
             }
         });
         return layout;
@@ -112,7 +118,13 @@ public class FavoritesEditFragment extends Fragment implements OnItemShiftedList
             favoriteNameView.setText(favoriteName);
             SingleFavoriteView favoriteView = (SingleFavoriteView) currentView.findViewById(R.id.singleFavoriteView);
             favoriteView.setColors(favorite.getColors());
-            ((CheckBox) currentView.findViewById(R.id.selectCheck)).setChecked(false);
+
+            CheckBox checkBox = (CheckBox) currentView.findViewById(R.id.selectCheck);
+            if(checked.contains(position)) {
+                checkBox.setChecked(true);
+            } else {
+                checkBox.setChecked(false);
+            }
             return currentView;
         }
     }
