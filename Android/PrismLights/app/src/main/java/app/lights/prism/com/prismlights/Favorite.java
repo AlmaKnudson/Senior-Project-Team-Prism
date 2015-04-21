@@ -83,7 +83,7 @@ public class Favorite {
         favoriteColors = new ArrayList<Integer>();
         for(String lightId: lightStates.keySet()) {
             PHLightState lightState = lightStates.get(lightId);
-            favoriteColors.add(PHUtilities.colorFromXY(new float[]{lightState.getX(), lightState.getY()}, HueBulbChangeUtility.colorXYModelForHue));
+            favoriteColors.add(getDisplayColor(lightState));
         }
     }
 
@@ -93,10 +93,6 @@ public class Favorite {
 
     public List<Integer> getColors() {
         return favoriteColors;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getName() {
