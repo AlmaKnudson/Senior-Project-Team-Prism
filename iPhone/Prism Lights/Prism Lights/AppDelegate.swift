@@ -9,9 +9,9 @@
 import UIKit
 
 var DEBUG :Bool = false
-var BRIDGELESS :Bool = true
+var BRIDGELESS :Bool = false
 var DEMO :Bool = false
-var BRIDGELOGGING :Bool = false;
+var BRIDGELOGGING :Bool = false
 
 
 @UIApplicationMain

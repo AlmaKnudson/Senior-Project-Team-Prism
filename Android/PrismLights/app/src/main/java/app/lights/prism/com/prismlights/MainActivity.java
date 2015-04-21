@@ -387,6 +387,7 @@ public class MainActivity extends Activity implements PHSDKListener{
             public void run() {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.container, new PushButtonFragment());
+                fragmentTransaction.addToBackStack("authenticationRequired");
                 fragmentTransaction.commit();
                 dialog.setCancelable(true);
                 dialog.cancel();
@@ -508,6 +509,21 @@ public class MainActivity extends Activity implements PHSDKListener{
         connectionLostCount = 0;
     }
 
+    public void showAuthenticationFailedDialog() {
+        if (dialog.isShowing()) {
+            dialog.cancel();
+        } else {
+            dialog.setCancelable(true);
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.setContentView(R.layout.dialog_warning);
+            TextView dialogTitle = (TextView) (dialog.findViewById(R.id.dialogTitle));
+            dialogTitle.setText(getText(R.string.authenticationFailed));
+            TextView dialogText = (TextView) (dialog.findViewById(R.id.textExplanation));
+            dialogText.setText(getText(R.string.authenticationFailedExplanation));
+            dialog.show();
+        }
+    }
+
     @Override
     /**
      * From API:
@@ -537,11 +553,11 @@ public class MainActivity extends Activity implements PHSDKListener{
         return dialog;
     }
 
+
     @Override
     public void onParsingErrors(List<PHHueParsingError> phHueParsingErrors) {
 
     }
-
 
     public void clearBackStack() {
         if(getFragmentManager().getBackStackEntryCount() > 0) {
@@ -627,6 +643,12 @@ public class MainActivity extends Activity implements PHSDKListener{
         } else {
             Log.e(DEBUG_TAG, "No network connection available.");
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        System.out.println("BACK PRESSED");
     }
 
     private class DownloaderTask extends AsyncTask<URL, Void, Boolean> {

@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.philips.lighting.model.PHLightState;
 
 public class AddFavoriteFragment extends Fragment implements CacheUpdateListener{
-    private BulbSelectionFragment bulbSelectionFragment;
+    private BulbSelectionView bulbSelectionView;
     private EditText nameEditor;
     private Button doneButton;
     private FavoritesDataModel favoritesDataModel;
@@ -39,15 +39,12 @@ public class AddFavoriteFragment extends Fragment implements CacheUpdateListener
         View layout = inflater.inflate(R.layout.fragment_add_multi, container, false);
         TextView title = (TextView) layout.findViewById(R.id.title);
         title.setText(R.string.add_favorite);
-        bulbSelectionFragment = (BulbSelectionFragment) getFragmentManager().findFragmentById(R.id.selectBulbFragment);
-        if(bulbSelectionFragment == null) {
-            bulbSelectionFragment = (BulbSelectionFragment) getChildFragmentManager().findFragmentById(R.id.selectBulbFragment);
-        }
-        bulbSelectionFragment.allowLongClick(true);
+        bulbSelectionView = (BulbSelectionView) layout.findViewById(R.id.selectBulbView);
+        bulbSelectionView.allowLongClick(true, getFragmentManager());
         nameEditor = (EditText) layout.findViewById(R.id.nameEditor);
         nameEditor.setText(favoritesDataModel.getNextFavoriteName());
         doneButton = (Button) layout.findViewById(R.id.doneButton);
-        bulbSelectionFragment.setOnCheckedNumberChanged(new CheckedNumberChangedListener() {
+        bulbSelectionView.setOnCheckedNumberChanged(new CheckedNumberChangedListener() {
             @Override
             public void onCheckedNumberChanged(int checkedNumber) {
                 if(checkedNumber > 0) {
@@ -62,15 +59,15 @@ public class AddFavoriteFragment extends Fragment implements CacheUpdateListener
             public void onClick(View v) {
                 if(!done) {
                     done = true;
-                    if (bulbSelectionFragment.getAllChecked()) {
-                        PHLightState lightState = bulbSelectionFragment.allBulbsSameState();
+                    if (bulbSelectionView.getAllChecked()) {
+                        PHLightState lightState = bulbSelectionView.allBulbsSameState();
                         if (lightState == null) {
-                            favoritesDataModel.addStateAsFavorite(bulbSelectionFragment.getSelectedLightIds(), nameEditor.getText().toString());
+                            favoritesDataModel.addStateAsFavorite(bulbSelectionView.getSelectedLightIds(), nameEditor.getText().toString());
                         } else {
                             favoritesDataModel.addStateAsFavorite(nameEditor.getText().toString(), lightState);
                         }
                     } else {
-                        favoritesDataModel.addStateAsFavorite(bulbSelectionFragment.getSelectedLightIds(), nameEditor.getText().toString());
+                        favoritesDataModel.addStateAsFavorite(bulbSelectionView.getSelectedLightIds(), nameEditor.getText().toString());
                     }
                     getFragmentManager().popBackStack();
                 }
@@ -81,15 +78,7 @@ public class AddFavoriteFragment extends Fragment implements CacheUpdateListener
 
     @Override
     public void cacheUpdated() {
-        bulbSelectionFragment.cacheUpdated();
+        bulbSelectionView.cacheUpdated();
     }
 
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if(bulbSelectionFragment != null) {
-            getFragmentManager().beginTransaction().remove(bulbSelectionFragment).commit();
-        }
-    }
 }

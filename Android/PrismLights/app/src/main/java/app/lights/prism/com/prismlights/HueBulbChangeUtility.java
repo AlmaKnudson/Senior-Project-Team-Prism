@@ -510,7 +510,11 @@ public class HueBulbChangeUtility {
         } else {
             for (String lightId : favorite.getLightStates().keySet()) {
                 PHLightState lightState = favorite.getLightStates().get(lightId);
-                bridge.updateLightState(getLightFromId(lightId, bridge), lightState);
+                //account for deleted lights or change in bridge
+                PHLight light = getLightFromId(lightId, bridge);
+                if(light != null) {
+                    bridge.updateLightState(getLightFromId(lightId, bridge), lightState);
+                }
             }
         }
     }

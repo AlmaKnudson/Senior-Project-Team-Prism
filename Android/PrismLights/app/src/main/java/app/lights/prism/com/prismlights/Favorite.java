@@ -27,15 +27,18 @@ public class Favorite {
         this.name = name;
         Map<String, PHLight> lights = PHHueSDK.getInstance().getSelectedBridge().getResourceCache().getLights();
         for(String lightId : lightIds) {
-            PHLightState oldLightState = lights.get(lightId).getLastKnownLightState();
-            PHLightState lightState = new PHLightState();
-            lightState.setColorMode(PHLight.PHLightColorMode.COLORMODE_XY);
-            lightState.setBrightness(oldLightState.getBrightness());
-            lightState.setOn(oldLightState.isOn());
-            lightState.setX(oldLightState.getX());
-            lightState.setY(oldLightState.getY());
-            lightStates.put(lightId, lightState);
-            favoriteColors.add(getDisplayColor(lightState));
+            PHLight light = lights.get(lightId);
+            if(light != null) {
+                PHLightState oldLightState = lights.get(lightId).getLastKnownLightState();
+                PHLightState lightState = new PHLightState();
+                lightState.setColorMode(PHLight.PHLightColorMode.COLORMODE_XY);
+                lightState.setBrightness(oldLightState.getBrightness());
+                lightState.setOn(oldLightState.isOn());
+                lightState.setX(oldLightState.getX());
+                lightState.setY(oldLightState.getY());
+                lightStates.put(lightId, lightState);
+                favoriteColors.add(getDisplayColor(lightState));
+            }
         }
     }
 
@@ -80,7 +83,7 @@ public class Favorite {
         favoriteColors = new ArrayList<Integer>();
         for(String lightId: lightStates.keySet()) {
             PHLightState lightState = lightStates.get(lightId);
-            favoriteColors.add(PHUtilities.colorFromXY(new float[]{lightState.getX(), lightState.getY()}, HueBulbChangeUtility.colorXYModelForHue));
+            favoriteColors.add(getDisplayColor(lightState));
         }
     }
 
@@ -90,10 +93,6 @@ public class Favorite {
 
     public List<Integer> getColors() {
         return favoriteColors;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getName() {

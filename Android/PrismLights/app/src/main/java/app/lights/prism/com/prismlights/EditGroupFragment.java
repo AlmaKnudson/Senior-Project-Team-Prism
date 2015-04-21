@@ -7,15 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.model.PHGroup;
 
 public class EditGroupFragment extends Fragment implements CacheUpdateListener {
-    private BulbSelectionFragment bulbSelectionFragment;
+    private BulbSelectionView bulbSelectionView;
     private TextView name;
     private Button doneButton;
     private boolean done;
@@ -45,15 +43,15 @@ public class EditGroupFragment extends Fragment implements CacheUpdateListener {
         View layout = inflater.inflate(R.layout.edit_group, container, false);
         TextView title = (TextView) layout.findViewById(R.id.title);
         title.setText(R.string.edit_group);
-        bulbSelectionFragment = (BulbSelectionFragment) getFragmentManager().findFragmentById(R.id.selectBulbFragment);
-        if(bulbSelectionFragment == null) {
-            bulbSelectionFragment = (BulbSelectionFragment) getChildFragmentManager().findFragmentById(R.id.selectBulbFragment);
+        bulbSelectionView = (BulbSelectionView) layout.findViewById(R.id.selectBulbView);
+        if(bulbSelectionView == null) {
+            bulbSelectionView = (BulbSelectionView) layout.findViewById(R.id.selectBulbView);
         }
-        bulbSelectionFragment.allowLongClick(false);
+        bulbSelectionView.allowLongClick(false, null);
         name = (TextView) layout.findViewById(R.id.groupName);
         name.setText(group.getName());
         doneButton = (Button) layout.findViewById(R.id.doneButton);
-        bulbSelectionFragment.setOnCheckedNumberChanged(new CheckedNumberChangedListener() {
+        bulbSelectionView.setOnCheckedNumberChanged(new CheckedNumberChangedListener() {
             @Override
             public void onCheckedNumberChanged(int checkedNumber) {
                 if(checkedNumber > 1) {
@@ -63,7 +61,7 @@ public class EditGroupFragment extends Fragment implements CacheUpdateListener {
                 }
             }
         });
-        bulbSelectionFragment.setSelectedIds(group.getLightIdentifiers());
+        bulbSelectionView.setSelectedIds(group.getLightIdentifiers());
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +78,7 @@ public class EditGroupFragment extends Fragment implements CacheUpdateListener {
                     }
                     progressDialog.setCanceledOnTouchOutside(false);
                     progressDialog.setCancelable(false);
-                    HueBulbChangeUtility.editGroup(groupId, bulbSelectionFragment.getSelectedLightIds(), new OnCompletedListener() {
+                    HueBulbChangeUtility.editGroup(groupId, bulbSelectionView.getSelectedLightIds(), new OnCompletedListener() {
                         @Override
                         public void onCompleted() {
                             getActivity().runOnUiThread(new Runnable() {
@@ -102,7 +100,7 @@ public class EditGroupFragment extends Fragment implements CacheUpdateListener {
 
     @Override
     public void cacheUpdated() {
-        bulbSelectionFragment.cacheUpdated();
+        bulbSelectionView.cacheUpdated();
         group = hueSDK.getSelectedBridge().getResourceCache().getGroups().get(groupId);
         //TODO handle group being deleted
         name.setText(group.getName());
@@ -114,14 +112,6 @@ public class EditGroupFragment extends Fragment implements CacheUpdateListener {
         super.onDetach();
         if(progressDialog != null) {
             progressDialog.dismiss();
-        }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if(bulbSelectionFragment != null) {
-            getFragmentManager().beginTransaction().remove(bulbSelectionFragment).commit();
         }
     }
 }

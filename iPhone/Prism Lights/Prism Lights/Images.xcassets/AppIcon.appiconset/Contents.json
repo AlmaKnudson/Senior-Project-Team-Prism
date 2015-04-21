@@ -13,25 +13,25 @@
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "40Logo.png",
+      "filename" : "icLauncher-4.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "80Logo.png",
+      "filename" : "icLauncher-5.png",
       "scale" : "3x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "120Logo.png",
+      "filename" : "icLauncher@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "180Logo.png",
+      "filename" : "icLauncher@3x.png",
       "scale" : "3x"
     },
     {
@@ -42,31 +42,31 @@
     {
       "size" : "29x29",
       "idiom" : "ipad",
-      "filename" : "40Logo-1.png",
+      "filename" : "icLauncher-3.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "ipad",
-      "filename" : "40Logo-2.png",
+      "filename" : "icLauncher-1.png",
       "scale" : "1x"
     },
     {
       "size" : "40x40",
       "idiom" : "ipad",
-      "filename" : "80Logo-1.png",
+      "filename" : "icLauncher-2.png",
       "scale" : "2x"
     },
     {
       "size" : "76x76",
       "idiom" : "ipad",
-      "filename" : "80Logo-2.png",
+      "filename" : "icLauncher.png",
       "scale" : "1x"
     },
     {
       "size" : "76x76",
       "idiom" : "ipad",
-      "filename" : "120Logo-1.png",
+      "filename" : "icLauncher@2x-1.png",
       "scale" : "2x"
     }
   ],

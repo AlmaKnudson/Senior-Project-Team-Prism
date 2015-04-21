@@ -56,7 +56,7 @@
     <style name="WarningImage">
         <item name="android:layout_width">20dp</item>
         <item name="android:layout_height">20dp</item>
-        <item name="android:tint">@color/lightPurple</item>
+        <item name="android:tint">@color/darkGray</item>
         <item name="android:src">@android:drawable/ic_secure</item>
         <item name="android:adjustViewBounds">true</item>
         <item name="android:layout_gravity">center</item>

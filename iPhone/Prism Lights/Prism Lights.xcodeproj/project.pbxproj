@@ -71,16 +71,18 @@
 		11FDAB501AACDA5F0055C2AD /* MusicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDAB4F1AACDA5F0055C2AD /* MusicCell.swift */; };
 		11FDAB541AAFF2460055C2AD /* MusicBulbRangeSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDAB531AAFF2460055C2AD /* MusicBulbRangeSelection.swift */; };
 		11FDAB581AB109510055C2AD /* BeaconBulbTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDAB571AB109510055C2AD /* BeaconBulbTracking.swift */; };
+		CC1C60B01AE5536D00FF1A3A /* FavoriteCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1C60AF1AE5536D00FF1A3A /* FavoriteCollectionCell.swift */; };
 		CC24AE701A77EFEA003316FD /* Lights_API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC24AE6F1A77EFEA003316FD /* Lights_API.swift */; };
 		CC26D2591AD990EB00AEE7F7 /* ConnectingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC26D2581AD990EB00AEE7F7 /* ConnectingViewController.swift */; };
 		CC26D25B1AD9F71F00AEE7F7 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC26D25A1AD9F71F00AEE7F7 /* Protocols.swift */; };
 		CC27D7FF1A802E9C00346F47 /* PrismSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC27D7FE1A802E9C00346F47 /* PrismSDK.swift */; };
 		CC391F411A7D91F9004C94B5 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC391F401A7D91F9004C94B5 /* Networking.swift */; };
+		CC4156B01AE310CE00CD5902 /* BridgeSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4156AF1AE310CE00CD5902 /* BridgeSelect.swift */; };
 		CC4A46E51A8912FD007DC0F2 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A46E41A8912FD007DC0F2 /* Settings.swift */; };
 		CC4A46E71A89130F007DC0F2 /* ModeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A46E61A89130F007DC0F2 /* ModeCell.swift */; };
 		CC89CA011ADD8E0B00E25DCD /* HomePageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC89CA001ADD8E0B00E25DCD /* HomePageController.swift */; };
 		CC89CA031ADD903D00E25DCD /* GroupCollectionControlller.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC89CA021ADD903D00E25DCD /* GroupCollectionControlller.swift */; };
-		CC89CA051ADD904F00E25DCD /* FavioriteCollectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC89CA041ADD904F00E25DCD /* FavioriteCollectionController.swift */; };
+		CC89CA051ADD904F00E25DCD /* FavoriteCollectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC89CA041ADD904F00E25DCD /* FavoriteCollectionController.swift */; };
 		CC89CA071ADDF16800E25DCD /* GroupBulbCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC89CA061ADDF16800E25DCD /* GroupBulbCell.swift */; };
 		CC89CA091ADDF1F000E25DCD /* ColorUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC89CA081ADDF1F000E25DCD /* ColorUtil.swift */; };
 		CC96AD941ABE26E00025896F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CCB135A81AAD5606006E464F /* Main.storyboard */; };
@@ -225,16 +227,18 @@
 		11FDAB4F1AACDA5F0055C2AD /* MusicCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicCell.swift; sourceTree = "<group>"; };
 		11FDAB531AAFF2460055C2AD /* MusicBulbRangeSelection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicBulbRangeSelection.swift; sourceTree = "<group>"; };
 		11FDAB571AB109510055C2AD /* BeaconBulbTracking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeaconBulbTracking.swift; sourceTree = "<group>"; };
+		CC1C60AF1AE5536D00FF1A3A /* FavoriteCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteCollectionCell.swift; sourceTree = "<group>"; };
 		CC24AE6F1A77EFEA003316FD /* Lights_API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lights_API.swift; sourceTree = "<group>"; };
 		CC26D2581AD990EB00AEE7F7 /* ConnectingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectingViewController.swift; sourceTree = "<group>"; };
 		CC26D25A1AD9F71F00AEE7F7 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		CC27D7FE1A802E9C00346F47 /* PrismSDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrismSDK.swift; sourceTree = "<group>"; };
 		CC391F401A7D91F9004C94B5 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
+		CC4156AF1AE310CE00CD5902 /* BridgeSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BridgeSelect.swift; sourceTree = "<group>"; };
 		CC4A46E41A8912FD007DC0F2 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		CC4A46E61A89130F007DC0F2 /* ModeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModeCell.swift; sourceTree = "<group>"; };
 		CC89CA001ADD8E0B00E25DCD /* HomePageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageController.swift; sourceTree = "<group>"; };
 		CC89CA021ADD903D00E25DCD /* GroupCollectionControlller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupCollectionControlller.swift; sourceTree = "<group>"; };
-		CC89CA041ADD904F00E25DCD /* FavioriteCollectionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavioriteCollectionController.swift; sourceTree = "<group>"; };
+		CC89CA041ADD904F00E25DCD /* FavoriteCollectionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteCollectionController.swift; sourceTree = "<group>"; };
 		CC89CA061ADDF16800E25DCD /* GroupBulbCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupBulbCell.swift; sourceTree = "<group>"; };
 		CC89CA081ADDF1F000E25DCD /* ColorUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorUtil.swift; sourceTree = "<group>"; };
 		CC9E5ECC1A89A16100B19DF6 /* AlarmsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmsTable.swift; sourceTree = "<group>"; };
@@ -298,11 +302,12 @@
 			children = (
 				0D0A26D91A38AFA10033550D /* Bulb Settings */,
 				0D9357E61A2D4BB100AAD52D /* BulbCollectionCell.swift */,
+				CC1C60AF1AE5536D00FF1A3A /* FavoriteCollectionCell.swift */,
 				CC89CA061ADDF16800E25DCD /* GroupBulbCell.swift */,
 				0D9862551A1D2C0B00FAD175 /* BulbsCollectionController.swift */,
 				CC89CA001ADD8E0B00E25DCD /* HomePageController.swift */,
 				CC89CA021ADD903D00E25DCD /* GroupCollectionControlller.swift */,
-				CC89CA041ADD904F00E25DCD /* FavioriteCollectionController.swift */,
+				CC89CA041ADD904F00E25DCD /* FavoriteCollectionController.swift */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -437,6 +442,7 @@
 				CCC54A391AC1EA39003FF0E2 /* BulbActivity.swift */,
 				CC26D2581AD990EB00AEE7F7 /* ConnectingViewController.swift */,
 				CC26D25A1AD9F71F00AEE7F7 /* Protocols.swift */,
+				CC4156AF1AE310CE00CD5902 /* BridgeSelect.swift */,
 			);
 			path = "Prism Lights";
 			sourceTree = "<group>";
@@ -779,6 +785,7 @@
 				117F49631A96DAFE00A31746 /* MusicController.m in Sources */,
 				0D3A79171A26A716003AC6D4 /* DDLog.m in Sources */,
 				0D3A79191A26A716003AC6D4 /* DDTTYLogger.m in Sources */,
+				CC1C60B01AE5536D00FF1A3A /* FavoriteCollectionCell.swift in Sources */,
 				CC391F411A7D91F9004C94B5 /* Networking.swift in Sources */,
 				CC9E5ECF1A89B95300B19DF6 /* AlarmCell.swift in Sources */,
 				CCCD592E1A78011E008B209D /* Rules_API.swift in Sources */,
@@ -800,6 +807,7 @@
 				0D9862541A1D2C0B00FAD175 /* AppDelegate.swift in Sources */,
 				CCC54A3A1AC1EA39003FF0E2 /* BulbActivity.swift in Sources */,
 				117F495C1A96DA4500A31746 /* EZPlot.m in Sources */,
+				CC4156B01AE310CE00CD5902 /* BridgeSelect.swift in Sources */,
 				0D3A791D1A26A716003AC6D4 /* DispatchQueueLogFormatter.m in Sources */,
 				0DB347431A2D5BCE00B91EF2 /* PushAuthController.swift in Sources */,
 				11FDAB581AB109510055C2AD /* BeaconBulbTracking.swift in Sources */,
@@ -819,7 +827,7 @@
 				CCB707861AA68A73002BF12B /* ColorSelectorView.swift in Sources */,
 				CC4A46E71A89130F007DC0F2 /* ModeCell.swift in Sources */,
 				CC4A46E51A8912FD007DC0F2 /* Settings.swift in Sources */,
-				CC89CA051ADD904F00E25DCD /* FavioriteCollectionController.swift in Sources */,
+				CC89CA051ADD904F00E25DCD /* FavoriteCollectionController.swift in Sources */,
 				CC27D7FF1A802E9C00346F47 /* PrismSDK.swift in Sources */,
 				CCCD59281A7800EA008B209D /* Schedules_API.swift in Sources */,
 				119F14F51AC18DF60024B019 /* ColorViewCell.swift in Sources */,
@@ -989,6 +997,7 @@
 					path,
 				);
 				INFOPLIST_FILE = "Prism Lights/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1026,6 +1035,7 @@
 					path,
 				);
 				INFOPLIST_FILE = "Prism Lights/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

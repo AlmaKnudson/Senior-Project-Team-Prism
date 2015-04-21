@@ -71,16 +71,16 @@ public class HomeFragment extends Fragment implements CacheUpdateListener{
         gridView.setAdapter(new HomeGridAdapter());
         trash = (ImageView) frame.findViewById(R.id.homeTrashImage);
         addFavoriteButton = (Button) frame.findViewById(R.id.addFavoriteButton);
-        addFavoriteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
-                BulbSelectionFragment bulbSelectionFragment = new BulbSelectionFragment();
-                fragmentTransaction.replace(R.id.container, bulbSelectionFragment);
-                fragmentTransaction.addToBackStack("bulbSelection");
-                fragmentTransaction.commit();
-            }
-        });
+//        addFavoriteButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
+//                BulbSelectionFragment bulbSelectionFragment = new BulbSelectionFragment();
+//                fragmentTransaction.replace(R.id.container, bulbSelectionFragment);
+//                fragmentTransaction.addToBackStack("bulbSelection");
+//                fragmentTransaction.commit();
+//            }
+//        });
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 //                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
