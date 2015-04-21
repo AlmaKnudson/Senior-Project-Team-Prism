@@ -15,25 +15,48 @@ class HomePageController : UIViewController, UIPageViewControllerDataSource, UIP
     // MARK: - Variables
     private var pageViewController: UIPageViewController?
     
-    var index:Int = 0
+    var pageIndex:Int = 0
     var PAGE_COUNT:Int = 3
+    var controllers:[UIViewController] = []
+    var controlDict:[String:UIViewController] = [:]
     
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        CreateControllerArray()
         createPageViewController()
         setupPageControl()
     }
+    
+    /**
+    Sets the phone status bar to be light colored for dark background
+    
+    :returns: UIStatusBarStyle
+    */
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
+    }
+    
+    private func CreateControllerArray() {
+        let bulbCollection = self.storyboard!.instantiateViewControllerWithIdentifier("BulbCollection") as! BulbsCollectionController
+        controllers.append(bulbCollection)
+        
+        let groupCollection =
+            self.storyboard?.instantiateViewControllerWithIdentifier("GroupCollection") as! GroupCollectionController
+        controllers.append(groupCollection)
+        let favoriteCollection =
+            self.storyboard?.instantiateViewControllerWithIdentifier("FavoriteCollection") as! FavoriteCollectionController
+        controllers.append(favoriteCollection)
+    }
+    
     
     private func createPageViewController() {
         
         let pageController = self.storyboard!.instantiateViewControllerWithIdentifier("PageViewController") as! UIPageViewController
         pageController.dataSource = self
         
-        let bulbCollection = self.storyboard!.instantiateViewControllerWithIdentifier("BulbCollection") as! BulbsCollectionController
-        let startingViewControllers: NSArray = [bulbCollection]
-
-        pageController.setViewControllers(startingViewControllers as [AnyObject], direction: UIPageViewControllerNavigationDirection.Forward, animated: false, completion: nil)
+        var controller:[UIViewController] = [controllers[0]]
+        pageController.setViewControllers(controller as [AnyObject], direction: UIPageViewControllerNavigationDirection.Forward, animated: false, completion: nil)
         
         pageViewController = pageController
         addChildViewController(pageViewController!)
@@ -51,40 +74,35 @@ class HomePageController : UIViewController, UIPageViewControllerDataSource, UIP
     // MARK: - UIPageViewControllerDataSource
     
     
-    func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController?{
+    func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController? {
         
+        var index = IndexOfController(viewController)
         if index <= 0 {
             return nil
         }
-        index--
-        
-        
-        return GetController()
+        return controllers[index-1]
     }
-    func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController?{
+    func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController? {
         
-        if index >= PAGE_COUNT-1 {
+        var index = IndexOfController(viewController)
+        if index >= controllers.count-1 {
             return nil
         }
-        index++
-        return GetController()
+        
+        return controllers[index+1]
     }
     
-    func GetController() -> (UIViewController?){
+    
+    func IndexOfController(viewController:UIViewController) -> Int {
         
-        switch index {
-        case 0:
-            return self.storyboard?.instantiateViewControllerWithIdentifier("BulbCollection") as! BulbsCollectionController
-        case 1:
-
-            return
-                self.storyboard?.instantiateViewControllerWithIdentifier("GroupCollection") as! GroupCollectionController
-        case 2:
-            return nil
-        default:
-            return nil
+        for var i = 0; i < controllers.count; i++ {
+            if(controllers[i] === viewController){
+                return i
+            }
         }
+        return -1
     }
+    
     
     
     // MARK: - Page Indicator
@@ -93,15 +111,26 @@ class HomePageController : UIViewController, UIPageViewControllerDataSource, UIP
     // Both methods are called in response to a 'setViewControllers:...' call, but the presentation index is updated automatically in the case of gesture-driven navigation.
     // The number of items reflected in the page indicator.
     func presentationCountForPageViewController(pageViewController: UIPageViewController) -> Int{
-        return PAGE_COUNT
+        return self.controllers.count
     }
 
     // The selected item reflected in the page indicator.
     func presentationIndexForPageViewController(pageViewController: UIPageViewController) -> Int{
-        return index
+        return pageIndex
     }
     
     
+    
+    func pageViewController(pageViewController: UIPageViewController, willTransitionToViewControllers pendingViewControllers: [AnyObject]){
+        
+    }
+    
+    // Sent when a gesture-initiated transition ends. The 'finished' parameter indicates whether the animation finished, while the 'completed' parameter indicates whether the transition completed or bailed out (if the user let go early).
+    func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [AnyObject], transitionCompleted completed: Bool){
+        if completed {
+            pageIndex++
+        }
+    }
     
 
     

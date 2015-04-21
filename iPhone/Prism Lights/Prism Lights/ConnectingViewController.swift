@@ -15,7 +15,8 @@ class ConnectingViewController : UIViewController, DismissPresentedController {
     let LAST_BRIDGE_MESSAGE = "Looking for last used Bridge..."
     let SCANNING_MESSAGE = "Searching for a New Bridge..."
     let CONNECTED_MESSAGE = "Connected!"
-    
+    var macs:[String] = []
+    var bridges:[String:String] = [:]
     
     //MARK: - Properties
     var activityIndicator: BulbActivity!
@@ -37,6 +38,16 @@ class ConnectingViewController : UIViewController, DismissPresentedController {
     }
     
     //MARK: - UIViewController Methods
+    
+    /**
+    Sets the phone status bar to be light colored for dark background
+    
+    :returns: UIStatusBarStyle
+    */
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -116,6 +127,10 @@ class ConnectingViewController : UIViewController, DismissPresentedController {
         if segue.identifier == "pushAuth" {
             var dest = segue.destinationViewController as! PushAuthController
             dest.delegate = self
+        } else if segue.identifier == "bridgeSelect" {
+            var dest = segue.destinationViewController as! BridgeSelect
+            dest.macs = macs
+            dest.bridges = bridges
         }
     }
     //MARK: - Notification Methods
@@ -204,8 +219,16 @@ class ConnectingViewController : UIViewController, DismissPresentedController {
     
     func MultipleBridgesFound(dict:[String:String]){
         //TODO: Present choices
-        var alert = UIAlertController(title: "1+ Bridges Found", message: "More than 1 bridge has been dectected.", preferredStyle: UIAlertControllerStyle.Alert)
-        let cancelButton = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Cancel) { (cancelButton) -> Void in     }
+        bridges = dict
+        macs = dict.keys.array
+        
+        var alert = UIAlertController(title: "1+ Bridges Found", message: "Select a Bridge to make a connection.", preferredStyle: UIAlertControllerStyle.Alert)
+        let button = UIAlertAction(title: "Select a Bridge", style: UIAlertActionStyle.Default) {
+            (Button) -> Void in
+            self.performSegueWithIdentifier("bridgeSelect", sender: self)
+        }
+        let cancelButton = UIAlertAction(title: "Don't Connect", style: UIAlertActionStyle.Cancel) { (cancelButton) -> Void in     }
+        alert.addAction(button)
         alert.addAction(cancelButton)
         //Show the alert to the user
         self.presentViewController(alert, animated: true) { () -> Void in}
@@ -229,6 +252,9 @@ class ConnectingViewController : UIViewController, DismissPresentedController {
     
     
 }
+
+
+
 
 
 func SearchForBridge(upnpSearch:Bool, portalSearch:Bool, ipAddressSearch:Bool, searchFinishedFunc:([NSObject:AnyObject]!)->()){
