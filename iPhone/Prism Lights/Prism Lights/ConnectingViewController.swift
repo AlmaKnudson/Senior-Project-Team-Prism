@@ -218,7 +218,6 @@ class ConnectingViewController : UIViewController, DismissPresentedController {
     }
     
     func MultipleBridgesFound(dict:[String:String]){
-        //TODO: Present choices
         bridges = dict
         macs = dict.keys.array
         

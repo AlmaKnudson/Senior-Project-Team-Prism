@@ -16,10 +16,11 @@
                         <viewControllerLayoutGuide type="bottom" id="NIY-Hu-uhM"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Am6-8i-XEB">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <tabBarItem key="tabBarItem" title="Home" image="home" id="0Ur-fv-tnQ"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lu9-5l-Hte" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -147,6 +148,7 @@
                             <constraint firstItem="Bd3-Da-90v" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leading" id="z4u-rd-Xli"/>
                         </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <tabBarItem key="tabBarItem" title="Home" image="home" id="acW-dT-cKf"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
@@ -277,6 +279,7 @@
                             <constraint firstItem="ghP-HQ-lmW" firstAttribute="bottom" secondItem="Mgc-iN-gRE" secondAttribute="top" id="uoa-31-JHj"/>
                         </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <tabBarItem key="tabBarItem" title="Home" image="home" id="HcH-i0-Xr8"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
@@ -1429,7 +1432,7 @@
                             </mask>
                         </variation>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Settings" image="gear" selectedImage="second" id="Vhm-P8-e48">
+                    <tabBarItem key="tabBarItem" title="Settings" image="p" selectedImage="second" id="Vhm-P8-e48">
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
                     </tabBarItem>
                     <connections>
@@ -1477,7 +1480,7 @@
         <scene sceneID="vWs-Ne-Je7">
             <objects>
                 <navigationController id="f97-iB-1xP" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Settings" image="gear" id="3dW-Sk-ATN"/>
+                    <tabBarItem key="tabBarItem" title="Settings" image="p" id="3dW-Sk-ATN"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="bhH-OT-2BT">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1554,7 +1557,7 @@
                             <outlet property="delegate" destination="TES-j6-umQ" id="8eL-7K-esA"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Settings" image="gear" selectedImage="second" id="0hC-KH-B4L"/>
+                    <tabBarItem key="tabBarItem" title="Settings" image="p" selectedImage="second" id="0hC-KH-B4L"/>
                     <navigationItem key="navigationItem" id="XeC-5p-RIP"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="i5b-uj-dSx" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3161,6 +3164,7 @@
                             <constraint firstItem="l3A-6d-vjQ" firstAttribute="leading" secondItem="WTr-AG-K5X" secondAttribute="leading" id="ajo-ed-lut"/>
                         </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <tabBarItem key="tabBarItem" title="Home" image="home" id="mDv-t1-FAZ"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
@@ -3176,18 +3180,18 @@
     <resources>
         <image name="bulb_bottom" width="86" height="150"/>
         <image name="bulb_top" width="86" height="150"/>
-        <image name="gear" width="50" height="50"/>
         <image name="groupBottom" width="141" height="150"/>
         <image name="groupTop" width="141" height="150"/>
         <image name="home" width="25" height="25"/>
         <image name="lock" width="48" height="60"/>
         <image name="note" width="25" height="25"/>
+        <image name="p" width="30" height="30"/>
         <image name="pushAuth" width="516" height="475"/>
         <image name="second" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Zij-yb-hZI"/>
-        <segue reference="VIG-4p-d0T"/>
+        <segue reference="5ef-6a-7TT"/>
+        <segue reference="QvR-CG-Niy"/>
         <segue reference="agp-MF-nMt"/>
         <segue reference="MV1-5L-hp4"/>
     </inferredMetricsTieBreakers>
