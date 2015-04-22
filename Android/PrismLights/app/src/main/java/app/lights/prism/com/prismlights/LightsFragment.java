@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LightsFragment extends Fragment implements CacheUpdateListener {
+public class LightsFragment extends Fragment implements CacheUpdateListener, EditButtonPresentCaller {
 
 
     private GridView gridView;
@@ -34,6 +34,7 @@ public class LightsFragment extends Fragment implements CacheUpdateListener {
     private Map<String, PHLight> currentLights;
     private PHHueSDK hueSDK;
     private LayoutIdOrder layoutIdOrder;
+    private EditButtonPresentListener editButtonPresentListener;
 
 
 
@@ -53,6 +54,7 @@ public class LightsFragment extends Fragment implements CacheUpdateListener {
         // Inflate the layout for this fragment
         View layout = inflater.inflate(R.layout.fragment_lights, container, false);
         gridView= (GridView) layout.findViewById(R.id.homeGridView);
+        updateFromCache();
         gridView.setAdapter(new LightViewAdapter());
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -81,6 +83,15 @@ public class LightsFragment extends Fragment implements CacheUpdateListener {
         return layout;
     }
 
+    /**
+     * Calls the edit button present listener after checking for null
+     */
+    private void callEditButtonPresentListener(boolean shown) {
+        if(editButtonPresentListener != null) {
+            editButtonPresentListener.editButtonPresent(shown);
+        }
+    }
+
     @Override
     public void cacheUpdated() {
         updateFromCache();
@@ -96,9 +107,40 @@ public class LightsFragment extends Fragment implements CacheUpdateListener {
 
     }
 
+    /**
+     * Updates the current lights and their id order from the cache, calling the edit button present listener
+     * if the number of lights has changed
+     */
     private void updateFromCache() {
+        //invalid initial value
+        int lastSize = -1;
+        if(currentLightIdOrder != null) {
+            lastSize = currentLightIdOrder.size();
+        }
         currentLights = hueSDK.getSelectedBridge().getResourceCache().getLights();
         currentLightIdOrder = layoutIdOrder.getLightsFromBridgeOrder(currentLights.keySet());
+        //if there are no lights it should update when initializing because 0 != -1.
+        // It should also update at any other time
+        if(lastSize != currentLightIdOrder.size()) {
+            if (currentLightIdOrder.size() < 2) {
+                callEditButtonPresentListener(false);
+            } else {
+                callEditButtonPresentListener(true);
+            }
+        }
+    }
+
+    public void setEditButtonPresentListener(EditButtonPresentListener editButtonPresentListener) {
+        this.editButtonPresentListener = editButtonPresentListener;
+    }
+
+    @Override
+    public boolean shouldEditButtonBePresent() {
+        if(currentLightIdOrder != null) {
+            return currentLightIdOrder.size() > 1;
+        } else {
+            return false;
+        }
     }
 
 
@@ -107,7 +149,6 @@ public class LightsFragment extends Fragment implements CacheUpdateListener {
 
         public LightViewAdapter() {
             super();
-            updateFromCache();
         }
         @Override
         public int getCount() {

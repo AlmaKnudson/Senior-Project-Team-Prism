@@ -21,24 +21,25 @@ import com.philips.lighting.hue.sdk.PHHueSDK;
 
 import java.util.HashSet;
 
-public class RealHomeFragment extends Fragment implements ViewPager.OnPageChangeListener, CacheUpdateListener{
+public class RealHomeFragment extends Fragment implements ViewPager.OnPageChangeListener, CacheUpdateListener, EditButtonPresentListener {
 
-    public static final String favoritePosition="FAVORITE_POSITION";
     private ViewPager viewPager;
     private View bulbIconSelected;
     private View bulbIconDeselected;
     private View groupIconSelected;
     private View groupIconDeselected;
     private View favoriteIconSelected;
+    private ImageButton addButton;
+    private ImageButton editButton;
     private View favoriteIconDeselected;
 
-    public static final int disabledOverlay = Color.argb(125, 0, 0, 0);
-    public static final int offOverlay = Color.argb(50, 0, 0, 0);
+    private Fragment lastSelectedFragment;
 
+    public static final int offOverlay = Color.argb(50, 0, 0, 0);
+    public static final int disabledOverlay = Color.argb(125, 0, 0, 0);
+    public static final String favoritePosition="FAVORITE_POSITION";
     public static final String lightPositionString = "CURRENT_BULB_ID";
     public static final String groupOrLightString = "GROUP_OR_LIGHT";
-    private ImageButton editButton;
-    private ImageButton addButton;
 
     public RealHomeFragment() {
     }
@@ -71,6 +72,7 @@ public class RealHomeFragment extends Fragment implements ViewPager.OnPageChange
     @Override
     public void onPageSelected(int position) {
         updateFromCache();
+        updateEditButtonListeners();
         switch(position) {
             case 0:
                 turnOffView(groupIconSelected, groupIconDeselected);
@@ -188,8 +190,37 @@ public class RealHomeFragment extends Fragment implements ViewPager.OnPageChange
     private void updateFromCache() {
         Fragment fragment = getChildFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewPager + ":" + viewPager.getCurrentItem());
         //Favorites fragment does not implement this
-        if(fragment instanceof CacheUpdateListener) {
+        if(fragment != null && fragment instanceof CacheUpdateListener) {
             ((CacheUpdateListener) fragment).cacheUpdated();
+        }
+    }
+
+    private void updateEditButtonListeners() {
+        Fragment fragment = getChildFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewPager + ":" + viewPager.getCurrentItem());
+        if(fragment != null) {
+            if (lastSelectedFragment != null && lastSelectedFragment instanceof EditButtonPresentCaller) {
+                EditButtonPresentCaller lastCaller = (EditButtonPresentCaller) lastSelectedFragment;
+                lastCaller.setEditButtonPresentListener(null);
+            }
+            if (fragment instanceof EditButtonPresentCaller) {
+                EditButtonPresentCaller caller = (EditButtonPresentCaller) fragment;
+                caller.setEditButtonPresentListener(this);
+                if (caller.shouldEditButtonBePresent()) {
+                    editButton.setVisibility(View.VISIBLE);
+                } else {
+                    editButton.setVisibility(View.GONE);
+                }
+                lastSelectedFragment = fragment;
+            }
+        }
+    }
+
+    @Override
+    public void editButtonPresent(boolean shown) {
+        if(shown) {
+            editButton.setVisibility(View.VISIBLE);
+        } else {
+            editButton.setVisibility(View.GONE);
         }
     }
 
@@ -218,5 +249,14 @@ public class RealHomeFragment extends Fragment implements ViewPager.OnPageChange
         public int getCount() {
             return 3;
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        if(lastSelectedFragment != null && lastSelectedFragment instanceof EditButtonPresentCaller) {
+            EditButtonPresentCaller lastCaller = (EditButtonPresentCaller) lastSelectedFragment;
+            lastCaller.setEditButtonPresentListener(null);
+        }
+        super.onDestroyView();
     }
 }

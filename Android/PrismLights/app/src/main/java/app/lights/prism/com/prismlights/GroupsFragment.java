@@ -21,12 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class GroupsFragment extends Fragment implements CacheUpdateListener {
+public class GroupsFragment extends Fragment implements CacheUpdateListener, EditButtonPresentCaller{
 
     private GridView gridView;
     private List<String> currentGroupIdOrder;
     private PHHueSDK hueSDK;
     private LayoutIdOrder layoutIdOrder;
+    private EditButtonPresentListener editButtonPresentListener;
 
     public GroupsFragment() {
         hueSDK = PHHueSDK.getInstance();
@@ -45,6 +46,7 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
         // Inflate the layout for this fragment
         View layout = inflater.inflate(R.layout.fragment_lights, container, false);
         gridView= (GridView) layout.findViewById(R.id.homeGridView);
+        updateFromCache(); //must be called before adapter is initialized
         gridView.setAdapter(new GroupViewAdapter());
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -79,9 +81,27 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
 
     }
 
+    /**
+     * Updates the current lights and their id order from the cache, calling the edit button present listener
+     * if the number of lights has changed
+     */
     private void updateFromCache() {
+        //invalid initial value
+        int lastSize = -1;
+        if(currentGroupIdOrder != null) {
+            lastSize = currentGroupIdOrder.size();
+        }
         Map<String, PHGroup> currentGroups = hueSDK.getSelectedBridge().getResourceCache().getGroups();
         currentGroupIdOrder = layoutIdOrder.getGroupsFromBridgeOrder(currentGroups.keySet());
+        //if there are no groups it should update when initializing because 0 != -1.
+        // It should also update at any other time
+        if(lastSize != currentGroupIdOrder.size()) {
+            if (currentGroupIdOrder.size() < 2) {
+                callEditButtonPresentListener(false);
+            } else {
+                callEditButtonPresentListener(true);
+            }
+        }
     }
 
     @Override
@@ -91,12 +111,34 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener {
         ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
     }
 
+    @Override
+    public void setEditButtonPresentListener(EditButtonPresentListener listener) {
+        this.editButtonPresentListener = listener;
+    }
+
+    @Override
+    public boolean shouldEditButtonBePresent() {
+        if(currentGroupIdOrder != null) {
+            return currentGroupIdOrder.size() > 1;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Calls the edit button present listener after checking for null
+     */
+    private void callEditButtonPresentListener(boolean shown) {
+        if(editButtonPresentListener != null) {
+            editButtonPresentListener.editButtonPresent(shown);
+        }
+    }
+
     private class GroupViewAdapter extends BaseAdapter {
 
 
         public GroupViewAdapter() {
             super();
-            updateFromCache();
         }
         @Override
         public int getCount() {
