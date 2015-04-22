@@ -33,7 +33,7 @@ public class RealHomeFragment extends Fragment implements ViewPager.OnPageChange
     private ImageButton editButton;
     private View favoriteIconDeselected;
 
-    private Fragment lastSelectedFragment;
+    private Fragment lastSelectedFragment; //keeps track of the last fragment that was selected so we can change the
 
     public static final int offOverlay = Color.argb(50, 0, 0, 0);
     public static final int disabledOverlay = Color.argb(125, 0, 0, 0);
