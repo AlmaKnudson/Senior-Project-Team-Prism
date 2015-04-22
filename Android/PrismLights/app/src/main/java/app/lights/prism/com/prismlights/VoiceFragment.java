@@ -25,6 +25,9 @@ import com.philips.lighting.model.PHLightState;
 //import org.json.JSONObject;
 //import org.w3c.dom.Text;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -107,17 +110,19 @@ public class VoiceFragment extends Fragment implements IWitListener {
             } else if (intent.equals("brighter")){
                 //Adjust brightness of hue lights.
                 StringBuilder message = new StringBuilder("INCREASING BRIGHTNESS\n");
-                List<PHLight> currentLights = bridge.getResourceCache().getAllLights();
-                for(PHLight light : currentLights){
-                    int currentBrightness = light.getLastKnownLightState().getBrightness();
-                    int newBrightness = Math.min(currentBrightness + 75, 254);
-                    PHLightState lightState = new PHLightState();
-                    lightState.setOn(true);
-                    lightState.setBrightness(newBrightness);
+                if(bridge != null) {
+                    List<PHLight> currentLights = bridge.getResourceCache().getAllLights();
+                    for (PHLight light : currentLights) {
+                        int currentBrightness = light.getLastKnownLightState().getBrightness();
+                        int newBrightness = Math.min(currentBrightness + 75, 254);
+                        PHLightState lightState = new PHLightState();
+                        lightState.setOn(true);
+                        lightState.setBrightness(newBrightness);
 
 //                    lightState.setBrightness(currentBrightness + (currentBrightness/5)); //Decrease brightness 20%
-                    bridge.updateLightState(light, lightState);
-                    message.append(light.getName() + ", is set to " + formatter.format((newBrightness * 1.0) / 254.0)+ " brightness.\n");
+                        bridge.updateLightState(light, lightState);
+                        message.append(light.getName() + ", is set to " + formatter.format((newBrightness * 1.0) / 254.0) + " brightness.\n");
+                    }
                 }
                 witResponse.setText(message.toString());
             } else if (intent.equals("bulbname_off")){ //TODO--SET COLOR OF INDIVIDUAL BULBS
@@ -143,34 +148,39 @@ public class VoiceFragment extends Fragment implements IWitListener {
             } else if (intent.equals("color")) {
                 if(entities.containsKey("color")){
                     try {
-                        String hueValue = entities.get("color").getAsJsonArray().get(0).getAsJsonObject().get("metadata").getAsString();
-                        String color = entities.get("color").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsString();
+//                        JSONObject arr = (JSONObject)entities.get("color").getAsJsonArray().get(0).getAsJsonObject();
+                        String[] result = entities.get("color").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsString().split("~!~");
+//                        String color = entities.get("color").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsString();
+                        String color = result[0];
+                        String hueValue = result[1];
                         witResponse.setText("Set hue value to be: " + hueValue + "\nFor this color: " + color);
                     } catch(Exception e){
                         witResponse.setText("Did not understand this command: " + outcome.get_text());
                     }
                 }
             } else if (intent.equals("dim")) {
-                //DIM BULBS
-                List<PHLight> currentLights = bridge.getResourceCache().getAllLights();
                 StringBuilder message = new StringBuilder("DIMMING LIGHTS\n");
-                for(PHLight light : currentLights){
-                    int currentBrightness = light.getLastKnownLightState().getBrightness();
-                    PHLightState lightState = new PHLightState();
-                    lightState.setOn(true);
-                    int newBrightness = Math.max(currentBrightness - 75, 0);
-                    if(newBrightness == 0)
-                        lightState.setOn(false);
-                    lightState.setBrightness(newBrightness); //Decrease brightness 20%
-                    bridge.updateLightState(light, lightState);
-                    message.append(light.getName() + ", is set to " + formatter.format((newBrightness * 1.0) / 254.0)+ " brightness.\n");
+                if(bridge != null) {
+                    //DIM BULBS
+                    List<PHLight> currentLights = bridge.getResourceCache().getAllLights();
+                    for (PHLight light : currentLights) {
+                        int currentBrightness = light.getLastKnownLightState().getBrightness();
+                        PHLightState lightState = new PHLightState();
+                        lightState.setOn(true);
+                        int newBrightness = Math.max(currentBrightness - 75, 0);
+                        if (newBrightness == 0)
+                            lightState.setOn(false);
+                        lightState.setBrightness(newBrightness); //Decrease brightness 20%
+                        bridge.updateLightState(light, lightState);
+                        message.append(light.getName() + ", is set to " + formatter.format((newBrightness * 1.0) / 254.0) + " brightness.\n");
+                    }
                 }
                 witResponse.setText(message.toString());
 //                witResponse.setText(intent + "\n" + entities.toString() + "dimm");
             } else if (intent.equals("timer")) {
                 try {
                     String durationInSeconds = entities.get("duration").getAsJsonArray().get(0).getAsJsonObject().get("value").toString();
-                    witResponse.setText("Setting time for " + durationInSeconds + " seconds.");
+                    witResponse.setText("Setting timer for " + durationInSeconds + " seconds.");
 //                    PHHueCountTimerListener timerLister = new PHHueCountTimerListener() {
 //                        @Override
 //                        public void onTick() {
@@ -202,20 +212,24 @@ public class VoiceFragment extends Fragment implements IWitListener {
                 }
             } else if (intent.equals("turn_lights_off")) {
                 witResponse.setText("TURNING ALL LIGHTS OFF");
-                List<PHLight> currentLights = bridge.getResourceCache().getAllLights();
-                for(PHLight light : currentLights){
-                    PHLightState lightState = new PHLightState();
+                if(bridge != null) {
+                    List<PHLight> currentLights = bridge.getResourceCache().getAllLights();
+                    for (PHLight light : currentLights) {
+                        PHLightState lightState = new PHLightState();
 //                    HueBulbChangeUtility.turnBulbOnOff(light);
 //                    lightState.setOn(on);
-                    lightState.setOn(false);
-                    bridge.updateLightState(light, lightState);
+                        lightState.setOn(false);
+                        bridge.updateLightState(light, lightState);
+                    }
                 }
             }  else if (intent.equals("turn_lights_on")) {
-                List<PHLight> currentLights = bridge.getResourceCache().getAllLights();
-                for(PHLight light : currentLights){
-                    PHLightState lightState = new PHLightState();
-                    lightState.setOn(true);
-                    bridge.updateLightState(light, lightState);
+                if(bridge != null) {
+                    List<PHLight> currentLights = bridge.getResourceCache().getAllLights();
+                    for (PHLight light : currentLights) {
+                        PHLightState lightState = new PHLightState();
+                        lightState.setOn(true);
+                        bridge.updateLightState(light, lightState);
+                    }
                 }
                 witResponse.setText("TURNING ALL LIGHTS ON");
             } else {

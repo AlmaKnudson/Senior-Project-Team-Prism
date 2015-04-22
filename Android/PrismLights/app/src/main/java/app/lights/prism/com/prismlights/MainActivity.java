@@ -54,6 +54,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Map;
@@ -69,7 +70,9 @@ public class MainActivity extends Activity implements PHSDKListener{
     private static final String ESTIMOTE_PROXIMITY_UUID = "B9407F30-F5F8-466E-AFF9-25556B57FE6D";
     private static final Region ALL_ESTIMOTE_BEACONS = new Region("Prism Lights", ESTIMOTE_PROXIMITY_UUID, null, null);
     private BeaconManager beaconManager;
-
+    private int threshold = 2; //There has to be number of threshold readings in a row of a range change before anything happens.
+    private HashMap<String, Integer> beaconInRangeMapCount;
+    private HashMap<String, Integer> beaconOutOfRangeMapCount;
 
     private static final String DEBUG_TAG = "MainActivity";
 
@@ -126,6 +129,8 @@ public class MainActivity extends Activity implements PHSDKListener{
         super.onCreate(savedInstanceState);
 
         /* BEACON/BLUETOOTH START */
+        beaconInRangeMapCount = new HashMap<String, Integer>();
+        beaconOutOfRangeMapCount = new HashMap<String, Integer>();
         beaconManager = new BeaconManager(this.getApplicationContext());
         beaconManager.setRangingListener(new BeaconManager.RangingListener() {
             @Override
@@ -140,9 +145,16 @@ public class MainActivity extends Activity implements PHSDKListener{
                             if (beaconAssociationListener != null) {
                                 beaconAssociationListener.onBeaconAssociation(getBeaconId(rangedBeacons.get(0)));
                             }
+//                            BeaconFragment myFragment = (BeaconFragment)getFragmentManager().findFragmentByTag("BEACON_FRAGMENT");
+//                            if (myFragment.isVisible()) {
+//                               System.out.println("MADE IT");
+//                                System.exit(0);
+//                            }
 
                             for (Beacon beacon : rangedBeacons) {
-                                String associations = HueSharedPreferences.getInstance(getApplicationContext()).getBeaconOrBulbAssociations(getBeaconId(beacon));
+                                boolean beaconInRange = false;
+                                String beaconId = getBeaconId(beacon);
+                                String associations = HueSharedPreferences.getInstance(getApplicationContext()).getBeaconOrBulbAssociations(beaconId);
                                 Scanner s = new Scanner(associations);
                                 while (s.hasNextLine()) {
 
@@ -150,17 +162,58 @@ public class MainActivity extends Activity implements PHSDKListener{
                                     if (currentLine.trim().equals(""))
                                         return;
                                     String[] result = currentLine.split("~!~");
-                                    String beaconId = result[0];
+//                                    String beaconId = result[0];
                                     String bulbId = result[1];
                                     String range = result[2];
 
                                     double distance = Utils.computeAccuracy(beacon);
                                     if (((int) (distance * 3)) <= Integer.parseInt(range)) {
-                                        HueBulbChangeUtility.turnBulbOnOff(bulbId, true);
+                                        beaconInRange = true;
+                                    }
+//                                    else {
+//                                        HueBulbChangeUtility.turnBulbOnOff(bulbId, false);
+//                                    }
+//                                    String beaconId = getBeaconId(beacon);
+                                    if (beaconInRangeMapCount.containsKey(beaconId)) {
+                                        if(beaconInRange){
+                                            int count = beaconInRangeMapCount.get(beaconId);
+                                            if((count+1) >= threshold){
+                                                HueBulbChangeUtility.turnBulbOnOff(bulbId, true);
+                                                beaconInRangeMapCount.put(beaconId, 0);
+                                            } else {
+                                                beaconInRangeMapCount.put(beaconId, count + 1);
+                                            }
+                                        } else {
+                                            beaconInRangeMapCount.put(beaconId, 0);
+                                        }
                                     } else {
-                                        HueBulbChangeUtility.turnBulbOnOff(bulbId, false);
+                                        if(beaconInRange)
+                                            beaconInRangeMapCount.put(beaconId, 1);
+                                        else
+                                            beaconInRangeMapCount.put(beaconId, 0);
+                                    }
+
+                                    if (beaconOutOfRangeMapCount.containsKey(beaconId)) {
+                                        if(!beaconInRange){
+                                            int count = beaconOutOfRangeMapCount.get(beaconId);
+                                            if( (count+1) >= threshold){
+                                                HueBulbChangeUtility.turnBulbOnOff(bulbId, false);
+                                                beaconOutOfRangeMapCount.put(beaconId, 0);
+                                            } else
+                                                beaconOutOfRangeMapCount.put(beaconId, count + 1);
+                                        } else {
+                                            beaconOutOfRangeMapCount.put(beaconId, 0);
+                                        }
+                                    } else {
+                                        if(!beaconInRange)
+                                            beaconOutOfRangeMapCount.put(beaconId, 1);
+                                        else
+                                            beaconOutOfRangeMapCount.put(beaconId, 0);
                                     }
                                 }
+
+
+
                             }
                         }
                     }
@@ -479,7 +532,7 @@ public class MainActivity extends Activity implements PHSDKListener{
             public void run() {
                 if(code == PHHueError.BRIDGE_NOT_RESPONDING) {
                     //TODO add message for when bridge isn't responding after access points found
-                    searchForBridge();
+//                    searchForBridge();
                     return;
                 }
                 //TODO use code rather than message

@@ -65,7 +65,7 @@ public class MusicFragment extends Fragment implements OnsetHandler {
     private ArrayList<String> mids;
     private ArrayList<String> highs;
 
-
+    private volatile double fX;
 
     private Random rng;
     private double mostRecentPitch;
@@ -99,7 +99,7 @@ public class MusicFragment extends Fragment implements OnsetHandler {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        fX = 1.75;
         HashMap<String, String> map = LightRangeMap.getLightRangeMap().getMap();
         lows = new ArrayList<String>();
         mids = new ArrayList<String>();
@@ -165,7 +165,8 @@ public class MusicFragment extends Fragment implements OnsetHandler {
             }
         };
 
-        cOP  = new ComplexOnsetDetector(2048, 0.1, 0.002, -70);
+//        cOP  = new ComplexOnsetDetector(2048, fX/10, 0.002, -70);
+        cOP  = new ComplexOnsetDetector(2048, .1, 0.002, -70);
         cOP.setHandler(this);
         p = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 44100, 2048, pdh);
         // add a processor, handle percussion event.
@@ -220,15 +221,30 @@ public class MusicFragment extends Fragment implements OnsetHandler {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     bpmLabel.setText("" + (progress + 60) );
                     int currentBPM = progress + 60;
-                //60 -->3
-                // 120 --> 2
-                //180 -->
+
+//                f(x) = 1/60 X + 3
+                double slope = -1.0/60.0;
+                double m =  (progress + 60.0); //BPM 60-180
+                fX = slope * m + 3.5;
+//                bpmLabel.setText("" + fX);
+
+
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
+
+//                dispatcher.removeAudioProcessor(p);
+                dispatcher.removeAudioProcessor(cOP);
             }
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                cOP.setThreshold(fX/10);
+//                cOP.setThreshold();
+//                cOP  = new ComplexOnsetDetector(2048, fX/10, 0.002, -70);
+//                cOP.setHandler(this);
+//                p = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 44100, 2048, pdh);
+//                dispatcher.addAudioProcessor(p);
+                dispatcher.addAudioProcessor(cOP);
             }
         });
 

@@ -19,6 +19,7 @@ import com.estimote.sdk.Beacon;
 import com.estimote.sdk.Region;
 
 import java.util.List;
+import java.util.Scanner;
 
 
 /**
@@ -45,7 +46,7 @@ public class BeaconFragment extends Fragment {
     private final int minRange;
     private volatile int currentRange;
     private double[] distanceInFeet = new double[8];
-    private int index = 0;
+
     private double currentAverageDistance = 0;
     private boolean addAssociation = false;
 
@@ -128,8 +129,36 @@ public class BeaconFragment extends Fragment {
         beaconLabel = (TextView) view.findViewById(R.id.beaconLabel);
         beaconRangeLabel = (TextView) view.findViewById(R.id.beaconRangeLabel);
 
+        beaconRangeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                currentRange = progress + minRange;
+                beaconRangeLabel.setText(currentRange + " Feet");
+            }
 
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
 
+        String associations = HueSharedPreferences.getInstance(getActivity().getApplicationContext()).getBeaconOrBulbAssociations("~!~" + currentBulbId + "~!~");
+        Scanner s = new Scanner(associations);
+        while (s.hasNextLine()) {
+            String currentLine = s.nextLine();
+            if (currentLine.trim().equals(""))
+                continue;
+            String[] result = currentLine.split("~!~");
+            String beaconId = result[0];
+            String bulbId = result[1];
+            String range = result[2];
+            System.out.println("This Bulb is associated with this beacon: " + bulbId + "\t" + beaconId);
+            beaconLabel.setText(beaconId);
+            beaconRangeSeekBar.setProgress(Integer.parseInt(range) - minRange );
+            beaconStartTrackingButton.setEnabled(false);
+        }
         beaconStopTrackingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,6 +166,9 @@ public class BeaconFragment extends Fragment {
                 HueSharedPreferences.getInstance(getActivity().getApplicationContext()).removeBulbAssociation(association);
 //                beaconManager.disconnect();
                 System.out.println("Stop Tracking button has been pressed. Removed association: " + association);
+                beaconLabel.setText("no beacon");
+                beaconStartTrackingButton.setEnabled(true);
+
             }
         });
 
@@ -145,8 +177,10 @@ public class BeaconFragment extends Fragment {
             public void onClick(View v) {
 
                 addAssociation = true;
+                beaconStartTrackingButton.setEnabled(false);
 
                 System.out.println("START Tracking button has been pressed.");
+
                 // Should be invoked in #onStart.
 //                beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
 //                    @Override public void onServiceReady() {
@@ -167,20 +201,7 @@ public class BeaconFragment extends Fragment {
             }
         });
 
-        beaconRangeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                currentRange = progress + minRange;
-                beaconRangeLabel.setText(currentRange + " Feet");
-            }
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
 
         return view;
     }
@@ -209,14 +230,16 @@ public class BeaconFragment extends Fragment {
                     String association = beaconId + "~!~" + currentBulbId + "~!~" + currentRange;
                     HueSharedPreferences.getInstance(getActivity().getApplicationContext()).addBeaconAssociation(association);
                     addAssociation = false;
+                    beaconLabel.setText(beaconId);
+                    beaconStartTrackingButton.setEnabled(false);
                 }
             }
         });
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ((MainActivity)getActivity()).setBeaconAssociationListener(null);
+        currentBulbId = null;
     }
 }
