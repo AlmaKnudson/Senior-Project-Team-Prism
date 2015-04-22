@@ -317,6 +317,7 @@ public class MainActivity extends Activity implements PHSDKListener{
         }
         //turn of the internet connection
         PHHueSDK.getInstance().disableAllHeartbeat();
+        PHHueSDK.getInstance().getNotificationManager().unregisterSDKListener(this);
         //consider destroying the sdk
     }
 
@@ -327,6 +328,7 @@ public class MainActivity extends Activity implements PHSDKListener{
         if(bridge != null) {
             hueBridgeSdk.enableHeartbeat(hueBridgeSdk.getSelectedBridge(), PHHueSDK.HB_INTERVAL);
             hueBridgeSdk.getHeartbeatManager().enableLightsHeartbeat(bridge, 2000);
+            hueBridgeSdk.getNotificationManager().registerSDKListener(this);
         }
     }
 
