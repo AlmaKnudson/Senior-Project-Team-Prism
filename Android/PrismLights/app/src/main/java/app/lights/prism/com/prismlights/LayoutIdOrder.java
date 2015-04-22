@@ -56,21 +56,24 @@ public class LayoutIdOrder {
     }
 
     public LinkedList<String> getGroupsFromBridgeOrder(Set<String> ids) {
-        return updateIdOrderFromBridge(new HashSet<String>(ids), groupIdOrder);
+        return updateIdOrderFromBridge(new HashSet<String>(ids), groupIdOrder, true);
     }
 
     public LinkedList<String> getLightsFromBridgeOrder(Set<String> ids) {
-        return updateIdOrderFromBridge(new HashSet<String>(ids), lightIdOrder);
+        return updateIdOrderFromBridge(new HashSet<String>(ids), lightIdOrder, false);
     }
 
-    private LinkedList<String> updateIdOrderFromBridge(Set<String> ids, LinkedList<String> currentIdOrder) {
+    private LinkedList<String> updateIdOrderFromBridge(Set<String> ids, LinkedList<String> currentIdOrder, Boolean isGroup) {
         if(!currentIdOrder.isEmpty()) {
             List<String> currentIdOrderCopy = new LinkedList<String>(currentIdOrder);
             for (String id : currentIdOrderCopy) {
                 if (ids.contains(id)) {
                     ids.remove(id);
                 } else {
-                    currentIdOrder.remove(id);
+                    //leave default group in always
+                    if(!(isGroup && id.equals("0"))) {
+                        currentIdOrder.remove(id);
+                    }
                 }
             }
             ArrayList<String> arrayIds = new ArrayList<String>(ids);
@@ -106,6 +109,7 @@ public class LayoutIdOrder {
             }
         } else {
             layoutIdOrderModel = new LayoutIdOrder();
+            layoutIdOrderModel.groupIdOrder.addFirst("0");
         }
     }
     public void saveToFile() {

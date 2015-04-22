@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * A data model for favorites because scenes aren't guaranteed to stay on the bridge,
@@ -86,7 +87,7 @@ public class FavoritesDataModel {
         normalState.setOn(true);
         normalState.setX(0.4596f);
         normalState.setY(0.4105f);
-        normalState.setBrightness(254);
+        normalState.setBrightness(HueBulbChangeUtility.MAX_BRIGHTNESS);
         favoritesDataModel.favorites.add(new Favorite("Normal All On", normalState));
         PHLightState offState = new PHLightState();
         offState.setOn(false);
@@ -149,14 +150,12 @@ public class FavoritesDataModel {
         saveToFile();
     }
 
-    public void removeFavorites(Set<Integer> toRemove) {
-        Set<Favorite> removeFavorites = new HashSet<Favorite>();
-
-        for(int toRemovePos: toRemove) {
-            removeFavorites.add(favorites.get(toRemovePos));
-        }
-        for(Favorite favorite: removeFavorites) {
-            favorites.remove(favorite);
+    public void removeFavorites(TreeSet<Integer> toRemove) {
+        int offsetIndex = 0;
+        //tree set iterator ascending insures this will work!
+        for(Integer removeIndex: toRemove) {
+            favorites.remove(removeIndex - offsetIndex);
+            offsetIndex++;
         }
         saveToFile();
     }

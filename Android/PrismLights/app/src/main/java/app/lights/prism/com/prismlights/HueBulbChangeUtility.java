@@ -1,11 +1,9 @@
 package app.lights.prism.com.prismlights;
 
-import android.os.AsyncTask;
 import android.text.format.DateFormat;
 
 import com.philips.lighting.hue.listener.PHGroupListener;
 import com.philips.lighting.hue.listener.PHLightListener;
-import com.philips.lighting.hue.sdk.PHBridgeSearchManager;
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 import com.philips.lighting.model.PHBridge;
@@ -14,26 +12,23 @@ import com.philips.lighting.model.PHGroup;
 import com.philips.lighting.model.PHHueError;
 import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
-import com.philips.lighting.model.PHScene;
 import com.philips.lighting.model.PHSchedule;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ThreadPoolExecutor;
 
 public class HueBulbChangeUtility {
 
 
     public static int MAX_BRIGHTNESS = 254;
 
-    public static String colorXYModelForHue = "LCT001";
+    public static final String COLOR_XY_MODEL_FOR_HUE = "LCT001";
+    public static final String DEFAULT_GROUP_ID = "0";
 
     public static PHLight getLightFromId(String identifier, PHBridge bridge) {
         return bridge.getResourceCache().getLights().get(identifier);
@@ -228,10 +223,20 @@ public class HueBulbChangeUtility {
         return PHHueSDK.getInstance().getSelectedBridge().getResourceCache().getLights();
     }
 
-    public static boolean isGroupReachable(PHGroup currentGroup) {
-        Map<String, PHLight> lights = getAllLights();
-        List<String> lightIds = currentGroup.getLightIdentifiers();
+    private static Map<String, PHGroup> getAllGroups() {
+        return PHHueSDK.getInstance().getSelectedBridge().getResourceCache().getGroups();
+    }
 
+    public static boolean isGroupReachable(String groupId) {
+        if(DEFAULT_GROUP_ID.equals(groupId)) {
+            return isGroupReachable(new ArrayList<String>(getAllLights().keySet()));
+        } else {
+            return isGroupReachable(getAllGroups().get(groupId).getLightIdentifiers());
+        }
+    }
+
+    private static boolean isGroupReachable(List<String> lightIds) {
+        Map<String, PHLight> lights = getAllLights();
         for(String id : lightIds) {
             if(lights.get(id).getLastKnownLightState().isReachable()) {
                 return true;
@@ -240,9 +245,16 @@ public class HueBulbChangeUtility {
         return false;
     }
 
-    public static boolean isGroupOff(PHGroup currentGroup) {
+    public static boolean isGroupOff(String groupId) {
+        if(DEFAULT_GROUP_ID.equals(groupId)) {
+            return isGroupOff(new ArrayList<String>(getAllLights().keySet()));
+        } else {
+            return isGroupOff(getAllGroups().get(groupId).getLightIdentifiers());
+        }
+    }
+
+    private static boolean isGroupOff(List<String> lightIds) {
         Map<String, PHLight> lights = getAllLights();
-        List<String> lightIds = currentGroup.getLightIdentifiers();
         for(String id : lightIds) {
             if(lights.get(id).getLastKnownLightState().isReachable() && lights.get(id).getLastKnownLightState().isOn()) {
                 return false;
@@ -251,9 +263,16 @@ public class HueBulbChangeUtility {
         return true;
     }
 
-    public static Integer getGroupColor(PHGroup currentGroup) {
+    public static Integer getGroupColor(String groupId) {
+        if(DEFAULT_GROUP_ID.equals(groupId)) {
+            return getGroupColor(new ArrayList<String>(getAllLights().keySet()));
+        } else {
+            return getGroupColor(getAllGroups().get(groupId).getLightIdentifiers());
+        }
+    }
+
+    private static Integer getGroupColor(List<String> lightIds) {
         Map<String, PHLight> lights = getAllLights();
-        List<String> lightIds = currentGroup.getLightIdentifiers();
         float[] previousColor = null;
 
         for(String id: lightIds) {
@@ -269,13 +288,24 @@ public class HueBulbChangeUtility {
                 }
             }
         }
-        return PHUtilities.colorFromXY(previousColor, colorXYModelForHue);
+        if(previousColor == null) {
+            return null;
+        }
+        return PHUtilities.colorFromXY(previousColor, COLOR_XY_MODEL_FOR_HUE);
     }
 
-    public static void toggleBulbGroupState(PHGroup group) {
+    public static void toggleBulbGroupState(String groupId) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
+        if(DEFAULT_GROUP_ID.equals(groupId)) {
+            bridge.setLightStateForDefaultGroup(getOnState(getToggledBulbGroupState(new ArrayList<String>(getAllLights().keySet()))));
+        } else {
+            bridge.setLightStateForGroup(groupId, getOnState(getToggledBulbGroupState(getAllGroups().get(groupId).getLightIdentifiers())));
+        }
+
+    }
+
+    private static boolean getToggledBulbGroupState(List<String> lightIds) {
         Map<String, PHLight> lights = getAllLights();
-        List<String> lightIds = group.getLightIdentifiers();
         boolean shouldSetOn = true;
         for(String id : lightIds) {
             if(lights.get(id).getLastKnownLightState().isReachable() && lights.get(id).getLastKnownLightState().isOn()) {
@@ -283,7 +313,7 @@ public class HueBulbChangeUtility {
                 break;
             }
         }
-        bridge.setLightStateForGroup(group.getIdentifier(), getOnState(shouldSetOn));
+        return shouldSetOn;
 
     }
 
@@ -328,27 +358,37 @@ public class HueBulbChangeUtility {
 
     public static void turnGroupOnOff(String identifier, boolean on) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
-        PHGroup group = getGroupFromId(identifier, bridge);
-        bridge.setLightStateForGroup(group.getIdentifier(), getOnState(on));
+        if(DEFAULT_GROUP_ID.equals(identifier)) {
+            bridge.setLightStateForDefaultGroup(getOnState(on));
+        } else {
+            PHGroup group = getGroupFromId(identifier, bridge);
+            bridge.setLightStateForGroup(group.getIdentifier(), getOnState(on));
+        }
     }
 
     public static void changeGroupBrightness(String identifier, int brightness) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
-        PHGroup group = getGroupFromId(identifier, bridge);
-        Map<String, PHLight> lights = getAllLights();
-        bridge.setLightStateForGroup(group.getIdentifier(), getBrightnessState(brightness, true));
+        if(DEFAULT_GROUP_ID.equals(identifier)) {
+            bridge.setLightStateForDefaultGroup(getBrightnessState(brightness, true));
+        } else {
+            PHGroup group = getGroupFromId(identifier, bridge);
+            bridge.setLightStateForGroup(group.getIdentifier(), getBrightnessState(brightness, true));
+        }
 
     }
 
     public static void changeGroupColor(String identifier, float[] newColor) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
-        PHGroup group = getGroupFromId(identifier, bridge);
-        bridge.setLightStateForGroup(group.getIdentifier(), getColorState(newColor, true));
+        if(DEFAULT_GROUP_ID.equals(identifier)) {
+            bridge.setLightStateForDefaultGroup(getColorState(newColor, true));
+        } else {
+            PHGroup group = getGroupFromId(identifier, bridge);
+            bridge.setLightStateForGroup(group.getIdentifier(), getColorState(newColor, true));
+        }
     }
 
     public static String getNextGroupId() {
-        PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
-        return "Group " + (1 + bridge.getResourceCache().getGroups().size());
+        return "Group " + (2 + getAllGroups().size());
     }
 
     /**
@@ -659,5 +699,20 @@ public class HueBulbChangeUtility {
             });
         }
 
+    }
+
+    public static String getGroupName(String groupId) {
+        if(DEFAULT_GROUP_ID.equals(groupId)) {
+            return "All Lights";
+        }
+        return PHHueSDK.getInstance().getSelectedBridge().getResourceCache().getGroups().get(groupId).getName();
+    }
+
+    public static int getGroupSize(String groupId) {
+        if(DEFAULT_GROUP_ID.equals(groupId)) {
+            return getAllLights().size();
+        } else {
+            return getAllGroups().get(groupId).getLightIdentifiers().size();
+        }
     }
 }

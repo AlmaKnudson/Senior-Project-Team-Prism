@@ -38,6 +38,7 @@ public class BulbSelectionView extends FrameLayout implements CacheUpdateListene
     private boolean allChecked;
     private CheckBox selectAllCheckBox;
     private CheckedNumberChangedListener checkedNumberChangedListener;
+    private LayoutIdOrder layoutIdOrder;
 
     public BulbSelectionView(Context context) {
         super(context);
@@ -56,6 +57,7 @@ public class BulbSelectionView extends FrameLayout implements CacheUpdateListene
 
     private void construct() {
         LayoutInflater.from(getContext()).inflate(R.layout.fragment_bulb_selection, this);
+        layoutIdOrder = LayoutIdOrder.getInstance(getContext().getFilesDir());
         hueSDK = PHHueSDK.getInstance();
         checked = new HashSet<String>();
         allChecked = false;
@@ -109,8 +111,7 @@ public class BulbSelectionView extends FrameLayout implements CacheUpdateListene
 
     private void updateFromCache() {
         currentLights = hueSDK.getSelectedBridge().getResourceCache().getLights();
-        currentLightIdOrder = new ArrayList<String>(currentLights.keySet());
-        HueBulbChangeUtility.sortIds(currentLightIdOrder);
+        currentLightIdOrder = layoutIdOrder.getLightsFromBridgeOrder(currentLights.keySet());
     }
 
     public void allowLongClick(boolean shouldAllowLongClick, FragmentManager fragmentManager) {
@@ -266,7 +267,7 @@ public class BulbSelectionView extends FrameLayout implements CacheUpdateListene
             //TODO make work with alternate color formats
             Float x = currentLight.getLastKnownLightState().getX();
             Float y = currentLight.getLastKnownLightState().getY();
-            int currentColor = PHUtilities.colorFromXY(new float[]{x, y}, HueBulbChangeUtility.colorXYModelForHue);
+            int currentColor = PHUtilities.colorFromXY(new float[]{x, y}, HueBulbChangeUtility.COLOR_XY_MODEL_FOR_HUE);
             currentColor = Color.argb(300, Color.red(currentColor), Color.green(currentColor), Color.blue(currentColor));
             bulbTop.setColorFilter(currentColor);
             return currentView;

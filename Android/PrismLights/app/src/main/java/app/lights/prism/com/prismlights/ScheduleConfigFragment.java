@@ -1,22 +1,16 @@
 package app.lights.prism.com.prismlights;
 
 import android.app.ActivityManager;
-import android.app.FragmentTransaction;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -150,7 +144,7 @@ public class ScheduleConfigFragment extends Fragment {
         colorPicker.setColorChangedListener(new ColorChangedListener() {
             @Override
             public void onColorChanged(float[] newColor) {
-                currentColor = PHUtilities.colorFromXY(newColor, HueBulbChangeUtility.colorXYModelForHue);
+                currentColor = PHUtilities.colorFromXY(newColor, HueBulbChangeUtility.COLOR_XY_MODEL_FOR_HUE);
             }
         });
 
@@ -223,7 +217,7 @@ public class ScheduleConfigFragment extends Fragment {
 
             if(state.getX() != null && state.getY() != null) {
                 float[] currentXYColor = new float[]{state.getX(), state.getY()};
-                currentColor = PHUtilities.colorFromXY(currentXYColor, HueBulbChangeUtility.colorXYModelForHue);
+                currentColor = PHUtilities.colorFromXY(currentXYColor, HueBulbChangeUtility.COLOR_XY_MODEL_FOR_HUE);
                 colorPicker.setColor(currentXYColor);
             }
 

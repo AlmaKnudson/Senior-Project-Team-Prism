@@ -72,7 +72,7 @@ public class EditGroupFragment extends Fragment implements CacheUpdateListener {
                         progressDialog.show();
                         progressDialog.setContentView(R.layout.progress);
                         TextView progressText = (TextView) progressDialog.findViewById(R.id.progressText);
-                        progressText.setText(getText(R.string.editing_group));
+                        progressText.setText(getText(R.string.delete_group));
                     } else {
                         progressDialog.show();
                     }

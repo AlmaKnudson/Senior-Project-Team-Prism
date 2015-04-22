@@ -27,7 +27,6 @@ import java.util.Set;
 public class GroupsEditFragment extends Fragment implements OnItemShiftedListener {
     private ReorderGridView gridView;
     private List<String> currentGroupIdOrder;
-    private Map<String, PHGroup> currentGroups;
     private PHHueSDK hueSDK;
     private Set<String> checked;
     private Dialog progressDialog;
@@ -56,7 +55,10 @@ public class GroupsEditFragment extends Fragment implements OnItemShiftedListene
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                updateChecked((CheckBox) view.findViewById(R.id.selectCheck), ((PHGroup)gridView.getAdapter().getItem(position)).getIdentifier());
+                String identifier = (String) gridView.getAdapter().getItem(position);
+                if(!HueBulbChangeUtility.DEFAULT_GROUP_ID.equals(identifier)) {
+                    updateChecked((CheckBox) view.findViewById(R.id.selectCheck), identifier);
+                }
             }
         });
         layout.findViewById(R.id.trashButton).setOnClickListener(new View.OnClickListener() {
@@ -83,6 +85,11 @@ public class GroupsEditFragment extends Fragment implements OnItemShiftedListene
                                     progressDialog.hide();
                                     updateFromCache();
                                     ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
+                                    //close fragment when view only contains 1 item, the uneditable all lights
+                                    if(currentGroupIdOrder.size() < 2) {
+                                        getFragmentManager().popBackStack();
+                                    }
+                                    checked.clear();
                                 }
                             }
                         });
@@ -123,7 +130,7 @@ public class GroupsEditFragment extends Fragment implements OnItemShiftedListene
 
 
     private void updateFromCache() {
-        currentGroups = hueSDK.getSelectedBridge().getResourceCache().getGroups();
+        Map<String, PHGroup> currentGroups = hueSDK.getSelectedBridge().getResourceCache().getGroups();
         currentGroupIdOrder = layoutIdOrder.getGroupsFromBridgeOrder(currentGroups.keySet());
     }
     private class GroupViewAdapter extends BaseAdapter {
@@ -135,12 +142,12 @@ public class GroupsEditFragment extends Fragment implements OnItemShiftedListene
         }
         @Override
         public int getCount() {
-            return currentGroups.size();
+            return currentGroupIdOrder.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return currentGroups.get(currentGroupIdOrder.get(position));
+            return currentGroupIdOrder.get(position);
         }
 
         @Override
@@ -156,10 +163,20 @@ public class GroupsEditFragment extends Fragment implements OnItemShiftedListene
             } else {
                 currentView =convertView;
             }
-            PHGroup currentGroup = (PHGroup) getItem(position);
+            String currentGroup = (String) getItem(position);
 
-            String lightName = currentGroup.getName();
-            ((CheckBox) currentView.findViewById(R.id.selectCheck)).setChecked(false);
+            String lightName = HueBulbChangeUtility.getGroupName(currentGroup);
+            CheckBox checkBox = (CheckBox) currentView.findViewById(R.id.selectCheck);
+            if(checked.contains(currentGroup)) {
+                checkBox.setChecked(true);
+            } else {
+                checkBox.setChecked(false);
+            }
+            if(HueBulbChangeUtility.DEFAULT_GROUP_ID.equals(currentGroup)) {
+                checkBox.setVisibility(View.GONE);
+            } else {
+                checkBox.setVisibility(View.VISIBLE);
+            }
 
             ImageView group2Top = (ImageView) currentView.findViewById(R.id.group2Top);
             ImageView group2Bottom = (ImageView) currentView.findViewById(R.id.group2Bottom);
@@ -169,7 +186,7 @@ public class GroupsEditFragment extends Fragment implements OnItemShiftedListene
             groupName.setText(lightName);
             ImageView groupTop;
             ImageView groupBottom;
-            if(currentGroup.getLightIdentifiers().size() > 2) {
+            if(HueBulbChangeUtility.getGroupSize(currentGroup) > 2) {
                 group2Top.setVisibility(View.INVISIBLE);
                 group2Bottom.setVisibility(View.INVISIBLE);
                 group3Top.setVisibility(View.VISIBLE);

@@ -57,7 +57,7 @@ public class Favorite {
 
     private int getDisplayColor(PHLightState lightState) {
         if(lightState.getX() != null && lightState.getY() != null) {
-            int onLightColor = PHUtilities.colorFromXY(new float[]{lightState.getX(), lightState.getY()}, HueBulbChangeUtility.colorXYModelForHue);
+            int onLightColor = PHUtilities.colorFromXY(new float[]{lightState.getX(), lightState.getY()}, HueBulbChangeUtility.COLOR_XY_MODEL_FOR_HUE);
             if(lightState.isOn() != null && lightState.isOn()) {
                 return onLightColor;
             } else {

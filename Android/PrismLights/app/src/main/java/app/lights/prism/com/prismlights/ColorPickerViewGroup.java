@@ -1,8 +1,6 @@
 package app.lights.prism.com.prismlights;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -128,7 +126,7 @@ public class ColorPickerViewGroup extends ViewGroup {
     }
 
     private void setTempXYColor(float[] color) {
-        selectorView.setColor(PHUtilities.colorFromXY(color, HueBulbChangeUtility.colorXYModelForHue));
+        selectorView.setColor(PHUtilities.colorFromXY(color, HueBulbChangeUtility.COLOR_XY_MODEL_FOR_HUE));
         tempXYColor = color;
     }
 
