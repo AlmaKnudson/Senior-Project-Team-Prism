@@ -100,7 +100,6 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
                             });
                         }
                     });
-//                    shouldUpdateFromCache = 2;
                 }
                 return false;
             }

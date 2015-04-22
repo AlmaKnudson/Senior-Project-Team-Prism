@@ -12,6 +12,7 @@
         android:layout_weight="0.82"
         android:id="@+id/colorPickerView"
         android:focusableInTouchMode="true"/>
+    <!--the focus is required so I can remove focus from the edit text-->
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
