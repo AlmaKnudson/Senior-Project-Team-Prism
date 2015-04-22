@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vCE-X6-d9u">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vCE-X6-d9u">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
@@ -1174,11 +1174,31 @@
                         <segue destination="f97-iB-1xP" kind="relationship" relationship="viewControllers" id="5dh-jQ-XPx"/>
                         <segue destination="Z3p-ar-eVL" kind="relationship" relationship="viewControllers" id="KlE-3a-0JA"/>
                         <segue destination="33H-mq-ea0" kind="relationship" relationship="viewControllers" id="3FV-yo-q1x"/>
+                        <segue destination="drI-98-Y8f" kind="relationship" relationship="viewControllers" id="ZHQ-Ze-2Wg"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-523" y="-182"/>
+        </scene>
+        <!--Voice-->
+        <scene sceneID="Laq-Ve-gyc">
+            <objects>
+                <viewController id="drI-98-Y8f" customClass="MusicViewController" customModule="Prism_Lights" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="bgJ-cv-aUM"/>
+                        <viewControllerLayoutGuide type="bottom" id="e0e-xz-bQ8"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="rpw-cg-EQY" customClass="MusicVi">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Voice" id="iL1-Ar-mGN"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OWL-nX-lSy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="207" y="407"/>
         </scene>
         <!--Settings-->
         <scene sceneID="N4g-Ve-cUD">
@@ -3185,7 +3205,7 @@
         <image name="home" width="25" height="25"/>
         <image name="lock" width="48" height="60"/>
         <image name="note" width="25" height="25"/>
-        <image name="p" width="30" height="30"/>
+        <image name="p" width="60" height="60"/>
         <image name="pushAuth" width="516" height="475"/>
         <image name="second" width="30" height="30"/>
     </resources>

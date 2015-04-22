@@ -469,11 +469,11 @@ class GroupCollectionController: UIViewController, UICollectionViewDataSource, U
                                 
                                 var numberFormatter = NSNumberFormatter()
                                 var number:NSNumber? = numberFormatter.numberFromString(range!)
-                                var rangeInt = (Float(number!)/10)
+                                var rangeInt = Float(number!)
                                 //                                                            NSLog("\(b.distance.floatValue) < \(rangeInt)")
                                 
                                 
-                                if b.distance.floatValue <= rangeInt {
+                                if (b.distance.floatValue/3.0) <= rangeInt {
                                     
                                     
                                     //This is to print out the distance to see if I get a different reading each time. Otherwise, I will have to poll for an average in a different/slower way.

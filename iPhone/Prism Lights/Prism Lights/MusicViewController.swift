@@ -12,7 +12,7 @@ import UIKit
 class MusicViewController: UIViewController {
     
     
-    /*
+    
     class MusicViewController: UIViewController, WitDelegate {
     
     var statusView:UILabel = UILabel();
@@ -29,10 +29,11 @@ class MusicViewController: UIViewController {
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-    
-    override init() {
-        super.init()
-    }
+        
+//    
+//    override init() {
+//        super.init()
+//    }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nil, bundle: nil)
@@ -47,7 +48,7 @@ class MusicViewController: UIViewController {
         Wit.sharedInstance().delegate = self;
         
         //Check that we are connected to bridge.
-        if ((UIApplication.sharedApplication().delegate as AppDelegate).hueSDK!.localConnected()){
+        if ((UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.localConnected()){
             cache = PHBridgeResourcesReader.readBridgeResourcesCache();
         }
         
@@ -149,7 +150,7 @@ class MusicViewController: UIViewController {
         }
         
         
-        var firstOutcome:NSDictionary = outcomes[0] as NSDictionary;
+        var firstOutcome:NSDictionary = outcomes[0] as! NSDictionary;
 //        intentView.text = firstOutcome as NSString;
         
         if let intent:NSString = firstOutcome.objectForKey("intent") as? NSString{
@@ -177,9 +178,9 @@ class MusicViewController: UIViewController {
             if let on_off:NSArray = entities.objectForKey("on_off") as? NSArray{
                 for el in on_off{
                     if let value:NSString = el["value"] as? NSString{
-                        println("on_of value is:" + value);
-                        entitiesView.text = entitiesView.text + "TURNING BULB(S): " + value + "\n";
-                        onOffVal = value;
+                        println("on_of value is:" + (value as! String));
+                        entitiesView.text = entitiesView.text + "TURNING BULB(S): " + (value as! String) + "\n";
+                        onOffVal = (value as! String);
                         onOff = true;
                         if(onOffVal == "off"){
                             if(cache != nil) {
@@ -211,16 +212,26 @@ class MusicViewController: UIViewController {
             if let color:NSArray = entities.objectForKey("color") as? NSArray{
                 for el in color{
                     if let value:NSString = el["value"] as? NSString{
-                        println("Color is: " + value);
-                        entitiesView.text = entitiesView.text + "COLOR: " + value + "\n";
+                        var colorPlusHueValue = value.componentsSeparatedByString("~!~")
+                        var colorName:String = colorPlusHueValue[0] as! String
+                        var colorHue:String = colorPlusHueValue[1] as! String
+                        println("Color is: " + (value as! String) );
+                        entitiesView.text = entitiesView.text + "COLOR: " + (colorName) + "\n";
+                        entitiesView.text = entitiesView.text + "HUE VALUE: " + (colorHue) + "\n";
                         colorVal = value.uppercaseString;
                     }
+                    
+                    /* Taking this out for now as per follow-up with Laurent from Wit.ai:
+                    "Thanks for reaching out. Yes we do have a regression here. We will fix it soon.
+                    Sorry for the inconvenience!
+                    Laurent"
                     if let tempHueVal:NSString = el["metadata"] as? NSString{
-                        println("Hue value is: " + tempHueVal);
-                        entitiesView.text = entitiesView.text + "HUE VALUE: " + tempHueVal + "\n";
-                        hueVal = tempHueVal;
+                        println("Hue value is: " + (tempHueVal as! String) );
+                        entitiesView.text = entitiesView.text + "HUE VALUE: " + (tempHueVal as! String) + "\n";
+                        hueVal = (tempHueVal as! String);
                         //colorVal = value.uppercaseString;
                     }
+*/
                 }
             }
             
@@ -229,8 +240,8 @@ class MusicViewController: UIViewController {
             if let alarm:NSArray = entities.objectForKey("alarm") as? NSArray{
                 for el in alarm{
                     if let value:NSString = el["value"] as? NSString{
-                        println("alarm is: " + value);
-                        entitiesView.text = entitiesView.text + "SETTING AN: " + value + "\n";
+                        println("alarm is: " + (value as! String) );
+                        entitiesView.text = entitiesView.text + "SETTING AN: " + (value as! String) + "\n";
                         setAlarm = true;
                     }
                 }
@@ -239,8 +250,8 @@ class MusicViewController: UIViewController {
             if let timer:NSArray = entities.objectForKey("timer") as? NSArray{
                 for el in timer{
                     if let value:NSString = el["value"] as? NSString{
-                        println("timer is: " + value);
-                        entitiesView.text = entitiesView.text + "SETTING A: " + value + "\n";
+                        println("timer is: " + (value as! String) );
+                        entitiesView.text = entitiesView.text + "SETTING A: " + (value as! String) + "\n";
                         setTimer = true;
                     }
                 }
@@ -257,7 +268,7 @@ class MusicViewController: UIViewController {
                     if let unit:NSString = norm.objectForKey("unit") as? NSString{
                         println("duration unit: \(unit)")
                         entitiesView.text = entitiesView.text + "DURATION UNIT:  \(unit)" + "\n";
-                        durationUnit = unit;
+                        durationUnit = (unit as! String);
                     }
                 }
             }
@@ -265,9 +276,9 @@ class MusicViewController: UIViewController {
             if let b:NSArray = entities.objectForKey("bulb") as? NSArray{
                 for el in b{
                     if let value:NSString = el["value"] as? NSString{
-                        println("bulb is: " + value);
-                        entitiesView.text = entitiesView.text + "BULB NAME: " + value + "\n";
-                        bulb = value;
+                        println("bulb is: " + (value as! String) );
+                        entitiesView.text = entitiesView.text + "BULB NAME: " + (value as! String) + "\n";
+                        bulb = (value as! String);
                     }
                 }
             }
@@ -345,14 +356,14 @@ class MusicViewController: UIViewController {
             if let date_time:NSArray = entities.objectForKey("datetime") as? NSArray{
                 for el in date_time{
                     if let value:NSString = el["grain"] as? NSString{
-                        println("grain of datetime is: " + value);
+                        println("grain of datetime is: " + (value as! String) );
 //                        entitiesView.text = entitiesView.text + "DATETIME GRAIN: " + value + "\n";
-                        datetimegrain = value;
+                        datetimegrain = (value as! String);
                     }
                     if let value:NSString = el["value"] as? NSString{
-                        println("datetime is: " + value);
-                        entitiesView.text = entitiesView.text + "DATETIME: \n" + value + "\n";
-                        datetimeval = value;
+                        println("datetime is: " + (value as! String) );
+                        entitiesView.text = entitiesView.text + "DATETIME: \n" + (value as! String) + "\n";
+                        datetimeval = (value as! String);
                     }
                 }
             }
@@ -360,9 +371,9 @@ class MusicViewController: UIViewController {
             if let ms:NSArray = entities.objectForKey("message_subject") as? NSArray{
                 for el in ms{
                     if let value:NSString = el["value"] as? NSString{
-                        println("message_subject is: " + value);
-                        entitiesView.text = entitiesView.text + "MESSAGE_SUBJECT: " + value + "\n";
-                        message_subject = value;
+                        println("message_subject is: " + (value as String) );
+                        entitiesView.text = entitiesView.text + "MESSAGE_SUBJECT: " + (value as! String ) + "\n";
+                        message_subject = (value as! String);
                     }
                 }
             }
@@ -370,11 +381,11 @@ class MusicViewController: UIViewController {
         }
         if let confidence:NSString = firstOutcome.objectForKey("confidence") as? NSString{
             println(confidence);
-            entitiesView.text = entitiesView.text + "CONFIDENCE: " + confidence + "\n";
+            entitiesView.text = entitiesView.text + "CONFIDENCE: " + (confidence as! String) + "\n";
         }
         if let text:NSString = firstOutcome.objectForKey("_text") as? NSString{
             println(text);
-            intentView.text = text;
+            intentView.text = (text as! String);
         }
         
         //Criteria for determining what to do with lights.
@@ -417,10 +428,10 @@ class MusicViewController: UIViewController {
         }
     
     }
-*/
+
     
    
 }
 
-
+}
 
