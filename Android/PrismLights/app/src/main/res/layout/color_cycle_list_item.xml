@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/colorCycleName"
+            android:ellipsize="end"
+            android:maxLines="1"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/colorCycleRun"
+            android:background="@drawable/buttons"
+            android:text="@string/run"
+            android:layout_margin="2dp"
+            android:padding="8dp"/>
+    </LinearLayout>
+
+    <app.lights.prism.com.prismlights.SingleColorCycleView
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/colorCycleSmallDetailView"/>
+</LinearLayout>

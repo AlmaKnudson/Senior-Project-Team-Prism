@@ -28,14 +28,14 @@ public class ColorCycle implements Serializable{
     private static final String DEBUG_TAG = "ColorCycle";
 
     private String name;
-    ArrayList<SingleColor> colors;
+    private ArrayList<SingleColor> colors;
 
-    ColorCycle(String name){
+    public ColorCycle(String name){
         this.name = name;
         colors = new ArrayList<>();
     }
 
-    ColorCycle(ColorCycle another){
+    public ColorCycle(ColorCycle another){
         name = another.getName();
         colors = new ArrayList<>();
         for (int i = 0; i<another.getSize(); i++){
@@ -47,7 +47,7 @@ public class ColorCycle implements Serializable{
     // Before construct a color cycle using this, you must check following:
     //      *if there is only one name in the list*
     //      *all description starts with "prism,"*
-    ColorCycle(List<PHSchedule> schedules){
+    public ColorCycle(List<PHSchedule> schedules){
         colors = new ArrayList<>();
 
         name = schedules.get(0).getName();
@@ -93,60 +93,68 @@ public class ColorCycle implements Serializable{
         }
     }
 
-    void add(float[] color, int brightness, int duration, int transition){
+    public void add(float[] color, int brightness, int duration, int transition){
         colors.add(new SingleColor(color, brightness, duration, transition));
     }
 
-    void remove(int i){
+    public void remove(int i){
         colors.remove(i);
     }
 
-    void setName(String name){
+    public void setName(String name){
         this.name = name;
     }
 
-    void setColor (int i, float[] color){
+    public void setColor (int i, float[] color){
         colors.get(i).color = color;
     }
 
-    void setBrightness (int i , int brightness){
+    public void setBrightness (int i , int brightness){
         colors.get(i).brightness = brightness;
     }
 
-    void setDuration (int i, int duration){
+    public void setDuration (int i, int duration){
         colors.get(i).duration = duration;
     }
 
-    void setTransition (int i, int transition){
+    public void setTransition (int i, int transition){
         colors.get(i).transition = transition;
     }
 
-    String getName(){
+    public String getName(){
         return name;
     }
 
-    int getSize(){
+    public int getSize(){
         return colors.size();
     }
 
-    int getColor(int i){
+    public int getColor(int i){
         float[] color = colors.get(i).color;
         return PHUtilities.colorFromXY(new float[]{color[0], color[1]}, "");
     }
 
-    float[] getColorFloat(int i){
+    public List<Integer> getColors() {
+        List<Integer> rgbColors = new ArrayList<Integer>();
+        for(int i = 0; i < colors.size(); i++) {
+            rgbColors.add(getColor(i));
+        }
+        return rgbColors;
+    }
+
+    public float[] getColorFloat(int i){
         return colors.get(i).color;
     }
 
-    int getBrightness(int i){
+    public int getBrightness(int i){
         return colors.get(i).brightness;
     }
 
-    int getDuration(int i){
+    public int getDuration(int i){
         return colors.get(i).duration;
     }
 
-    int getTransition(int i){
+    public int getTransition(int i){
         return colors.get(i).transition;
     }
 

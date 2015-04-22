@@ -70,4 +70,11 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">top|end</item>
     </style>
+    <style name="TopButton" >
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:background">@drawable/top_button</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:scaleType">centerInside</item>
+    </style>
 </resources>

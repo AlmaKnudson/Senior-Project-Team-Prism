@@ -9,21 +9,13 @@
         android:orientation="horizontal"
         android:layout_gravity="end">
         <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="30dp"
             android:src="@drawable/trash_button"
-            android:background="@drawable/top_button"
-            android:adjustViewBounds="true"
-            android:scaleType="centerInside"
-            android:id="@+id/trashButton"/>
+            android:id="@+id/trashButton"
+            style="@style/TopButton"/>
         <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="30dp"
             android:src="@drawable/done_button"
-            android:background="@drawable/top_button"
-            android:adjustViewBounds="true"
-            android:scaleType="centerInside"
-            android:id="@+id/doneButton"/>
+            android:id="@+id/doneButton"
+            style="@style/TopButton"/>
     </LinearLayout>
     <app.lights.prism.com.prismlights.ReorderGridView
         android:layout_width="match_parent"

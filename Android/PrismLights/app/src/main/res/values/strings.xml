@@ -80,4 +80,7 @@
     <string name="no_add_group">Unable to Add Group</string>
     <string name="no_add_group_explanation">Only 16 groups are supported. Please remove or edit an existing group.</string>
     <string name="delete_group">Deleting Groups...</string>
+    <string name="color_cycles">Color Cycles</string>
+    <string name="color_cycles_label">Color Cycles:</string>
+    <string name="run">Run</string>
 </resources>
