@@ -62,7 +62,6 @@ public class ColorCycleDetailFragment extends Fragment {
         ImageView addImageView = (ImageView)view.findViewById(R.id.addColorButton);
         ListView colorCycleListView = (ListView)view.findViewById(R.id.colorCycleDetailListView);
         Button saveButton = (Button)view.findViewById(R.id.colorCycleSaveButton);
-        Button cancelButton = (Button)view.findViewById(R.id.colorCycleCancelButton);
 
         nameEditor.setText(newColorCycle.getName());
 
@@ -129,14 +128,6 @@ public class ColorCycleDetailFragment extends Fragment {
                         fm.popBackStack();
                     }
                 }
-            }
-        });
-
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                android.app.FragmentManager fm = getActivity().getFragmentManager();
-                fm.popBackStack();
             }
         });
 

@@ -79,6 +79,7 @@ public class MainActivity extends Activity implements PHSDKListener{
     private static final String colorCycleFileName = "colorCycle.out";
     private static final String colorCycleTaskFileName = "colorCycleTask.out";
     private static final String colorCycleTasksGroupFileName = "colorCycleTaskGroup.out";
+    private boolean connecting = false;
 
     //colorCycle utilities
     private List<ColorCycle> colorCycles;
@@ -243,8 +244,12 @@ public class MainActivity extends Activity implements PHSDKListener{
             lastAccessPoint.setIpAddress(lastIpAddress);
             lastAccessPoint.setUsername(lastUsername);
             if (!hueBridgeSdk.isAccessPointConnected(lastAccessPoint)) {
+                connecting = true;
                 hueBridgeSdk.connect(lastAccessPoint);
                 waitingText = getText(R.string.connecting);
+            } else {
+                openHomeScreen(); //already connected, can go directly to homescreen
+                return;
             }
         } else {
             PHBridgeSearchManager bridgeSearchManager = (PHBridgeSearchManager) hueBridgeSdk.getSDKService(PHHueSDK.SEARCH_BRIDGE);
@@ -263,8 +268,9 @@ public class MainActivity extends Activity implements PHSDKListener{
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
+        //save the color cycles
         if(sunrise!= null && sunset != null) {
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
             settings.edit().putLong("sunrise", sunrise.getTime()).commit();
@@ -309,6 +315,27 @@ public class MainActivity extends Activity implements PHSDKListener{
                 System.out.println("Problem Saving colorCycleTasksGroup: " + e);
             }
         }
+        //turn of the internet connection
+        PHHueSDK.getInstance().disableAllHeartbeat();
+        PHHueSDK.getInstance().getNotificationManager().unregisterSDKListener(this);
+        //consider destroying the sdk
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        PHBridge bridge = hueBridgeSdk.getSelectedBridge();
+        if(bridge != null) {
+            hueBridgeSdk.enableHeartbeat(hueBridgeSdk.getSelectedBridge(), PHHueSDK.HB_INTERVAL);
+            hueBridgeSdk.getHeartbeatManager().enableLightsHeartbeat(bridge, 2000);
+            hueBridgeSdk.getNotificationManager().registerSDKListener(this);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
     }
 
     public void searchForBridge() {
@@ -366,7 +393,7 @@ public class MainActivity extends Activity implements PHSDKListener{
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container, new RealHomeFragment());
         fragmentTransaction.commit();
-        if(dialog.isShowing()) {
+        if(dialog != null && dialog.isShowing()) {
             dialog.setCancelable(true);
             dialog.cancel();
         }
@@ -448,6 +475,7 @@ public class MainActivity extends Activity implements PHSDKListener{
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    connecting = false;
                     openHomeScreen();
                 }
             });
@@ -464,11 +492,22 @@ public class MainActivity extends Activity implements PHSDKListener{
             @Override
             public void run() {
                 if (code == PHHueError.BRIDGE_NOT_RESPONDING) {
-                    //TODO add message for when bridge isn't responding after access points found
-                    searchForBridge();
+                    //seems to only happen when connecting to bridge that's there but won't respond
+                    if(!connecting) {
+                        dialog.setCancelable(true);
+                        dialog.setCanceledOnTouchOutside(true);
+                        dialog.setContentView(R.layout.dialog_warning);
+                        TextView dialogTitle = (TextView) (dialog.findViewById(R.id.dialogTitle));
+                        dialogTitle.setText(getText(R.string.could_not_connect));
+                        TextView dialogText = (TextView) (dialog.findViewById(R.id.textExplanation));
+                        dialogText.setText(getText(R.string.could_not_connect_explanation));
+                        dialog.show();
+                    } else {
+                        connecting = false;
+                        searchForBridge();
+                    }
                     return;
                 }
-                //TODO use code rather than message
                 if (message.equals("No bridge found")) {
                     dialog.setCancelable(true);
                     dialog.setCanceledOnTouchOutside(true);
