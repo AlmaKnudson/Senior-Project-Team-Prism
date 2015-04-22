@@ -80,6 +80,9 @@
 		CC4156B01AE310CE00CD5902 /* BridgeSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4156AF1AE310CE00CD5902 /* BridgeSelect.swift */; };
 		CC4A46E51A8912FD007DC0F2 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A46E41A8912FD007DC0F2 /* Settings.swift */; };
 		CC4A46E71A89130F007DC0F2 /* ModeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A46E61A89130F007DC0F2 /* ModeCell.swift */; };
+		CC54AEC21AE6D29E008EED17 /* Favorite.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC54AEC01AE6D29E008EED17 /* Favorite.swift */; };
+		CC54AEC31AE6D29E008EED17 /* FavoritesDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC54AEC11AE6D29E008EED17 /* FavoritesDataModel.swift */; };
+		CC54AEC51AE6D459008EED17 /* SingleFavoriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC54AEC41AE6D459008EED17 /* SingleFavoriteView.swift */; };
 		CC89CA011ADD8E0B00E25DCD /* HomePageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC89CA001ADD8E0B00E25DCD /* HomePageController.swift */; };
 		CC89CA031ADD903D00E25DCD /* GroupCollectionControlller.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC89CA021ADD903D00E25DCD /* GroupCollectionControlller.swift */; };
 		CC89CA051ADD904F00E25DCD /* FavoriteCollectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC89CA041ADD904F00E25DCD /* FavoriteCollectionController.swift */; };
@@ -106,6 +109,7 @@
 		CCCD592A1A7800FE008B209D /* Scenes_API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD59291A7800FE008B209D /* Scenes_API.swift */; };
 		CCCD592E1A78011E008B209D /* Rules_API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD592D1A78011E008B209D /* Rules_API.swift */; };
 		CCCD59301A78012F008B209D /* Configuration_API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD592F1A78012F008B209D /* Configuration_API.swift */; };
+		CCDD3FF21AE6F70800113B22 /* SectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCDD3FF11AE6F70800113B22 /* SectionHeader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -236,6 +240,9 @@
 		CC4156AF1AE310CE00CD5902 /* BridgeSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BridgeSelect.swift; sourceTree = "<group>"; };
 		CC4A46E41A8912FD007DC0F2 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		CC4A46E61A89130F007DC0F2 /* ModeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModeCell.swift; sourceTree = "<group>"; };
+		CC54AEC01AE6D29E008EED17 /* Favorite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Favorite.swift; sourceTree = "<group>"; };
+		CC54AEC11AE6D29E008EED17 /* FavoritesDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritesDataModel.swift; sourceTree = "<group>"; };
+		CC54AEC41AE6D459008EED17 /* SingleFavoriteView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleFavoriteView.swift; sourceTree = "<group>"; };
 		CC89CA001ADD8E0B00E25DCD /* HomePageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageController.swift; sourceTree = "<group>"; };
 		CC89CA021ADD903D00E25DCD /* GroupCollectionControlller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupCollectionControlller.swift; sourceTree = "<group>"; };
 		CC89CA041ADD904F00E25DCD /* FavoriteCollectionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteCollectionController.swift; sourceTree = "<group>"; };
@@ -262,6 +269,7 @@
 		CCCD592D1A78011E008B209D /* Rules_API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rules_API.swift; sourceTree = "<group>"; };
 		CCCD592F1A78012F008B209D /* Configuration_API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration_API.swift; sourceTree = "<group>"; };
 		CCCD59311A780140008B209D /* Info_API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Info_API.swift; sourceTree = "<group>"; };
+		CCDD3FF11AE6F70800113B22 /* SectionHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -302,12 +310,16 @@
 			children = (
 				0D0A26D91A38AFA10033550D /* Bulb Settings */,
 				0D9357E61A2D4BB100AAD52D /* BulbCollectionCell.swift */,
+				CC54AEC01AE6D29E008EED17 /* Favorite.swift */,
+				CC54AEC11AE6D29E008EED17 /* FavoritesDataModel.swift */,
+				CC54AEC41AE6D459008EED17 /* SingleFavoriteView.swift */,
 				CC1C60AF1AE5536D00FF1A3A /* FavoriteCollectionCell.swift */,
 				CC89CA061ADDF16800E25DCD /* GroupBulbCell.swift */,
 				0D9862551A1D2C0B00FAD175 /* BulbsCollectionController.swift */,
 				CC89CA001ADD8E0B00E25DCD /* HomePageController.swift */,
 				CC89CA021ADD903D00E25DCD /* GroupCollectionControlller.swift */,
 				CC89CA041ADD904F00E25DCD /* FavoriteCollectionController.swift */,
+				CCDD3FF11AE6F70800113B22 /* SectionHeader.swift */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -792,7 +804,9 @@
 				0D8B27A61A3A0B7C0069372C /* ColorPickerView.swift in Sources */,
 				CCCB88D51A98D808003D68F4 /* Alarms.swift in Sources */,
 				0D8B27A41A3A0B3A0069372C /* BulbSettings.swift in Sources */,
+				CCDD3FF21AE6F70800113B22 /* SectionHeader.swift in Sources */,
 				CCCD59301A78012F008B209D /* Configuration_API.swift in Sources */,
+				CC54AEC51AE6D459008EED17 /* SingleFavoriteView.swift in Sources */,
 				117F495B1A96DA4500A31746 /* EZOutput.m in Sources */,
 				CCB707871AA68A73002BF12B /* NewColorPickerView.swift in Sources */,
 				117F49561A96DA4500A31746 /* EZAudioPlayer.m in Sources */,
@@ -829,6 +843,7 @@
 				CC4A46E51A8912FD007DC0F2 /* Settings.swift in Sources */,
 				CC89CA051ADD904F00E25DCD /* FavoriteCollectionController.swift in Sources */,
 				CC27D7FF1A802E9C00346F47 /* PrismSDK.swift in Sources */,
+				CC54AEC21AE6D29E008EED17 /* Favorite.swift in Sources */,
 				CCCD59281A7800EA008B209D /* Schedules_API.swift in Sources */,
 				119F14F51AC18DF60024B019 /* ColorViewCell.swift in Sources */,
 				CC26D2591AD990EB00AEE7F7 /* ConnectingViewController.swift in Sources */,
@@ -836,6 +851,7 @@
 				117F49531A96DA4500A31746 /* AEFloatConverter.m in Sources */,
 				0D3A79131A26A716003AC6D4 /* DDASLLogger.m in Sources */,
 				11FDAB541AAFF2460055C2AD /* MusicBulbRangeSelection.swift in Sources */,
+				CC54AEC31AE6D29E008EED17 /* FavoritesDataModel.swift in Sources */,
 				117F49571A96DA4500A31746 /* EZAudioPlot.m in Sources */,
 				0D0A26DB1A38B6E70033550D /* SettingsTableViewController.swift in Sources */,
 				0D4F25451A2AD34A005C61EA /* BridgeConnect.swift in Sources */,

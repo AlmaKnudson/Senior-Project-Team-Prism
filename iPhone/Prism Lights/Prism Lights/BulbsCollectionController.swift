@@ -81,6 +81,18 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
     Then tries to connect to the bridge
     */
     override func viewWillAppear(animated: Bool) {
+        var manager = PHNotificationManager.defaultManager()
+        manager!.registerObject(self, withSelector: "HeartBeatReceived", forNotification: "LOCAL_CONNECTION_NOTIFICATION")
+        manager!.registerObject(self, withSelector: "NetworkConnectionLost", forNotification: "NO_LOCAL_CONNECTION_NOTIFICATION")
+        manager!.registerObject(self, withSelector: "NotAuthorized", forNotification: "NO_LOCAL_AUTHENTICATION_NOTIFICATION")
+        
+        
+        //Check that we are connected to bridge.
+        if !((UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.localConnected()){
+            //Connect to bridge
+            (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.enableLocalConnection()
+        }
+
     }
     
     override func viewDidAppear(animated: Bool) {

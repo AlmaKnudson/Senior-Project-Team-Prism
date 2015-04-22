@@ -119,17 +119,23 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
-                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="BulbHeader" id="K8y-NP-4T9">
+                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SectionHeader" id="K8y-NP-4T9" customClass="SectionHeader" customModule="Prism_Lights" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Single" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nT3-nR-FQL">
-                                            <rect key="frame" x="263" y="14" width="75" height="21"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Single" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nT3-nR-FQL">
+                                            <rect key="frame" x="8" y="14" width="113" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ceE-WR-FKC">
+                                            <rect key="frame" x="561" y="12" width="25" height="25"/>
+                                        </imageView>
                                     </subviews>
+                                    <connections>
+                                        <outlet property="headerLabel" destination="nT3-nR-FQL" id="3YA-qo-i7f"/>
+                                    </connections>
                                 </collectionReusableView>
                                 <variation key="heightClass=compact-widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="0.0" y="0.0" width="0.0" height="0.0"/>
@@ -250,17 +256,9 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
-                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="BulbHeader" id="H1q-ja-HVh">
+                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SectionHeader" id="H1q-ja-HVh" customClass="SectionHeader" customModule="Prism_Lights" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Groups" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C8d-EL-xFy">
-                                            <rect key="frame" x="258" y="14" width="85" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
                                 </collectionReusableView>
                                 <variation key="heightClass=compact-widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="0.0" y="0.0" width="0.0" height="0.0"/>
@@ -3116,9 +3114,9 @@
                                                         <rect key="frame" x="0.0" y="-35" width="0.0" height="35"/>
                                                     </variation>
                                                 </label>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FKf-FK-VWu">
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FKf-FK-VWu" customClass="SingleFavoriteView" customModule="Prism_Lights" customModuleProvider="target">
                                                     <rect key="frame" x="8" y="8" width="64" height="70"/>
-                                                    <color key="backgroundColor" red="1" green="0.036118559240000001" blue="0.92075689199999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="backgroundColor" red="1" green="0.0" blue="0.83528858083287716" alpha="1" colorSpace="calibratedRGB"/>
                                                 </view>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -3139,11 +3137,12 @@
                                             </mask>
                                         </variation>
                                         <connections>
-                                            <outlet property="bulbLabel" destination="HKU-Wn-xnN" id="vQU-4E-tKs"/>
+                                            <outlet property="favoriteLabel" destination="HKU-Wn-xnN" id="XL4-3G-B9f"/>
+                                            <outlet property="favoriteView" destination="FKf-FK-VWu" id="p60-M3-w4d"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
-                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="BulbHeader" id="OKA-66-wji">
+                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="BulbHeader" id="OKA-66-wji" customClass="SectionHeader" customModule="Prism_Lights" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </collectionReusableView>
@@ -3185,14 +3184,14 @@
         <image name="home" width="25" height="25"/>
         <image name="lock" width="48" height="60"/>
         <image name="note" width="25" height="25"/>
-        <image name="p" width="30" height="30"/>
+        <image name="p" width="60" height="60"/>
         <image name="pushAuth" width="516" height="475"/>
         <image name="second" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="5ef-6a-7TT"/>
-        <segue reference="QvR-CG-Niy"/>
-        <segue reference="agp-MF-nMt"/>
+        <segue reference="Zij-yb-hZI"/>
+        <segue reference="VIG-4p-d0T"/>
         <segue reference="MV1-5L-hp4"/>
+        <segue reference="agp-MF-nMt"/>
     </inferredMetricsTieBreakers>
 </document>

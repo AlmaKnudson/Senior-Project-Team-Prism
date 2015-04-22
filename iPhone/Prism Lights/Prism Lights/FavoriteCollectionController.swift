@@ -13,6 +13,7 @@ class FavoriteCollectionController : UIViewController, UIGestureRecognizerDelega
     var retryConnection = true
     var beenConnected = false
     var skipNextHeartbeat = false
+    //var favorites:FavoritesDataModel
     
     
     @IBOutlet weak var bulbCollectionView: UICollectionView!
@@ -28,15 +29,18 @@ class FavoriteCollectionController : UIViewController, UIGestureRecognizerDelega
         gesture.delegate = self
         self.bulbCollectionView.addGestureRecognizer(gesture)
         
+        
     }
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        
     }
     
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nil, bundle: nil)
+
     }
     
     /**
@@ -108,9 +112,8 @@ class FavoriteCollectionController : UIViewController, UIGestureRecognizerDelega
     :returns: number of bulbs in group
     */
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int{
-        var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
         
-        return 0
+        return favoritesDataModel.count
     }
     
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
@@ -125,6 +128,8 @@ class FavoriteCollectionController : UIViewController, UIGestureRecognizerDelega
         if( cell == nil){
             cell = FavoriteCollectionCell()
         }
+        var favorite = favoritesDataModel.getFavorite(atIndex: indexPath.row)
+        cell.SetupView(favorite.favoriteColors, name: favorite.name)
         
         return cell!
     }
@@ -135,10 +140,32 @@ class FavoriteCollectionController : UIViewController, UIGestureRecognizerDelega
             println("Favorite tapped")
         }
         
-        collectionView.reloadData()
-        
-        
+        EnableFavoriteSetting(favoritesDataModel.getFavorite(atIndex: indexPath.row))
+
     }
+    
+    
+    /**
+    Sets all the bubls in the favorite to that favorite setting.
+    
+    :param: favorite The favorite to be enabled.
+    */
+    func EnableFavoriteSetting(favorite:Favorite) {
+        
+        //Favorite is for all lights
+        if favorite.isAll {
+            var lightState:PHLightState = favorite.allLightState!
+            SetGroupLightState("0", lightState)
+            
+        }
+        
+        //Iterate over each bulb id and it's lightstate
+        for (bulbId, lightState) in favorite.stateMap {
+            SetBulbLightState(bulbId, lightState)
+        }
+    }
+    
+    
     
     /**
     Sets the phone status bar to be light colored for dark background
@@ -184,7 +211,6 @@ class FavoriteCollectionController : UIViewController, UIGestureRecognizerDelega
     func ApplySettings(){
         self.dismissViewControllerAnimated(true, completion: nil)
         self.bulbCollectionView.reloadData()
-        //TODO: Need protocol for pushAuth
     }
     
     func DismissMe() {
