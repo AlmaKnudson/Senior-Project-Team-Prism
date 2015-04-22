@@ -33,7 +33,6 @@ import java.util.TreeSet;
  * A data model for favorites because scenes aren't guaranteed to stay on the bridge,
  * and I don't want to have to create a group every time to use them anyway
  * NOT THREAD SAFE...SHOULD ONLY BE CALLED ON UI THREAD
- * TODO think about if you should save the bridge (if you can) for limited lights
  */
 public class FavoritesDataModel {
 

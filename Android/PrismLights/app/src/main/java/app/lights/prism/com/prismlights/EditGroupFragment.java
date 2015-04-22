@@ -102,7 +102,6 @@ public class EditGroupFragment extends Fragment implements CacheUpdateListener {
     public void cacheUpdated() {
         bulbSelectionView.cacheUpdated();
         group = hueSDK.getSelectedBridge().getResourceCache().getGroups().get(groupId);
-        //TODO handle group being deleted
         name.setText(group.getName());
 
     }
