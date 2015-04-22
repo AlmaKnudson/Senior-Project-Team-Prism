@@ -326,16 +326,16 @@ public class MainActivity extends Activity implements PHSDKListener{
         super.onResume();
         PHBridge bridge = hueBridgeSdk.getSelectedBridge();
         if(bridge != null) {
+            hueBridgeSdk.getNotificationManager().registerSDKListener(this);
             hueBridgeSdk.enableHeartbeat(hueBridgeSdk.getSelectedBridge(), PHHueSDK.HB_INTERVAL);
             hueBridgeSdk.getHeartbeatManager().enableLightsHeartbeat(bridge, 2000);
-            hueBridgeSdk.getNotificationManager().registerSDKListener(this);
         }
     }
 
     @Override
+
     protected void onStop() {
         super.onStop();
-
     }
 
     public void searchForBridge() {
