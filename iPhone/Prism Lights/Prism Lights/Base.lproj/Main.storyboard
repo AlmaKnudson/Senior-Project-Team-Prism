@@ -129,9 +129,18 @@
                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ceE-WR-FKC">
-                                            <rect key="frame" x="561" y="12" width="25" height="25"/>
-                                        </imageView>
+                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cGl-OL-JEW">
+                                            <rect key="frame" x="562" y="10" width="30" height="30"/>
+                                            <state key="normal" image="add">
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ymL-M1-lO7">
+                                            <rect key="frame" x="572" y="20" width="30" height="30"/>
+                                            <state key="normal" image="add">
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                        </button>
                                     </subviews>
                                     <connections>
                                         <outlet property="headerLabel" destination="nT3-nR-FQL" id="3YA-qo-i7f"/>
@@ -3177,6 +3186,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="add" width="30" height="30"/>
         <image name="bulb_bottom" width="86" height="150"/>
         <image name="bulb_top" width="86" height="150"/>
         <image name="groupBottom" width="141" height="150"/>
