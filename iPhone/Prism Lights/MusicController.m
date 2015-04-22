@@ -741,7 +741,7 @@ bool throttleSkip = true;
 //    }
 //
     
-    int brightness = arc4random() % 254;
+    int brightness = arc4random() % maxBrightness;
     
     //    brightness = max((double)brightness, (double)maxBrightness);
     
