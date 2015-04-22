@@ -264,7 +264,6 @@ public class BulbSelectionView extends FrameLayout implements CacheUpdateListene
                 bulbTop.setColorFilter(RealHomeFragment.offOverlay);
                 return currentView;
             }
-            //TODO make work with alternate color formats
             Float x = currentLight.getLastKnownLightState().getX();
             Float y = currentLight.getLastKnownLightState().getY();
             int currentColor = PHUtilities.colorFromXY(new float[]{x, y}, HueBulbChangeUtility.COLOR_XY_MODEL_FOR_HUE);

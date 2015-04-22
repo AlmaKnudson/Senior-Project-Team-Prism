@@ -84,7 +84,6 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
-                        //TODO check if name is valid
                         HueBulbChangeUtility.changeGroupName(identifier, nameEditor.getText().toString());
                         nameEditor.clearFocus();
                     }
@@ -97,7 +96,7 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
             @Override
             public void onClick(View v) {
                 ToggleButton bulbOn = (ToggleButton) v;
-                HueBulbChangeUtility.turnGroupOnOff(identifier, bulbOn.isChecked());
+                HueBulbChangeUtility.turnGroupOnOff(identifier, bulbOn.isChecked(), (MainActivity)getActivity());
             }
         });
         brightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -112,14 +111,14 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                HueBulbChangeUtility.changeGroupBrightness(identifier, seekBar.getProgress());
+                HueBulbChangeUtility.changeGroupBrightness(identifier, seekBar.getProgress(), (MainActivity)getActivity());
             }
         });
         colorPicker.setColorChangedListener(new ColorChangedListener() {
             @Override
             public void onColorChanged(float[] newColor) {
                 currentColor = newColor;
-                HueBulbChangeUtility.changeGroupColor(identifier, newColor);
+                HueBulbChangeUtility.changeGroupColor(identifier, newColor, (MainActivity)getActivity());
             }
         });
 

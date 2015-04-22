@@ -59,7 +59,7 @@ public class LightsFragment extends Fragment implements CacheUpdateListener, Edi
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 //                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
-                    HueBulbChangeUtility.toggleBulbState((PHLight) gridView.getAdapter().getItem(position));
+                    HueBulbChangeUtility.toggleBulbState((PHLight) gridView.getAdapter().getItem(position), (MainActivity)getActivity());
             }
         });
 
@@ -195,7 +195,6 @@ public class LightsFragment extends Fragment implements CacheUpdateListener, Edi
                 bulbTop.setColorFilter(RealHomeFragment.offOverlay);
                 return currentView;
             }
-            //TODO make work with alternate color formats
             Float x = currentLight.getLastKnownLightState().getX();
             Float y = currentLight.getLastKnownLightState().getY();
             int currentColor = PHUtilities.colorFromXY(new float[]{x, y}, HueBulbChangeUtility.COLOR_XY_MODEL_FOR_HUE);

@@ -36,13 +36,13 @@ public class FavoritesFragment extends Fragment implements EditButtonPresentCall
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                HueBulbChangeUtility.activateFavorite((Favorite) gridView.getAdapter().getItem(position));
+                HueBulbChangeUtility.activateFavorite((Favorite) gridView.getAdapter().getItem(position), (MainActivity)getActivity());
             }
         });
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                HueBulbChangeUtility.activateFavorite((Favorite) gridView.getAdapter().getItem(position));
+                HueBulbChangeUtility.activateFavorite((Favorite) gridView.getAdapter().getItem(position), (MainActivity)getActivity());
                 Bundle bundle = new Bundle();
                 bundle.putInt(RealHomeFragment.favoritePosition, position);
 

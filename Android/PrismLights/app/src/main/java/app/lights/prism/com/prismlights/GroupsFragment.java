@@ -51,7 +51,7 @@ public class GroupsFragment extends Fragment implements CacheUpdateListener, Edi
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 //                Toast.makeText(getActivity(), "" + position+" is clicked", Toast.LENGTH_SHORT).show();
-                HueBulbChangeUtility.toggleBulbGroupState((String) gridView.getAdapter().getItem(position));
+                HueBulbChangeUtility.toggleBulbGroupState((String) gridView.getAdapter().getItem(position), (MainActivity)getActivity());
             }
         });
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
