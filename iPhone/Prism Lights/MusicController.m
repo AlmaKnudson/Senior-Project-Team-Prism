@@ -735,10 +735,13 @@ bool throttleSkip = true;
     }
     
     
-    int brightness = fmax((maxMag / runningMaxMag)*maxBrightness, (maxBrightness/2));
-    if (brightness < (maxBrightness/2)){
-        brightness = (maxBrightness/2) + brightness;
-    }
+//    int brightness = fmax((maxMag / runningMaxMag)*maxBrightness, (maxBrightness/2));
+//    if (brightness < (maxBrightness/2)){
+//        brightness = (maxBrightness/2) + brightness;
+//    }
+//
+    
+    int brightness = arc4random() % 254;
     
     //    brightness = max((double)brightness, (double)maxBrightness);
     
