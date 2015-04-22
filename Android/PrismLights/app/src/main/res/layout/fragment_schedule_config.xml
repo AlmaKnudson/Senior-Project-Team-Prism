@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="app.lights.prism.com.prismlights.ScheduleConfigFragment"
-    android:background="@android:color/black">
+    android:background="@android:color/black"
+    android:padding="5dp">
 
     <LinearLayout
         android:orientation="vertical"
@@ -25,27 +26,19 @@
 
             <EditText
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_weight="1"
                 android:id="@+id/nameEditor"
                 android:inputType="textCapWords"
                 android:maxLength="32"/>
         </LinearLayout>
 
-        <ToggleButton
+        <app.lights.prism.com.prismlights.ColorPickerViewGroup
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/change_state"
-            android:id="@+id/bulbOnState"
-            style="@style/ToggleButton"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/scheduleColorPicker"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/brightness"
-            android:id="@+id/textView4"
-            android:textSize="17sp"
-            android:textColor="@android:color/white" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -62,36 +55,18 @@
             <TextView
                 android:layout_width="45dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
                 android:text="100%"
                 android:id="@+id/brightnessLabel"
                 android:textSize="17sp"
                 android:textColor="@android:color/white"
-                android:gravity="center_vertical|bottom|end"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:gravity="center"/>
+            <ToggleButton
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/select_color"
-                android:id="@+id/colorLabel"
-                android:textSize="17sp"
-                android:textColor="@android:color/white" />
-
+                android:text="@string/change_state"
+                android:id="@+id/bulbOnState"
+                style="@style/ToggleButton"/>
         </LinearLayout>
-
-        <app.lights.prism.com.prismlights.ColorPickerViewGroup
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:id="@+id/scheduleColorPicker"/>
-
         <LinearLayout
             android:id="@+id/linearLayRecurringDays"
             android:layout_width="match_parent"
