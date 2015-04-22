@@ -12,7 +12,7 @@ protocol ColorSelectedProtocol{
     func ColorSelected(color :UIColor)
 }
 
-class BulbSettingsController : UIViewController, ColorChangedDelegate{
+class BulbSettingsController : UIViewController, ColorChangedDelegate, UITextFieldDelegate{
     
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var onSwitch: UISwitch!
@@ -24,6 +24,8 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate{
     var bulbId :String?
     var isGroup :Bool?
 
+    
+    
     //MARK - Actions
     @IBAction func onSwitchToggle(sender: UISwitch) {
         if(DEBUG){
@@ -66,6 +68,12 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate{
     }
     
     @IBAction func ApplySettings(sender: UIBarButtonItem) {
+        var bridgeSend = PHBridgeSendAPI()
+        var lights:NSDictionary = PHBridgeResourcesReader.readBridgeResourcesCache().lights as NSDictionary
+        var light:PHLight = lights.valueForKey(self.bulbId!) as! PHLight
+        light.name = nameTextField.text;
+        
+        bridgeSend.updateLightWithLight(light, completionHandler: nil)
         homeDelegate?.ApplySettings()
     }
     
@@ -92,7 +100,6 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate{
         //Set the Delegate of the Child Controller
         var picker = ((self.childViewControllers.last)?.view) as! ColorPicker
         picker.colorChangedDelegate = self
-
     }
     
 
@@ -122,6 +129,7 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate{
         //Set previous color
         var point = CGPoint(x: CGFloat(lightState.x), y: CGFloat(lightState.y))
         picker.color = point
+        nameTextField.delegate = self
     }
     
     
@@ -136,7 +144,6 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate{
         
         // Create new light state object
         var lightState = PHLightState()
-        
         // Set converted XY value to light state
         lightState.x = color.x
         lightState.y = color.y
@@ -161,6 +168,8 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate{
         }
         
     }
+    
+
 
     
     
