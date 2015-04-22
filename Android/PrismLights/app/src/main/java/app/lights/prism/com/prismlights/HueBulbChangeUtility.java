@@ -72,33 +72,69 @@ public class HueBulbChangeUtility {
 
 
 
-    public static void turnBulbOnOff (String lightId, boolean on, MainActivity activity) {
+    public static void turnBulbOnOff(String lightId, boolean on, MainActivity activity, OnCompletedListener onCompletedListener) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
-        turnBulbOnOff(getLightFromId(lightId, bridge), on, activity);
+        turnBulbOnOff(getLightFromId(lightId, bridge), on, activity, onCompletedListener);
 
     }
 
-    public static void turnBulbOnOff(PHLight light, boolean on, MainActivity activity) {
+    public static void turnBulbOnOff(PHLight light, final boolean on, MainActivity activity, final OnCompletedListener onCompletedListener) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
         ColorCycle.removePreviousColorCycle(bridge, light.getIdentifier(), false, activity);
         PHLightState lightState = new PHLightState();
         lightState.setOn(on);
-        bridge.updateLightState(light, lightState);
+        bridge.updateLightState(light, lightState, new PHLightListener() {
+            @Override
+            public void onReceivingLightDetails(PHLight phLight) {
+
+            }
+
+            @Override
+            public void onReceivingLights(List<PHBridgeResource> phBridgeResources) {
+
+            }
+
+            @Override
+            public void onSearchComplete() {
+
+            }
+
+            @Override
+            public void onSuccess() {
+                callOnCompletedListener(onCompletedListener);
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                callOnCompletedListener(onCompletedListener);
+            }
+
+            @Override
+            public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
+
+            }
+        });
     }
 
-    public static boolean changeLightName(String lightId, String lightName) {
+    private static void callOnCompletedListener(OnCompletedListener onCompletedListener) {
+        if(onCompletedListener != null) {
+            onCompletedListener.onCompleted();
+        }
+    }
+
+    public static boolean changeLightName(String lightId, String lightName, final OnCompletedListener onCompletedListener) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
         PHLight light = getLightFromId(lightId, bridge);
         light.setName(lightName);
         bridge.updateLight(light, new PHLightListener() {
             @Override
             public void onSuccess() {
-
+                callOnCompletedListener(onCompletedListener);
             }
 
             @Override
             public void onError(int i, String s) {
-
+                callOnCompletedListener(onCompletedListener);
             }
 
             @Override
@@ -124,29 +160,89 @@ public class HueBulbChangeUtility {
         return true;
     }
 
-    public static void changeBrightness(String lightId, int brightness, MainActivity activity) {
+    public static void changeBrightness(String lightId, int brightness, MainActivity activity, OnCompletedListener onCompletedListener) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
         PHLight light = getLightFromId(lightId, bridge);
-        changeBrightness(light, brightness, activity);
+        changeBrightness(light, brightness, activity, onCompletedListener);
     }
 
-    public static void changeBrightness(PHLight light, int brightness, MainActivity activity) {
+    public static void changeBrightness(PHLight light, int brightness, MainActivity activity, final OnCompletedListener onCompletedListener) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
         ColorCycle.removePreviousColorCycle(bridge, light.getIdentifier(), false, activity);
-        bridge.updateLightState(light, getBrightnessState(brightness, !light.getLastKnownLightState().isOn()));
+        bridge.updateLightState(light, getBrightnessState(brightness, !light.getLastKnownLightState().isOn()), new PHLightListener() {
+            @Override
+            public void onReceivingLightDetails(PHLight phLight) {
+
+            }
+
+            @Override
+            public void onReceivingLights(List<PHBridgeResource> phBridgeResources) {
+
+            }
+
+            @Override
+            public void onSearchComplete() {
+
+            }
+
+            @Override
+            public void onSuccess() {
+                callOnCompletedListener(onCompletedListener);
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                callOnCompletedListener(onCompletedListener);
+            }
+
+            @Override
+            public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
+
+            }
+        });
     }
 
 
-    public static void changeBulbColor(String lightId, float[] xY, MainActivity activity) {
+    public static void changeBulbColor(String lightId, float[] xY, MainActivity activity, OnCompletedListener onCompletedListener) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
         PHLight light = getLightFromId(lightId, bridge);
-        changeBulbColor(light, xY, activity);
+        changeBulbColor(light, xY, activity, onCompletedListener);
     }
 
-    private static void changeBulbColor(PHLight light, float[]xY, MainActivity activity) {
+    private static void changeBulbColor(PHLight light, float[] xY, MainActivity activity, final OnCompletedListener onCompletedListener) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
         ColorCycle.removePreviousColorCycle(bridge, light.getIdentifier(), false, activity);
-        bridge.updateLightState(light, getColorState(xY, !light.getLastKnownLightState().isOn()));
+        bridge.updateLightState(light, getColorState(xY, !light.getLastKnownLightState().isOn()), new PHLightListener() {
+            @Override
+            public void onReceivingLightDetails(PHLight phLight) {
+
+            }
+
+            @Override
+            public void onReceivingLights(List<PHBridgeResource> phBridgeResources) {
+
+            }
+
+            @Override
+            public void onSearchComplete() {
+
+            }
+
+            @Override
+            public void onSuccess() {
+                callOnCompletedListener(onCompletedListener);
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                callOnCompletedListener(onCompletedListener);
+            }
+
+            @Override
+            public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
+
+            }
+        });
     }
 
     private static PHLightState getBrightnessState(int brightness, boolean shouldSetOn) {
@@ -384,11 +480,7 @@ public class HueBulbChangeUtility {
         bridge.createGroup(name, lightIdentifiers, new PHGroupListener() {
             @Override
             public void onCreated(PHGroup phGroup) {
-                System.out.println("Created Group");
-                if(onCompletedListener != null) {
-                    onCompletedListener.onCompleted();
-                    onCompletedListener.onCompleted();
-                }
+                callOnCompletedListener(onCompletedListener);
             }
 
             @Override
@@ -405,18 +497,14 @@ public class HueBulbChangeUtility {
             public void onSuccess() {
                 System.out.println("Success Group");
 
-                if(onCompletedListener != null) {
-                    onCompletedListener.onCompleted();
-                }
+                callOnCompletedListener(onCompletedListener);
             }
 
             @Override
             public void onError(int i, String s) {
                 System.out.println("Error Group");
                 //TOOD handle error when
-                if(onCompletedListener != null) {
-                    onCompletedListener.onCompleted();
-                }
+                callOnCompletedListener(onCompletedListener);
             }
 
             @Override
@@ -429,17 +517,13 @@ public class HueBulbChangeUtility {
     public static void deleteGroup(PHGroup phGroup, final OnCompletedListener onCompletedListener) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
         if(phGroup == null) {
-            if(onCompletedListener != null) {
-                onCompletedListener.onCompleted();
-            }
+            callOnCompletedListener(onCompletedListener);
             return;
         }
         bridge.deleteGroup(phGroup.getIdentifier(), new PHGroupListener() {
             @Override
             public void onCreated(PHGroup phGroup) {
-                if(onCompletedListener != null) {
-                    onCompletedListener.onCompleted();
-                }
+                callOnCompletedListener(onCompletedListener);
             }
 
             @Override
@@ -454,16 +538,12 @@ public class HueBulbChangeUtility {
 
             @Override
             public void onSuccess() {
-                if(onCompletedListener != null) {
-                    onCompletedListener.onCompleted();
-                }
+                callOnCompletedListener(onCompletedListener);
             }
 
             @Override
             public void onError(int i, String s) {
-                if(onCompletedListener != null) {
-                    onCompletedListener.onCompleted();
-                }
+                callOnCompletedListener(onCompletedListener);
             }
 
             @Override
@@ -521,9 +601,7 @@ public class HueBulbChangeUtility {
 
             @Override
             public void onSearchComplete() {
-                if(onCompletedListener != null) {
-                    onCompletedListener.onCompleted();
-                }
+                callOnCompletedListener(onCompletedListener);
             }
 
             @Override
@@ -533,9 +611,7 @@ public class HueBulbChangeUtility {
 
             @Override
             public void onError(int i, String s) {
-                if(onCompletedListener != null) {
-                    onCompletedListener.onCompleted();
-                }
+                callOnCompletedListener(onCompletedListener);
             }
 
             @Override
@@ -560,9 +636,7 @@ public class HueBulbChangeUtility {
 
             @Override
             public void onSearchComplete() {
-                if(onCompletedListener != null) {
-                    onCompletedListener.onCompleted();
-                }
+                callOnCompletedListener(onCompletedListener);
             }
 
             @Override
@@ -572,9 +646,7 @@ public class HueBulbChangeUtility {
 
             @Override
             public void onError(int i, String s) {
-                if(onCompletedListener != null) {
-                    onCompletedListener.onCompleted();
-                }
+                callOnCompletedListener(onCompletedListener);
             }
 
             @Override
@@ -592,10 +664,7 @@ public class HueBulbChangeUtility {
             @Override
             public void onCreated(PHGroup phGroup) {
                 System.out.println("Created Group");
-                if(onCompletedListener != null) {
-                    onCompletedListener.onCompleted();
-                    onCompletedListener.onCompleted();
-                }
+                callOnCompletedListener(onCompletedListener);
             }
 
             @Override
@@ -612,17 +681,13 @@ public class HueBulbChangeUtility {
             public void onSuccess() {
                 System.out.println("Success Group");
 
-                if(onCompletedListener != null) {
-                    onCompletedListener.onCompleted();
-                }
+                callOnCompletedListener(onCompletedListener);
             }
 
             @Override
             public void onError(int i, String s) {
                 System.out.println("Error Group");
-                if(onCompletedListener != null) {
-                    onCompletedListener.onCompleted();
-                }
+                callOnCompletedListener(onCompletedListener);
             }
 
             @Override
