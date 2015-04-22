@@ -110,6 +110,8 @@
 		CCCD592E1A78011E008B209D /* Rules_API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD592D1A78011E008B209D /* Rules_API.swift */; };
 		CCCD59301A78012F008B209D /* Configuration_API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCD592F1A78012F008B209D /* Configuration_API.swift */; };
 		CCDD3FF21AE6F70800113B22 /* SectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCDD3FF11AE6F70800113B22 /* SectionHeader.swift */; };
+		CCDEDEB01AE7330F00BECD0A /* EditBulbsCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCDEDEAF1AE7330F00BECD0A /* EditBulbsCollection.swift */; };
+		CCDEDEB21AE735BF00BECD0A /* RAReorderableLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCDEDEB11AE735BF00BECD0A /* RAReorderableLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -270,6 +272,8 @@
 		CCCD592F1A78012F008B209D /* Configuration_API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration_API.swift; sourceTree = "<group>"; };
 		CCCD59311A780140008B209D /* Info_API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Info_API.swift; sourceTree = "<group>"; };
 		CCDD3FF11AE6F70800113B22 /* SectionHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
+		CCDEDEAF1AE7330F00BECD0A /* EditBulbsCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditBulbsCollection.swift; sourceTree = "<group>"; };
+		CCDEDEB11AE735BF00BECD0A /* RAReorderableLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RAReorderableLayout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -310,6 +314,7 @@
 			children = (
 				0D0A26D91A38AFA10033550D /* Bulb Settings */,
 				0D9357E61A2D4BB100AAD52D /* BulbCollectionCell.swift */,
+				CCDEDEB11AE735BF00BECD0A /* RAReorderableLayout.swift */,
 				CC54AEC01AE6D29E008EED17 /* Favorite.swift */,
 				CC54AEC11AE6D29E008EED17 /* FavoritesDataModel.swift */,
 				CC54AEC41AE6D459008EED17 /* SingleFavoriteView.swift */,
@@ -320,6 +325,7 @@
 				CC89CA021ADD903D00E25DCD /* GroupCollectionControlller.swift */,
 				CC89CA041ADD904F00E25DCD /* FavoriteCollectionController.swift */,
 				CCDD3FF11AE6F70800113B22 /* SectionHeader.swift */,
+				CCDEDEAF1AE7330F00BECD0A /* EditBulbsCollection.swift */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -796,6 +802,7 @@
 				CCB135A71AAD03C2006E464F /* datething.swift in Sources */,
 				117F49631A96DAFE00A31746 /* MusicController.m in Sources */,
 				0D3A79171A26A716003AC6D4 /* DDLog.m in Sources */,
+				CCDEDEB21AE735BF00BECD0A /* RAReorderableLayout.swift in Sources */,
 				0D3A79191A26A716003AC6D4 /* DDTTYLogger.m in Sources */,
 				CC1C60B01AE5536D00FF1A3A /* FavoriteCollectionCell.swift in Sources */,
 				CC391F411A7D91F9004C94B5 /* Networking.swift in Sources */,
@@ -843,6 +850,7 @@
 				CC4A46E51A8912FD007DC0F2 /* Settings.swift in Sources */,
 				CC89CA051ADD904F00E25DCD /* FavoriteCollectionController.swift in Sources */,
 				CC27D7FF1A802E9C00346F47 /* PrismSDK.swift in Sources */,
+				CCDEDEB01AE7330F00BECD0A /* EditBulbsCollection.swift in Sources */,
 				CC54AEC21AE6D29E008EED17 /* Favorite.swift in Sources */,
 				CCCD59281A7800EA008B209D /* Schedules_API.swift in Sources */,
 				119F14F51AC18DF60024B019 /* ColorViewCell.swift in Sources */,

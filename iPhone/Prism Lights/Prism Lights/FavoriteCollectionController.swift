@@ -28,8 +28,6 @@ class FavoriteCollectionController : UIViewController, UIGestureRecognizerDelega
         gesture.minimumPressDuration = 0.50
         gesture.delegate = self
         self.bulbCollectionView.addGestureRecognizer(gesture)
-        
-        
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -98,6 +96,10 @@ class FavoriteCollectionController : UIViewController, UIGestureRecognizerDelega
         } else if segue.identifier == "pushAuth" {
             var dest = segue.destinationViewController as! PushAuthController
             dest.delegate = self
+        } else if segue.identifier == "editCollection" {
+            var dest = segue.destinationViewController as! EditBulbsCollection
+            dest.editType = "favorite"
+            dest.dismissDeleget = self
         }
     }
     
@@ -134,6 +136,26 @@ class FavoriteCollectionController : UIViewController, UIGestureRecognizerDelega
         return cell!
     }
     
+    func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView{
+        //1
+        switch kind {
+            //2
+        case UICollectionElementKindSectionHeader:
+            //3
+            let headerView =
+            collectionView.dequeueReusableSupplementaryViewOfKind(kind,
+                withReuseIdentifier: "SectionHeader",
+                forIndexPath: indexPath)
+                as! SectionHeader
+            headerView.headerType = "favorite"
+            return headerView
+        default:
+            //4
+            assert(false, "Unexpected element kind. Should only have headers.")
+        }
+    }
+
+    
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         if(DEBUG){
@@ -145,25 +167,6 @@ class FavoriteCollectionController : UIViewController, UIGestureRecognizerDelega
     }
     
     
-    /**
-    Sets all the bubls in the favorite to that favorite setting.
-    
-    :param: favorite The favorite to be enabled.
-    */
-    func EnableFavoriteSetting(favorite:Favorite) {
-        
-        //Favorite is for all lights
-        if favorite.isAll {
-            var lightState:PHLightState = favorite.allLightState!
-            SetGroupLightState("0", lightState)
-            
-        }
-        
-        //Iterate over each bulb id and it's lightstate
-        for (bulbId, lightState) in favorite.stateMap {
-            SetBulbLightState(bulbId, lightState)
-        }
-    }
     
     
     
@@ -273,6 +276,27 @@ class FavoriteCollectionController : UIViewController, UIGestureRecognizerDelega
 
             hueSDK.disableLocalConnection()
         
+    }
+
+    
+    /**
+    Sets all the bubls in the favorite to that favorite setting.
+    
+    :param: favorite The favorite to be enabled.
+    */
+    func EnableFavoriteSetting(favorite:Favorite) {
+        
+        //Favorite is for all lights
+        if favorite.isAll {
+            var lightState:PHLightState = favorite.allLightState!
+            SetGroupLightState("0", lightState)
+            
+        }
+        
+        //Iterate over each bulb id and it's lightstate
+        for (bulbId, lightState) in favorite.stateMap {
+            SetBulbLightState(bulbId, lightState)
+        }
     }
 
     

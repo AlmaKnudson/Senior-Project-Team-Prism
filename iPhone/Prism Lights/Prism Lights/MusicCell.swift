@@ -20,6 +20,7 @@ class MusicCell : UITableViewCell{
     
     @IBOutlet weak var bulbRangeSegment: UISegmentedControl!
     
+    @IBOutlet weak var bulbNameLabel: UILabel!
     var cellDelegate: CellRangeChangeDelegate? = nil
     
     
