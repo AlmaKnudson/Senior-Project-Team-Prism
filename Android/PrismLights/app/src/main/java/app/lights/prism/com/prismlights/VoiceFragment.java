@@ -160,7 +160,7 @@ public class VoiceFragment extends Fragment implements IWitListener {
                             }
                         }
 
-                        HueBulbChangeUtility.setLightOrGroupFromName(bulbname, onOff, hV);
+                        HueBulbChangeUtility.setLightOrGroupFromName(bulbname, onOff, hV, (MainActivity)getActivity());
                         witResponse.setText("Turning bulb/group '" + bulbname + "'" + onOff + "'.");
                     }
 

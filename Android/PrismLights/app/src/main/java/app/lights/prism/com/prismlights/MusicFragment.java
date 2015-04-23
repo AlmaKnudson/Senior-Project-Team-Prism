@@ -21,6 +21,7 @@ import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -44,7 +45,7 @@ public class MusicFragment extends Fragment implements OnsetHandler {
     private  AudioProcessor p;
     private PercussionOnsetDetector pOC;
     private ComplexOnsetDetector cOP;
-    private volatile AudioDispatcher dispatcher;
+    private AudioDispatcher dispatcher;
     private WaveformView mWaveformView;
     private ToggleButton toggleButton;
     private Button selectLightsButton;
@@ -59,6 +60,9 @@ public class MusicFragment extends Fragment implements OnsetHandler {
     private TextView midRangeMinLabel;
     private TextView midRangeMaxLabel;
     private TextView highRangeMinLabel;
+    private Thread thread;
+
+    private boolean stopped;
 
     //These lists will be SMALL
     private ArrayList<String> lows;
@@ -137,42 +141,13 @@ public class MusicFragment extends Fragment implements OnsetHandler {
         brightnessLabel = (TextView) layout.findViewById(R.id.muzeBrightnessLabel);
         maxBrightnessSlider = (SeekBar) layout.findViewById(R.id.maxBrightnessSlider);
 
-        dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(44100, 2048, 0);
-
-       pdh = new PitchDetectionHandler() {
-            @Override
-            public void handlePitch(PitchDetectionResult result,AudioEvent e) {
-                short[] data = new short[e.getBufferSize()/2];
-                ByteBuffer.wrap(e.getByteBuffer()).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(data);
-                mWaveformView.updateAudioData(data);
-                if(result.isPitched()){
-                    float pitchInHz = result.getPitch();
-//                    System.out.println("Most Recent Pitch: " + pitchInHz);
-                    mostRecentPitch = pitchInHz;
-                }
-//                System.out.println(result.isPitched());
-//                float pitchInHz = result.getPitch();
-//                if(pitchInHz != -1.0)
-//                    System.out.println("Pitch: " + pitchInHz);
-
-                MusicFragment.this.getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-//                        TextView text = (TextView) findViewById(R.id.textView1);
-//                        System.out.println("" + pitchInHz);
-                    }
-                });
-            }
-        };
-
-//        cOP  = new ComplexOnsetDetector(2048, fX/10, 0.002, -70);
-        cOP  = new ComplexOnsetDetector(2048, .1, 0.002, -70);
-        cOP.setHandler(this);
-        p = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 44100, 2048, pdh);
-        // add a processor, handle percussion event.
 
 
-        new Thread(dispatcher,"Audio Dispatcher").start();
+//        initDispatcher();
+
+
+
+
 //        slave = new Thread(dispatcher,"Audio Dispatcher").start();
 
 //        task = new MusicTask();
@@ -232,19 +207,26 @@ public class MusicFragment extends Fragment implements OnsetHandler {
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
-//                dispatcher.removeAudioProcessor(p);
-                dispatcher.removeAudioProcessor(cOP);
+                if(dispatcher != null) {
+//                    dispatcher.removeAudioProcessor(p);
+//                    dispatcher.removeAudioProcessor(cOP);
+                }
             }
+
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                cOP.setThreshold(fX/10);
+
+                  cOP.setThreshold(fX / 10);
+
 //                cOP.setThreshold();
 //                cOP  = new ComplexOnsetDetector(2048, fX/10, 0.002, -70);
 //                cOP.setHandler(this);
 //                p = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 44100, 2048, pdh);
 //                dispatcher.addAudioProcessor(p);
-                dispatcher.addAudioProcessor(cOP);
+//                dispatcher.addAudioProcessor(cOP);
+//                thread.start();
+//                dispatcher.addAudioProcessor(p);
+//                dispatcher.addAudioProcessor(cOP);
             }
         });
 
@@ -274,12 +256,60 @@ public class MusicFragment extends Fragment implements OnsetHandler {
                 startRecording = (ToggleButton) v;
 
                 if(startRecording.isChecked()) {
+
+                    dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(44100, 2048, 0);
+
+                    pdh = new PitchDetectionHandler() {
+                        @Override
+                        public void handlePitch(PitchDetectionResult result,AudioEvent e) {
+                            short[] data = new short[e.getBufferSize()/2];
+                            ByteBuffer.wrap(e.getByteBuffer()).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(data);
+                            mWaveformView.updateAudioData(data);
+                            if(result.isPitched()){
+                                float pitchInHz = result.getPitch();
+//                    System.out.println("Most Recent Pitch: " + pitchInHz);
+                                mostRecentPitch = pitchInHz;
+                            }
+//                System.out.println(result.isPitched());
+//                float pitchInHz = result.getPitch();
+//                if(pitchInHz != -1.0)
+//                    System.out.println("Pitch: " + pitchInHz);
+
+                            MusicFragment.this.getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+//                        TextView text = (TextView) findViewById(R.id.textView1);
+//                        System.out.println("" + pitchInHz);
+                                }
+                            });
+                        }
+                    };
+
+
+                    if(p!= null){
+                        dispatcher.removeAudioProcessor(p);
+                    }
+                    if(cOP != null){
+                        dispatcher.removeAudioProcessor(cOP);
+                        cOP.setHandler(null);
+                    }
+//        cOP  = new ComplexOnsetDetector(2048, fX/10, 0.002, -70);
+                    cOP  = new ComplexOnsetDetector(2048, .15, 0.002, -70);
+                    cOP.setHandler(MusicFragment.this);
+                    p = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 44100, 2048, pdh);
+                    // add a processor, handle percussion event.
+
                     dispatcher.addAudioProcessor(p);
                     dispatcher.addAudioProcessor(cOP);
 
+                    thread = new Thread(dispatcher,"Audio Dispatcher");
+                    thread.start();
+
                 } else {
-                    dispatcher.removeAudioProcessor(p);
-                    dispatcher.removeAudioProcessor(cOP);
+                    dispatcher.stop();
+//                    dispatcher.removeAudioProcessor(p);
+//                    dispatcher.removeAudioProcessor(cOP);
+//                    dispatcher.skip(20);
                 }
             }
         };
@@ -299,6 +329,7 @@ public class MusicFragment extends Fragment implements OnsetHandler {
         toggleButton.setOnClickListener(listener);
         return layout;
     }
+
 
 
     @Override
