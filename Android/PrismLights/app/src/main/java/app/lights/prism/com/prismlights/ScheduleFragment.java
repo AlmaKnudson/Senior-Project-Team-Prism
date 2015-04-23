@@ -2,9 +2,7 @@ package app.lights.prism.com.prismlights;
 
 import android.app.ActivityManager;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.FragmentTransaction;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -17,17 +15,14 @@ import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import com.philips.lighting.hue.listener.PHScheduleListener;
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHHueError;
-import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
 import com.philips.lighting.model.PHSchedule;
 
@@ -41,14 +36,12 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
 
     private String identifier;
     private boolean isGroup;
-    private int chosenSchedulePosition;
     private ListView scheduleListView;
     static ScheduleAdapter adapter;
     static private PHHueSDK phHueSDK;
     private static PHBridge bridge;
     String delegate;
-    List<PHSchedule> phSchedules; // this List of schedules in bridge whose description is Schedule.
-    ToggleButton currentSwitch;
+    ScheduleList scheduleList;
     private Dialog progressDialog;
 
     /**
@@ -73,13 +66,11 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
         }
 
         getPhSchedules();
-
-        currentSwitch = null;
     }
 
     // this function get list of schedule from the bridge, and return schedules for this bulb
     private void getPhSchedules() {
-        phSchedules = new ArrayList<PHSchedule>();
+        List<PHSchedule> phSchedules = new ArrayList<>();
 
         List<PHSchedule> recurringSchedules = bridge.getResourceCache().getAllSchedules(true);
 
@@ -100,6 +91,8 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
                 }
             }
         }
+
+        scheduleList = new ScheduleList(phSchedules);
     }
 
     @Override
@@ -139,7 +132,7 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
                 Bundle bundle = new Bundle();
                 bundle.putString(RealHomeFragment.lightPositionString, identifier);
                 bundle.putBoolean(RealHomeFragment.groupOrLightString, isGroup);
-                ((MainActivity) getActivity()).setCurrentSchedule(phSchedules.get(position));
+                ((MainActivity) getActivity()).setCurrentSchedule(scheduleList.getSchedule(position));
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 ScheduleConfigFragment scheduleConfigFragment = new ScheduleConfigFragment();
@@ -164,12 +157,12 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
 
         @Override
         public int getCount() {
-            return phSchedules.size();
+            return scheduleList.getSize();
         }
 
         @Override
         public Object getItem(int position) {
-            return phSchedules.get(position);
+            return scheduleList.getSchedule(position);
         }
 
         @Override
@@ -179,39 +172,60 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
 
         @Override
         public View getView(final int position, final View convertView, ViewGroup parent) {
-            final PHSchedule phSchedule = phSchedules.get(position);
 
-            Date d = phSchedule.getDate();
-
-            String timeString = (String) DateFormat.format(delegate, d.getTime());
             View currentView;
             if(convertView == null) {
-                currentView = LayoutInflater.from(ScheduleFragment.this.getActivity()).inflate(R.layout.single_schedule, parent, false);
+                currentView = LayoutInflater.from(ScheduleFragment.this.getActivity()).inflate(R.layout.single_schedule_new, parent, false);
             } else {
                 currentView = convertView;
             }
 
-            TextView timeText = (TextView) currentView.findViewById(R.id.scheduleTime);
-            timeText.setText(timeString);
+            final Schedule schedule = scheduleList.getSchedule(position);
 
-            PHLightState state = phSchedule.getLightState();
+            TextView nameText = (TextView) currentView.findViewById(R.id.nameText);
+            nameText.setText("Name: " + schedule.getName());
 
-            String isOnText;
-            if (state.isOn())
-                isOnText = "On";
+
+            TextView OnTimeText = (TextView) currentView.findViewById(R.id.onTimeText);
+
+            int timeChoiceOn = schedule.getTimeChoiceOn();
+            if(timeChoiceOn==0){
+                Date onTime = schedule.getOnTime();
+                String onTimeString = (String) DateFormat.format(delegate, onTime.getTime());
+                OnTimeText.setText("On: "+ onTimeString);
+            }
+            else if (timeChoiceOn==1)
+                OnTimeText.setText("On: Sunrise");
+            else if (timeChoiceOn==2)
+                OnTimeText.setText("On: Sunset");
             else
-                isOnText = "Off";
+                OnTimeText.setText("On: None");
 
-            TextView onOffText = (TextView) currentView.findViewById(R.id.scheduleOnOff);
-            onOffText.setText(isOnText);
+
+            TextView OffTimeText = (TextView) currentView.findViewById(R.id.offTimeText);
+
+            int timeChoiceOff = schedule.getTimeChoiceOff();
+            if(timeChoiceOff==0) {
+                Date offTime = schedule.getOffTime();
+                String offTimeString = (String) DateFormat.format(delegate, offTime.getTime());
+                OffTimeText.setText("Off: " + offTimeString);
+            }
+            else if (timeChoiceOff==1)
+                OffTimeText.setText("Off: Sunrise");
+            else if (timeChoiceOff==2)
+                OffTimeText.setText("Off: Sunset");
+            else
+                OffTimeText.setText("Off: None");
+
+            PHLightState state = schedule.getLightState();
 
             String brightness;
             if (state.getBrightness() == null)
-                brightness = "";
+                brightness = "Brightness: None";
             else
-                brightness = HueBulbChangeUtility.revertBrightness(state.getBrightness()) + "%";
+                brightness = "Brightness: " + HueBulbChangeUtility.revertBrightness(state.getBrightness()) + "%";
 
-            TextView brightnessText = (TextView) currentView.findViewById(R.id.scheduleBrightness);
+            TextView brightnessText = (TextView) currentView.findViewById(R.id.brightnessText);
             brightnessText.setText(brightness);
 
             int color;
@@ -220,36 +234,46 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
             else
                 color = PHUtilities.colorFromXY(new float[]{state.getX(), state.getY()}, "");
 
-            View colorImage =  currentView.findViewById(R.id.scheduleColor);
+            View colorImage =  currentView.findViewById(R.id.colorView);
             colorImage.setBackgroundColor(color);
 
 
-            final ToggleButton scheduleSwitch = (ToggleButton)currentView.findViewById(R.id.singleScheduleSwitch);
-            if(phSchedule.getStatus()==null || phSchedule.getStatus().equals(PHSchedule.PHScheduleStatus.ENABLED)) // when a new schedule is created, bridge returns null for status
+            final ToggleButton scheduleSwitch = (ToggleButton)currentView.findViewById(R.id.toggleButton);
+            if(schedule.getStatus()==null || schedule.getStatus().equals(PHSchedule.PHScheduleStatus.ENABLED)) // when a new schedule is created, bridge returns null for status
                 scheduleSwitch.setChecked(true);
             else
                 scheduleSwitch.setChecked(false);
 
-            scheduleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            scheduleSwitch.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked){
-                        phSchedule.setStatus(PHSchedule.PHScheduleStatus.ENABLED);
-                    } else {
-                        phSchedule.setStatus(PHSchedule.PHScheduleStatus.DISABLED);
+                public void onClick(View v) {
+                    if (schedule.getScheduleOn()!=null){
+                        if (((ToggleButton)v).isChecked()) {
+                            schedule.getScheduleOn().setStatus(PHSchedule.PHScheduleStatus.ENABLED);
+                        } else {
+                            schedule.getScheduleOn().setStatus(PHSchedule.PHScheduleStatus.DISABLED);
+                        }
+                        updateSchedule(schedule.getScheduleOn());
                     }
-                    currentSwitch = scheduleSwitch;
-                    updateSchedule(phSchedule);
+
+                    if (schedule.getScheduleOn()!=null){
+                        if (((ToggleButton)v).isChecked()) {
+                            schedule.getScheduleOff().setStatus(PHSchedule.PHScheduleStatus.ENABLED);
+                        } else {
+                            schedule.getScheduleOff().setStatus(PHSchedule.PHScheduleStatus.DISABLED);
+                        }
+                        updateSchedule(schedule.getScheduleOff());
+                    }
                 }
             });
 
-            TextView nameText = (TextView) currentView.findViewById(R.id.scheduleName);
-            nameText.setText(phSchedule.getName());
 
-            TextView recurringDayText = (TextView) currentView.findViewById(R.id.scheduleRecurringDay);
+
+
+            TextView recurringDayText = (TextView) currentView.findViewById(R.id.daysText);
 
             String recurringDaysBitStr = String.format("%07d", new BigInteger(
-                    Integer.toBinaryString(phSchedule.getRecurringDays())));
+                    Integer.toBinaryString(schedule.getRecurringDays())));
 
             String recurringDays = "";
 
@@ -315,16 +339,18 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
                 }
             }
 
+            recurringDayText.setText("Days: " + recurringDays);
 
-            recurringDayText.setText(recurringDays);
-
-            TextView deleteTextView = (TextView) currentView.findViewById(R.id.scheduleDelete);
+            ImageView deleteTextView = (ImageView) currentView.findViewById(R.id.deleteScheduleImageButton);
 
 
             deleteTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deleteSchedule(position);
+                    if(schedule.getScheduleOn()!=null)
+                        deleteSchedule(schedule.getScheduleOn());
+                    if(schedule.getScheduleOff()!=null)
+                        deleteSchedule(schedule.getScheduleOff());
                 }
             });
 
@@ -345,10 +371,11 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
 
             @Override
             public void onSuccess() {
-                currentSwitch = null;
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         closeProgressDialog();
+                        getPhSchedules();
+                        adapter.notifyDataSetChanged();
                     }
                 });
 
@@ -356,31 +383,25 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
 
             @Override
             public void onError(int i, final String s) {
-
-                if (phSchedule.getStatus().equals(PHSchedule.PHScheduleStatus.ENABLED))
-                    currentSwitch.setChecked(false);
-                else
-                    currentSwitch.setChecked(true);
-
-                currentSwitch = null;
-
                 getActivity().runOnUiThread(new Runnable() {
+                    @Override
                     public void run() {
                         closeProgressDialog();
-                        DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
+                        DialogCreator.showWarningDialog("Error", s, (MainActivity) getActivity());
                     }
                 });
             }
 
             @Override
             public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
-                ;
+
             }
         });
     }
 
-    private void deleteSchedule(int position) {
-        String scheduleID = phSchedules.get(position).getIdentifier();
+    private void deleteSchedule(PHSchedule schedule) {
+        String scheduleID;
+        scheduleID = schedule.getIdentifier();
 
         progressDialog = DialogCreator.showLoadingDialog(getText(R.string.sending_progress).toString(), (MainActivity)getActivity());
 
@@ -418,15 +439,6 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
 
             }
         });
-    }
-
-    private boolean isCurrentActivity() {
-        ActivityManager mActivityManager = (ActivityManager)getActivity().getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> RunningTask = mActivityManager.getRunningTasks(1);
-        ActivityManager.RunningTaskInfo ar = RunningTask.get(0);
-        String currentClass = "." + this.getClass().getSimpleName();
-        String topActivity =  ar.topActivity.getShortClassName().toString();
-        return topActivity.contains(currentClass);
     }
 
     @Override

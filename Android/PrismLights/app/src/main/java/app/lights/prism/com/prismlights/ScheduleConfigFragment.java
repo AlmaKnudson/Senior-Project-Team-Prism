@@ -1,17 +1,22 @@
 package app.lights.prism.com.prismlights;
 
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -22,7 +27,6 @@ import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHHueError;
-import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
 import com.philips.lighting.model.PHSchedule;
 
@@ -39,9 +43,8 @@ public class ScheduleConfigFragment extends Fragment {
     static private PHHueSDK phHueSDK;
     private static PHBridge bridge;
 
-    private PHSchedule currentSchedule;
+    private Schedule currentSchedule;
     private EditText nameEditor;
-    private ToggleButton bulbOnState;
     private SeekBar brightness;
     private TextView brightnessPercentage;
     private int currentColor;
@@ -56,13 +59,22 @@ public class ScheduleConfigFragment extends Fragment {
     private ToggleButton btnFri;
     private ToggleButton btnSat;
 
-    private Button btnScheduleTime;
-    private int mHour;
-    private int mMinute;
-    private static Date timeToSend;
+    private PHSchedule currentOnSchedule;
+    private Button timeOnPickerButton;
+    private Date timeOn;
+    private int timeChoiceOn;
+
+    private PHSchedule currentOffSchedule;
+    private Button timeOffPickerButton;
+    private Date timeOff;
+    private int timeChoiceOff;
 
     private static int recurringDays;
     private static String recurringDaysBitStr;
+
+    private int updateCounter;
+
+
 
 
 
@@ -102,8 +114,9 @@ public class ScheduleConfigFragment extends Fragment {
         phHueSDK = PHHueSDK.getInstance();
         bridge = phHueSDK.getSelectedBridge();
 
+        //TODO: get both currentOnSchedule, and currentOffSchedule Here
         currentSchedule = ((MainActivity)getActivity()).getCurrentSchedule();
-        ((MainActivity)getActivity()).setCurrentSchedule(null);
+        ((MainActivity)getActivity()).setCurrentPHschedule(null);
 
         if (getArguments() != null) {
             identifier = getArguments().getString(RealHomeFragment.lightPositionString);
@@ -111,6 +124,24 @@ public class ScheduleConfigFragment extends Fragment {
         }
 
         recurringDays = 0; //default value
+        if(currentSchedule!=null) {
+            currentOnSchedule = currentSchedule.getScheduleOn();
+            timeChoiceOn = currentSchedule.getTimeChoiceOn();
+            timeOn = currentSchedule.getOnTime();
+
+            currentOffSchedule = currentSchedule.getScheduleOff();
+            timeChoiceOff = currentSchedule.getTimeChoiceOff();
+            timeOff = currentSchedule.getOffTime();
+        }
+        else{
+            currentOnSchedule = null;
+            timeChoiceOn = -1;
+            timeOn = null;
+
+            currentOffSchedule = null;
+            timeChoiceOff = -1;
+            timeOff = null;
+        }
     }
 
     @Override
@@ -119,7 +150,6 @@ public class ScheduleConfigFragment extends Fragment {
         // Inflate the layout for this fragment
         FrameLayout frame = (FrameLayout) inflater.inflate(R.layout.fragment_schedule_config, container, false);
         nameEditor = (EditText) frame.findViewById(R.id.nameEditor);
-        bulbOnState = (ToggleButton) frame.findViewById(R.id.bulbOnState);
         brightness = (SeekBar) frame.findViewById(R.id.brightness);
         brightnessPercentage = (TextView) frame.findViewById(R.id.brightnessLabel);
         colorPicker = (ColorPickerViewGroup) frame.findViewById(R.id.scheduleColorPicker);
@@ -166,29 +196,221 @@ public class ScheduleConfigFragment extends Fragment {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentSchedule != null)
-                    updateSchedule();
-                else
-                    addNewSchedule();
+                //TODO: validate
+                if (nameEditor.getText().toString().trim().equals("")) {
+                    DialogCreator.showWarningDialog("Error", "Please Enter a name.", (MainActivity) getActivity());
+                } else {
+                    String key = new Date().getTime() + "";
 
+                    if (currentSchedule != null && currentOnSchedule != null) {
+                        if (timeChoiceOn == 0) {
+                            updateSchedule(currentOnSchedule, timeOn, timeChoiceOn, true);
+                            updateCounter++;
+                        } else if (timeChoiceOn == 1) {
+                            updateSchedule(currentOnSchedule, ((MainActivity) getActivity()).getSunrise(), timeChoiceOn, true);
+                            updateCounter++;
+                        } else if (timeChoiceOn == 2) {
+                            updateSchedule(currentOnSchedule, ((MainActivity) getActivity()).getSunset(), timeChoiceOn, true);
+                            updateCounter++;
+                        } else {//timeChoiceOn is -1 or 3
+                            if (currentOnSchedule != null) {
+                                deleteSchedule(currentOnSchedule);
+                                updateCounter++;
+                            }
+                        }
+                    } else {
+
+                        if (timeChoiceOn == 0) {
+                            addNewSchedule(timeOn, timeChoiceOn, true, key);
+                            updateCounter++;
+                        } else if (timeChoiceOn == 1) {
+                            addNewSchedule(((MainActivity) getActivity()).getSunrise(), timeChoiceOn, true, key);
+                            updateCounter++;
+                        } else if (timeChoiceOn == 2) {
+                            addNewSchedule(((MainActivity) getActivity()).getSunset(), timeChoiceOn, true, key);
+                            updateCounter++;
+                        }
+                    }
+
+                    if (currentSchedule != null && currentOffSchedule != null) {
+                        if (timeChoiceOff == 0) {
+                            updateSchedule(currentOffSchedule, timeOff, timeChoiceOff, false);
+                            updateCounter++;
+                        } else if (timeChoiceOff == 1) {
+                            updateSchedule(currentOffSchedule, ((MainActivity) getActivity()).getSunrise(), timeChoiceOff, false);
+                            updateCounter++;
+                        } else if (timeChoiceOff == 2) {
+                            updateSchedule(currentOffSchedule, ((MainActivity) getActivity()).getSunset(), timeChoiceOff, false);
+                            updateCounter++;
+                        } else {//timeChoiceOff is -1 or 3
+                            if (currentOffSchedule != null) {
+                                deleteSchedule(currentOffSchedule);
+                                updateCounter++;
+                            }
+                        }
+                    } else {
+                        if (timeChoiceOff == 0) {
+                            addNewSchedule(timeOff, timeChoiceOff, false, key);
+                            updateCounter++;
+                        } else if (timeChoiceOff == 1) {
+                            addNewSchedule(((MainActivity) getActivity()).getSunrise(), timeChoiceOff, false, key);
+                            updateCounter++;
+                        } else if (timeChoiceOff == 2) {
+                            addNewSchedule(((MainActivity) getActivity()).getSunset(), timeChoiceOff, false, key);
+                            updateCounter++;
+                        }
+                    }
+                }
             }
         });
 
-        btnScheduleTime = (Button) frame.findViewById(R.id.btnTimerTime);
+        timeOnPickerButton = (Button) frame.findViewById(R.id.btnOnTime);
+        timeOffPickerButton = (Button) frame.findViewById(R.id.btnOffTime);
 
-        final Calendar c = Calendar.getInstance();
-        mHour = c.get(Calendar.HOUR_OF_DAY);
-        mMinute = c.get(Calendar.MINUTE);
-
-        btnScheduleTime.setOnClickListener(new View.OnClickListener() {
+        timeOnPickerButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                TimePickerDialog timePicker = new TimePickerDialog(
-                        getActivity(),
-                        mTimeSetListener, mHour, mMinute, false);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Choose Turn On Time");
 
-                timePicker.show();
+                //timeChoiceOn 0:timePick, 1:sunrise, 2:sunset, none
+                timeChoiceOn = 0;
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                View view = inflater.inflate(R.layout.schedule_time_picker, null);
+                final TimePicker timePicker = (TimePicker) (view.findViewById(R.id.ScheduleTimePicker));
+                final RadioGroup radioGroup = (RadioGroup) (view.findViewById(R.id.ScheduleRadioGroup));
+                final RadioButton radioButtonSunrise = (RadioButton) (view.findViewById(R.id.radioButtonSunrise));
+                final RadioButton radioButtonSunset = (RadioButton) (view.findViewById(R.id.radioButtonSunset));
+                final RadioButton radioButtonNone = (RadioButton) (view.findViewById(R.id.radioButtonNone));
+
+                timePicker.setIs24HourView(false);
+
+                timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+                    @Override
+                    public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                        radioGroup.clearCheck();
+                        timeChoiceOn = 0;
+                        // TODO: blur timePicker
+                    }
+                });
+
+
+                radioButtonSunrise.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        timeChoiceOn = 1;
+                        // TODO: blur timePicker
+                    }
+                });
+
+                radioButtonSunset.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        timeChoiceOn = 2;
+                        // TODO: blur timePicker
+                    }
+                });
+
+                radioButtonNone.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        timeChoiceOn = 3;
+                        // TODO: blur timePicker
+                    }
+                });
+
+
+                builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (timeChoiceOn == 0) {
+                            timeOn = Calendar.getInstance().getTime();
+                            timeOn.setHours(timePicker.getCurrentHour());
+                            timeOn.setMinutes(timePicker.getCurrentMinute());
+                        }
+                        updateOnTimeDisplay();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                builder.setView(view);
+                builder.show();
+            }
+        });
+
+        timeOffPickerButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Choose Turn Off Time");
+
+                //timeChoiceOn 0:timePick, 1:sunrise, 2:sunset, none
+                timeChoiceOff = 0;
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                View view = inflater.inflate(R.layout.schedule_time_picker, null);
+                final TimePicker timePicker = (TimePicker) (view.findViewById(R.id.ScheduleTimePicker));
+                final RadioGroup radioGroup = (RadioGroup) (view.findViewById(R.id.ScheduleRadioGroup));
+                final RadioButton radioButtonSunrise = (RadioButton) (view.findViewById(R.id.radioButtonSunrise));
+                final RadioButton radioButtonSunset = (RadioButton) (view.findViewById(R.id.radioButtonSunset));
+                final RadioButton radioButtonNone = (RadioButton) (view.findViewById(R.id.radioButtonNone));
+
+                timePicker.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        radioGroup.clearCheck();
+                        timeChoiceOff = 0;
+                        // TODO: blur timePicker
+                    }
+                });
+
+                radioButtonSunrise.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        timeChoiceOff = 1;
+                        // TODO: blur timePicker
+                    }
+                });
+
+                radioButtonSunset.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        timeChoiceOff = 2;
+                        // TODO: blur timePicker
+                    }
+                });
+
+                radioButtonNone.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        timeChoiceOff = 3;
+                        // TODO: blur timePicker
+                    }
+                });
+
+
+                builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (timeChoiceOff == 0) {
+                            timeOff = Calendar.getInstance().getTime();
+                            timeOff.setHours(timePicker.getCurrentHour());
+                            timeOff.setMinutes(timePicker.getCurrentMinute());
+                        }
+                        updateOffTimeDisplay();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                builder.setView(view);
+                builder.show();
             }
         });
 
@@ -206,13 +428,13 @@ public class ScheduleConfigFragment extends Fragment {
 
             nameEditor.setText(currentSchedule.getName());
 
-            bulbOnState.setChecked(state.isOn());
-
             if(state.getBrightness() != null) {
                 int currentBrightness = HueBulbChangeUtility.revertBrightness(state.getBrightness());
                 brightness.setProgress(currentBrightness);
                 brightnessPercentage.setText(currentBrightness + "%");
             }
+            else
+                brightness.setProgress(100);
 
             if(state.getX() != null && state.getY() != null) {
                 float[] currentXYColor = new float[]{state.getX(), state.getY()};
@@ -221,104 +443,107 @@ public class ScheduleConfigFragment extends Fragment {
             }
 
             recurringDays = currentSchedule.getRecurringDays();
-            recurringDaysBitStr = String.format("%07d", new BigInteger(
-                    Integer.toBinaryString(recurringDays)));
+            updateDaysToggles(recurringDays);
 
-            for (int i = 0; i < recurringDaysBitStr.length(); i++) {
-                switch (i) {
-                    case 0:
-                        if (recurringDaysBitStr.charAt(0) == '1') {
 
-                            recurringDays = (recurringDays | PHSchedule.RecurringDay.RECURRING_MONDAY
-                                    .getValue());
-                            btnMon.setChecked(true);
-                        }
 
-                        break;
-                    case 1:
-                        if (recurringDaysBitStr.charAt(1) == '1') {
-                            recurringDays = (recurringDays | PHSchedule.RecurringDay.RECURRING_TUESDAY
-                                    .getValue());
-                            btnTue.setChecked(true);
-                        }
-                        break;
-                    case 2:
-                        if (recurringDaysBitStr.charAt(2) == '1') {
-                            recurringDays = (recurringDays | PHSchedule.RecurringDay.RECURRING_WEDNESDAY
-                                    .getValue());
-                            btnWed.setChecked(true);
-                        }
-                        break;
-                    case 3:
-                        if (recurringDaysBitStr.charAt(3) == '1') {
-                            recurringDays = (recurringDays | PHSchedule.RecurringDay.RECURRING_THURSDAY
-                                    .getValue());
-                            btnThur.setChecked(true);
-                        }
-                        break;
-                    case 4:
-                        if (recurringDaysBitStr.charAt(4) == '1') {
-                            recurringDays = (recurringDays | PHSchedule.RecurringDay.RECURRING_FRIDAY
-                                    .getValue());
-                            btnFri.setChecked(true);
-                        }
-                        break;
-                    case 5:
-                        if (recurringDaysBitStr.charAt(5) == '1') {
-                            recurringDays = (recurringDays | PHSchedule.RecurringDay.RECURRING_SATURDAY
-                                    .getValue());
-                            btnSat.setChecked(true);
-                        }
-                        break;
-                    case 6:
-                        if (recurringDaysBitStr.charAt(6) == '1') {
-                            recurringDays = (recurringDays | PHSchedule.RecurringDay.RECURRING_SUNDAY
-                                    .getValue());
-                            btnSun.setChecked(true);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            Date lastScheduleTime = currentSchedule.getDate();
-            if (lastScheduleTime != null) {
-                mHour = lastScheduleTime.getHours();
-                mMinute = lastScheduleTime.getMinutes();
-                timeToSend = Calendar.getInstance().getTime();
-                timeToSend.setHours(mHour);
-                timeToSend.setMinutes(mMinute);
-                updateDisplay();
-            }
+            updateOnTimeDisplay();
+            updateOffTimeDisplay();
         }
         else {
             brightness.setProgress(100);
+            recurringDays = 127; //default: every day
+            updateDaysToggles(recurringDays);
         }
 
         return frame;
     }
 
-    private void updateSchedule() {
+    private void updateDaysToggles(int recurringDays) {
+        recurringDaysBitStr = String.format("%07d", new BigInteger(
+                Integer.toBinaryString(recurringDays)));
 
-        currentSchedule.setName(nameEditor.getText().toString().trim());
-        currentSchedule.setDate(timeToSend);
-        currentSchedule.setRecurringDays(recurringDays);
-        currentSchedule.setLightState(getLightState());
-        currentSchedule.setDescription("prism");
+        for (int i = 0; i < recurringDaysBitStr.length(); i++) {
+            switch (i) {
+                case 0:
+                    if (recurringDaysBitStr.charAt(0) == '1') {
+
+                        recurringDays = (recurringDays | PHSchedule.RecurringDay.RECURRING_MONDAY
+                                .getValue());
+                        btnMon.setChecked(true);
+                    }
+
+                    break;
+                case 1:
+                    if (recurringDaysBitStr.charAt(1) == '1') {
+                        recurringDays = (recurringDays | PHSchedule.RecurringDay.RECURRING_TUESDAY
+                                .getValue());
+                        btnTue.setChecked(true);
+                    }
+                    break;
+                case 2:
+                    if (recurringDaysBitStr.charAt(2) == '1') {
+                        recurringDays = (recurringDays | PHSchedule.RecurringDay.RECURRING_WEDNESDAY
+                                .getValue());
+                        btnWed.setChecked(true);
+                    }
+                    break;
+                case 3:
+                    if (recurringDaysBitStr.charAt(3) == '1') {
+                        recurringDays = (recurringDays | PHSchedule.RecurringDay.RECURRING_THURSDAY
+                                .getValue());
+                        btnThur.setChecked(true);
+                    }
+                    break;
+                case 4:
+                    if (recurringDaysBitStr.charAt(4) == '1') {
+                        recurringDays = (recurringDays | PHSchedule.RecurringDay.RECURRING_FRIDAY
+                                .getValue());
+                        btnFri.setChecked(true);
+                    }
+                    break;
+                case 5:
+                    if (recurringDaysBitStr.charAt(5) == '1') {
+                        recurringDays = (recurringDays | PHSchedule.RecurringDay.RECURRING_SATURDAY
+                                .getValue());
+                        btnSat.setChecked(true);
+                    }
+                    break;
+                case 6:
+                    if (recurringDaysBitStr.charAt(6) == '1') {
+                        recurringDays = (recurringDays | PHSchedule.RecurringDay.RECURRING_SUNDAY
+                                .getValue());
+                        btnSun.setChecked(true);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void updateSchedule(PHSchedule schedule, Date time, int choiceTime, boolean isOn) {
+
+        schedule.setName(nameEditor.getText().toString().trim());
+        schedule.setDate(time);
+        schedule.setRecurringDays(recurringDays);
+        schedule.setLightState(getLightState(isOn));
+
+        String[] tokens = schedule.getDescription().split("[,]");
+
+        schedule.setDescription("prism,"+ tokens[1] + "," + choiceTime);
         if(isGroup)
-            currentSchedule.setGroupIdentifier(identifier);
+            schedule.setGroupIdentifier(identifier);
         else
-            currentSchedule.setLightIdentifier(identifier);
-        currentSchedule.setAutoDelete(true);
+            schedule.setLightIdentifier(identifier);
+        schedule.setAutoDelete(true);
 
         progressDialog = DialogCreator.showLoadingDialog(getText(R.string.sending_progress).toString(), (MainActivity)getActivity());
 
-
-        bridge.updateSchedule(currentSchedule, new PHScheduleListener() {
+        bridge.updateSchedule(schedule, new PHScheduleListener() {
             @Override
             public void onCreated(PHSchedule phSchedule) {
-                ;
+
             }
 
             @Override
@@ -328,11 +553,13 @@ public class ScheduleConfigFragment extends Fragment {
                         closeProgressDialog();
                     }
                 });
+                updateCounter--;
                 goToScheduleFragment();
             }
 
             @Override
             public void onError(int i, final String s) {
+                updateCounter--;
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         closeProgressDialog();
@@ -343,28 +570,27 @@ public class ScheduleConfigFragment extends Fragment {
 
             @Override
             public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
-            ;
+
             }
         });
 
     }
 
-    private void addNewSchedule() {
-        currentSchedule = new PHSchedule(nameEditor.getText().toString().trim());
-        //currentSchedule.setName(nameEditor.getText().toString());
-        currentSchedule.setDate(timeToSend);
-        currentSchedule.setRecurringDays(recurringDays);
-        currentSchedule.setLightState(getLightState());
-        currentSchedule.setDescription("prism");
+    private void addNewSchedule(Date time, int choiceTime, boolean isOn, String key) {
+        PHSchedule schedule = new PHSchedule(nameEditor.getText().toString().trim());
+        schedule.setDate(time);
+        schedule.setRecurringDays(recurringDays);
+        schedule.setLightState(getLightState(isOn));
+        schedule.setDescription("prism,"+ key + "," + choiceTime);
         if(isGroup)
-            currentSchedule.setGroupIdentifier(identifier);
+            schedule.setGroupIdentifier(identifier);
         else
-            currentSchedule.setLightIdentifier(identifier);
-        currentSchedule.setAutoDelete(true);
+            schedule.setLightIdentifier(identifier);
+        schedule.setAutoDelete(true);
 
         progressDialog = DialogCreator.showLoadingDialog(getText(R.string.sending_progress).toString(), (MainActivity)getActivity());
 
-        bridge.createSchedule(currentSchedule, new PHScheduleListener() {
+        bridge.createSchedule(schedule, new PHScheduleListener() {
             @Override
             public void onCreated(PHSchedule phSchedule) {
                 getActivity().runOnUiThread(new Runnable() {
@@ -374,6 +600,7 @@ public class ScheduleConfigFragment extends Fragment {
                         //TODO add result dialog?
                     }
                 });
+                updateCounter--;
                 goToScheduleFragment();
             }
 
@@ -383,6 +610,7 @@ public class ScheduleConfigFragment extends Fragment {
 
             @Override
             public void onError(int i, final String s) {
+                updateCounter--;
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         closeProgressDialog();
@@ -393,42 +621,66 @@ public class ScheduleConfigFragment extends Fragment {
 
             @Override
             public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
+
+            }
+        });
+    }
+
+    private void deleteSchedule(PHSchedule schedule) {
+        String scheduleID = schedule.getIdentifier();
+
+        bridge.removeSchedule(scheduleID, new PHScheduleListener() {
+            @Override
+            public void onCreated(PHSchedule phSchedule) {
+
+            }
+
+            @Override
+            public void onSuccess() {
+                updateCounter--;
+                return;
+            }
+
+            @Override
+            public void onError(int i, final String s) {
+                updateCounter--;
+            }
+
+            @Override
+            public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
+
             }
         });
     }
 
 
-    private PHLightState getLightState() {
+    private PHLightState getLightState(boolean isOn) {
         PHLightState state = new PHLightState();
-        state.setOn(bulbOnState.isChecked());
-//        state.setHue(50);
-//        state.setSaturation(50);
+        state.setOn(isOn);
         state.setBrightness(HueBulbChangeUtility.convertBrightness(brightness.getProgress()));
         float xy[] = PHUtilities.calculateXY(currentColor, "");
         state.setX(xy[0]);
         state.setY(xy[1]);
-//        state.setX((float)0);
-//        state.setY((float)0);
-//        state.setEffectMode(PHLight.PHLightEffectMode.EFFECT_NONE);
-//        state.setAlertMode(PHLight.PHLightAlertMode.ALERT_NONE);
-//        state.setTransitionTime(1);
         return state;
     }
 
 
     private void goToScheduleFragment() {
-        android.app.FragmentManager fm = getActivity().getFragmentManager();
-        fm.popBackStack();
+        if(updateCounter == 0) {
+            android.app.FragmentManager fm = getActivity().getFragmentManager();
+            fm.popBackStack();
+        }
     }
 
-    private boolean isCurrentActivity() {
-        ActivityManager mActivityManager = (ActivityManager)getActivity().getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> RunningTask = mActivityManager.getRunningTasks(1);
-        ActivityManager.RunningTaskInfo ar = RunningTask.get(0);
-        String currentClass = "." + this.getClass().getSimpleName();
-        String topActivity =  ar.topActivity.getShortClassName().toString();
-        return topActivity.contains(currentClass);
-    }
+//    private boolean isCurrentActivity() {
+//
+//        ActivityManager mActivityManager = (ActivityManager)getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+//        List<ActivityManager.RunningTaskInfo> RunningTask = mActivityManager.getRunningTasks(1);
+//        ActivityManager.RunningTaskInfo ar = RunningTask.get(0);
+//        String currentClass = "." + this.getClass().getSimpleName();
+//        String topActivity =  ar.topActivity.getShortClassName().toString();
+//        return topActivity.contains(currentClass);
+//    }
 
     /**
      * Listener for ToggleButton for recurring days.
@@ -516,30 +768,36 @@ public class ScheduleConfigFragment extends Fragment {
         }
     };
 
-
-    /*
-     * Listener for TimerPicker dialog to indicate the user is done filling in
-     * the time.
-     */
-    private TimePickerDialog.OnTimeSetListener mTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
-
-        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            mHour = hourOfDay;
-            mMinute = minute;
-            updateDisplay();
-
-            timeToSend = Calendar.getInstance().getTime();
-            timeToSend.setHours(mHour);
-            timeToSend.setMinutes(mMinute);
-        }
-    };
-
     /*
      * update the displayed time on button.
      */
-    private void updateDisplay() {
-        btnScheduleTime.setText(new StringBuilder().append(PHHelper.pad(mHour))
-                .append(":").append(PHHelper.pad(mMinute)));
+    private void updateOnTimeDisplay() {
+        if(timeChoiceOn==0){
+            String delegate = "hh:mm aaa";
+            String onTimeString = (String) DateFormat.format(delegate, timeOn.getTime());
+            timeOnPickerButton.setText(onTimeString);
+        }
+
+        else if (timeChoiceOn==1)
+            timeOnPickerButton.setText("Sunrise");
+        else if (timeChoiceOn==2)
+            timeOnPickerButton.setText("Sunset");
+        else
+            timeOnPickerButton.setText("None");
+    }
+
+    private void updateOffTimeDisplay() {
+        if(timeChoiceOff==0){
+            String delegate = "hh:mm aaa";
+            String offTimeString = (String) DateFormat.format(delegate, timeOff.getTime());
+            timeOffPickerButton.setText(offTimeString);
+        }
+        else if (timeChoiceOff==1)
+            timeOffPickerButton.setText("Sunrise");
+        else if (timeChoiceOff==2)
+            timeOffPickerButton.setText("Sunset");
+        else
+            timeOffPickerButton.setText("None");
     }
 
     private void closeProgressDialog() {

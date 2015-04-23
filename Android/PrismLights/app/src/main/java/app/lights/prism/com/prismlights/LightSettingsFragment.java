@@ -227,7 +227,9 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
         List<PHSchedule> colorCycles = bridge.getResourceCache().getAllTimers(true);
         List<PHSchedule> colorCyclesForThisBulb = new ArrayList<>();
         for (int i = 0; i< colorCycles.size();i++){
-            if (colorCycles.get(i).getLightIdentifier().equals(identifier) && colorCycles.get(i).getDescription().startsWith("prism"))
+            if (colorCycles.get(i).getLightIdentifier()!=null
+                    &&colorCycles.get(i).getLightIdentifier().equals(identifier)
+                    && colorCycles.get(i).getDescription().startsWith("prism"))
                 colorCyclesForThisBulb.add(colorCycles.get(i));
         }
 

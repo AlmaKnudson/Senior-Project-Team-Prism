@@ -79,21 +79,21 @@ public class AdvancedSettingFragment extends Fragment implements CacheUpdateList
             if(isGroup){
                 if ( schedule.getGroupIdentifier()!=null
                         && schedule.getGroupIdentifier().equals(identifier)
-                        && schedule.getDescription().equals("prism,sunset")) {
+                        && schedule.getDescription().equals("prism,smartsun,2")) {
                     sunsetSchedules.add(schedule);
                 } else if (schedule.getGroupIdentifier()!= null
                         && schedule.getGroupIdentifier().equals(identifier)
-                        && schedule.getDescription().equals("prism,sunrise")) {
+                        && schedule.getDescription().equals("prism,smartsun,1")) {
                     sunriseSchedules.add(schedule);
                 }
             }else {
                 if ( schedule.getLightIdentifier()!=null
                         && schedule.getLightIdentifier().equals(identifier)
-                        && schedule.getDescription().equals("prism,sunset") ) {
+                        && schedule.getDescription().equals("prism,smartsun,2") ) {
                     sunsetSchedules.add(schedule);
                 } else if (schedule.getLightIdentifier()!=null
                         && schedule.getLightIdentifier().equals(identifier)
-                        && schedule.getDescription().equals("prism,sunrise") ) {
+                        && schedule.getDescription().equals("prism,smartsun,1") ) {
                     sunriseSchedules.add(schedule);
                 }
             }
@@ -189,16 +189,16 @@ public class AdvancedSettingFragment extends Fragment implements CacheUpdateList
                 //check if there is recurring schedule for sunrise if there is, enable it, or create it.
                 if (((ToggleButton) v).isChecked()) {
                     if (sunriseSchedules.size() == 0) {
-                        createSunSchedule(identifier, "sunrise");
+                        createSunSchedule(identifier, 1);
                     } else if (sunriseSchedules.size() == 1) {
                         sunriseSchedules.get(0).setStatus(PHSchedule.PHScheduleStatus.ENABLED);
-                        updateSchedule(sunriseSchedules.get(0), "sunrise");
+                        updateSchedule(sunriseSchedules.get(0), 1);
                     }
                 } else {
                     // if there is recurring schedule for sunrise, disable it.
                     if (sunriseSchedules.size() == 1) {
                         sunriseSchedules.get(0).setStatus(PHSchedule.PHScheduleStatus.DISABLED);
-                        updateSchedule(sunriseSchedules.get(0), "sunrise");
+                        updateSchedule(sunriseSchedules.get(0), 1);
                     }
                 }
                 getSunSchedules();
@@ -211,16 +211,16 @@ public class AdvancedSettingFragment extends Fragment implements CacheUpdateList
             public void onClick(View v) {
                 if (((ToggleButton) v).isChecked()) {
                     if (sunsetSchedules.size() == 0) {
-                        createSunSchedule(identifier, "sunset");
+                        createSunSchedule(identifier, 2);
                     } else if (sunsetSchedules.size() == 1) {
                         sunsetSchedules.get(0).setStatus(PHSchedule.PHScheduleStatus.ENABLED);
-                        updateSchedule(sunsetSchedules.get(0), "sunset");
+                        updateSchedule(sunsetSchedules.get(0), 2);
                     }
                 } else {
                     // if there is recurring schedule for sunset, disable it.
                     if (sunsetSchedules.size() == 1) {
                         sunsetSchedules.get(0).setStatus(PHSchedule.PHScheduleStatus.DISABLED);
-                        updateSchedule(sunsetSchedules.get(0), "sunset");
+                        updateSchedule(sunsetSchedules.get(0), 2);
                     }
                 }
                 getSunSchedules();
@@ -256,11 +256,11 @@ public class AdvancedSettingFragment extends Fragment implements CacheUpdateList
             Log.e(DEBUG_TAG, "There were more than 1 sunset schedule for bulb" + identifier);
     }
 
-    private void updateSchedule(final PHSchedule phSchedule, String name) {
+    private void updateSchedule(final PHSchedule phSchedule, int name) {
         phSchedule.setAutoDelete(true);
 
         if(phSchedule.getStatus().equals(PHSchedule.PHScheduleStatus.ENABLED)) {
-            if (name.equals("sunrise"))
+            if (name==1)
                 phSchedule.setDate(getSunriseTime());
             else
                 phSchedule.setDate(getSunsetTime());
@@ -286,7 +286,7 @@ public class AdvancedSettingFragment extends Fragment implements CacheUpdateList
             public void onError(int i, final String s) {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        if (phSchedule.getDescription().equals("sunrise")) {
+                        if (phSchedule.getDescription().equals("prism,smartsun,1")) {
                             if (phSchedule.getStatus().equals(PHSchedule.PHScheduleStatus.ENABLED))
                                 sunriseSwitch.setChecked(false);
                             else
@@ -311,20 +311,26 @@ public class AdvancedSettingFragment extends Fragment implements CacheUpdateList
         });
     }
 
-    private void createSunSchedule(String identifier, String name) {
-        PHSchedule currentSchedule = new PHSchedule(name);
-        if (name.equals("sunrise"))
+    private void createSunSchedule(String identifier, int name) {
+
+        PHSchedule currentSchedule;
+        if (name==1) {
+            currentSchedule = new PHSchedule("Sunrise");
             currentSchedule.setDate(getSunriseTime());
-        else
+
+        }
+        else {
+            currentSchedule = new PHSchedule("Sunset");
             currentSchedule.setDate(getSunsetTime());
+        }
         currentSchedule.setRecurringDays(127); //127 is for everyday
         PHLightState state = new PHLightState();
-        if (name.equals("sunrise"))
+        if (name==1)
             state.setOn(false);
         else
             state.setOn(true);
         currentSchedule.setLightState(state);
-        currentSchedule.setDescription("prism," + name);
+        currentSchedule.setDescription("prism,smartsun,"+ name);
         if (isGroup)
             currentSchedule.setGroupIdentifier(identifier);
         else

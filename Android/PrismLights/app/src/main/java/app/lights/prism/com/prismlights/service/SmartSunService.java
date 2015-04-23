@@ -134,9 +134,9 @@ public class SmartSunService extends Service {
 
             for (int i = 0; i < schedules.size(); i++) {
                 PHSchedule schedule = schedules.get(i);
-                if (schedule.getDescription().equals("prism,sunrise")) {
+                if (schedule.getDescription().equals("prism,smartsun,1")) {
                     sunriseSchedules.add(schedule);
-                } else if (schedule.getDescription().equals("prism,sunset")) {
+                } else if (schedule.getDescription().equals("prism,smartsun,2")) {
                     sunsetSchedules.add(schedule);
                 }
             }
@@ -163,13 +163,13 @@ public class SmartSunService extends Service {
 
                     @Override
                     public void onSuccess() {
-                        Log.d(DEBUG_TAG, "Sunrise for " + schedule.getLightIdentifier() + " is updated.");
+
                         sunriseDone = true;
                     }
 
                     @Override
                     public void onError(int i, String s) {
-                        Log.e(DEBUG_TAG, "Sunrise for " + schedule.getLightIdentifier() + " failed to update.");
+
                         sunriseDone = true;
                     }
 
@@ -192,13 +192,13 @@ public class SmartSunService extends Service {
 
                     @Override
                     public void onSuccess() {
-                        Log.d(DEBUG_TAG, "Sunset for " + schedule.getLightIdentifier() + " is updated.");
+
                         sunsetDone = true;
                     }
 
                     @Override
                     public void onError(int i, String s) {
-                        Log.e(DEBUG_TAG, "Sunset for " + schedule.getLightIdentifier() + " failed to update.");
+
                         sunsetDone = true;
                     }
 

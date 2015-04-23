@@ -141,11 +141,20 @@ public class MainActivity extends Activity implements PHSDKListener{
     }
 
     // for passing schedule between fragments
-    private PHSchedule currentSchedule;
-    public PHSchedule getCurrentSchedule(){
+    private PHSchedule currentPHschedule;
+    public PHSchedule getCurrentPHschedule(){
+        return currentPHschedule;
+    }
+    public void setCurrentPHschedule(PHSchedule schedule){
+        currentPHschedule = schedule;
+    }
+
+    // for passin schedule from scheduleFragment to scheduleConfigFragment
+    private Schedule currentSchedule;
+    public Schedule getCurrentSchedule(){
         return currentSchedule;
     }
-    public void setCurrentSchedule(PHSchedule schedule){
+    public void setCurrentSchedule(Schedule schedule){
         currentSchedule = schedule;
     }
 
@@ -304,11 +313,11 @@ public class MainActivity extends Activity implements PHSDKListener{
             float[] color4 = {0.2207f,0.1386f};
             float[] color5 = {0.3452f,0.1879f};
 
-            demoCycle.add(color, 100, 10, 2 );
-            demoCycle.add(color2, 30, 10, 2 );
-            demoCycle.add(color3, 100, 10, 2 );
-            demoCycle.add(color4, 30, 10, 2 );
-            demoCycle.add(color5, 100, 10, 2 );
+            demoCycle.add(color, 100, 5, 2 );
+            demoCycle.add(color2, 20, 5, 2 );
+            demoCycle.add(color3, 100, 5, 2 );
+            demoCycle.add(color4, 20, 5, 2 );
+            demoCycle.add(color5, 100, 5, 2 );
 
             colorCycles.add(demoCycle);
         }
@@ -576,8 +585,8 @@ public class MainActivity extends Activity implements PHSDKListener{
 
         // TODO: find a perfect place for this.
         //set recurring service here once. it is ok to be called multiple time, previous alarm broadcasting will be replaced.
-        Context context = this.getApplicationContext();
-        setAlarmBroadcasting(context);
+//        Context context = this.getApplicationContext();
+//        setAlarmBroadcasting(context);
     }
 
     @Override

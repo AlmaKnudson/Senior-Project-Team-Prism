@@ -17,17 +17,11 @@
             style="@style/TitleTextView"/>
 
         <ImageView
-            android:layout_width="65dp"
-            android:layout_height="match_parent"
-            android:id="@+id/refreshButton"
-            android:src="@android:drawable/ic_menu_rotate" />
-
-        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:id="@+id/schedulePlusButton"
-            android:src="@android:drawable/ic_menu_add" />
+            android:src="@drawable/plus_button" />
     </LinearLayout>
     <View
         style="@style/TitleUnderline"/>
@@ -36,8 +30,9 @@
         android:layout_height="0dp"
         android:layout_width="match_parent"
         android:layout_weight="1"
-        style="@style/ListView"/>
-    <!--android:choiceMode="singleChoice" -->
+        style="@style/ListView" />
+        <!--android:choiceMode="singleChoice"-->
+
 
 
 
