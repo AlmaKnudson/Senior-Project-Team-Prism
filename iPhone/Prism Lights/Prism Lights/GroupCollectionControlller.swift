@@ -115,6 +115,10 @@ class GroupCollectionController: UIViewController, UICollectionViewDataSource, U
         } else if segue.identifier == "pushAuth" {
             var dest = segue.destinationViewController as! PushAuthController
             dest.delegate = self
+        } else if segue.identifier == "editCollection" {
+            var dest = segue.destinationViewController as! EditBulbsCollection
+            dest.editType = "group"
+            dest.dismissDeleget = self
         }
     }
     
@@ -226,6 +230,30 @@ class GroupCollectionController: UIViewController, UICollectionViewDataSource, U
         
         
     }
+    
+    
+    func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView{
+        //1
+        switch kind {
+            //2
+        case UICollectionElementKindSectionHeader:
+            //3
+            let headerView =
+            collectionView.dequeueReusableSupplementaryViewOfKind(kind,
+                withReuseIdentifier: "SectionHeader",
+                forIndexPath: indexPath)
+                as! SectionHeader
+            headerView.headerLabel.text = "Groups"
+            headerView.headerType = "group"
+            return headerView
+        default:
+            //4
+            assert(false, "Unexpected element kind. Should only have headers.")
+        }
+    }
+
+    
+    
     
     /**
     Sets the phone status bar to be light colored for dark background
@@ -346,10 +374,6 @@ class GroupCollectionController: UIViewController, UICollectionViewDataSource, U
     
     //MARK: Helper Methods
     
-    
-    
-    
-    
     func ToggleGroupState(identifier:String) -> Bool {
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
         var lightOn = true
@@ -380,7 +404,11 @@ class GroupCollectionController: UIViewController, UICollectionViewDataSource, U
                     continue
                 }
                 light.lightState.on = lightOn
-                lightState = light.lightState
+                lightState = PHLightState()
+                lightState!.x = light.lightState.x
+                lightState!.y = light.lightState.y
+                lightState!.on = light.lightState.on
+                lightState!.brightness = light.lightState.brightness
             }
             
         } else {

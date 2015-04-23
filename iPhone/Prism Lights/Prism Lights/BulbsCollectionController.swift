@@ -81,9 +81,24 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
     Then tries to connect to the bridge
     */
     override func viewWillAppear(animated: Bool) {
+        
+        
+        
+        //Check that we are connected to bridge.
+        if !((UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.localConnected()){
+            //Connect to bridge
+            (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.enableLocalConnection()
+        }
+
     }
     
     override func viewDidAppear(animated: Bool) {
+        var manager = PHNotificationManager.defaultManager()
+        manager!.registerObject(self, withSelector: "HeartBeatReceived", forNotification: "LOCAL_CONNECTION_NOTIFICATION")
+        manager!.registerObject(self, withSelector: "NetworkConnectionLost", forNotification: "NO_LOCAL_CONNECTION_NOTIFICATION")
+        manager!.registerObject(self, withSelector: "NotAuthorized", forNotification: "NO_LOCAL_AUTHENTICATION_NOTIFICATION")
+        
+        
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -111,6 +126,10 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
         } else if segue.identifier == "pushAuth" {
             var dest = segue.destinationViewController as! PushAuthController
             dest.delegate = self
+        } else if segue.identifier == "editCollection" {
+            var dest = segue.destinationViewController as! EditBulbsCollection
+            dest.editType = "single"
+            dest.dismissDeleget = self
         }
     }
     
@@ -168,7 +187,7 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
     // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell{
         
-        var cell:BulbCollectionCell! = bulbCollectionView.dequeueReusableCellWithReuseIdentifier("bulb", forIndexPath: indexPath) as? BulbCollectionCell
+        var cell:BulbCollectionCell! = bulbCollectionView.dequeueReusableCellWithReuseIdentifier("bulbCell", forIndexPath: indexPath) as? BulbCollectionCell
         if( cell == nil){
             cell = BulbCollectionCell()
         }
@@ -266,6 +285,30 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
         
         collectionView.reloadItemsAtIndexPaths(index)
     }
+    
+    
+    func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView{
+        //1
+        switch kind {
+            //2
+        case UICollectionElementKindSectionHeader:
+            //3
+            let headerView =
+            collectionView.dequeueReusableSupplementaryViewOfKind(kind,
+                withReuseIdentifier: "SectionHeader",
+                forIndexPath: indexPath)
+                as! SectionHeader
+            headerView.headerLabel.text = "Individual Bulbs"
+            headerView.headerType = "single"
+            return headerView
+        default:
+            //4
+            assert(false, "Unexpected element kind")
+        }
+    }
+
+    
+    
     
     /**
     Sets the phone status bar to be light colored for dark background
@@ -402,8 +445,14 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
             light.lightState.on = true
         }
         
+        var lightState = PHLightState()
+        lightState.x = light.lightState.x
+        lightState.y = light.lightState.y
+        lightState.on = light.lightState.on
+        lightState.brightness = light.lightState.brightness
+        
         //Send Light change to Bridge
-        bridgeSendAPI.updateLightStateForId(identifier, withLightState: light.lightState){
+        bridgeSendAPI.updateLightStateForId(identifier, withLightState: lightState){
             error -> Void in
             if error != nil {
                 if(DEBUG){
@@ -417,82 +466,21 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
         return light.lightState.on.boolValue
     }
     
-    func ToggleGroupState(identifier:String) -> Bool {
-        var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-        var lightOn = true
-        var bridgeSendAPI = PHBridgeSendAPI()
-        var lightState:PHLightState? = nil
-        
-        //Group 0 is all lights
-        //Group 0 is assumed and isn't in the cache
-        if identifier == "0" {
-            for (lightId, light) in (cache.lights as! [String:PHLight]){
-                //Ignore lights not connected to bridge
-                if(light.lightState.reachable == 0){
-                    continue
-                }
-                
-                if light.lightState.on.boolValue {
-                    lightOn = false
-                    break
-                } else {
-                    
-                }
-            }
-            
-            //update all lightStates
-            for (lightId, light) in (cache.lights as! [String:PHLight]){
-                //Ignore lights not connected to bridge
-                if(light.lightState.reachable == 0){
-                    continue
-                }
-                light.lightState.on = lightOn
-                lightState = light.lightState
-            }
-            
-        } else {
-            
-            var group:PHGroup = cache!.groups[identifier] as! PHGroup
-            
-            
-            for lightId:String in (group.lightIdentifiers as! [String]) {
-                var light = cache.lights[lightId] as! PHLight
-                
-                
-                
-            }
-        }
-        
-        if lightState == nil {
-            return false
-        }
-        //Send Light change to Bridge
-        bridgeSendAPI.setLightStateForGroupWithId(identifier, lightState: lightState){
-            error -> Void in
-            if error != nil {
-                if(DEBUG){
-                    println("Error updating light state.")
-                }
-                return
-            }
-            self.skipNextHeartbeat = true
-        }
-        
-        return true
-        
-        
-    }
-    
-    
-    
-    
     
     func ApplySettings(){
+        var manager = PHNotificationManager.defaultManager()
+        manager!.registerObject(self, withSelector: "HeartBeatReceived", forNotification: "LOCAL_CONNECTION_NOTIFICATION")
+        manager!.registerObject(self, withSelector: "NetworkConnectionLost", forNotification: "NO_LOCAL_CONNECTION_NOTIFICATION")
+        manager!.registerObject(self, withSelector: "NotAuthorized", forNotification: "NO_LOCAL_AUTHENTICATION_NOTIFICATION")
         self.dismissViewControllerAnimated(true, completion: nil)
         self.bulbCollectionView.reloadData()
     }
     
     func DismissMe() {
+        var manager = PHNotificationManager.defaultManager()
+        manager!.registerObject(self, withSelector: "HeartBeatReceived", forNotification: "LOCAL_CONNECTION_NOTIFICATION")
+        manager!.registerObject(self, withSelector: "NetworkConnectionLost", forNotification: "NO_LOCAL_CONNECTION_NOTIFICATION")
+        manager!.registerObject(self, withSelector: "NotAuthorized", forNotification: "NO_LOCAL_AUTHENTICATION_NOTIFICATION")
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     

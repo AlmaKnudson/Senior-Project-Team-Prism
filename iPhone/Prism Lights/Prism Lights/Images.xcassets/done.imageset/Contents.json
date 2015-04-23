@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "Warning-icon-hi.png"
+      "filename" : "DoneButton.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "Warning-icon-hi-1.png"
+      "filename" : "DoneButton@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "Warning-icon-hi-2.png"
+      "filename" : "DoneButton@3x.png"
     }
   ],
   "info" : {

@@ -79,13 +79,15 @@ import Foundation
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
         let cellId:String = "MyCell"
-        var cell:MusicCell = tableView.dequeueReusableCellWithIdentifier(cellId, forIndexPath:indexPath) as! MusicCell
-        cell.textLabel?.textColor = UIColor.whiteColor()
+        var cell:MusicCell! = tableView.dequeueReusableCellWithIdentifier(cellId, forIndexPath:indexPath) as! MusicCell
+        if cell == nil {
+            cell = MusicCell()
+        }
+        cell.bulbNameLabel.text = (lights[indexPath.row].bulbName as String)
         cell.bulbIdentifier = (lights[indexPath.row].bulbIdentifier as String)
         cell.bulbName = (lights[indexPath.row].bulbName as String)
         //        cell.bulbRange = 2
         cell.SetBulbRange(lights[indexPath.row].bulbRange)
-        cell.textLabel?.text = (lights[indexPath.row].bulbName as String)
         cell.backgroundColor = UIColor.blackColor()
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         cell.cellDelegate = self
