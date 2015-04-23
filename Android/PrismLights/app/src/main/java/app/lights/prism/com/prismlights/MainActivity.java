@@ -806,7 +806,7 @@ public class MainActivity extends Activity implements PHSDKListener{
                 sunset.setMinutes(33);
                 sunset.setSeconds(00);
             }
-            new AlertDialog.Builder(this)
+            new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK)
                     .setTitle("Warning")
                     .setMessage("There is no access to the current location. The sunrise and sunset time may not be accurate. Please try again later for more accurate result.")
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {

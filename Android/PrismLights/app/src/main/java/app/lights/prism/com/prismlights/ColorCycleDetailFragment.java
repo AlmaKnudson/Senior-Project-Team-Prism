@@ -82,7 +82,7 @@ public class ColorCycleDetailFragment extends Fragment {
             public void onClick(View v) {
 
                 if(nameEditor.getText().toString().trim().equals(""))
-                    new AlertDialog.Builder(getActivity())
+                    new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_DARK)
                             .setTitle("Error")
                             .setMessage("Please Enter Name for this Color Cycle.")
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -93,7 +93,7 @@ public class ColorCycleDetailFragment extends Fragment {
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
                 else if (newColorCycle.getSize() < 2)
-                    new AlertDialog.Builder(getActivity())
+                    new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_DARK)
                             .setTitle("Error")
                             .setMessage("Please add at least two colors.")
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -107,7 +107,7 @@ public class ColorCycleDetailFragment extends Fragment {
                     String newName = nameEditor.getText().toString().trim();
                     // if this is new cycle, check if the name already exist or not.
                     if(isNew && ((MainActivity) getActivity()).containsCycleName(newName) != -1) {
-                        new AlertDialog.Builder(getActivity())
+                        new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_DARK)
                                 .setTitle("Error")
                                 .setMessage("Same Name already exits, please enter other name.")
                                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -174,7 +174,7 @@ public class ColorCycleDetailFragment extends Fragment {
             color.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_DARK);
                     builder.setTitle("Choose Color");
                     final ColorPickerViewGroup colorPickerViewGroup = new ColorPickerViewGroup(getActivity());
                     if (newColorCycle.getColorFloat(position) != null) {
@@ -208,7 +208,7 @@ public class ColorCycleDetailFragment extends Fragment {
             brightness.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_DARK);
                     builder.setTitle("Enter Brightness");
 
                     LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -253,7 +253,7 @@ public class ColorCycleDetailFragment extends Fragment {
             duration.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_DARK);
                     builder.setTitle("Enter Duration");
 
                     LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -329,7 +329,7 @@ public class ColorCycleDetailFragment extends Fragment {
                                 + Integer.parseInt(secText.getText().toString().split("\\s")[0]);
                         if(time > newColorCycle.getDuration(position))
                         {
-                            new AlertDialog.Builder(getActivity())
+                            new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_DARK)
                                     .setTitle("Error")
                                     .setMessage("Transition time cannot be longer than duration of the color.")
                                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -350,7 +350,7 @@ public class ColorCycleDetailFragment extends Fragment {
 
                 @Override
                 public void onClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_DARK);
                     builder.setTitle("Enter Duration");
 
                     LayoutInflater inflater = getActivity().getLayoutInflater();

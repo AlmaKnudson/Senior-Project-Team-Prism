@@ -419,7 +419,7 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
                 final CharSequence[] items = {" On "," Off "," Alert "};
 
                 // Creating and Building the Dialog
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_DARK);
 
                 builder.setTitle("Select The Alarm Mode");
                 builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
