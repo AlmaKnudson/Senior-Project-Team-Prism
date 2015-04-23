@@ -20,7 +20,9 @@ import com.philips.lighting.model.PHGroup;
 import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public class GroupSettingsFragment extends Fragment implements CacheUpdateListener {
     private String identifier; // The id of the chosen Light
@@ -36,7 +38,10 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
     private ImageButton editGroupButton;
 
     private PHHueSDK hueSDK;
-
+    private int shouldUpdateOnOffState;
+    private int shouldUpdateBrightness;
+    private int shouldUpdateName;
+    private int shouldUpdateColor;
 
 
     public GroupSettingsFragment() {
@@ -52,6 +57,10 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        shouldUpdateColor = 0;
+        shouldUpdateBrightness = 0;
+        shouldUpdateOnOffState = 0;
+        shouldUpdateName = 0;
         // Inflate the layout for this fragment
         View frame = inflater.inflate(R.layout.fragment_group_settings, container, false);
         nameEditor = (EditText) frame.findViewById(R.id.nameEditor);
@@ -87,8 +96,25 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
-                        HueBulbChangeUtility.changeGroupName(identifier, nameEditor.getText().toString());
-                        nameEditor.clearFocus();
+                        shouldUpdateName++;
+                        HueBulbChangeUtility.changeGroupName(identifier, nameEditor.getText().toString(), new OnCompletedListener() {
+                            boolean hasCompleted = false;
+
+                            @Override
+                            public void onCompleted() {
+
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (!hasCompleted && shouldUpdateName > 0) {
+                                            hasCompleted = true;
+                                            shouldUpdateName--;
+                                            nameEditor.clearFocus();
+                                        }
+                                    }
+                                });
+                            }
+                        });
                     }
                     return false;
                 }
@@ -98,8 +124,25 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
         bulbOnState.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                shouldUpdateOnOffState++;
                 ToggleButton bulbOn = (ToggleButton) v;
-                HueBulbChangeUtility.turnGroupOnOff(identifier, bulbOn.isChecked(), (MainActivity)getActivity());
+                HueBulbChangeUtility.turnGroupOnOff(identifier, bulbOn.isChecked(), (MainActivity)getActivity(), new OnCompletedListener() {
+                    boolean hasCompleted = false;
+
+                    @Override
+                    public void onCompleted() {
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!hasCompleted && shouldUpdateOnOffState > 0) {
+                                    hasCompleted = true;
+                                    shouldUpdateOnOffState--;
+                                }
+                            }
+                        });
+                    }
+                });
             }
         });
         brightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -114,14 +157,48 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                HueBulbChangeUtility.changeGroupBrightness(identifier, seekBar.getProgress(), (MainActivity)getActivity());
+                shouldUpdateBrightness++;
+                HueBulbChangeUtility.changeGroupBrightness(identifier, seekBar.getProgress(), (MainActivity)getActivity(), new OnCompletedListener() {
+                    boolean hasCompleted = false;
+
+                    @Override
+                    public void onCompleted() {
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!hasCompleted && shouldUpdateBrightness > 0) {
+                                    hasCompleted = true;
+                                    shouldUpdateBrightness--;
+                                }
+                            }
+                        });
+                    }
+                });
             }
         });
         colorPicker.setColorChangedListener(new ColorChangedListener() {
             @Override
             public void onColorChanged(float[] newColor) {
+                shouldUpdateColor++;
                 currentColor = newColor;
-                HueBulbChangeUtility.changeGroupColor(identifier, newColor, (MainActivity)getActivity());
+                HueBulbChangeUtility.changeGroupColor(identifier, newColor, (MainActivity)getActivity(), new OnCompletedListener() {
+                    boolean hasCompleted = false;
+
+                    @Override
+                    public void onCompleted() {
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(!hasCompleted && shouldUpdateColor > 0) {
+                                    hasCompleted = true;
+                                    shouldUpdateColor--;
+                                }
+                            }
+                        });
+                    }
+                });
             }
         });
 
@@ -160,29 +237,58 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
     }
 
     private void updateState() {
-        if(!nameEditor.hasFocus()) {
+        if(!nameEditor.hasFocus() && shouldUpdateName == 0) {
             nameEditor.setText(HueBulbChangeUtility.getGroupName(identifier));
         }
         PHBridgeResourcesCache cache = hueSDK.getSelectedBridge().getResourceCache();
         PHLight currentLight;
         if(HueBulbChangeUtility.DEFAULT_GROUP_ID.equals("0")) {
-            List<PHLight> lights = cache.getAllLights();
-            if(!lights.isEmpty()) {
-               currentLight = lights.get(0);
-            } else {
-                return;
+            Collection<String> lights = cache.getLights().keySet();
+            currentLight = getFirstReachableBulb(lights);
+            if(currentLight == null) {
+               return;
             }
         } else {
-            currentLight = cache.getLights().get(cache.getGroups().get(identifier).getLightIdentifiers().get(0));
+            currentLight = getFirstReachableBulb(cache.getGroups().get(identifier).getLightIdentifiers());
+            if(currentLight == null) {
+                return;
+            }
         }
         PHLightState state = currentLight.getLastKnownLightState();
+        if(shouldUpdateOnOffState == 0) {
+            bulbOnState.setChecked(state.isOn());
+        }
+        if(shouldUpdateBrightness == 0) {
+            int currentBrightness = getCurrentBrightness(state.getBrightness());
+            brightness.setProgress(currentBrightness);
+            brightnessPercentage.setText(currentBrightness + "%");
+        }
+        if(shouldUpdateColor == 0) {
+            currentColor = new float[]{state.getX(), state.getY()};
+            colorPicker.setColor(currentColor);
+        }
+    }
 
-        bulbOnState.setChecked(state.isOn());
-        int currentBrightness = getCurrentBrightness(state.getBrightness());
-        brightness.setProgress(currentBrightness);
-        brightnessPercentage.setText(currentBrightness + "%");
-        currentColor = new float[]{state.getX(), state.getY()};
-        colorPicker.setColor(currentColor);
+    /**
+     * Returns the first reachable bulb identified by the ids in the collection
+     * If there isn't a reachable bulb it returns the first bulb in the colleciton
+     * If there are no bulbs in the collection it returns null
+     * @param lights the colleciton of bulb ids
+     * @return
+     */
+    private PHLight getFirstReachableBulb(Collection<String> lights) {
+        if(lights.isEmpty()) {
+            return null;
+        }
+        Map<String, PHLight> lightCache = hueSDK.getSelectedBridge().getResourceCache().getLights();
+        PHLight currentLight = null;
+        for(String lightId: lights) {
+            currentLight = lightCache.get(lightId);
+            if(currentLight != null && currentLight.getLastKnownLightState().isReachable()) {
+                return currentLight;
+            }
+        }
+        return currentLight;
     }
 
     private int getCurrentBrightness(int phBrightness) {
