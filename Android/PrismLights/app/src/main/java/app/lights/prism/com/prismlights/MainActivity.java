@@ -282,7 +282,6 @@ public class MainActivity extends Activity implements PHSDKListener{
         setContentView(R.layout.activity_main);
         homeButton = (Button) findViewById(R.id.homeButton);
         settingsButton = (ImageButton) findViewById(R.id.settingsButton);
-        settingsButton.setEnabled(false);//TODO do this in the xml if possible
         musicButton = (Button) findViewById(R.id.musicButton);
         voiceButton = (Button) findViewById(R.id.voiceButton);
         homeButton.setOnClickListener(new View.OnClickListener() {
@@ -439,6 +438,7 @@ public class MainActivity extends Activity implements PHSDKListener{
             dialog.cancel();
         }
         //enable tab buttons so we can use them
+        voiceButton.setEnabled(true);
         settingsButton.setEnabled(true);
         musicButton.setEnabled(true);
         homeButton.setEnabled(true);

@@ -44,7 +44,7 @@ public class MusicFragment extends Fragment implements OnsetHandler {
     private  AudioProcessor p;
     private PercussionOnsetDetector pOC;
     private ComplexOnsetDetector cOP;
-    private AudioDispatcher dispatcher;
+    private volatile AudioDispatcher dispatcher;
     private WaveformView mWaveformView;
     private ToggleButton toggleButton;
     private Button selectLightsButton;

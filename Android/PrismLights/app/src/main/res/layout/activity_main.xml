@@ -52,7 +52,7 @@
             android:text="@string/voice"
             android:id="@+id/voiceButton"
             android:background="@drawable/bottom_button"
-            android:enabled="true" />
+            android:enabled="false" />
 
 
     </LinearLayout>

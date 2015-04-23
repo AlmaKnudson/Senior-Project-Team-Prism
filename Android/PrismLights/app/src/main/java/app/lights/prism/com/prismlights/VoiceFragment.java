@@ -37,6 +37,7 @@ import java.util.List;
 import ai.wit.sdk.IWitListener;
 import ai.wit.sdk.Wit;
 import ai.wit.sdk.model.WitOutcome;
+import ai.wit.sdk.WitMic;
 //import ai.wit.sdk.model.WitResponse;
 
 public class VoiceFragment extends Fragment implements IWitListener {
@@ -44,6 +45,8 @@ public class VoiceFragment extends Fragment implements IWitListener {
     private Wit wit;
     private TextView micStatus;
     private TextView witResponse;
+    private WitMic mic;
+    private boolean ignoreCallback;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,10 +54,12 @@ public class VoiceFragment extends Fragment implements IWitListener {
         String accessToken = "SAIGZN56HURQBH5PSTPPQQ545ZNVBSSF";
         wit = new Wit(accessToken, this);
 
+
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ignoreCallback = false;
         // Inflate the layout for this fragment
         LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.fragment_voice_control, container, false);
         ImageButton mic = (ImageButton) layout.findViewById(R.id.micButton);
@@ -76,6 +81,8 @@ public class VoiceFragment extends Fragment implements IWitListener {
 
     @Override
     public void witDidGraspIntent(ArrayList<WitOutcome> witOutcomes, String s, Error error) {
+        if(ignoreCallback)
+            return;
         //TODO: handle recieving this after the view has disappeared
         System.out.println(witOutcomes);
         if(witOutcomes != null && !witOutcomes.isEmpty() && error == null) {
@@ -125,27 +132,76 @@ public class VoiceFragment extends Fragment implements IWitListener {
                     }
                 }
                 witResponse.setText(message.toString());
-            } else if (intent.equals("bulbname_off")){ //TODO--SET COLOR OF INDIVIDUAL BULBS
+            } else if (intent.equals("bulbname_off") || intent.equals("bulbname_on")){ //TODO--SET COLOR OF INDIVIDUAL BULBS
                 //Example, "Kitchen off" or "Bathroom off"
                 try {
                     if (entities.containsKey("bulbname")) {
                         String bulbname = entities.get("bulbname").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsString();
-                        witResponse.setText("Turning bulb/group '" + bulbname + "' off.");
+
+
+
+                        boolean onOff = false;
+                        if(entities.containsKey("on_off")){
+                            if(entities.get("on_off").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsString().equals("on")){
+                                onOff = true;
+                            }
+                        }
+
+                        int hV = -1;
+                        if(entities.containsKey("color")){
+                            String[] result = entities.get("color").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsString().split("~!~");
+//                        String color = entities.get("color").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsString();
+                            String color = result[0];
+                            try {
+                                hV = Integer.parseInt(result[1]);
+                                onOff = true;
+                            } catch(Exception e){
+
+                            }
+                        }
+
+                        HueBulbChangeUtility.setLightOrGroupFromName(bulbname, onOff, hV);
+                        witResponse.setText("Turning bulb/group '" + bulbname + "'" + onOff + "'.");
                     }
+
                 } catch(Exception e) {
                     witResponse.setText("Did not understand this command: " + outcome.get_text());
                 }
-            } else if (intent.equals("bulbname_on")) {
-                //Example, "Kitchen on" or "Bathroom on"
-                try {
-                    if (entities.containsKey("bulbname")) {
-                        String bulbname = entities.get("bulbname").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsString();
-                        witResponse.setText("Turning bulb/group '" + bulbname + "' on.");
-                    }
-                } catch(Exception e) {
-                    witResponse.setText("Did not understand this command: " + outcome.get_text());
-                }
-            } else if (intent.equals("color")) {
+            }
+
+//            else if (intent.equals("bulbname_on")) {
+//                //Example, "Kitchen on" or "Bathroom on"
+//                try {
+//                    if (entities.containsKey("bulbname")) {
+//                        String bulbname = entities.get("bulbname").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsString();
+//                        witResponse.setText("Turning bulb/group '" + bulbname + "' off.");
+//
+//                        int hV = -1;
+//                        if(entities.containsKey("color")){
+//                            String[] result = entities.get("color").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsString().split("~!~");
+////                        String color = entities.get("color").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsString();
+//                            String color = result[0];
+//                            try {
+//                                hV = Integer.parseInt(result[1]);
+//                            } catch(Exception e){
+//
+//                            }
+//                        }
+//                        boolean onOff = false;
+//                        if(entities.containsKey("on_off")){
+//                            if(entities.get("on_off").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsString().equals("on")){
+//                                onOff = true;
+//                            }
+//                        }
+//
+//                        HueBulbChangeUtility.setLightOrGroupFromName(bulbname, onOff, hV);
+//                    }
+//                } catch(Exception e) {
+//                    witResponse.setText("Did not understand this command: " + outcome.get_text());
+//                }
+//            }
+
+            else if (intent.equals("color")) {
                 if(entities.containsKey("color")){
                     try {
 //                        JSONObject arr = (JSONObject)entities.get("color").getAsJsonArray().get(0).getAsJsonObject();
@@ -258,5 +314,17 @@ public class VoiceFragment extends Fragment implements IWitListener {
     @Override
     public String witGenerateMessageId() {
         return null;
+    }
+
+
+    @Override
+    public void onDestroyView() {
+       try {
+           wit.stopListening();
+       } catch(Exception e) {
+
+       }
+        ignoreCallback = true;
+        super.onDestroyView();
     }
 }

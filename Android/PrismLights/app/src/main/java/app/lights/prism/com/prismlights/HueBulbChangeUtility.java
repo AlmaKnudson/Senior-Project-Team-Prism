@@ -41,6 +41,45 @@ public class HueBulbChangeUtility {
         return bridge.getResourceCache().getLights().get(identifier);
     }
 
+
+
+    public static void setLightOrGroupFromName(String name, boolean onOff, int hueValue){
+        PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
+       for (String lightId: bridge.getResourceCache().getLights().keySet()){
+           if(bridge.getResourceCache().getLights().get(lightId).getName().toLowerCase().contains(name.toLowerCase().trim()) ){
+               PHLight light = bridge.getResourceCache().getLights().get(lightId);
+               if(hueValue != -1){
+                   PHLightState lightState = new PHLightState();
+                   lightState.setHue(hueValue);
+                   lightState.setColorMode(PHLight.PHLightColorMode.COLORMODE_HUE_SATURATION);
+                   lightState.setOn(onOff);
+                   lightState.setSaturation(254);
+                   bridge.updateLightState(light, lightState);
+               } else {
+                   turnBulbOnOff(light, onOff);
+               }
+           }
+       }
+
+       for(PHGroup group : bridge.getResourceCache().getAllGroups()) {
+           if(group.getName().toLowerCase().contains(name.toLowerCase().trim())){
+               if(hueValue != -1){
+
+//                   PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
+//                   PHGroup group = getGroupFromId(identifier, bridge);
+                   PHLightState lightState = new PHLightState();
+                   lightState.setHue(hueValue);
+                   lightState.setOn(onOff);
+                   lightState.setColorMode(PHLight.PHLightColorMode.COLORMODE_HUE_SATURATION);
+                   lightState.setSaturation(254);
+                   bridge.setLightStateForGroup(group.getIdentifier(), lightState);
+               } else {
+                   turnGroupOnOff(group.getIdentifier(), onOff);
+               }
+           }
+       }
+    }
+
     public static Map<String, PHLight> getLightMap(){
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
         return bridge.getResourceCache().getLights();
