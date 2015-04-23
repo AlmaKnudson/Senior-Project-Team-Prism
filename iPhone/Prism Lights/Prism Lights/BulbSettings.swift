@@ -19,10 +19,12 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate, UITextFie
     @IBOutlet weak var brightnessPercentLabel: UILabel!
     @IBOutlet weak var brightnessSlider: UISlider!
     
-    var brightnessInt :Int? = nil
+    var brightnessInt :Int = -1
     var homeDelegate :BulbSettingsProtocol?
-    var bulbId :String?
-    var isGroup :Bool?
+    var id :String = ""
+    var isGroup :Bool = false
+    var setupCalled:Bool = false
+    var name:String = ""
 
     
     
@@ -33,8 +35,11 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate, UITextFie
         }
         var lightState = PHLightState()
         lightState.on = sender.on
-        var bridgeSend = PHBridgeSendAPI()
-        bridgeSend.updateLightStateForId(self.bulbId, withLightState: lightState, completionHandler: nil)
+        if isGroup {
+            SetGroupLightState(id, lightState)
+        } else {
+            SetBulbLightState(id, lightState)
+        }
     }
     @IBAction func BrightnessFinished(sender: UISlider) {
         if(DEBUG){
@@ -42,14 +47,11 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate, UITextFie
         }
         var lightState = PHLightState()
         lightState.brightness = Int(254*sender.value)
-        var bridgeSend = PHBridgeSendAPI()
-        bridgeSend.updateLightStateForId(self.bulbId, withLightState: lightState, completionHandler: nil)
-        
-        var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-        var light = (cache.lights?[bulbId!]) as! PHLight
-        light.lightState.brightness = Int(254*sender.value)
-        println(Int(255*sender.value))
-        
+        if isGroup {
+            SetGroupLightState(id, lightState)
+        } else {
+            SetBulbLightState(id, lightState)
+        }
     }
     
     @IBAction func BrightnessFinishedOutside(sender: UISlider) {
@@ -70,22 +72,50 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate, UITextFie
     @IBAction func ApplySettings(sender: UIBarButtonItem) {
         var bridgeSend = PHBridgeSendAPI()
         var lights:NSDictionary = PHBridgeResourcesReader.readBridgeResourcesCache().lights as NSDictionary
-        var light:PHLight = lights.valueForKey(self.bulbId!) as! PHLight
-        light.name = nameTextField.text;
         
-        bridgeSend.updateLightWithLight(light, completionHandler: nil)
+        if isGroup {
+            
+        } else {
+            var light:PHLight = lights.valueForKey(self.id) as! PHLight
+            light.name = nameTextField.text;
+        
+            bridgeSend.updateLightWithLight(light, completionHandler: nil)
+        }
         homeDelegate?.ApplySettings()
     }
+    
+
+    required init(coder aDecoder: NSCoder) {
+     super.init(coder: aDecoder)
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    
+    
+    
+    
     
     
     //MARK - UIViewController Methods
     override func viewWillAppear(animated: Bool) {
+        if !setupCalled {
+            assertionFailure("Setup on BulbSettingsController not called before view Will Appear")
+        }
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
         
+        var lightState:PHLightState
+        
+        if self.isGroup {
+            lightState = GetGroupState(self.id).lightState
+        } else{
+            lightState = ((cache.lights?[self.id]) as! PHLight).lightState
+        }
+        
+        
         //Sets the slider to current brightness
-        var light = (cache.lights?[bulbId!]) as! PHLight
-        var lightState = light.lightState
-        var brightness = Float(lightState.brightness) / 255
+        var brightness = Float(lightState.brightness) / 254
         brightnessSlider.value = brightness
         self.brightnessPercentLabel.text = "\(Int(brightnessSlider.value*100))%"
         
@@ -96,31 +126,23 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate, UITextFie
             onSwitch.on = false
         }
         
-        self.title = light.name
-        //Set the Delegate of the Child Controller
-        var picker = ((self.childViewControllers.last)?.view) as! ColorPicker
-        picker.colorChangedDelegate = self
+        
+        self.title = self.name
     }
     
 
     override func viewDidAppear(animated: Bool) {
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
+        let lightState:PHLightState
         
-        //Sets the slider to current brightness
-        var light = (cache.lights?[bulbId!]) as! PHLight
-        var lightState = light.lightState
-        var brightness = Float(lightState.brightness) / 255
-        brightnessSlider.value = brightness
-        self.brightnessPercentLabel.text = "\(Int(brightnessSlider.value*100))%"
-//        
-//        //Sets the on-off switch
-//        if lightState.on == 1{
-//            onSwitch.on = true
-//        } else{
-//            onSwitch.on = false
-//        }
         
-//        self.title = light.name
+        if isGroup {
+            lightState = GetGroupState(id).lightState
+        } else {
+            lightState = GetBulbLightState(id)!
+        }
+        
+        
         //Set the Delegate of the Child Controller
         var picker = ((self.childViewControllers.last)?.view) as! ColorPicker
         picker.colorChangedDelegate = self
@@ -138,9 +160,6 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate, UITextFie
     func onColorChanged(color: CGPoint) {
         
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-        var light = (cache.lights?[bulbId!]) as! PHLight
-        
-        
         
         // Create new light state object
         var lightState = PHLightState()
@@ -148,11 +167,11 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate, UITextFie
         lightState.x = color.x
         lightState.y = color.y
         // Update light state
-        var bridgeSend = PHBridgeSendAPI()
-        bridgeSend.updateLightStateForId(self.bulbId, withLightState: lightState, completionHandler: nil)
-        
-        light.lightState.x = color.x
-        light.lightState.y = color.y
+        if isGroup {
+            SetGroupLightState(id, lightState)
+        } else{
+            SetBulbLightState(id, lightState)
+        }
     }
     
     
@@ -161,8 +180,8 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate, UITextFie
         
         if segue.identifier == "advancedSettings" {
             var alarmTable:AdvancedSettingsController = segue.destinationViewController as! AdvancedSettingsController
-            alarmTable.bulbId = self.bulbId
-            alarmTable.isGroup = isGroup
+            alarmTable.bulbId = self.id
+            alarmTable.isGroup = self.isGroup
         } else if segue.identifier == "CycleColorsTable" {
             
         }
@@ -170,7 +189,16 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate, UITextFie
     }
     
 
-
+    func Setup(brightness:Int, id:String, isGroup:Bool, name:String){
+        self.setupCalled = true
+        
+        self.brightnessInt = brightness
+        self.id  = id
+        self.isGroup = isGroup
+        self.name = name
+    }
+    
+    
     
     
     

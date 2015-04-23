@@ -12,7 +12,6 @@ class GroupCollectionController: UIViewController, UICollectionViewDataSource, U
     
     let GROUP_SECTION = 0
     
-    
     var retryConnection = true
     var beenConnected = false
     var skipNextHeartbeat = false
@@ -22,9 +21,6 @@ class GroupCollectionController: UIViewController, UICollectionViewDataSource, U
     let beaconManager : ESTBeaconManager = ESTBeaconManager()
     
     var bridgeSendAPI = PHBridgeSendAPI();
-    
-    var groupCount :Int = 1;
-    var groupIds:[String] = []
     
     
     @IBOutlet weak var bulbCollectionView: UICollectionView!
@@ -110,8 +106,10 @@ class GroupCollectionController: UIViewController, UICollectionViewDataSource, U
             var dest = segue.destinationViewController as! UINavigationController
             var bulbSettingsController = dest.viewControllers[0] as! BulbSettingsController
             bulbSettingsController.homeDelegate = self
-            bulbSettingsController.bulbId = "\((sender as! NSIndexPath).row+1)"
-            bulbSettingsController.isGroup = false
+            
+            let groupId = Groups[(sender as! NSIndexPath).row]
+            var lightState = GetGroupState(groupId).lightState
+            bulbSettingsController.Setup(lightState.brightness.integerValue, id: groupId, isGroup: true, name: GetGroupName(groupId)!)
         } else if segue.identifier == "pushAuth" {
             var dest = segue.destinationViewController as! PushAuthController
             dest.delegate = self
@@ -136,16 +134,7 @@ class GroupCollectionController: UIViewController, UICollectionViewDataSource, U
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
         
         if section == GROUP_SECTION {
-            if(cache.groups != nil){
-                //count doesn't account for group number 0. So +1 to account for it.
-                groupCount = cache.groups.count + 1
-            } else {
-                groupCount = 1
-            }
-            if(BRIDGELESS){
-                groupCount = 1
-            }
-            return groupCount
+            return Groups.count()
         }
         return 0
     }
@@ -164,50 +153,43 @@ class GroupCollectionController: UIViewController, UICollectionViewDataSource, U
         }
         
         var cache:PHBridgeResourcesCache! = PHBridgeResourcesReader.readBridgeResourcesCache()
-        
+        var groupId = Groups[indexPath.row]
         if indexPath.section == GROUP_SECTION {
-            var groupId = indexPath.row
-            var lightState = PHLightState()
-            lightState.on = false
-            
-            if groupId == 0 {
-                cell.initGroupCell("All Lights")
-            } else {
+            if groupId == "0" {
                 
-                var group:PHGroup! = cache?.groups?["\(groupId)"] as? PHGroup
+                //Name the group cell to all
+                cell.initGroupCell("All Lights")
+                
+            } else {
+                //Set the name of the group cell from group name
+                var group:PHGroup! = cache?.groups?[groupId] as? PHGroup
                 if group != nil {
                     cell.initGroupCell(group.name)
                 } else{
-                    cell.initGroupCell("")
+                    cell.initGroupCell("Unknown")
+                    cell.SetUnreachable()
                     return cell
                 }
             }
             
-            if cache.groups != nil{
-                var theLight:PHLight! = nil
-                for (lightId, light) in (cache.lights as! [String:PHLight]){
-                    //Ignore lights not connected to bridge
-                    if(light.lightState.reachable == 0){
-                        continue
-                    }
-                    
-                    if light.lightState.on == 1{
-                        theLight = light
-                        lightState.on = true
-                        lightState.x = light.lightState.x
-                        lightState.y = light.lightState.y
-                        break
-                    }
-                }
-                
-                if(lightState.on == 1){
-                    var point = CGPoint(x: Double(lightState.x), y: Double(lightState.y))
-                    var color = PHUtilities.colorFromXY(point, forModel: theLight.modelNumber)
-                    cell.turnOn(false)
-                    cell.SetGroupColor(color)
-                } else{
-                    cell.turnOff(false)
-                }
+            var tuple  = GetGroupState(groupId)
+            let modelNumber = tuple.modelNumber
+            let lightState = tuple.lightState
+            
+            //Check that the group is reachable
+            if !lightState.reachable.boolValue {
+                cell.SetUnreachable()
+                return cell
+            }
+            
+            //Set the bulb image
+            if lightState.on.boolValue{
+                var point = CGPoint(x: Double(lightState.x), y: Double(lightState.y))
+                var color = PHUtilities.colorFromXY(point, forModel: modelNumber)
+                cell.turnOn(false)
+                cell.SetGroupColor(color)
+            } else{
+                cell.turnOff(false)
             }
         }
         
@@ -219,15 +201,18 @@ class GroupCollectionController: UIViewController, UICollectionViewDataSource, U
         if(DEBUG){
             println("Bulb tapped")
         }
-        self.skipNextHeartbeat = true
         
+        self.skipNextHeartbeat = true
         if( indexPath.section == GROUP_SECTION){
-            var identifier = "\(indexPath.row)"
+            var identifier = Groups[indexPath.row]
             ToggleGroupState(identifier)
             
         }
-        collectionView.reloadData()
         
+        //Reload that cell
+        var index:[AnyObject] = [AnyObject]()
+        index.append(indexPath)
+        collectionView.reloadItemsAtIndexPaths(index)
         
     }
     
@@ -279,10 +264,9 @@ class GroupCollectionController: UIViewController, UICollectionViewDataSource, U
                     println("indexPath of cell: \(indexPath)")
                 }
                 
-                var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-                var lightId = indexPath!.row+1
-                var light = cache.lights["\(lightId)"] as! PHLight
-                if(light.lightState.reachable.boolValue){
+                var groupId = Groups[indexPath!.row]
+                var groupState = GetGroupState(groupId)
+                if(groupState.lightState.reachable.boolValue){
                     self.performSegueWithIdentifier("BulbSettingsNav", sender: indexPath)
                 }
             }
@@ -375,86 +359,47 @@ class GroupCollectionController: UIViewController, UICollectionViewDataSource, U
     //MARK: Helper Methods
     
     func ToggleGroupState(identifier:String) -> Bool {
-        var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-        var lightOn = true
-        var bridgeSendAPI = PHBridgeSendAPI()
-        var lightState:PHLightState? = nil
         
-        //Group 0 is all lights
-        //Group 0 is assumed and isn't in the cache
-        if identifier == "0" {
-            for (lightId, light) in (cache.lights as! [String:PHLight]){
-                //Ignore lights not connected to bridge
-                if(light.lightState.reachable == 0){
-                    continue
-                }
-                
-                if light.lightState.on.boolValue {
-                    lightOn = false
-                    break
-                } else {
-                    
-                }
-            }
-            
-            //update all lightStates
-            for (lightId, light) in (cache.lights as! [String:PHLight]){
-                //Ignore lights not connected to bridge
-                if(light.lightState.reachable == 0){
-                    continue
-                }
-                light.lightState.on = lightOn
-                lightState = PHLightState()
-                lightState!.x = light.lightState.x
-                lightState!.y = light.lightState.y
-                lightState!.on = light.lightState.on
-                lightState!.brightness = light.lightState.brightness
-            }
-            
-        } else {
-            
-            var group:PHGroup = cache!.groups[identifier] as! PHGroup
-            
-            
-            for lightId:String in (group.lightIdentifiers as! [String]) {
-                var light = cache.lights[lightId] as! PHLight
-                
-                
-                
-            }
-        }
+        let groupState = GetGroupState(identifier)
+        let groupLightState = groupState.lightState
+        let modelNumber = groupState.modelNumber
         
-        if lightState == nil {
+        if !groupLightState.reachable.boolValue {
             return false
         }
-        //Send Light change to Bridge
-        bridgeSendAPI.setLightStateForGroupWithId(identifier, lightState: lightState){
-            error -> Void in
-            if error != nil {
-                if(DEBUG){
-                    println("Error updating light state.")
-                }
-                return
-            }
-            self.skipNextHeartbeat = true
+     
+        //Flip the on state of the group
+        if groupLightState.on.boolValue {
+            groupLightState.on = false
+        } else{
+            groupLightState.on = true
         }
         
+        SetGroupLightState(identifier, groupLightState)
         return true
-        
-        
     }
     
     
-    
     func ApplySettings(){
+        var manager = PHNotificationManager.defaultManager()
+        manager!.registerObject(self, withSelector: "HeartBeatReceived", forNotification: "LOCAL_CONNECTION_NOTIFICATION")
+        manager!.registerObject(self, withSelector: "NetworkConnectionLost", forNotification: "NO_LOCAL_CONNECTION_NOTIFICATION")
+        manager!.registerObject(self, withSelector: "NotAuthorized", forNotification: "NO_LOCAL_AUTHENTICATION_NOTIFICATION")
         self.dismissViewControllerAnimated(true, completion: nil)
         self.bulbCollectionView.reloadData()
         //TODO: Need protocol for pushAuth
     }
     
     func DismissMe() {
+        var manager = PHNotificationManager.defaultManager()
+        manager!.registerObject(self, withSelector: "HeartBeatReceived", forNotification: "LOCAL_CONNECTION_NOTIFICATION")
+        manager!.registerObject(self, withSelector: "NetworkConnectionLost", forNotification: "NO_LOCAL_CONNECTION_NOTIFICATION")
+        manager!.registerObject(self, withSelector: "NotAuthorized", forNotification: "NO_LOCAL_AUTHENTICATION_NOTIFICATION")
         self.dismissViewControllerAnimated(true, completion: nil)
     }
+    
+    
+
     
     //- (void)beaconManager:(ESTBeaconManager *)manager
     //    didStartMonitoringForRegion:(ESTBeaconRegion *)region;

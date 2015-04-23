@@ -1,5 +1,5 @@
 //
-//  BulbModel.swift
+//  GroupModel.swift
 //  Prism Lights
 //
 //  Created by Cody Foltz on 4/23/15.
@@ -8,49 +8,55 @@
 
 import Foundation
 
-var BulbsModel = BulbModel()
+var Groups = GroupModel()
 
-class BulbModel {
+class GroupModel {
     
-    var bulbs:[String:PHLightState] = [:]
-    var bulbIds:[String]
+    var groupIds:[String]
     
     func CompareToCache(){
         
         var cache:PHBridgeResourcesCache! = PHBridgeResourcesReader.readBridgeResourcesCache()
         
-        if cache == nil || cache.lights == nil {
+        if cache == nil || cache.groups == nil {
             return
         }
         
-        var cacheIds:[String] = (cache.lights.keys.array as! [NSString]) as! [String]
+        var cacheIds:[String] = (cache.groups.keys.array as! [NSString]) as! [String]
         
-        if bulbIds.count == cacheIds.count {
+        //Account for group "0" which is not in the cache
+        //Place in the front of the array so that it is first if it needs to be added.
+        cacheIds.insert("0", atIndex: 0)
+        
+        //Account for group "0" which is not in the cache
+        if groupIds.count == (cacheIds.count) {
             return
         }
         
         
-        //Adds new bulbs and removes bulbs that have been removed.
+        //Adds new groups and removes groups that have been removed.
         
         //Create a mapping to insure all bulbs in the cache have been recorded
-        var cachedBulbs = [String:Bool]()
+        var cachedGroups = [String:Bool]()
         for id in cacheIds {
-            cachedBulbs[id] = false
+            cachedGroups[id] = false
         }
         
+        
         //Remove bulbId if it is not in the cache
-        for var i = 0; i < bulbIds.count; i++ {
-            if cachedBulbs.indexForKey(bulbIds[i]) == nil {
-                bulbIds.removeAtIndex(i)
+        for var i = 0; i < groupIds.count; i++ {
+            
+            if cachedGroups.indexForKey(groupIds[i]) == nil {
+                groupIds.removeAtIndex(i)
             } else {
-                cachedBulbs[bulbIds[i]] = true
+                cachedGroups[groupIds[i]] = true
             }
         }
         
         //Add bulbs from cache that is not already accounted for
-        for (cachedBulbId, foundFlag) in cachedBulbs {
+        for (cachedGroupId, foundFlag) in cachedGroups {
             if !foundFlag {
-                bulbIds.append(cachedBulbId)
+                groupIds.append(cachedGroupId)
             }
         }
         
@@ -59,40 +65,39 @@ class BulbModel {
     }
     
     init(){
-        bulbs = [:]
-        bulbIds = []
+        groupIds = []
         loadFromFile()
         CompareToCache()
     }
     
     subscript(index: Int) -> String {
-        if index < 0 || index >= bulbIds.count {
+        if index < 0 || index >= groupIds.count {
             assertionFailure("Index out of bound within BulbModel")
         }
-        return bulbIds[index]
+        return groupIds[index]
     }
     
     func count() -> Int {
-        return bulbIds.count
+        return groupIds.count
     }
     
     func idAtIndex(index:Int) -> String {
         
-        if index < 0 || index >= bulbIds.count {
+        if index < 0 || index >= groupIds.count {
             assertionFailure("Index out of bound within BulbModel")
         }
-        return bulbIds[index]
+        return groupIds[index]
     }
     
     
     private func saveToFile() -> Bool {
         var idsArray: NSMutableArray = []
-        for bulbId in bulbIds {
+        for bulbId in groupIds {
             idsArray.addObject(bulbId)
         }
         let documentsDirectory: String? = NSSearchPathForDirectoriesInDomains(
             .DocumentDirectory, .UserDomainMask, true)?[0] as! String?
-        let filePath: String? = documentsDirectory?.stringByAppendingPathComponent("bulbIds.plist")
+        let filePath: String? = documentsDirectory?.stringByAppendingPathComponent("groupIds.plist")
         if(filePath != nil) {
             idsArray.writeToFile(filePath!, atomically: true)
             return true
@@ -103,14 +108,14 @@ class BulbModel {
     private func loadFromFile() {
         let documentsDirectory: String? = NSSearchPathForDirectoriesInDomains(
             .DocumentDirectory, .UserDomainMask, true)?[0] as! String?
-        let filePath: String? = documentsDirectory?.stringByAppendingPathComponent("bulbIds.plist")
+        let filePath: String? = documentsDirectory?.stringByAppendingPathComponent("groupIds.plist")
         if let actualFilePath = filePath {
             let optStoredFavorites: NSArray? = NSArray(contentsOfFile: actualFilePath)
             if let storedFavorites = optStoredFavorites {
-                bulbIds = []
+                groupIds = []
                 for id in storedFavorites {
                     var bulbId = id as! String
-                    bulbIds.append(bulbId)
+                    groupIds.append(bulbId)
                 }
                 return
             }
@@ -119,5 +124,11 @@ class BulbModel {
         CompareToCache()
     }
     
+
+    
+    
+    
     
 }
+
+

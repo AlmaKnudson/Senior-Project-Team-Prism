@@ -27,6 +27,13 @@ class EditBulbsCollection: UIViewController, UICollectionViewDataSource, UIColle
     var dismissDeleget:DismissPresentedController? = nil
     
     
+    override func viewDidLoad() {
+        
+    }
+    
+    
+    
+    
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 2.0
