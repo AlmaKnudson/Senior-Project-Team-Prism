@@ -344,7 +344,7 @@
                     <connections>
                         <outlet property="bulbCollectionView" destination="ghP-HQ-lmW" id="me1-Rq-JUq"/>
                         <outlet property="loadingMessageLabel" destination="kML-PA-ce6" id="KzY-gr-wGd"/>
-                        <segue destination="5xJ-tq-vqj" kind="show" id="QvR-CG-Niy"/>
+                        <segue destination="5xJ-tq-vqj" kind="show" identifier="BulbSettingsNav" id="QvR-CG-Niy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dBW-BO-7HO" sceneMemberID="firstResponder"/>
@@ -1222,7 +1222,7 @@
         <!--Edit Bulbs Collection-->
         <scene sceneID="lgF-oC-iQe">
             <objects>
-                <viewController title="Edit Bulbs Collection" id="sgI-6l-pKs" sceneMemberID="viewController">
+                <viewController title="Edit Bulbs Collection" id="sgI-6l-pKs" customClass="EditBulbsCollection" customModule="Prism_Lights" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="FNF-UM-bXD"/>
                         <viewControllerLayoutGuide type="bottom" id="z5o-eK-kNB"/>
@@ -3020,11 +3020,11 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="Yqu-oy-S8b"/>
-                                <exclude reference="tWT-Vi-EGH"/>
                                 <exclude reference="Kmq-Rv-W5i"/>
                                 <exclude reference="L4t-xN-c2J"/>
                                 <exclude reference="xGN-ir-lYh"/>
+                                <exclude reference="Yqu-oy-S8b"/>
+                                <exclude reference="tWT-Vi-EGH"/>
                                 <exclude reference="GFY-yA-sFa"/>
                                 <exclude reference="NK5-Bi-Ygo"/>
                                 <exclude reference="Pa6-7Y-q79"/>
@@ -3032,8 +3032,8 @@
                                 <exclude reference="qFv-7i-FgG"/>
                                 <exclude reference="bKr-EZ-9oR"/>
                                 <exclude reference="hdx-Jo-FYW"/>
-                                <exclude reference="kJX-GS-tak"/>
                                 <exclude reference="g0k-Qk-qOd"/>
+                                <exclude reference="kJX-GS-tak"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -3043,11 +3043,11 @@
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
                             <mask key="constraints">
-                                <include reference="Yqu-oy-S8b"/>
-                                <include reference="tWT-Vi-EGH"/>
                                 <include reference="Kmq-Rv-W5i"/>
                                 <include reference="L4t-xN-c2J"/>
                                 <include reference="xGN-ir-lYh"/>
+                                <include reference="Yqu-oy-S8b"/>
+                                <include reference="tWT-Vi-EGH"/>
                                 <include reference="GFY-yA-sFa"/>
                                 <include reference="NK5-Bi-Ygo"/>
                                 <include reference="Pa6-7Y-q79"/>
@@ -3055,8 +3055,8 @@
                                 <include reference="qFv-7i-FgG"/>
                                 <include reference="bKr-EZ-9oR"/>
                                 <include reference="hdx-Jo-FYW"/>
-                                <include reference="kJX-GS-tak"/>
                                 <exclude reference="g0k-Qk-qOd"/>
+                                <include reference="kJX-GS-tak"/>
                             </mask>
                         </variation>
                     </view>
@@ -3581,10 +3581,10 @@
         <image name="x" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="kTA-oR-AUT"/>
+        <segue reference="VIG-4p-d0T"/>
         <segue reference="oPu-gS-aiX"/>
         <segue reference="MV1-5L-hp4"/>
         <segue reference="agp-MF-nMt"/>
-        <segue reference="kTA-oR-AUT"/>
-        <segue reference="VIG-4p-d0T"/>
     </inferredMetricsTieBreakers>
 </document>

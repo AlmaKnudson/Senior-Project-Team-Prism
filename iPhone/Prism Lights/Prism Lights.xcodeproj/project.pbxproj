@@ -113,6 +113,7 @@
 		CCDEDEB01AE7330F00BECD0A /* EditBulbsCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCDEDEAF1AE7330F00BECD0A /* EditBulbsCollection.swift */; };
 		CCDEDEB21AE735BF00BECD0A /* RAReorderableLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCDEDEB11AE735BF00BECD0A /* RAReorderableLayout.swift */; };
 		CCDEDEB71AE93E6200BECD0A /* BulbModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCDEDEB61AE93E6200BECD0A /* BulbModel.swift */; };
+		CCDEDEB91AE9546100BECD0A /* GroupModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCDEDEB81AE9546100BECD0A /* GroupModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -276,6 +277,7 @@
 		CCDEDEAF1AE7330F00BECD0A /* EditBulbsCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditBulbsCollection.swift; sourceTree = "<group>"; };
 		CCDEDEB11AE735BF00BECD0A /* RAReorderableLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RAReorderableLayout.swift; sourceTree = "<group>"; };
 		CCDEDEB61AE93E6200BECD0A /* BulbModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BulbModel.swift; sourceTree = "<group>"; };
+		CCDEDEB81AE9546100BECD0A /* GroupModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -458,6 +460,7 @@
 				CC26D25A1AD9F71F00AEE7F7 /* Protocols.swift */,
 				CC4156AF1AE310CE00CD5902 /* BridgeSelect.swift */,
 				CCDEDEB61AE93E6200BECD0A /* BulbModel.swift */,
+				CCDEDEB81AE9546100BECD0A /* GroupModel.swift */,
 			);
 			path = "Prism Lights";
 			sourceTree = "<group>";
@@ -860,6 +863,7 @@
 				0DB347431A2D5BCE00B91EF2 /* PushAuthController.swift in Sources */,
 				11FDAB581AB109510055C2AD /* BeaconBulbTracking.swift in Sources */,
 				CC89CA011ADD8E0B00E25DCD /* HomePageController.swift in Sources */,
+				CCDEDEB91AE9546100BECD0A /* GroupModel.swift in Sources */,
 				0D3A79111A26A716003AC6D4 /* DDAbstractDatabaseLogger.m in Sources */,
 				CC26D25B1AD9F71F00AEE7F7 /* Protocols.swift in Sources */,
 				11FDAB501AACDA5F0055C2AD /* MusicCell.swift in Sources */,

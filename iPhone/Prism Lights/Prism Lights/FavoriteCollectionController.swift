@@ -83,6 +83,8 @@ class FavoriteCollectionController : UIViewController, UIGestureRecognizerDelega
         // Dispose of any resources that can be recreated.
     }
     
+
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if(DEBUG){
             println("In Prepare For Segue")
@@ -91,7 +93,7 @@ class FavoriteCollectionController : UIViewController, UIGestureRecognizerDelega
             var dest = segue.destinationViewController as! UINavigationController
             var bulbSettingsController = dest.viewControllers[0] as! BulbSettingsController
             bulbSettingsController.homeDelegate = self
-            bulbSettingsController.bulbId = "\((sender as! NSIndexPath).row+1)"
+            bulbSettingsController.id = "\((sender as! NSIndexPath).row+1)"
             bulbSettingsController.isGroup = false
         } else if segue.identifier == "pushAuth" {
             var dest = segue.destinationViewController as! PushAuthController
@@ -194,12 +196,7 @@ class FavoriteCollectionController : UIViewController, UIGestureRecognizerDelega
                     println("indexPath of cell: \(indexPath)")
                 }
                 
-                var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-                var lightId = indexPath!.row+1
-                var light = cache.lights["\(lightId)"] as! PHLight
-                if(light.lightState.reachable.boolValue){
-                    self.performSegueWithIdentifier("BulbSettingsNav", sender: indexPath)
-                }
+                //self.performSegueWithIdentifier("BulbSettingsNav", sender: indexPath)
             }
         }
         

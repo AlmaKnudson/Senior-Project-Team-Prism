@@ -28,9 +28,6 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
     var bridgeSendAPI = PHBridgeSendAPI();
     
     
-    var lightCount :Int = 0;
-    var bulbIds:[String] = [String]()
-    
     @IBOutlet weak var bulbCollectionView: UICollectionView!
     
     
@@ -52,17 +49,8 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
         gesture.delegate = self
         self.bulbCollectionView.addGestureRecognizer(gesture)
         
-        //Get the light count
-        var cache:PHBridgeResourcesCache? = PHBridgeResourcesReader.readBridgeResourcesCache()
-        if(cache != nil){
-            var lights = cache?.lights;
-            if(lights == nil){
-                lightCount = 0;
-            } else{
-                lightCount = (cache?.lights.count)!
-            }
-        }
-
+        //Make sure the bulbs are updated
+        BulbsModel.CompareToCache()
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -82,7 +70,9 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
     */
     override func viewWillAppear(animated: Bool) {
         
-        
+        if(DEBUG){
+            println("Bulb View Will Appear")
+        }
         
         //Check that we are connected to bridge.
         if !((UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!.localConnected()){
@@ -120,9 +110,10 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
             var dest = segue.destinationViewController as! UINavigationController
             var bulbSettingsController = dest.viewControllers[0] as! BulbSettingsController
             bulbSettingsController.homeDelegate = self
-            var bulbId = bulbIds[(sender as! NSIndexPath).row]
-            bulbSettingsController.bulbId = bulbId
-            bulbSettingsController.isGroup = false
+            var bulbId = BulbsModel[(sender as! NSIndexPath).row]
+            if let light = GetBulbLightState(bulbId) {
+                bulbSettingsController.Setup(light.brightness.integerValue, id: bulbId, isGroup: false, name: GetBulbName(bulbId)!)
+            }
         } else if segue.identifier == "pushAuth" {
             var dest = segue.destinationViewController as! PushAuthController
             dest.delegate = self
@@ -144,38 +135,9 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
     :returns: number of bulbs in group
     */
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int{
-        var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-        
-        
         if(section == BULB_SECTION){
-            
-            if(cache.lights != nil){
-                var lights = cache.lights as! [String:PHLight]
-                bulbIds = lights.keys.array
-                lightCount = lights.count
-                
-            } else{
-                lightCount = 0
-            }
-            if(BRIDGELESS){
-                lightCount = 3
-            }
-            
-            return lightCount;
+            return BulbsModel.count();
         }
-//        
-//        if section == GROUP_SECTION {
-//            if(cache.groups != nil){
-//                //count doesn't account for group number 0. So +1 to account for it.
-//                groupCount = cache.groups.count + 1
-//            } else {
-//                groupCount = 1
-//            }
-//            if(BRIDGELESS){
-//                groupCount = 1
-//            }
-//            return groupCount
-//        }
         return 0
     }
     
@@ -195,14 +157,14 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
         var cache:PHBridgeResourcesCache! = PHBridgeResourcesReader.readBridgeResourcesCache()
         
         if indexPath.section == BULB_SECTION {
-            var lightId = bulbIds[indexPath.row]
+            var lightId = BulbsModel[indexPath.row]
             var light:PHLight! = cache.lights?["\(lightId)"] as? PHLight
             if(light != nil){
                 cell.initBulbCell(light.name)
                 
                 if !light.lightState.reachable.boolValue {
                     cell.SetUnreachable()
-                } else if(light.lightState.on == 0){
+                } else if(!light.lightState.on.boolValue){
                     cell.turnOff(false)
                 } else{
                     var point = CGPoint(x: Double(light.lightState.x), y: Double(light.lightState.y))
@@ -214,50 +176,6 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
             } else{
                 cell.initBulbCell("")
             }
-//        } else if indexPath.section == GROUP_SECTION {
-//            var groupId = indexPath.row
-//            var lightState = PHLightState()
-//            lightState.on = false
-//            
-//            if groupId == 0 {
-//                cell.initGroupCell("All Lights")
-//            } else {
-//                
-//                var group:PHGroup! = cache?.groups?["\(groupId)"] as? PHGroup
-//                if group != nil {
-//                    cell.initGroupCell(group.name)
-//                } else{
-//                    cell.initGroupCell("")
-//                    return cell
-//                }
-//            }
-//            
-//            if cache.groups != nil{
-//                var theLight:PHLight! = nil
-//                for (lightId, light) in (cache.lights as! [String:PHLight]){
-//                    //Ignore lights not connected to bridge
-//                    if(light.lightState.reachable == 0){
-//                        continue
-//                    }
-//                    
-//                    if light.lightState.on == 1{
-//                        theLight = light
-//                        lightState.on = true
-//                        lightState.x = light.lightState.x
-//                        lightState.y = light.lightState.y
-//                        break
-//                    }
-//                }
-//                
-//                if(lightState.on == 1){
-//                    var point = CGPoint(x: Double(lightState.x), y: Double(lightState.y))
-//                    var color = PHUtilities.colorFromXY(point, forModel: theLight.modelNumber)
-//                    cell.turnOn(false)
-//                    cell.SetGroupColor(color)
-//                } else{
-//                    cell.turnOff(false)
-//                }
-//            }
         }
         
         return cell!
@@ -270,7 +188,7 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
         }
         self.skipNextHeartbeat = true
         if( indexPath.section == BULB_SECTION){
-            var identifier = bulbIds[indexPath.row]
+            var identifier = BulbsModel[indexPath.row]
             ToggleLightState(identifier)
             
         }
@@ -336,7 +254,7 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
                 
                 var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
                 var index = indexPath!.row
-                var lightId = bulbIds[index]
+                var lightId = BulbsModel[index]
                 var light = cache.lights["\(lightId)"] as! PHLight
                 if(light.lightState.reachable.boolValue){
                     self.performSegueWithIdentifier("BulbSettingsNav", sender: indexPath)

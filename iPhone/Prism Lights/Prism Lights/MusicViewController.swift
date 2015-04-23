@@ -8,11 +8,6 @@
 
 import UIKit
 
-
-class MusicViewController: UIViewController {
-    
-    
-    
     class MusicViewController: UIViewController, WitDelegate {
     
     var statusView:UILabel = UILabel();
@@ -433,5 +428,4 @@ class MusicViewController: UIViewController {
    
 }
 
-}
 
