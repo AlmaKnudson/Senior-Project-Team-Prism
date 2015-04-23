@@ -87,7 +87,7 @@ public class VoiceFragment extends Fragment implements IWitListener {
         System.out.println(witOutcomes);
         if(witOutcomes != null && !witOutcomes.isEmpty() && error == null) {
             WitOutcome outcome = witOutcomes.get(0);
-            witResponse.setText("\nYOU SAID:\n" + outcome.get_text() + "\n\nYOUR INTENT:\n" + outcome.get_intent() "\n");
+            witResponse.setText("\nYOU SAID:\n" + outcome.get_text() + "\n\nYOUR INTENT:\n" + outcome.get_intent() + "\n");
             String intent = outcome.get_intent().trim();
 
 
