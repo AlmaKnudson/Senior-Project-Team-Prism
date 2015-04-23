@@ -89,7 +89,7 @@ public class MainActivity extends Activity implements PHSDKListener{
     private int connectionLostCount = 0;
     private Date sunrise;
     private Date sunset;
-    public static int MIN_CONNECTION_LOST_COUNT=1;
+    public static int MIN_CONNECTION_LOST_COUNT=2;
     public static final String homeFragmentTag="HOME_FRAGMENT";
     public static final String musicFragmentTag="MUSIC_FRAGMENT_TAG";
     public static final String voiceFragmentTag="VOICE_FRAGMENT_TAG";
@@ -418,15 +418,9 @@ public class MainActivity extends Activity implements PHSDKListener{
             bridgeSearchManager.search(true, true);
             waitingText = getText(R.string.searching);
         }
-
-        dialog = new ProgressDialog(this);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
-        dialog.show();
-        dialog.setContentView(R.layout.progress);
-        TextView progressText = (TextView) dialog.findViewById(R.id.progressText);
-        progressText.setText(waitingText);
         //end code from example app
+
+        DialogCreator.showLoadingDialog(waitingText.toString(), this);
     }
 
     @Override
@@ -504,14 +498,7 @@ public class MainActivity extends Activity implements PHSDKListener{
         PHBridgeSearchManager bridgeSearchManager = (PHBridgeSearchManager) hueBridgeSdk.getSDKService(PHHueSDK.SEARCH_BRIDGE);
         bridgeSearchManager.search(true, true);
         CharSequence waitingText = getText(R.string.searching);
-        if(!dialog.isShowing()) {
-            dialog.setCanceledOnTouchOutside(false);
-            dialog.setCancelable(false);
-            dialog.show();
-            dialog.setContentView(R.layout.progress);
-        }
-        TextView progressText = (TextView) dialog.findViewById(R.id.progressText);
-        progressText.setText(waitingText);
+        DialogCreator.showLoadingDialog(waitingText.toString(), this);
     }
 
 
@@ -541,10 +528,10 @@ public class MainActivity extends Activity implements PHSDKListener{
         hueBridgeSdk.setSelectedBridge(phBridge);
         hueBridgeSdk.enableHeartbeat(phBridge, PHHueSDK.HB_INTERVAL);
         hueBridgeSdk.getHeartbeatManager().enableLightsHeartbeat(phBridge, 2000);
-        connectionLostCount = 0;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                connectionLostCount = 0;
                 openHomeScreen();
             }
         });
@@ -579,8 +566,7 @@ public class MainActivity extends Activity implements PHSDKListener{
                 fragmentTransaction.replace(R.id.container, new PushButtonFragment());
                 fragmentTransaction.addToBackStack("authenticationRequired");
                 fragmentTransaction.commit();
-                dialog.setCancelable(true);
-                dialog.cancel();
+                DialogCreator.cancelShowingDialog(MainActivity.this);
             }
         });
         hueBridgeSdk.startPushlinkAuthentication(accessPoint);
@@ -657,14 +643,7 @@ public class MainActivity extends Activity implements PHSDKListener{
                 if (code == PHHueError.BRIDGE_NOT_RESPONDING) {
                     //seems to only happen when connecting to bridge that's there but won't respond
                     if(!connecting) {
-                        dialog.setCancelable(true);
-                        dialog.setCanceledOnTouchOutside(true);
-                        dialog.setContentView(R.layout.dialog_warning);
-                        TextView dialogTitle = (TextView) (dialog.findViewById(R.id.dialogTitle));
-                        dialogTitle.setText(getText(R.string.could_not_connect));
-                        TextView dialogText = (TextView) (dialog.findViewById(R.id.textExplanation));
-                        dialogText.setText(getText(R.string.could_not_connect_explanation));
-                        dialog.show();
+                        DialogCreator.showWarningDialog(getText(R.string.could_not_connect).toString(), getText(R.string.could_not_connect_explanation).toString(), MainActivity.this);
                     } else {
                         connecting = false;
                         searchForBridge();
@@ -672,9 +651,7 @@ public class MainActivity extends Activity implements PHSDKListener{
                     return;
                 }
                 if (message.equals("No bridge found")) {
-                    dialog.setCancelable(true);
-                    dialog.setCanceledOnTouchOutside(true);
-                    dialog.setContentView(R.layout.dialog_warning);
+                    DialogCreator.showWarningDialog(getText(R.string.no_bridge_found).toString(), getText(R.string.no_bridge_message).toString(), MainActivity.this);
                     return;
                 }
                 if (code == PHHueError.NO_CONNECTION) {
@@ -689,40 +666,27 @@ public class MainActivity extends Activity implements PHSDKListener{
 
     @Override
     public void onConnectionResumed(PHBridge bridge) {
-        if(connectionLostCount > 0) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (dialog.isShowing()) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(connectionLostCount >= MIN_CONNECTION_LOST_COUNT) {
+                    connectionLostCount = 0;
+                    if (dialog != null && dialog.isShowing()) {
                         dialog.cancel();
                     } else {
-                        dialog.setCancelable(true);
-                        dialog.setCanceledOnTouchOutside(true);
-                        dialog.setContentView(R.layout.dialog_warning);
-                        TextView dialogTitle = (TextView) (dialog.findViewById(R.id.dialogTitle));
-                        dialogTitle.setText(getText(R.string.connection_found));
-                        TextView dialogText = (TextView) (dialog.findViewById(R.id.textExplanation));
-                        dialogText.setText(getText(R.string.connection_found_message));
-                        dialog.show();
+                        DialogCreator.showWarningDialog(getText(R.string.connection_found).toString(), getText(R.string.connection_found_message).toString(), MainActivity.this);
                     }
                 }
-            });
-        }
-        connectionLostCount = 0;
+            }
+        });
     }
 
     public void showAuthenticationFailedDialog() {
-        if (dialog.isShowing()) {
+        if (dialog != null && dialog.isShowing()) {
             dialog.cancel();
         } else {
-            dialog.setCancelable(true);
-            dialog.setCanceledOnTouchOutside(true);
-            dialog.setContentView(R.layout.dialog_warning);
-            TextView dialogTitle = (TextView) (dialog.findViewById(R.id.dialogTitle));
-            dialogTitle.setText(getText(R.string.authenticationFailed));
-            TextView dialogText = (TextView) (dialog.findViewById(R.id.textExplanation));
-            dialogText.setText(getText(R.string.authenticationFailedExplanation));
-            dialog.show();
+            DialogCreator.showWarningDialog(getText(R.string.authenticationFailed).toString(), getText(R.string.authenticationFailedExplanation).toString(), this);
         }
     }
 
@@ -732,23 +696,15 @@ public class MainActivity extends Activity implements PHSDKListener{
      * Here you would handle the loss of connection to your bridge.
      */
     public void onConnectionLost(PHAccessPoint phAccessPoint) {
-        connectionLostCount++;
-        if(connectionLostCount == MIN_CONNECTION_LOST_COUNT) {
-            //TODO make it stop searching for the bridge
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    dialog.setCancelable(true);
-                    dialog.setCanceledOnTouchOutside(true);
-                    dialog.setContentView(R.layout.dialog_warning);
-                    TextView dialogTitle = (TextView) (dialog.findViewById(R.id.dialogTitle));
-                    dialogTitle.setText(getText(R.string.connection_lost));
-                    TextView dialogText = (TextView) (dialog.findViewById(R.id.textExplanation));
-                    dialogText.setText(getText(R.string.connection_lost_message));
-                    dialog.show();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                connectionLostCount++;
+                if(connectionLostCount == MIN_CONNECTION_LOST_COUNT) {
+                    DialogCreator.showWarningDialog(getText(R.string.connection_lost).toString(), getText(R.string.connection_lost_message).toString(), MainActivity.this);
                 }
-            });
-        }
+            }
+        });
     }
 
     public Dialog getDialog() {
@@ -883,6 +839,10 @@ public class MainActivity extends Activity implements PHSDKListener{
 
     public void setBeaconAssociationListener(BeaconAssociationListener beaconAssociationListener) {
         this.beaconAssociationListener = beaconAssociationListener;
+    }
+
+    public void setDialog(Dialog dialog) {
+        this.dialog = dialog;
     }
 
     private class DownloaderTask extends AsyncTask<URL, Void, Boolean> {

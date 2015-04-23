@@ -1,6 +1,7 @@
 package app.lights.prism.com.prismlights;
 
 import android.app.ActivityManager;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -66,6 +67,29 @@ public class ScheduleConfigFragment extends Fragment {
 
 
     //TODO: validate name length, show error message when update or create schedule fails.
+
+    private Dialog progressDialog;
+
+
+//    private OnFragmentInteractionListener mListener;
+
+//    /**
+//     * Use this factory method to create a new instance of
+//     * this fragment using the provided parameters.
+//     *
+//     * @param param1 Parameter 1.
+//     * @param param2 Parameter 2.
+//     * @return A new instance of fragment ScheduleConfigFragment.
+//     */
+//    // TODO: Rename and change types and number of parameters
+//    public static ScheduleConfigFragment newInstance(String param1, String param2) {
+//        ScheduleConfigFragment fragment = new ScheduleConfigFragment();
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
     public ScheduleConfigFragment() {
         // Required empty public constructor
@@ -288,9 +312,8 @@ public class ScheduleConfigFragment extends Fragment {
             currentSchedule.setLightIdentifier(identifier);
         currentSchedule.setAutoDelete(true);
 
-        final PHWizardAlertDialog dialogManager = PHWizardAlertDialog
-                .getInstance();
-        dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
+        progressDialog = DialogCreator.showLoadingDialog(getText(R.string.sending_progress).toString(), (MainActivity)getActivity());
+
 
         bridge.updateSchedule(currentSchedule, new PHScheduleListener() {
             @Override
@@ -300,12 +323,9 @@ public class ScheduleConfigFragment extends Fragment {
 
             @Override
             public void onSuccess() {
-                dialogManager.closeProgressDialog();
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_schedule_updated), R.string.btn_ok, R.string.txt_result);
-                        }
+                        closeProgressDialog();
                     }
                 });
                 goToScheduleFragment();
@@ -313,12 +333,10 @@ public class ScheduleConfigFragment extends Fragment {
 
             @Override
             public void onError(int i, final String s) {
-                dialogManager.closeProgressDialog();
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showErrorDialog(getActivity(), s, R.string.btn_ok);
-                        }
+                        closeProgressDialog();
+                        DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
                     }
                 });
             }
@@ -344,19 +362,16 @@ public class ScheduleConfigFragment extends Fragment {
             currentSchedule.setLightIdentifier(identifier);
         currentSchedule.setAutoDelete(true);
 
-        final PHWizardAlertDialog dialogManager = PHWizardAlertDialog.getInstance();
-        dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
+        progressDialog = DialogCreator.showLoadingDialog(getText(R.string.sending_progress).toString(), (MainActivity)getActivity());
 
         bridge.createSchedule(currentSchedule, new PHScheduleListener() {
             @Override
             public void onCreated(PHSchedule phSchedule) {
-                dialogManager.closeProgressDialog();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_schedule_created), R.string.btn_ok, R.string.txt_result);
-                        }
+                        closeProgressDialog();
+                        //TODO add result dialog?
                     }
                 });
                 goToScheduleFragment();
@@ -368,13 +383,10 @@ public class ScheduleConfigFragment extends Fragment {
 
             @Override
             public void onError(int i, final String s) {
-                dialogManager.closeProgressDialog();
-
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showErrorDialog(getActivity(), s, R.string.btn_ok);
-                        }
+                        closeProgressDialog();
+                        DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
                     }
                 });
             }
@@ -529,44 +541,17 @@ public class ScheduleConfigFragment extends Fragment {
         btnScheduleTime.setText(new StringBuilder().append(PHHelper.pad(mHour))
                 .append(":").append(PHHelper.pad(mMinute)));
     }
-//
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
-//
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-//
-//    /**
-//     * This interface must be implemented by activities that contain this
-//     * fragment to allow an interaction in this fragment to be communicated
-//     * to the activity and potentially other fragments contained in that
-//     * activity.
-//     * <p/>
-//     * See the Android Training lesson <a href=
-//     * "http://developer.android.com/training/basics/fragments/communicating.html"
-//     * >Communicating with Other Fragments</a> for more information.
-//     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        public void onFragmentInteraction(Uri uri);
-//    }
+
+    private void closeProgressDialog() {
+        if(progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.hide();
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        closeProgressDialog();
+        super.onDetach();
+    }
 
 }

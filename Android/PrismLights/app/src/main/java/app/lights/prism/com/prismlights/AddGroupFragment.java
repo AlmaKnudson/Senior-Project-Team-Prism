@@ -60,17 +60,7 @@ public class AddGroupFragment extends Fragment implements CacheUpdateListener {
             public void onClick(View v) {
                 if (!done) {
                     done = true;
-                    if (progressDialog == null) {
-                        progressDialog = new ProgressDialog(getActivity());
-                        progressDialog.show();
-                        progressDialog.setContentView(R.layout.progress);
-                        TextView progressText = (TextView) progressDialog.findViewById(R.id.progressText);
-                        progressText.setText(getText(R.string.adding_group));
-                    } else {
-                        progressDialog.show();
-                    }
-                    progressDialog.setCanceledOnTouchOutside(false);
-                    progressDialog.setCancelable(false);
+                    progressDialog = DialogCreator.showLoadingDialog(getText(R.string.adding_group).toString(), (MainActivity) getActivity());
                     HueBulbChangeUtility.createGroup(nameEditor.getText().toString(), bulbSelectionView.getSelectedLightIds(), new OnCompletedListener() {
                         @Override
                         public void onCompleted() {
@@ -99,7 +89,7 @@ public class AddGroupFragment extends Fragment implements CacheUpdateListener {
     @Override
     public void onDetach() {
         super.onDetach();
-        if(progressDialog != null) {
+        if(progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
     }

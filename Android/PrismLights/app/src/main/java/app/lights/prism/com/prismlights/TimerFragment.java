@@ -63,7 +63,7 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
     int alarmMode;
     AlertDialog modeDialog;
     TimePickerFragment timePickerDialog;
-    private Dialog dialog;
+    private Dialog progressDialog;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -315,15 +315,7 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        dialog = ((MainActivity)getActivity()).getDialog();
-                        dialog.setCancelable(true);
-                        dialog.setCanceledOnTouchOutside(true);
-                        dialog.setContentView(R.layout.dialog_warning);
-                        TextView dialogTitle = (TextView) (dialog.findViewById(R.id.dialogTitle));
-                        dialogTitle.setText(getText(R.string.time_sync_error));
-                        TextView dialogText = (TextView) (dialog.findViewById(R.id.textExplanation));
-                        dialogText.setText(getText(R.string.time_sync_error_message));
-                        dialog.show();
+                        DialogCreator.showWarningDialog(getText(R.string.time_sync_error).toString(), getText(R.string.time_sync_error_message).toString(), (MainActivity)getActivity());
                     }
                 });
             }
@@ -479,55 +471,6 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
         timePickerDialog.show(getFragmentManager(), "timePicker");
     }
 
-//    private void updateTimer(int timerPosition, int time) {
-//
-//        PHSchedule schedule = currentTimers.get(timerPosition);
-//        schedule.setTimer(time);
-//        schedule.setLightState(getLightState());
-//
-//        final PHWizardAlertDialog dialogManager = PHWizardAlertDialog
-//                .getInstance();
-//        dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
-//
-//        bridge.updateSchedule(schedule, new PHScheduleListener() {
-//            @Override
-//            public void onCreated(PHSchedule phSchedule) {
-//
-//            }
-//
-//            @Override
-//            public void onSuccess() {
-//                dialogManager.closeProgressDialog();
-//                getActivity().runOnUiThread(new Runnable() {
-//                    public void run() {
-//                        if (isCurrentActivity()) {
-//                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_timer_updated), R.string.btn_ok, R.string.txt_result);
-//                        }
-//                        getCurrentTimers();
-//                        clearCountDown();
-//                        adapter.notifyDataSetChanged();
-//                    }
-//                });
-//            }
-//
-//            @Override
-//            public void onError(int i, final String s) {
-//                dialogManager.closeProgressDialog();
-//                getActivity().runOnUiThread(new Runnable() {
-//                    public void run() {
-//                        if (isCurrentActivity()) {
-//                            PHWizardAlertDialog.showErrorDialog(getActivity(), s,R.string.btn_ok);
-//                        }
-//                    }
-//                });
-//            }
-//
-//            @Override
-//            public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
-//
-//            }
-//        });
-//    }
 
     private void addNewTimer(int time) {
         String scheduleName = ""+ time;
@@ -545,19 +488,15 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
 //        schedule.setCreated(startTime);
 //        Log.d("StartTime", ""+startTime);
 
-        final PHWizardAlertDialog dialogManager = PHWizardAlertDialog.getInstance();
-        dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
+        progressDialog = DialogCreator.showLoadingDialog(getText(R.string.sending_progress).toString(), (MainActivity)getActivity());
 
         bridge.createSchedule(schedule, new PHScheduleListener() {
             @Override
             public void onCreated(PHSchedule phSchedule) {
-                dialogManager.closeProgressDialog();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_timer_created), R.string.btn_ok, R.string.txt_result);
-                        }
+                        closeProgressDialog();
                         getCurrentTimers();
                         clearCountDown();
                         adapter.notifyDataSetChanged();
@@ -573,13 +512,10 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
 
             @Override
             public void onError(int i, final String s) {
-                dialogManager.closeProgressDialog();
-
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showErrorDialog(getActivity(), s, R.string.btn_ok);
-                        }
+                        closeProgressDialog();
+                        DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
                     }
                 });
             }
@@ -593,8 +529,7 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
     private void deleteTimer(int position) {
         String scheduleID = currentTimers.get(position).getIdentifier();
 
-        final PHWizardAlertDialog dialogManager = PHWizardAlertDialog.getInstance();
-        dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
+        progressDialog = DialogCreator.showLoadingDialog(getText(R.string.sending_progress).toString(), (MainActivity)getActivity());
 
         bridge.removeSchedule(scheduleID, new PHScheduleListener() {
             @Override
@@ -604,13 +539,10 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
 
             @Override
             public void onSuccess() {
-                dialogManager.closeProgressDialog();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_timer_deleted), R.string.btn_ok, R.string.txt_result);
-                        }
+                        closeProgressDialog();
                         getCurrentTimers();
                         clearCountDown();
                         adapter.notifyDataSetChanged();
@@ -622,11 +554,11 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
 
             @Override
             public void onError(int i, final String s) {
-                dialogManager.closeProgressDialog();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (isCurrentActivity()) { PHWizardAlertDialog.showErrorDialog(getActivity(), s, R.string.btn_ok); }
+                        closeProgressDialog();
+                        DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
                     }
                 });
             }
@@ -636,15 +568,6 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
 
             }
         });
-    }
-
-    private boolean isCurrentActivity() {
-        ActivityManager mActivityManager = (ActivityManager)getActivity().getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> RunningTask = mActivityManager.getRunningTasks(1);
-        ActivityManager.RunningTaskInfo ar = RunningTask.get(0);
-        String currentClass = "." + this.getClass().getSimpleName();
-        String topActivity =  ar.topActivity.getShortClassName().toString();
-        return topActivity.contains(currentClass);
     }
 
     private PHLightState getLightState() {
@@ -677,38 +600,15 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
         return state;
     }
 
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-//
-//
-//
-//    /**
-//     * This interface must be implemented by activities that contain this
-//     * fragment to allow an interaction in this fragment to be communicated
-//     * to the activity and potentially other fragments contained in that
-//     * activity.
-//     * <p/>
-//     * See the Android Training lesson <a href=
-//     * "http://developer.android.com/training/basics/fragments/communicating.html"
-//     * >Communicating with Other Fragments</a> for more information.
-//     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        public void onFragmentInteraction(String id);
-//    }
+    private void closeProgressDialog() {
+        if(progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.hide();
+        }
+    }
 
+    @Override
+    public void onDetach() {
+        closeProgressDialog();
+        super.onDetach();
+    }
 }

@@ -49,6 +49,7 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
     String delegate;
     List<PHSchedule> phSchedules; // this List of schedules in bridge whose description is Schedule.
     ToggleButton currentSwitch;
+    private Dialog progressDialog;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -333,8 +334,8 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
 
     private void updateSchedule(final PHSchedule phSchedule) {
         phSchedule.setAutoDelete(true);
-        final PHWizardAlertDialog dialogManager = PHWizardAlertDialog.getInstance();
-        dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
+        progressDialog = DialogCreator.showLoadingDialog(getText(R.string.sending_progress).toString(), (MainActivity)getActivity());
+
 
         bridge.updateSchedule(phSchedule, new PHScheduleListener() {
             @Override
@@ -345,12 +346,9 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
             @Override
             public void onSuccess() {
                 currentSwitch = null;
-                dialogManager.closeProgressDialog();
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_schedule_updated), R.string.btn_ok, R.string.txt_result);
-                        }
+                        closeProgressDialog();
                     }
                 });
 
@@ -366,12 +364,10 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
 
                 currentSwitch = null;
 
-                dialogManager.closeProgressDialog();
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showErrorDialog(getActivity(), s, R.string.btn_ok);
-                        }
+                        closeProgressDialog();
+                        DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
                     }
                 });
             }
@@ -386,8 +382,7 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
     private void deleteSchedule(int position) {
         String scheduleID = phSchedules.get(position).getIdentifier();
 
-        final PHWizardAlertDialog dialogManager = PHWizardAlertDialog.getInstance();
-        dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
+        progressDialog = DialogCreator.showLoadingDialog(getText(R.string.sending_progress).toString(), (MainActivity)getActivity());
 
         bridge.removeSchedule(scheduleID, new PHScheduleListener() {
             @Override
@@ -397,28 +392,23 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
 
             @Override
             public void onSuccess() {
-                dialogManager.closeProgressDialog();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_schedule_deleted), R.string.btn_ok, R.string.txt_result);
-                        }
+                        closeProgressDialog();
                         getPhSchedules();
                         adapter.notifyDataSetChanged();
                     }
                 });
-
-                return;
             }
 
             @Override
             public void onError(int i, final String s) {
-                dialogManager.closeProgressDialog();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (isCurrentActivity()) { PHWizardAlertDialog.showErrorDialog(getActivity(), s, R.string.btn_ok); }
+                        closeProgressDialog();
+                        DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
                     }
                 });
             }
@@ -444,5 +434,17 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
         super.onResume();
         getPhSchedules();
         adapter.notifyDataSetChanged();
+    }
+
+    private void closeProgressDialog() {
+        if(progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.hide();
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        closeProgressDialog();
+        super.onDetach();
     }
 }

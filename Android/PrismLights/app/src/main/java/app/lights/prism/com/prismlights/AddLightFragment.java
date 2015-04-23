@@ -34,7 +34,7 @@ public class AddLightFragment extends Fragment {
     private EditText serialCode;
     private boolean searchCompleted;
     private boolean searching;
-    private ProgressDialog progressDialog;
+    private Dialog progressDialog;
 
     public AddLightFragment() {
         serialCodes = new ArrayList<String>();
@@ -54,17 +54,7 @@ public class AddLightFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(!searching) {
-                    if (progressDialog == null) {
-                        progressDialog = new ProgressDialog(getActivity());
-                        progressDialog.show();
-                        progressDialog.setContentView(R.layout.progress);
-                        TextView progressText = (TextView) progressDialog.findViewById(R.id.progressText);
-                        progressText.setText(getText(R.string.searching_for_new_lights));
-                    } else {
-                        progressDialog.show();
-                    }
-                    progressDialog.setCanceledOnTouchOutside(false);
-                    progressDialog.setCancelable(false);
+                    progressDialog = DialogCreator.showLoadingDialog(getText(R.string.searching_for_new_lights).toString(), (MainActivity)getActivity());
                     OnCompletedListener onCompletedListener = new OnCompletedListener() {
                         @Override
                         public void onCompleted() {
@@ -187,7 +177,7 @@ public class AddLightFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        if(progressDialog != null) {
+        if(progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
     }

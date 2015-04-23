@@ -1,5 +1,6 @@
 package app.lights.prism.com.prismlights;
 
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -20,7 +21,7 @@ public class EditGroupFragment extends Fragment implements CacheUpdateListener {
     private String groupId;
     private PHHueSDK hueSDK;
     private PHGroup group;
-    private ProgressDialog progressDialog;
+    private Dialog progressDialog;
     private boolean groupEdited;
 
     public EditGroupFragment() {
@@ -67,17 +68,7 @@ public class EditGroupFragment extends Fragment implements CacheUpdateListener {
             public void onClick(View v) {
                 if(!done) {
                     done = true;
-                    if (progressDialog == null) {
-                        progressDialog = new ProgressDialog(getActivity());
-                        progressDialog.show();
-                        progressDialog.setContentView(R.layout.progress);
-                        TextView progressText = (TextView) progressDialog.findViewById(R.id.progressText);
-                        progressText.setText(getText(R.string.delete_group));
-                    } else {
-                        progressDialog.show();
-                    }
-                    progressDialog.setCanceledOnTouchOutside(false);
-                    progressDialog.setCancelable(false);
+                    progressDialog = DialogCreator.showLoadingDialog(getText(R.string.edit_group).toString(), (MainActivity)getActivity());
                     HueBulbChangeUtility.editGroup(groupId, bulbSelectionView.getSelectedLightIds(), new OnCompletedListener() {
                         @Override
                         public void onCompleted() {
@@ -109,7 +100,7 @@ public class EditGroupFragment extends Fragment implements CacheUpdateListener {
     @Override
     public void onDetach() {
         super.onDetach();
-        if(progressDialog != null) {
+        if(progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
     }

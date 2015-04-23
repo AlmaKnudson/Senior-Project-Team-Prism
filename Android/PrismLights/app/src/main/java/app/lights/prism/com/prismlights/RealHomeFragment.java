@@ -114,13 +114,7 @@ public class RealHomeFragment extends Fragment implements ViewPager.OnPageChange
                             fragmentTransaction.addToBackStack("addGroupFragment");
                             fragmentTransaction.commit();
                         } else {
-                            ProgressDialog dialog = new ProgressDialog(getActivity());
-                            dialog.show();
-                            dialog.setContentView(R.layout.dialog_warning);
-                            TextView titleView = (TextView) dialog.findViewById(R.id.dialogTitle);
-                            titleView.setText(getText(R.string.no_add_group));
-                            TextView explanationView = (TextView) dialog.findViewById(R.id.textExplanation);
-                            explanationView.setText(getText(R.string.no_add_group_explanation));
+                            DialogCreator.showWarningDialog(getText(R.string.no_add_group).toString(), getText(R.string.no_add_group_explanation).toString(), (MainActivity)getActivity());
                         }
                     }
                 });

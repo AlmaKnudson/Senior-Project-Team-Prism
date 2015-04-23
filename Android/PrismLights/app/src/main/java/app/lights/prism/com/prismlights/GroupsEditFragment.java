@@ -64,24 +64,14 @@ public class GroupsEditFragment extends Fragment implements OnItemShiftedListene
         layout.findViewById(R.id.trashButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (progressDialog == null) {
-                    progressDialog = new ProgressDialog(getActivity());
-                    progressDialog.show();
-                    progressDialog.setContentView(R.layout.progress);
-                    TextView progressText = (TextView) progressDialog.findViewById(R.id.progressText);
-                    progressText.setText(getText(R.string.adding_group));
-                } else {
-                    progressDialog.show();
-                }
-                progressDialog.setCanceledOnTouchOutside(false);
-                progressDialog.setCancelable(false);
+                    progressDialog = DialogCreator.showLoadingDialog(getText(R.string.delete_group).toString(), (MainActivity)getActivity());
                 HueBulbChangeUtility.deleteGroups(checked, new OnCompletedListener() {
                     @Override
                     public void onCompleted() {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (progressDialog.isShowing()) {
+                                if (progressDialog != null && progressDialog.isShowing()) {
                                     progressDialog.hide();
                                     updateFromCache();
                                     ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
@@ -110,6 +100,9 @@ public class GroupsEditFragment extends Fragment implements OnItemShiftedListene
     public void onDetach() {
         super.onDetach();
         layoutIdOrder.saveToFile();
+        if(progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 
     private void updateChecked(CheckBox checkBox, String id) {

@@ -60,6 +60,8 @@ public class AlarmFragment extends Fragment implements CacheUpdateListener{
     List<PHSchedule> alarmSchedules; // this List of schedules in bridge whose description is prism.
     boolean isGroup;
 
+    private Dialog progressDialog;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -322,9 +324,7 @@ public class AlarmFragment extends Fragment implements CacheUpdateListener{
        schedule.setDate(alarmTime);
        schedule.setLightState(getLightState());
 
-        final PHWizardAlertDialog dialogManager = PHWizardAlertDialog
-                .getInstance();
-        dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
+        progressDialog = DialogCreator.showLoadingDialog(getText(R.string.sending_progress).toString(), (MainActivity)getActivity());
 
         bridge.updateSchedule(schedule, new PHScheduleListener() {
             @Override
@@ -334,12 +334,9 @@ public class AlarmFragment extends Fragment implements CacheUpdateListener{
 
             @Override
             public void onSuccess() {
-                dialogManager.closeProgressDialog();
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_alarm_updated), R.string.btn_ok, R.string.txt_result);
-                        }
+                        closeProgressDialog();
                         getAlarmSchedules();
                         adapter.notifyDataSetChanged();
                     }
@@ -349,12 +346,10 @@ public class AlarmFragment extends Fragment implements CacheUpdateListener{
 
             @Override
             public void onError(int i, final String s) {
-                dialogManager.closeProgressDialog();
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showErrorDialog(getActivity(), s,R.string.btn_ok);
-                        }
+                        closeProgressDialog();
+                        DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
                     }
                 });
             }
@@ -378,19 +373,15 @@ public class AlarmFragment extends Fragment implements CacheUpdateListener{
         schedule.setLightState(getLightState());
         schedule.setDescription("prism");
 
-        final PHWizardAlertDialog dialogManager = PHWizardAlertDialog.getInstance();
-        dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
+        progressDialog = DialogCreator.showLoadingDialog(getText(R.string.sending_progress).toString(), (MainActivity)getActivity());
 
         bridge.createSchedule(schedule, new PHScheduleListener() {
             @Override
             public void onCreated(PHSchedule phSchedule) {
-                dialogManager.closeProgressDialog();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_alarm_created), R.string.btn_ok, R.string.txt_result);
-                        }
+                        closeProgressDialog();
                         getAlarmSchedules();
                         adapter.notifyDataSetChanged();
                     }
@@ -405,13 +396,10 @@ public class AlarmFragment extends Fragment implements CacheUpdateListener{
 
             @Override
             public void onError(int i, final String s) {
-                dialogManager.closeProgressDialog();
-
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showErrorDialog(getActivity(), s, R.string.btn_ok);
-                        }
+                        closeProgressDialog();
+                        DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
                     }
                 });
             }
@@ -425,8 +413,7 @@ public class AlarmFragment extends Fragment implements CacheUpdateListener{
     private void deleteAlarm(int position) {
         String scheduleID = alarmSchedules.get(position).getIdentifier();
 
-        final PHWizardAlertDialog dialogManager = PHWizardAlertDialog.getInstance();
-        dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
+        progressDialog = DialogCreator.showLoadingDialog(getText(R.string.sending_progress).toString(), (MainActivity)getActivity());
 
         bridge.removeSchedule(scheduleID, new PHScheduleListener() {
             @Override
@@ -436,13 +423,10 @@ public class AlarmFragment extends Fragment implements CacheUpdateListener{
 
             @Override
             public void onSuccess() {
-                dialogManager.closeProgressDialog();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_alarm_deleted), R.string.btn_ok, R.string.txt_result);
-                        }
+                        closeProgressDialog();
                         getAlarmSchedules();
                         adapter.notifyDataSetChanged();
                     }
@@ -453,11 +437,11 @@ public class AlarmFragment extends Fragment implements CacheUpdateListener{
 
             @Override
             public void onError(int i, final String s) {
-                dialogManager.closeProgressDialog();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (isCurrentActivity()) { PHWizardAlertDialog.showErrorDialog(getActivity(), s, R.string.btn_ok); }
+                        closeProgressDialog();
+                        DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
                     }
                 });
             }
@@ -467,15 +451,6 @@ public class AlarmFragment extends Fragment implements CacheUpdateListener{
 
             }
         });
-    }
-
-    private boolean isCurrentActivity() {
-        ActivityManager mActivityManager = (ActivityManager)getActivity().getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> RunningTask = mActivityManager.getRunningTasks(1);
-        ActivityManager.RunningTaskInfo ar = RunningTask.get(0);
-        String currentClass = "." + this.getClass().getSimpleName();
-        String topActivity =  ar.topActivity.getShortClassName().toString();
-        return topActivity.contains(currentClass);
     }
 
     private PHLightState getLightState() {
@@ -508,59 +483,15 @@ public class AlarmFragment extends Fragment implements CacheUpdateListener{
         return state;
     }
 
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-//
-//
-//    @Override
-//    public void onItemClick(AdapterView<?> parent, View view, int identifier, long id) {
-//        if (null != mListener) {
-//            // Notify the active callbacks interface (the activity, if the
-//            // fragment is attached to one) that an item has been selected.
-//            mListener.onFragmentInteraction(AlarmList.currentBulbAlarms.get(identifier).name);
-//        }
-//    }
-//
-//    /**
-//     * The default content for this Fragment has a TextView that is shown when
-//     * the list is empty. If you would like to change the text, call this method
-//     * to supply the text it should use.
-//     */
-//    public void setEmptyText(CharSequence emptyText) {
-//        View emptyView = alarmListView.getEmptyView();
-//
-//        if (emptyView instanceof TextView) {
-//            ((TextView) emptyView).setText(emptyText);
-//        }
-//    }
-//
-//    /**
-//     * This interface must be implemented by activities that contain this
-//     * fragment to allow an interaction in this fragment to be communicated
-//     * to the activity and potentially other fragments contained in that
-//     * activity.
-//     * <p/>
-//     * See the Android Training lesson <a href=
-//     * "http://developer.android.com/training/basics/fragments/communicating.html"
-//     * >Communicating with Other Fragments</a> for more information.
-//     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        public void onFragmentInteraction(String id);
-//    }
+    private void closeProgressDialog() {
+        if(progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.hide();
+        }
+    }
 
+    @Override
+    public void onDetach() {
+        closeProgressDialog();
+        super.onDetach();
+    }
 }

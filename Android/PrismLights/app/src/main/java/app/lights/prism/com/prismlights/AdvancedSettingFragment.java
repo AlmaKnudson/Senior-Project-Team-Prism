@@ -1,6 +1,7 @@
 package app.lights.prism.com.prismlights;
 
 import android.app.ActivityManager;
+import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
@@ -45,7 +46,7 @@ public class AdvancedSettingFragment extends Fragment implements CacheUpdateList
     ArrayList<PHSchedule> sunsetSchedules;
     ArrayList<PHSchedule> sunriseSchedules;
     private String name; //TODO: Show this name
-
+    private Dialog progressDialog;
 
     public AdvancedSettingFragment() {
         // Required empty public constructor
@@ -265,56 +266,47 @@ public class AdvancedSettingFragment extends Fragment implements CacheUpdateList
                 phSchedule.setDate(getSunsetTime());
         }
 
-        final PHWizardAlertDialog dialogManager = PHWizardAlertDialog.getInstance();
-        dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
+        progressDialog = DialogCreator.showLoadingDialog(getText(R.string.sending_progress).toString(), (MainActivity)getActivity());
 
         bridge.updateSchedule(phSchedule, new PHScheduleListener() {
             @Override
             public void onCreated(PHSchedule phSchedule) {
-                ;
             }
 
             @Override
             public void onSuccess() {
-                dialogManager.closeProgressDialog();
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_schedule_updated), R.string.btn_ok, R.string.txt_result);
-                        }
+                        closeProgressDialog();
                     }
                 });
             }
 
             @Override
             public void onError(int i, final String s) {
-                if (phSchedule.getDescription().equals("prism,sunrise")) {
-                    if (phSchedule.getStatus().equals(PHSchedule.PHScheduleStatus.ENABLED))
-                        sunriseSwitch.setChecked(false);
-                    else
-                        sunriseSwitch.setChecked(true);
-
-                } else {
-                    if (phSchedule.getStatus().equals(PHSchedule.PHScheduleStatus.ENABLED))
-                        sunsetSwitch.setChecked(false);
-                    else
-                        sunsetSwitch.setChecked(true);
-                }
-
-                dialogManager.closeProgressDialog();
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showErrorDialog(getActivity(), s, R.string.btn_ok);
+                        if (phSchedule.getDescription().equals("sunrise")) {
+                            if (phSchedule.getStatus().equals(PHSchedule.PHScheduleStatus.ENABLED))
+                                sunriseSwitch.setChecked(false);
+                            else
+                                sunriseSwitch.setChecked(true);
+
+                        } else {
+                            if (phSchedule.getStatus().equals(PHSchedule.PHScheduleStatus.ENABLED))
+                                sunsetSwitch.setChecked(false);
+                            else
+                                sunsetSwitch.setChecked(true);
                         }
+                        closeProgressDialog();
+                        DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
                     }
                 });
-
             }
 
             @Override
             public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
-                ;
+
             }
         });
     }
@@ -340,19 +332,15 @@ public class AdvancedSettingFragment extends Fragment implements CacheUpdateList
 
         currentSchedule.setAutoDelete(true);
 
-        final PHWizardAlertDialog dialogManager = PHWizardAlertDialog.getInstance();
-        dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
+        progressDialog = DialogCreator.showLoadingDialog(getText(R.string.sending_progress).toString(), (MainActivity)getActivity());
 
         bridge.createSchedule(currentSchedule, new PHScheduleListener() {
             @Override
             public void onCreated(PHSchedule phSchedule) {
-                dialogManager.closeProgressDialog();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_schedule_created), R.string.btn_ok, R.string.txt_result);
-                        }
+                        closeProgressDialog();
                     }
                 });
             }
@@ -363,13 +351,11 @@ public class AdvancedSettingFragment extends Fragment implements CacheUpdateList
 
             @Override
             public void onError(int i, final String s) {
-                dialogManager.closeProgressDialog();
 
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showErrorDialog(getActivity(), s, R.string.btn_ok);
-                        }
+                        closeProgressDialog();
+                        DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
                     }
                 });
             }
@@ -387,13 +373,16 @@ public class AdvancedSettingFragment extends Fragment implements CacheUpdateList
         return ((MainActivity)getActivity()).getSunset();
     }
 
-    private boolean isCurrentActivity() {
-        ActivityManager mActivityManager = (ActivityManager)getActivity().getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> RunningTask = mActivityManager.getRunningTasks(1);
-        ActivityManager.RunningTaskInfo ar = RunningTask.get(0);
-        String currentClass = "." + this.getClass().getSimpleName();
-        String topActivity =  ar.topActivity.getShortClassName().toString();
-        return topActivity.contains(currentClass);
+    private void closeProgressDialog() {
+        if(progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.hide();
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        closeProgressDialog();
+        super.onDetach();
     }
 
     @Override
@@ -408,44 +397,4 @@ public class AdvancedSettingFragment extends Fragment implements CacheUpdateList
         getSunSchedules();
         updateSunScheduleToggles();
     }
-//
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
-//
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-//
-//    /**
-//     * This interface must be implemented by activities that contain this
-//     * fragment to allow an interaction in this fragment to be communicated
-//     * to the activity and potentially other fragments contained in that
-//     * activity.
-//     * <p/>
-//     * See the Android Training lesson <a href=
-//     * "http://developer.android.com/training/basics/fragments/communicating.html"
-//     * >Communicating with Other Fragments</a> for more information.
-//     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        public void onFragmentInteraction(Uri uri);
-//    }
-//
 }
