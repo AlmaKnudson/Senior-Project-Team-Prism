@@ -362,4 +362,18 @@ public class MusicFragment extends Fragment implements OnsetHandler {
             HueBulbChangeUtility.musicChangeBulbsColor(lightsToChange, xY, 20, 0);
         }
     }
+
+    @Override
+    public void onDestroyView() {
+
+        if(dispatcher!= null)
+            dispatcher.stop();
+        if(p!=null)
+            dispatcher.removeAudioProcessor(p);
+        if(cOP!=null) {
+            dispatcher.removeAudioProcessor(cOP);
+            cOP.setHandler(null);
+        }
+        super.onDestroyView();
+    }
 }
