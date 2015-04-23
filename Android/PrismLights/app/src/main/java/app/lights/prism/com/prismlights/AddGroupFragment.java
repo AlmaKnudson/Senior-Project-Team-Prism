@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 public class AddGroupFragment extends Fragment implements CacheUpdateListener {
 
-    private BulbSelectionFragment bulbSelectionFragment;
+    private BulbSelectionView bulbSelectionView;
     private EditText nameEditor;
     private Button doneButton;
     private Dialog progressDialog;
@@ -34,16 +34,16 @@ public class AddGroupFragment extends Fragment implements CacheUpdateListener {
         View layout = inflater.inflate(R.layout.fragment_add_multi, container, false);
         TextView title = (TextView) layout.findViewById(R.id.title);
         title.setText(R.string.add_group);
-        bulbSelectionFragment = (BulbSelectionFragment) getFragmentManager().findFragmentById(R.id.selectBulbFragment);
-        if(bulbSelectionFragment == null) {
-            bulbSelectionFragment = (BulbSelectionFragment) getChildFragmentManager().findFragmentById(R.id.selectBulbFragment);
+        bulbSelectionView = (BulbSelectionView) layout.findViewById(R.id.selectBulbView);
+        if(bulbSelectionView == null) {
+            bulbSelectionView = (BulbSelectionView) layout.findViewById(R.id.selectBulbView);
         }
-        bulbSelectionFragment.allowLongClick(false);
+        bulbSelectionView.allowLongClick(false, null);
         doneButton = (Button) layout.findViewById(R.id.doneButton);
-        bulbSelectionFragment.setOnCheckedNumberChanged(new CheckedNumberChangedListener() {
+        bulbSelectionView.setOnCheckedNumberChanged(new CheckedNumberChangedListener() {
             @Override
             public void onCheckedNumberChanged(int checkedNumber) {
-                if(checkedNumber > 1) {
+                if (checkedNumber > 1) {
                     doneButton.setEnabled(true);
                 } else {
                     doneButton.setEnabled(false);
@@ -71,7 +71,7 @@ public class AddGroupFragment extends Fragment implements CacheUpdateListener {
                     }
                     progressDialog.setCanceledOnTouchOutside(false);
                     progressDialog.setCancelable(false);
-                    HueBulbChangeUtility.createGroup(nameEditor.getText().toString(), bulbSelectionFragment.getSelectedLightIds(), new OnCompletedListener() {
+                    HueBulbChangeUtility.createGroup(nameEditor.getText().toString(), bulbSelectionView.getSelectedLightIds(), new OnCompletedListener() {
                         @Override
                         public void onCompleted() {
                             getActivity().runOnUiThread(new Runnable() {
@@ -93,7 +93,7 @@ public class AddGroupFragment extends Fragment implements CacheUpdateListener {
 
     @Override
     public void cacheUpdated() {
-        bulbSelectionFragment.cacheUpdated();
+        bulbSelectionView.cacheUpdated();
     }
 
     @Override
@@ -101,14 +101,6 @@ public class AddGroupFragment extends Fragment implements CacheUpdateListener {
         super.onDetach();
         if(progressDialog != null) {
             progressDialog.dismiss();
-        }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if(bulbSelectionFragment != null) {
-            getFragmentManager().beginTransaction().remove(bulbSelectionFragment).commit();
         }
     }
 }

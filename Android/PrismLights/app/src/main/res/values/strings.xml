@@ -18,7 +18,7 @@
     <string name="connection_lost_message">Your connection to the bridge was lost. Any changes you make will not be sent to the bridge. Please make sure you are on a local network with the bridge properly connected to the router.</string>
     <string name="connection_found">Connection to Bridge Reestablished</string>
     <string name="connection_found_message">Your connection has been reestablished. Changes will now be sent to the bridge.</string>
-    <string name="advanced_setting">Advanced Settings</string>
+    <string name="advanced_setting">Advanced</string>
     <string name="voice">Voice Control</string>
     <string name="waiting">Waiting...</string>
     <string name="listening">Listening...</string>
@@ -51,8 +51,6 @@
     <string name="time_sync_error_message">The bridge and your mobile device have different time.
         Please Connect your Bridge or Device to Internet.</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="addFavorite">Add Current State as Favorite</string>
     <string name="select_bulb">Select Bulbs</string>
     <string name="done">Done</string>
@@ -75,4 +73,14 @@
     <string name="group_label">Group:</string>
     <string name="editing_group">Editing Group...</string>
     <string name="edit_group">Edit Group</string>
+    <string name="authenticationFailed">Authentication Failed</string>
+    <string name="authenticationFailedExplanation">You did not push the button on the bridge in time. If you would like to connect, please search for bridges again.</string>
+    <string name="no_add_group">Unable to Add Group</string>
+    <string name="no_add_group_explanation">Only 16 groups are supported. Please remove or edit an existing group.</string>
+    <string name="delete_group">Deleting Groups...</string>
+    <string name="color_cycles">Color Cycles</string>
+    <string name="color_cycles_label">Color Cycles:</string>
+    <string name="run">Run</string>
+    <string name="could_not_connect">Failed to Connect</string>
+    <string name="could_not_connect_explanation">Failed to connect to bridge. Please make sure your bridge is plugged directly into the router.</string>
 </resources>

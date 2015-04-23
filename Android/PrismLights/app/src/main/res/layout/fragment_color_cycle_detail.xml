@@ -21,13 +21,16 @@
                 android:textSize="17sp"
                 android:textColor="@android:color/white"
                 android:gravity="center" />
-
+            <Space
+                android:layout_width="5dp"
+                android:layout_height="wrap_content" />
             <EditText
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:id="@+id/nameEditor"
-                android:inputType="textCapWords" />
+                android:inputType="textCapWords"
+                android:imeOptions="actionDone"/>
         </LinearLayout>
 
         <LinearLayout
@@ -79,12 +82,13 @@
                     android:id="@+id/colorCycleHeaderTransitionText"
                     android:layout_weight="1"
                     android:gravity="center" />
-                <ImageView
+                <ImageButton
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight=".5"
                     android:id="@+id/addColorButton"
-                    android:src="@android:drawable/ic_menu_add"
+                    android:src="@drawable/plus_button"
+                    style="@style/TopButton"
                     android:gravity="center"/>
 
             </LinearLayout>
@@ -98,7 +102,7 @@
 
         </LinearLayout>
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -106,22 +110,14 @@
             android:weightSum="1">
 
             <Button
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight=".5"
                 android:text="Save"
                 android:id="@+id/colorCycleSaveButton"
                 android:background="@drawable/buttons"
-                android:padding="10dp" />
-
-            <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".5"
-                android:text="Cancel"
-                android:id="@+id/colorCycleCancelButton"
-                android:background="@drawable/buttons"
-                android:padding="10dp"/>
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"/>
         </LinearLayout>
     </RelativeLayout>
 </FrameLayout>

@@ -1,7 +1,6 @@
 package app.lights.prism.com.prismlights;
 
 import android.app.FragmentTransaction;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,23 +9,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.philips.lighting.hue.sdk.PHHueSDK;
-import com.philips.lighting.hue.sdk.utilities.PHUtilities;
-import com.philips.lighting.model.PHLight;
-import com.philips.lighting.model.PHScene;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-public class FavoritesFragment extends Fragment {
+public class FavoritesFragment extends Fragment implements EditButtonPresentCaller {
 
 
     private GridView gridView;
+    private EditButtonPresentListener editButtonPresentListener;
+    private FavoritesDataModel favoritesDataModel;
 
     public FavoritesFragment() {
     }
@@ -38,17 +29,20 @@ public class FavoritesFragment extends Fragment {
         // Inflate the layout for this fragment
         View layout = inflater.inflate(R.layout.fragment_lights, container, false);
         gridView= (GridView) layout.findViewById(R.id.homeGridView);
+        favoritesDataModel = FavoritesDataModel.getInstance(getActivity().getFilesDir());
         gridView.setAdapter(new FavoriteViewAdapter());
+        //only time it needs to be called because they can't be deleted remotely
+        callEditButtonPresentListener();
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                HueBulbChangeUtility.activateFavorite((Favorite) gridView.getAdapter().getItem(position));
+                HueBulbChangeUtility.activateFavorite((Favorite) gridView.getAdapter().getItem(position), (MainActivity)getActivity());
             }
         });
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                HueBulbChangeUtility.activateFavorite((Favorite) gridView.getAdapter().getItem(position));
+                HueBulbChangeUtility.activateFavorite((Favorite) gridView.getAdapter().getItem(position), (MainActivity)getActivity());
                 Bundle bundle = new Bundle();
                 bundle.putInt(RealHomeFragment.favoritePosition, position);
 
@@ -65,15 +59,37 @@ public class FavoritesFragment extends Fragment {
         return layout;
     }
 
+    @Override
+    public void setEditButtonPresentListener(EditButtonPresentListener listener) {
+        this.editButtonPresentListener = listener;
+    }
 
+    @Override
+    public boolean shouldEditButtonBePresent() {
+        if(favoritesDataModel != null) {
+            return favoritesDataModel.getFavoritesCount() > 0;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Calls the edit button present listener after checking for null
+     */
+    private void callEditButtonPresentListener() {
+        if(editButtonPresentListener != null) {
+            if(favoritesDataModel.getFavoritesCount() > 0) {
+                editButtonPresentListener.editButtonPresent(true);
+            } else {
+                editButtonPresentListener.editButtonPresent(false);
+            }
+        }
+    }
 
     private class FavoriteViewAdapter extends BaseAdapter {
 
-        private FavoritesDataModel favoritesDataModel;
-
         public FavoriteViewAdapter() {
             super();
-            favoritesDataModel = FavoritesDataModel.getInstance(getActivity().getFilesDir());
         }
         @Override
         public int getCount() {

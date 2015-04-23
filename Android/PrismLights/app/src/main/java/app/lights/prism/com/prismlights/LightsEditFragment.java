@@ -1,7 +1,5 @@
 package app.lights.prism.com.prismlights;
 
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Color;
@@ -9,8 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,7 +16,6 @@ import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 import com.philips.lighting.model.PHLight;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -132,10 +127,9 @@ public class LightsEditFragment extends Fragment implements OnItemShiftedListene
                 bulbTop.setColorFilter(RealHomeFragment.offOverlay);
                 return currentView;
             }
-            //TODO make work with alternate color formats
             Float x = currentLight.getLastKnownLightState().getX();
             Float y = currentLight.getLastKnownLightState().getY();
-            int currentColor = PHUtilities.colorFromXY(new float[]{x, y}, HueBulbChangeUtility.colorXYModelForHue);
+            int currentColor = PHUtilities.colorFromXY(new float[]{x, y}, HueBulbChangeUtility.COLOR_XY_MODEL_FOR_HUE);
             currentColor = Color.argb(300, Color.red(currentColor), Color.green(currentColor), Color.blue(currentColor));
             bulbTop.setColorFilter(currentColor);
 //            Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.moving_light);

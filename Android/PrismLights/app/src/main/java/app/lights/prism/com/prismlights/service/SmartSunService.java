@@ -134,9 +134,9 @@ public class SmartSunService extends Service {
 
             for (int i = 0; i < schedules.size(); i++) {
                 PHSchedule schedule = schedules.get(i);
-                if (schedule.getDescription().equals("sunrise")) {
+                if (schedule.getDescription().equals("prism,sunrise")) {
                     sunriseSchedules.add(schedule);
-                } else if (schedule.getDescription().equals("sunset")) {
+                } else if (schedule.getDescription().equals("prism,sunset")) {
                     sunsetSchedules.add(schedule);
                 }
             }

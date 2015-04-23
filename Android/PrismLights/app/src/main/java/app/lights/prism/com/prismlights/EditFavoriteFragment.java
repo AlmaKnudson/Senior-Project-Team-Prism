@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.philips.lighting.model.PHLightState;
 
 public class EditFavoriteFragment extends Fragment implements CacheUpdateListener {
-    private BulbSelectionFragment bulbSelectionFragment;
+    private BulbSelectionView bulbSelectionFragment;
     private EditText nameEditor;
     private Button doneButton;
     private FavoritesDataModel favoritesDataModel;
@@ -45,11 +45,11 @@ public class EditFavoriteFragment extends Fragment implements CacheUpdateListene
         View layout = inflater.inflate(R.layout.fragment_add_multi, container, false);
         TextView title = (TextView) layout.findViewById(R.id.title);
         title.setText(R.string.edit_favorite);
-        bulbSelectionFragment = (BulbSelectionFragment) getFragmentManager().findFragmentById(R.id.selectBulbFragment);
+        bulbSelectionFragment = (BulbSelectionView) layout.findViewById(R.id.selectBulbView);
         if(bulbSelectionFragment == null) {
-            bulbSelectionFragment = (BulbSelectionFragment) getChildFragmentManager().findFragmentById(R.id.selectBulbFragment);
+            bulbSelectionFragment = (BulbSelectionView) layout.findViewById(R.id.selectBulbView);
         }
-        bulbSelectionFragment.allowLongClick(true);
+        bulbSelectionFragment.allowLongClick(true, getFragmentManager());
         nameEditor = (EditText) layout.findViewById(R.id.nameEditor);
         //also figure out why after 3 back and forths it stops working correctly
         nameEditor.setText(favorite.getName());
@@ -57,7 +57,7 @@ public class EditFavoriteFragment extends Fragment implements CacheUpdateListene
         bulbSelectionFragment.setOnCheckedNumberChanged(new CheckedNumberChangedListener() {
             @Override
             public void onCheckedNumberChanged(int checkedNumber) {
-                if(checkedNumber > 0) {
+                if (checkedNumber > 0) {
                     doneButton.setEnabled(true);
                 } else {
                     doneButton.setEnabled(false);
@@ -95,15 +95,6 @@ public class EditFavoriteFragment extends Fragment implements CacheUpdateListene
     @Override
     public void cacheUpdated() {
         bulbSelectionFragment.cacheUpdated();
-    }
-
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if(bulbSelectionFragment != null) {
-            getFragmentManager().beginTransaction().remove(bulbSelectionFragment).commit();
-        }
     }
 }
 

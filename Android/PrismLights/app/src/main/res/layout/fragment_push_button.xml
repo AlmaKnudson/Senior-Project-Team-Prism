@@ -15,10 +15,25 @@
         android:textSize="18sp"
         android:textColor="@android:color/black" />
 
-    <ImageView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:src="@drawable/smartbridge"/>
+        android:layout_weight="1">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/smartbridge"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
+            android:layout_gravity="center_vertical"/>
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_margin="20dp"
+            android:id="@+id/authenticationProgress"
+            android:max="100"/>
+    </FrameLayout>
 
 </LinearLayout>

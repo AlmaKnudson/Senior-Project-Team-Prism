@@ -1,6 +1,7 @@
 package app.lights.prism.com.prismlights;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.AlarmManager;
 import android.app.Dialog;
@@ -9,6 +10,7 @@ import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
@@ -44,6 +46,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -91,6 +94,11 @@ public class MainActivity extends Activity implements PHSDKListener{
     public static final String musicFragmentTag="MUSIC_FRAGMENT_TAG";
     public static final String voiceFragmentTag="VOICE_FRAGMENT_TAG";
     private static final String settingsFragmentTag = "SETTINGS_FRAGMENT";
+    private static final String colorCycleFileName = "colorCycle.out";
+    private static final String colorCycleTaskFileName = "colorCycleTask.out";
+    private static final String colorCycleTasksGroupFileName = "colorCycleTaskGroup.out";
+    private boolean connecting = false;
+
     //colorCycle utilities
     private List<ColorCycle> colorCycles;
     public List<ColorCycle> getAllColorCycles(){
@@ -105,14 +113,31 @@ public class MainActivity extends Activity implements PHSDKListener{
     public void addColorCycle(ColorCycle colorCycle){
         colorCycles.add(colorCycle);
     }
+    public int containsCycleName(String newName) {
+        List<ColorCycle> list = getAllColorCycles();
+        int nameExist = -1;
+        for(int i = 0; i<list.size();i++)
+        {
+            if(list.get(i).getName().equals(newName))
+                nameExist = i;
+        }
+        return nameExist;
+    }
 
     //for passing colorCycleTasks
     private Map<String,List<ScheduledFuture>> colorCycleTasks;
-    public void setColorCycleTasks(String identifier, List<ScheduledFuture> tasks){
-        colorCycleTasks.put(identifier, tasks);
+    private Map<String,List<ScheduledFuture>> colorCycleTasksGroup;
+    public void setColorCycleTasks(String identifier, List<ScheduledFuture> tasks, boolean isGroup){
+        if (!isGroup)
+            colorCycleTasks.put(identifier, tasks);
+        else
+            colorCycleTasksGroup.put(identifier,tasks);
     }
-    public List<ScheduledFuture> getColorCycleTasks(String identifier){
-        return colorCycleTasks.get(identifier);
+    public List<ScheduledFuture> getColorCycleTasks(String identifier, boolean isGroup){
+        if(!isGroup)
+            return colorCycleTasks.get(identifier);
+        else
+            return colorCycleTasksGroup.get(identifier);
     }
 
     // for passing schedule between fragments
@@ -178,7 +203,7 @@ public class MainActivity extends Activity implements PHSDKListener{
                                         if(beaconInRange){
                                             int count = beaconInRangeMapCount.get(beaconId);
                                             if((count+1) >= threshold){
-                                                HueBulbChangeUtility.turnBulbOnOff(bulbId, true);
+                                                HueBulbChangeUtility.turnBulbOnOff(bulbId, true, MainActivity.this, null);
                                                 beaconInRangeMapCount.put(beaconId, 0);
                                             } else {
                                                 beaconInRangeMapCount.put(beaconId, count + 1);
@@ -197,7 +222,7 @@ public class MainActivity extends Activity implements PHSDKListener{
                                         if(!beaconInRange){
                                             int count = beaconOutOfRangeMapCount.get(beaconId);
                                             if( (count+1) >= threshold){
-                                                HueBulbChangeUtility.turnBulbOnOff(bulbId, false);
+                                                HueBulbChangeUtility.turnBulbOnOff(bulbId, false, MainActivity.this, null);
                                                 beaconOutOfRangeMapCount.put(beaconId, 0);
                                             } else
                                                 beaconOutOfRangeMapCount.put(beaconId, count + 1);
@@ -260,7 +285,8 @@ public class MainActivity extends Activity implements PHSDKListener{
 
         // get Stored colorCycles
         try {
-            FileInputStream in = new FileInputStream("colorCycle.out");
+            File file = new File(this.getFilesDir(), colorCycleFileName);
+            FileInputStream in = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(in);
             colorCycles = (ArrayList<ColorCycle>) (ois.readObject());
             ois.close();
@@ -269,6 +295,49 @@ public class MainActivity extends Activity implements PHSDKListener{
         } catch (Exception e) {
             Log.e(DEBUG_TAG, "Getting colorCycle info failed: "+ e);
             colorCycles = new ArrayList<>();
+
+            //add Demo cycle
+            ColorCycle demoCycle = new ColorCycle("My First Cycle");
+            float[] color = {0.1658f,0.0504f};
+            float[] color2 = {0.4087f,0.5158f};
+            float[] color3 = {0.6091f,0.3294f};
+            float[] color4 = {0.2207f,0.1386f};
+            float[] color5 = {0.3452f,0.1879f};
+
+            demoCycle.add(color, 100, 10, 2 );
+            demoCycle.add(color2, 30, 10, 2 );
+            demoCycle.add(color3, 100, 10, 2 );
+            demoCycle.add(color4, 30, 10, 2 );
+            demoCycle.add(color5, 100, 10, 2 );
+
+            colorCycles.add(demoCycle);
+        }
+
+        // get Stored colorCycleTasks
+        try {
+            File file = new File(this.getFilesDir(), colorCycleTaskFileName);
+            FileInputStream in = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(in);
+            colorCycleTasks = (Map<String,List<ScheduledFuture>>) (ois.readObject());
+            ois.close();
+            in.close();
+
+        } catch (Exception e) {
+            Log.e(DEBUG_TAG, "Getting colorCycleTasks info failed: "+ e);
+            colorCycleTasks = new HashMap<>();
+        }
+        // get Stored colorCycleTasks for Group
+        try {
+            File file = new File(this.getFilesDir(), colorCycleTasksGroupFileName);
+            FileInputStream in = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(in);
+            colorCycleTasksGroup = (Map<String,List<ScheduledFuture>>) (ois.readObject());
+            ois.close();
+            in.close();
+
+        } catch (Exception e) {
+            Log.e(DEBUG_TAG, "Getting colorCycleTaskGroup info failed: "+ e);
+            colorCycleTasksGroup = new HashMap<>();
         }
 
         currentSchedule = null;
@@ -337,8 +406,12 @@ public class MainActivity extends Activity implements PHSDKListener{
             lastAccessPoint.setIpAddress(lastIpAddress);
             lastAccessPoint.setUsername(lastUsername);
             if (!hueBridgeSdk.isAccessPointConnected(lastAccessPoint)) {
+                connecting = true;
                 hueBridgeSdk.connect(lastAccessPoint);
                 waitingText = getText(R.string.connecting);
+            } else {
+                openHomeScreen(); //already connected, can go directly to homescreen
+                return;
             }
         } else {
             PHBridgeSearchManager bridgeSearchManager = (PHBridgeSearchManager) hueBridgeSdk.getSDKService(PHHueSDK.SEARCH_BRIDGE);
@@ -357,8 +430,9 @@ public class MainActivity extends Activity implements PHSDKListener{
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
+        //save the color cycles
         if(sunrise!= null && sunset != null) {
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
             settings.edit().putLong("sunrise", sunrise.getTime()).commit();
@@ -366,16 +440,64 @@ public class MainActivity extends Activity implements PHSDKListener{
         }
         if(colorCycles != null){
             try {
-                FileOutputStream out = new FileOutputStream("colorCycle.out");
+                File file = new File(this.getFilesDir(), colorCycleFileName);
+                FileOutputStream out = new FileOutputStream(file);
                 ObjectOutputStream oos = new ObjectOutputStream(out);
                 oos.writeObject(colorCycles);
                 oos.flush();
                 oos.close();
                 out.close();
             } catch (Exception e) {
-                System.out.println("Problem serializing colorCycle: " + e);
+                System.out.println("Problem Saving colorCycle: " + e);
             }
         }
+        if(colorCycleTasks != null){
+            try {
+                File file = new File(this.getFilesDir(), colorCycleTaskFileName);
+                FileOutputStream out = new FileOutputStream(file);
+                ObjectOutputStream oos = new ObjectOutputStream(out);
+                oos.writeObject(colorCycleTasks);
+                oos.flush();
+                oos.close();
+                out.close();
+            } catch (Exception e) {
+                System.out.println("Problem Saving colorCycleTasks: " + e);
+            }
+        }
+        if(colorCycleTasks != null){
+            try {
+                File file = new File(this.getFilesDir(), colorCycleTasksGroupFileName);
+                FileOutputStream out = new FileOutputStream(file);
+                ObjectOutputStream oos = new ObjectOutputStream(out);
+                oos.writeObject(colorCycleTasksGroup);
+                oos.flush();
+                oos.close();
+                out.close();
+            } catch (Exception e) {
+                System.out.println("Problem Saving colorCycleTasksGroup: " + e);
+            }
+        }
+        //turn of the internet connection
+        PHHueSDK.getInstance().disableAllHeartbeat();
+        PHHueSDK.getInstance().getNotificationManager().unregisterSDKListener(this);
+        //consider destroying the sdk
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        PHBridge bridge = hueBridgeSdk.getSelectedBridge();
+        if(bridge != null) {
+            hueBridgeSdk.getNotificationManager().registerSDKListener(this);
+            hueBridgeSdk.enableHeartbeat(hueBridgeSdk.getSelectedBridge(), PHHueSDK.HB_INTERVAL);
+            hueBridgeSdk.getHeartbeatManager().enableLightsHeartbeat(bridge, 2000);
+        }
+    }
+
+    @Override
+
+    protected void onStop() {
+        super.onStop();
     }
 
     public void searchForBridge() {
@@ -433,7 +555,7 @@ public class MainActivity extends Activity implements PHSDKListener{
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container, new RealHomeFragment());
         fragmentTransaction.commit();
-        if(dialog.isShowing()) {
+        if(dialog != null && dialog.isShowing()) {
             dialog.setCancelable(true);
             dialog.cancel();
         }
@@ -455,6 +577,7 @@ public class MainActivity extends Activity implements PHSDKListener{
             public void run() {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.container, new PushButtonFragment());
+                fragmentTransaction.addToBackStack("authenticationRequired");
                 fragmentTransaction.commit();
                 dialog.setCancelable(true);
                 dialog.cancel();
@@ -515,6 +638,7 @@ public class MainActivity extends Activity implements PHSDKListener{
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    connecting = false;
                     openHomeScreen();
                 }
             });
@@ -530,19 +654,30 @@ public class MainActivity extends Activity implements PHSDKListener{
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(code == PHHueError.BRIDGE_NOT_RESPONDING) {
-                    //TODO add message for when bridge isn't responding after access points found
-//                    searchForBridge();
+                if (code == PHHueError.BRIDGE_NOT_RESPONDING) {
+                    //seems to only happen when connecting to bridge that's there but won't respond
+                    if(!connecting) {
+                        dialog.setCancelable(true);
+                        dialog.setCanceledOnTouchOutside(true);
+                        dialog.setContentView(R.layout.dialog_warning);
+                        TextView dialogTitle = (TextView) (dialog.findViewById(R.id.dialogTitle));
+                        dialogTitle.setText(getText(R.string.could_not_connect));
+                        TextView dialogText = (TextView) (dialog.findViewById(R.id.textExplanation));
+                        dialogText.setText(getText(R.string.could_not_connect_explanation));
+                        dialog.show();
+                    } else {
+                        connecting = false;
+                        searchForBridge();
+                    }
                     return;
                 }
-                //TODO use code rather than message
-                if(message.equals("No bridge found")) {
+                if (message.equals("No bridge found")) {
                     dialog.setCancelable(true);
                     dialog.setCanceledOnTouchOutside(true);
                     dialog.setContentView(R.layout.dialog_warning);
                     return;
                 }
-                if(code == PHHueError.NO_CONNECTION) {
+                if (code == PHHueError.NO_CONNECTION) {
                     return;
                 }
 //                Toast toast = Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT);
@@ -576,6 +711,21 @@ public class MainActivity extends Activity implements PHSDKListener{
         connectionLostCount = 0;
     }
 
+    public void showAuthenticationFailedDialog() {
+        if (dialog.isShowing()) {
+            dialog.cancel();
+        } else {
+            dialog.setCancelable(true);
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.setContentView(R.layout.dialog_warning);
+            TextView dialogTitle = (TextView) (dialog.findViewById(R.id.dialogTitle));
+            dialogTitle.setText(getText(R.string.authenticationFailed));
+            TextView dialogText = (TextView) (dialog.findViewById(R.id.textExplanation));
+            dialogText.setText(getText(R.string.authenticationFailedExplanation));
+            dialog.show();
+        }
+    }
+
     @Override
     /**
      * From API:
@@ -605,11 +755,11 @@ public class MainActivity extends Activity implements PHSDKListener{
         return dialog;
     }
 
+
     @Override
     public void onParsingErrors(List<PHHueParsingError> phHueParsingErrors) {
 
     }
-
 
     public void clearBackStack() {
         if(getFragmentManager().getBackStackEntryCount() > 0) {
@@ -674,8 +824,41 @@ public class MainActivity extends Activity implements PHSDKListener{
     private void updateSunTime() {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         List<String> providers = locationManager.getProviders(true);
+        Location location = null;
 
-        Location location = locationManager.getLastKnownLocation(providers.get(0));
+        for (int i = 0; i<providers.size();i++){
+            if (locationManager.getLastKnownLocation(providers.get(0))!=null) {
+                location = locationManager.getLastKnownLocation(providers.get(0));
+                break;
+            }
+        }
+
+        //if there is no access to location make
+        if (location==null){
+            if(sunrise==null) {
+                sunrise = new Date();
+                sunrise.setDate(sunrise.getDate() - 1);
+                sunrise.setHours(7);
+                sunrise.setMinutes(24);
+                sunrise.setSeconds(00);
+                sunset = new Date();
+                sunset.setDate(sunrise.getDate() - 1);
+                sunset.setHours(20);
+                sunset.setMinutes(33);
+                sunset.setSeconds(00);
+            }
+            new AlertDialog.Builder(this)
+                    .setTitle("Warning")
+                    .setMessage("There is no access to the current location. The sunrise and sunset time may not be accurate. Please try again later for more accurate result.")
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+            return;
+        }
+
         Date date = new Date();
 
         URL url;
@@ -696,6 +879,7 @@ public class MainActivity extends Activity implements PHSDKListener{
             Log.e(DEBUG_TAG, "No network connection available.");
         }
     }
+
 
     public void setBeaconAssociationListener(BeaconAssociationListener beaconAssociationListener) {
         this.beaconAssociationListener = beaconAssociationListener;

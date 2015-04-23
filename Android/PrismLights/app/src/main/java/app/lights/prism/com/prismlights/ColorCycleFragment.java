@@ -31,9 +31,8 @@ public class ColorCycleFragment extends Fragment {
 
     private static  final String DEBUG_TAG = "ColorCycleFragment";
     public static final String chosenColorCycleString = "CHOSEN_COLOR_CYCLE";
-    public static final String identifierString = "CHOSEN_IDENTIFIER";
+    public static final String isNewString = "IS_NEW";
 
-    private int position; // The number for the chosen Light
     private boolean isGroup; //True if group false otherwise
     private List<ColorCycle> colorCycles;
     private PHHueSDK hueSDK;
@@ -41,9 +40,7 @@ public class ColorCycleFragment extends Fragment {
     private PHLight currentLight;
     private PHGroup currentGroup;
     private String currentIdentifier;
-    private int chosenColorCycle;
     private ColorCycleListAdapter colorCycleListAdapter;
-    private ColorCycleDetailListAdapter colorCycleDetailListAdapter;
 
     public ColorCycleFragment() {
         // Required empty public constructor
@@ -55,23 +52,20 @@ public class ColorCycleFragment extends Fragment {
         if (getArguments() != null) {
             currentIdentifier = getArguments().getString(RealHomeFragment.lightPositionString);
             isGroup = getArguments().getBoolean(RealHomeFragment.groupOrLightString);
+
         }
         colorCycles = ((MainActivity)getActivity()).getAllColorCycles();
-        hueSDK = PHHueSDK.getInstance();
-        bridge = hueSDK.getSelectedBridge();
+        bridge = PHHueSDK.getInstance().getSelectedBridge();
         if(!isGroup) {
-            currentLight = hueSDK.getSelectedBridge().getResourceCache().getLights().get(currentIdentifier);
+            currentLight = bridge.getResourceCache().getLights().get(currentIdentifier);
             currentIdentifier = currentLight.getIdentifier();
             currentGroup = null;
         }
         else {
-            currentGroup = hueSDK.getSelectedBridge().getResourceCache().getGroups().get(currentIdentifier);
+            currentGroup = bridge.getResourceCache().getGroups().get(currentIdentifier);
             currentIdentifier = currentGroup.getIdentifier();
             currentLight = null;
         }
-
-        if (colorCycles!=null && colorCycles.size()>0)
-            chosenColorCycle = 0;
     }
 
     @Override
@@ -82,11 +76,6 @@ public class ColorCycleFragment extends Fragment {
         TextView nameTextView = (TextView)view.findViewById(R.id.colorCycleBulbNameText);
         ImageView colorCycleAddImageView = (ImageView)view.findViewById(R.id.colorCycleAddButton);
         ListView colorCycleListView = (ListView)view.findViewById(R.id.colorCycleListView);
-        Button colorCycleEditButton = (Button)view.findViewById(R.id.colorCycleEditButton);
-        ListView colorCycleDetailListView = (ListView)view.findViewById(R.id.colorCycleDetailListView);
-        Button okButton = (Button)view.findViewById(R.id.colorCycleOkButton);
-        Button cancelButton = (Button)view.findViewById(R.id.colorCycleCancelButton);
-
         if(isGroup)
             nameTextView.setText(currentGroup.getName());
         else
@@ -97,6 +86,7 @@ public class ColorCycleFragment extends Fragment {
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putInt(chosenColorCycleString, -1); // indicating this is for a new colorcycle
+                bundle.putBoolean(isNewString, true);
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 ColorCycleDetailFragment colorCycleDetailFragment = new ColorCycleDetailFragment();
                 colorCycleDetailFragment.setArguments(bundle);
@@ -108,22 +98,20 @@ public class ColorCycleFragment extends Fragment {
         colorCycleListAdapter = new ColorCycleListAdapter();
         colorCycleListView.setAdapter(colorCycleListAdapter);
 
-        if (colorCycles!=null && colorCycles.size()>0)
-            colorCycleListView.setSelection(0);//TODO: check if selection working. I need to highLight selected one.
+//        colorCycleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                chosenColorCycle = position;
+//                colorCycleDetailListAdapter.notifyDataSetChanged();
+//            }
+//        });
 
         colorCycleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                chosenColorCycle = position;
-                colorCycleDetailListAdapter.notifyDataSetChanged();
-            }
-        });
-
-        colorCycleEditButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putInt(chosenColorCycleString, chosenColorCycle);//pass chosen colorCycle
+                bundle.putInt(chosenColorCycleString, position);//pass chosen colorCycle
+                bundle.putBoolean(isNewString, false);
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 ColorCycleDetailFragment colorCycleDetailFragment = new ColorCycleDetailFragment();
                 colorCycleDetailFragment.setArguments(bundle);
@@ -132,28 +120,16 @@ public class ColorCycleFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
-
-        colorCycleDetailListAdapter = new ColorCycleDetailListAdapter();
-        colorCycleDetailListView.setAdapter(colorCycleDetailListAdapter);
-
-        okButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO: need to get duration from user
-                List<ScheduledFuture> tasks = colorCycles.get(chosenColorCycle).startColorCycle(10, bridge, currentIdentifier, isGroup);
-                ((MainActivity)getActivity()).setColorCycleTasks(currentIdentifier,tasks);
-                android.app.FragmentManager fm = getActivity().getFragmentManager();
-                fm.popBackStack();
-            }
-        });
-
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                android.app.FragmentManager fm = getActivity().getFragmentManager();
-                fm.popBackStack();
-            }
-        });
+//        okButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //TODO: need to get duration from user
+//                List<ScheduledFuture> tasks = colorCycles.get(chosenColorCycle).startColorCycle(10, bridge, currentIdentifier, isGroup, (MainActivity)getActivity());
+//                ((MainActivity)getActivity()).setColorCycleTasks(currentIdentifier,tasks, isGroup);
+//                android.app.FragmentManager fm = getActivity().getFragmentManager();
+//                fm.popBackStack();
+//            }
+//        });
 
         return view;
     }
@@ -163,7 +139,6 @@ public class ColorCycleFragment extends Fragment {
         super.onResume();
         colorCycles = ((MainActivity)getActivity()).getAllColorCycles();
         colorCycleListAdapter.notifyDataSetChanged();
-        colorCycleDetailListAdapter.notifyDataSetChanged();
     }
 
     private class ColorCycleListAdapter extends BaseAdapter{
@@ -180,63 +155,32 @@ public class ColorCycleFragment extends Fragment {
 
         @Override
         public long getItemId(int position) {
-            return 0;
+            return position;
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            TextView currentView;
-            if(convertView == null) {
-                currentView = new TextView(getActivity());
-            } else {
-                currentView = (TextView)convertView;
-            }
-            currentView.setText(colorCycles.get(position).getName());
-            return currentView;
-        }
-    }
-
-    private  class ColorCycleDetailListAdapter extends BaseAdapter{
-
-        @Override
-        public int getCount() {
-            if (colorCycles==null || colorCycles.size()==0)
-                return 0;
-            else
-                return colorCycles.get(chosenColorCycle).getSize();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             View currentView;
             if(convertView == null) {
-                currentView = LayoutInflater.from(ColorCycleFragment.this.getActivity()).inflate(R.layout.single_color_cycle_detail_row, parent, false);
+                currentView = LayoutInflater.from(ColorCycleFragment.this.getActivity()).inflate(R.layout.color_cycle_list_item, parent, false);
             } else {
                 currentView = convertView;
             }
-
-            ColorCycle currentColorCycle = colorCycles.get(chosenColorCycle);
-
-            TextView color = (TextView)currentView.findViewById(R.id.colorCycleColorText);
-            TextView brightness = (TextView)currentView.findViewById(R.id.colorCycleBrightnessText);
-            TextView duration = (TextView)currentView.findViewById(R.id.colorCycleDurationText);
-            TextView transition = (TextView)currentView.findViewById(R.id.colorCycleTransitionText);
-
-            color.setBackgroundColor(currentColorCycle.getColor(position));
-            brightness.setText(currentColorCycle.getBrightness(position));
-            duration.setText(currentColorCycle.getDuration(position));
-            transition.setText(currentColorCycle.getTransition(position));
-
+            TextView colorCycleName = (TextView) currentView.findViewById(R.id.colorCycleName);
+            colorCycleName.setText(colorCycles.get(position).getName());
+            SingleColorCycleView cycleView = (SingleColorCycleView) currentView.findViewById(R.id.colorCycleSmallDetailView);
+            cycleView.setColors(colorCycles.get(position).getColors());
+            Button runColorCycleButton = (Button) currentView.findViewById(R.id.colorCycleRun);
+            runColorCycleButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //TODO: need to get duration from user
+                    List<ScheduledFuture> tasks = colorCycles.get(position).startColorCycle(10, bridge, currentIdentifier, isGroup, (MainActivity)getActivity());
+                    ((MainActivity)getActivity()).setColorCycleTasks(currentIdentifier,tasks, isGroup);
+//                    android.app.FragmentManager fm = getActivity().getFragmentManager();
+//                    fm.popBackStack();
+                }
+            });
             return currentView;
         }
     }

@@ -56,8 +56,8 @@
     <style name="WarningImage">
         <item name="android:layout_width">20dp</item>
         <item name="android:layout_height">20dp</item>
-        <item name="android:tint">@color/lightPurple</item>
-        <item name="android:src">@android:drawable/ic_secure</item>
+        <item name="android:tint">@color/darkGray</item>
+        <item name="android:src">@drawable/ic_secure</item>
         <item name="android:adjustViewBounds">true</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:visibility">gone</item>
@@ -69,5 +69,12 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">top|end</item>
+    </style>
+    <style name="TopButton" >
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:background">@drawable/top_button</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:scaleType">centerInside</item>
     </style>
 </resources>
