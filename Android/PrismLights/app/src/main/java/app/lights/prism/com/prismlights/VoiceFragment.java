@@ -65,7 +65,7 @@ public class VoiceFragment extends Fragment implements IWitListener {
         ImageButton mic = (ImageButton) layout.findViewById(R.id.micButton);
         micStatus = (TextView) layout.findViewById(R.id.micText);
         witResponse = (TextView) layout.findViewById(R.id.micResultText);
-        wit.captureTextIntent("Turn lights on");
+        // wit.captureTextIntent("Turn lights on");
         mic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,7 +87,7 @@ public class VoiceFragment extends Fragment implements IWitListener {
         System.out.println(witOutcomes);
         if(witOutcomes != null && !witOutcomes.isEmpty() && error == null) {
             WitOutcome outcome = witOutcomes.get(0);
-            witResponse.setText("\nYOU WANT TO:\n" + outcome.get_text() + "\n\nINTENT:\n" + outcome.get_intent() + "\n\nENTITIES:\n" + outcome.get_entities());
+            witResponse.setText("\nYOU SAID:\n" + outcome.get_text() + "\n\nYOUR INTENT:\n" + outcome.get_intent() "\n");
             String intent = outcome.get_intent().trim();
 
 
@@ -161,7 +161,7 @@ public class VoiceFragment extends Fragment implements IWitListener {
                         }
 
                         HueBulbChangeUtility.setLightOrGroupFromName(bulbname, onOff, hV, (MainActivity)getActivity());
-                        witResponse.setText("Turning bulb/group '" + bulbname + "'" + onOff + "'.");
+                        witResponse.setText(witResponse.getText() + "Turning bulb/group '" + bulbname + "'" + onOff + "'.");
                     }
 
                 } catch(Exception e) {
