@@ -44,13 +44,10 @@ import java.util.Map;
  * with a GridView.
  * <p/>
  */
-public class AlarmFragment extends Fragment {
+public class AlarmFragment extends Fragment implements CacheUpdateListener{
 
-    public static String lightPositionString = "CURRENT_BULB_POSITION";
-
-    private int currentBulbId; // The chosen Light BULB ID
+    private String identifier; // The chosen Light BULB ID
     private int chosenAlarmPosition;
-    private PHLight currentBulb;
     private ListView alarmListView;
     static AlarmAdapter adapter;
     static private PHHueSDK phHueSDK;
@@ -60,7 +57,8 @@ public class AlarmFragment extends Fragment {
     AlertDialog modeDialog;
     TimePickerFragment timePickerDialog;
     String delegate;
-    List<PHSchedule> alarmSchedules; // this List of schedules in bridge whose description is Alarm.
+    List<PHSchedule> alarmSchedules; // this List of schedules in bridge whose description is prism.
+    boolean isGroup;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -83,11 +81,10 @@ public class AlarmFragment extends Fragment {
         timePickerDialog = null;
 
         if (getArguments() != null) {
-            currentBulbId = getArguments().getInt(lightPositionString);
+            identifier = getArguments().getString(RealHomeFragment.lightPositionString);
+            isGroup = getArguments().getBoolean(RealHomeFragment.groupOrLightString);
         }
 
-        //get current bulb
-        currentBulb = bridge.getResourceCache().getAllLights().get(currentBulbId);
         getAlarmSchedules();
     }
 
@@ -97,16 +94,20 @@ public class AlarmFragment extends Fragment {
         // TODO: currently getting just non recurring schedules. to get recurring schedules, param need to be true.
         List<PHSchedule> nonRecurringSchedules = bridge.getResourceCache().getAllSchedules(false);
 
-        // get schedules from Bridge that are for this bulb and has description "Alarm"
-
-        String currentBulbIdentity = currentBulb.getIdentifier();
+        // get schedules from Bridge that are for this bulb and has description "prism"
 
         for (int i=0; i<nonRecurringSchedules.size();i++)
         {
             PHSchedule schedule = nonRecurringSchedules.get(i);
-            if(schedule.getLightIdentifier()!=null && schedule.getLightIdentifier().equals(currentBulbIdentity) && schedule.getDescription().equals("Alarm"))
-            {
-                alarmSchedules.add(nonRecurringSchedules.get(i));
+
+            if(isGroup){
+                if (schedule.getGroupIdentifier() != null && schedule.getGroupIdentifier().equals(identifier) && schedule.getDescription().equals("prism")) {
+                    alarmSchedules.add(nonRecurringSchedules.get(i));
+                }
+            }else {
+                if (schedule.getLightIdentifier() != null && schedule.getLightIdentifier().equals(identifier) && schedule.getDescription().equals("prism")) {
+                    alarmSchedules.add(nonRecurringSchedules.get(i));
+                }
             }
         }
     }
@@ -130,14 +131,10 @@ public class AlarmFragment extends Fragment {
 
         adapter = new AlarmAdapter();
         alarmListView.setAdapter(adapter);
-
-        ImageView refreshButton = (ImageView)view.findViewById(R.id.refreshButton);
-
-        refreshButton.setOnClickListener(new View.OnClickListener() {
+        alarmListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                getAlarmSchedules();
-                adapter.notifyDataSetChanged();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                showTimePickerDialog(position);
             }
         });
 
@@ -147,6 +144,12 @@ public class AlarmFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        getAlarmSchedules();
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void cacheUpdated() {
         getAlarmSchedules();
         adapter.notifyDataSetChanged();
     }
@@ -196,13 +199,13 @@ public class AlarmFragment extends Fragment {
 
             modeView.setText(modeString);
 
-            // When individual Alarm is clicked, open a time picker to change the Alarm
-            timeView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showTimePickerDialog(position);
-                }
-            });
+//            // When individual Alarm is clicked, open a time picker to change the Alarm
+//            timeView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    showTimePickerDialog(position);
+//                }
+//            });
 
             TextView deleteTextView = (TextView) currentView.findViewById(R.id.alarmDeleteText);
 
@@ -368,9 +371,12 @@ public class AlarmFragment extends Fragment {
         String scheduleName = (String) DateFormat.format(delegate, alarmTime.getTime());
         PHSchedule schedule = new PHSchedule(scheduleName);
         schedule.setDate(alarmTime);
-        schedule.setLightIdentifier(currentBulb.getIdentifier());
+        if(isGroup)
+            schedule.setGroupIdentifier(identifier);
+        else
+            schedule.setLightIdentifier(identifier);
         schedule.setLightState(getLightState());
-        schedule.setDescription("Alarm");
+        schedule.setDescription("prism");
 
         final PHWizardAlertDialog dialogManager = PHWizardAlertDialog.getInstance();
         dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
@@ -521,11 +527,11 @@ public class AlarmFragment extends Fragment {
 //
 //
 //    @Override
-//    public void onItemClick(AdapterView<?> parent, View view, int currentBulbId, long id) {
+//    public void onItemClick(AdapterView<?> parent, View view, int identifier, long id) {
 //        if (null != mListener) {
 //            // Notify the active callbacks interface (the activity, if the
 //            // fragment is attached to one) that an item has been selected.
-//            mListener.onFragmentInteraction(AlarmList.currentBulbAlarms.get(currentBulbId).name);
+//            mListener.onFragmentInteraction(AlarmList.currentBulbAlarms.get(identifier).name);
 //        }
 //    }
 //

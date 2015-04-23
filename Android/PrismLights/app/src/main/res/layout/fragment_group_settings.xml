@@ -73,14 +73,29 @@
             android:id="@+id/editGroupButton"/>
     </LinearLayout>
 
-    <Button
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/advanced_setting"
-        android:id="@+id/advancedSettingButton"
-        android:layout_gravity="center"
-        android:background="@drawable/buttons"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"/>
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/advanced_setting"
+            android:id="@+id/advancedSettingButton"
+            android:background="@drawable/buttons"/>
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="match_parent" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Color Cycle"
+            android:id="@+id/colorCycleButton"
+            android:background="@drawable/buttons"/>
+    </LinearLayout>
 
 </LinearLayout>

@@ -37,13 +37,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class ScheduleFragment extends Fragment {
-    public static String lightPositionString = "CURRENT_BULB_POSITION";
-    private static final String ARG_PARAM2 = "CURRENT_SCHEDULE";
+public class ScheduleFragment extends Fragment implements CacheUpdateListener {
 
-    private int currentBulbId; // The chosen Light BULB ID
+    private String identifier;
+    private boolean isGroup;
     private int chosenSchedulePosition;
-    private PHLight currentBulb;
     private ListView scheduleListView;
     static ScheduleAdapter adapter;
     static private PHHueSDK phHueSDK;
@@ -69,11 +67,10 @@ public class ScheduleFragment extends Fragment {
         delegate = "hh:mm aaa";
 
         if (getArguments() != null) {
-            currentBulbId = getArguments().getInt(lightPositionString);
+            identifier = getArguments().getString(RealHomeFragment.lightPositionString);
+            isGroup = getArguments().getBoolean(RealHomeFragment.groupOrLightString);
         }
 
-        //get current bulb
-        currentBulb = bridge.getResourceCache().getAllLights().get(currentBulbId);
         getPhSchedules();
 
         currentSwitch = null;
@@ -87,14 +84,19 @@ public class ScheduleFragment extends Fragment {
 
         // get recurring schedules from Bridge that are for this bulb
 
-        String currentBulbIdentity = currentBulb.getIdentifier();
-
         for (int i=0; i<recurringSchedules.size();i++)
         {
             PHSchedule schedule = recurringSchedules.get(i);
-            if(schedule.getLightIdentifier() != null && schedule.getLightIdentifier().equals(currentBulbIdentity))
-            {
-                phSchedules.add(recurringSchedules.get(i));
+            if(isGroup){
+                if (schedule.getGroupIdentifier() != null && schedule.getGroupIdentifier().equals(identifier)
+                        && schedule.getDescription().startsWith("prism")) {
+                    phSchedules.add(recurringSchedules.get(i));
+                }
+            }else {
+                if (schedule.getLightIdentifier() != null && schedule.getLightIdentifier().equals(identifier)
+                        && schedule.getDescription().startsWith("prism")) {
+                    phSchedules.add(recurringSchedules.get(i));
+                }
             }
         }
     }
@@ -112,8 +114,9 @@ public class ScheduleFragment extends Fragment {
             public void onClick(View v) {
                 //need to open new fragment with BulbID argument.
                 Bundle bundle = new Bundle();
-                bundle.putInt(lightPositionString, currentBulbId);
-                ((MainActivity)getActivity()).setCurrentSchedule(null);
+                bundle.putString(RealHomeFragment.lightPositionString, identifier);
+                bundle.putBoolean(RealHomeFragment.groupOrLightString, isGroup);
+                ((MainActivity) getActivity()).setCurrentSchedule(null);
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 ScheduleConfigFragment scheduleConfigFragment = new ScheduleConfigFragment();
@@ -133,7 +136,8 @@ public class ScheduleFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //need to open new fragment with BulbID and scheduleID arguments.
                 Bundle bundle = new Bundle();
-                bundle.putInt(lightPositionString, currentBulbId);
+                bundle.putString(RealHomeFragment.lightPositionString, identifier);
+                bundle.putBoolean(RealHomeFragment.groupOrLightString, isGroup);
                 ((MainActivity) getActivity()).setCurrentSchedule(phSchedules.get(position));
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -145,17 +149,13 @@ public class ScheduleFragment extends Fragment {
             }
         });
 
-        ImageView refreshButton = (ImageView)view.findViewById(R.id.refreshButton);
-
-        refreshButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getPhSchedules();
-                adapter.notifyDataSetChanged();
-            }
-        });
-
         return view;
+    }
+
+    @Override
+    public void cacheUpdated() {
+        getPhSchedules();
+        adapter.notifyDataSetChanged();
     }
 
 
@@ -208,7 +208,7 @@ public class ScheduleFragment extends Fragment {
             if (state.getBrightness() == null)
                 brightness = "";
             else
-                brightness = state.getBrightness() + "%";
+                brightness = HueBulbChangeUtility.revertBrightness(state.getBrightness()) + "%";
 
             TextView brightnessText = (TextView) currentView.findViewById(R.id.scheduleBrightness);
             brightnessText.setText(brightness);
@@ -224,7 +224,7 @@ public class ScheduleFragment extends Fragment {
 
 
             final ToggleButton scheduleSwitch = (ToggleButton)currentView.findViewById(R.id.singleScheduleSwitch);
-            if(phSchedule.getStatus().equals(PHSchedule.PHScheduleStatus.ENABLED))
+            if(phSchedule.getStatus()==null || phSchedule.getStatus().equals(PHSchedule.PHScheduleStatus.ENABLED)) // when a new schedule is created, bridge returns null for status
                 scheduleSwitch.setChecked(true);
             else
                 scheduleSwitch.setChecked(false);
@@ -445,124 +445,4 @@ public class ScheduleFragment extends Fragment {
         getPhSchedules();
         adapter.notifyDataSetChanged();
     }
-
-    //    // this is TimePickerFragment, showTimePickerDialog create this DialogFragment.
-//    // when user click "done", onTimeSet get called.
-//    // TODO: is this ok non static? public class in a class.... private-> fragment have to be public,...?
-//    private class TimePickerFragment extends DialogFragment
-//            implements TimePickerDialog.OnTimeSetListener {
-//
-//        @Override
-//        public Dialog onCreateDialog(Bundle savedInstanceState) {
-//            int hour;
-//            int minute;
-//            if (chosenSchedulePosition == -1) {
-//                // Use the current time as the default values for the picker
-//                final Calendar c = Calendar.getInstance();
-//                hour = c.get(Calendar.HOUR_OF_DAY);
-//                minute = c.get(Calendar.MINUTE);
-//            }
-//            else{
-//                Date date = phSchedules.get(chosenSchedulePosition).getDate();
-//                hour = date.getHours();
-//                minute = date.getMinutes();
-//            }
-//
-//            // Create a new instance of TimePickerDialog and return it
-//            return new TimePickerDialog(getActivity(), this, hour, minute,
-//                    DateFormat.is24HourFormat(getActivity()));
-//        }
-//
-//        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-//
-//            if (view.isShown()) {
-//
-//                Date scheduleTime = new Date();
-//                scheduleTime.setHours(hourOfDay);
-//                scheduleTime.setMinutes(minute);
-//
-//                Date currentTime = new Date();
-//                if(scheduleTime.getTime() < currentTime.getTime()) {
-//                    scheduleTime = new Date(scheduleTime.getTime()+86400000); //adding 24 hours in milliseconds
-//                }
-//
-//
-//                // user want to add new Schedule
-//                if (chosenSchedulePosition == -1)
-//                {
-//                    addNewSchedule(scheduleTime);
-//                }
-//                // user wants to change existing schedule
-//                else
-//                {
-//                    updateSchedule(chosenSchedulePosition, scheduleTime);
-//                }
-//            }
-//
-//            adapter.notifyDataSetChanged();
-//        }
-//    }
-
-//    //This function gets called when user want to add/change schedule, and this opens the timepicker.
-//    public void showTimePickerDialog(int schedulePosition) {
-//        chosenSchedulePosition = schedulePosition;
-//        DialogFragment newFragment = new TimePickerFragment();
-//        newFragment.show(getFragmentManager(), "timePicker");
-//    }
-
-//
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-//
-//
-//    @Override
-//    public void onItemClick(AdapterView<?> parent, View view, int currentBulbId, long id) {
-//        if (null != mListener) {
-//            // Notify the active callbacks interface (the activity, if the
-//            // fragment is attached to one) that an item has been selected.
-//            mListener.onFragmentInteraction(AlarmList.currentBulbAlarms.get(currentBulbId).name);
-//        }
-//    }
-//
-//    /**
-//     * The default content for this Fragment has a TextView that is shown when
-//     * the list is empty. If you would like to change the text, call this method
-//     * to supply the text it should use.
-//     */
-//    public void setEmptyText(CharSequence emptyText) {
-//        View emptyView = scheduleListView.getEmptyView();
-//
-//        if (emptyView instanceof TextView) {
-//            ((TextView) emptyView).setText(emptyText);
-//        }
-//    }
-//
-//    /**
-//     * This interface must be implemented by activities that contain this
-//     * fragment to allow an interaction in this fragment to be communicated
-//     * to the activity and potentially other fragments contained in that
-//     * activity.
-//     * <p/>
-//     * See the Android Training lesson <a href=
-//     * "http://developer.android.com/training/basics/fragments/communicating.html"
-//     * >Communicating with Other Fragments</a> for more information.
-//     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        public void onFragmentInteraction(String id);
-//    }
 }

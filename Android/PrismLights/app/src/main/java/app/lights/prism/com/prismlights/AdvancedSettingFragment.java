@@ -12,13 +12,11 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.philips.lighting.hue.listener.PHScheduleListener;
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHHueError;
-import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
 import com.philips.lighting.model.PHSchedule;
 
@@ -28,16 +26,13 @@ import java.util.List;
 import java.util.Map;
 
 
-public class AdvancedSettingFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    public static String lightPositionString = RealHomeFragment.lightPositionString;
+public class AdvancedSettingFragment extends Fragment implements CacheUpdateListener{
     private static final String DEBUG_TAG = "AdvancedSettingFragment";
 
 
     private PHHueSDK hueBridgeSdk;
     private PHBridge bridge;
-    private String identification; // ID of the chosen Light
+    private String identifier; // ID of the chosen Light
     private Boolean isGroup;
 
     private TextView alarmText;
@@ -45,9 +40,9 @@ public class AdvancedSettingFragment extends Fragment {
     private TextView scheduleText;
     private ToggleButton sunriseSwitch;
     private ToggleButton sunsetSwitch;
-    private PHLight currentBulb;
     ArrayList<PHSchedule> sunsetSchedules;
     ArrayList<PHSchedule> sunriseSchedules;
+    private String name; //TODO: Show this name
 
 
     public AdvancedSettingFragment() {
@@ -58,12 +53,15 @@ public class AdvancedSettingFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            identification = getArguments().getString(lightPositionString);
+            identifier = getArguments().getString(RealHomeFragment.lightPositionString);
             isGroup = getArguments().getBoolean(RealHomeFragment.groupOrLightString);
         }
         hueBridgeSdk = PHHueSDK.getInstance();
         bridge = hueBridgeSdk.getSelectedBridge();
-        currentBulb = hueBridgeSdk.getSelectedBridge().getResourceCache().getLights().get(identification);
+        if(isGroup)
+            name = hueBridgeSdk.getSelectedBridge().getResourceCache().getGroups().get(identifier).getName();
+        else
+            name = hueBridgeSdk.getSelectedBridge().getResourceCache().getLights().get(identifier).getName();
 
         getSunSchedules();
     }
@@ -75,11 +73,26 @@ public class AdvancedSettingFragment extends Fragment {
 
         for (int i = 0; i < schedules.size(); i++) {
             PHSchedule schedule = schedules.get(i);
-            if (schedule.getDescription().equals("sunset") && schedule.getLightIdentifier().equals(identification)) {
-                sunsetSchedules.add(schedule);
-            }
-            else if (schedule.getDescription().equals("sunrise") && schedule.getLightIdentifier().equals(identification)) {
-                sunriseSchedules.add(schedule);
+            if(isGroup){
+                if ( schedule.getGroupIdentifier()!=null
+                        && schedule.getGroupIdentifier().equals(identifier)
+                        && schedule.getDescription().equals("prism,sunset")) {
+                    sunsetSchedules.add(schedule);
+                } else if (schedule.getGroupIdentifier()!= null
+                        && schedule.getGroupIdentifier().equals(identifier)
+                        && schedule.getDescription().equals("prism,sunrise")) {
+                    sunriseSchedules.add(schedule);
+                }
+            }else {
+                if ( schedule.getLightIdentifier()!=null
+                        && schedule.getLightIdentifier().equals(identifier)
+                        && schedule.getDescription().equals("prism,sunset") ) {
+                    sunsetSchedules.add(schedule);
+                } else if (schedule.getLightIdentifier()!=null
+                        && schedule.getLightIdentifier().equals(identifier)
+                        && schedule.getDescription().equals("prism,sunrise") ) {
+                    sunriseSchedules.add(schedule);
+                }
             }
         }
     }
@@ -101,7 +114,8 @@ public class AdvancedSettingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putString(lightPositionString, identification);
+                bundle.putString(RealHomeFragment.lightPositionString, identifier);
+                bundle.putBoolean(RealHomeFragment.groupOrLightString, isGroup);
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 AlarmFragment alarmFragment = new AlarmFragment();
@@ -116,7 +130,8 @@ public class AdvancedSettingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putString(lightPositionString, identification);
+                bundle.putString(RealHomeFragment.lightPositionString, identifier);
+                bundle.putBoolean(RealHomeFragment.groupOrLightString, isGroup);
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 TimerFragment timerFragment = new TimerFragment();
@@ -131,7 +146,8 @@ public class AdvancedSettingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putString(lightPositionString, identification);
+                bundle.putString(RealHomeFragment.lightPositionString, identifier);
+                bundle.putBoolean(RealHomeFragment.groupOrLightString, isGroup);
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 ScheduleFragment scheduleFragment = new ScheduleFragment();
@@ -142,69 +158,50 @@ public class AdvancedSettingFragment extends Fragment {
             }
         });
 
-        if (sunriseSchedules.size() == 0) {
-            sunriseSwitch.setChecked(false);
-        } else if (sunriseSchedules.size() == 1){
-            if (sunriseSchedules.get(0).getStatus().equals(PHSchedule.PHScheduleStatus.ENABLED))
-                sunriseSwitch.setChecked(true);
-            else
-                sunriseSwitch.setChecked(false);
-        } else
-            Log.e(DEBUG_TAG, "There were more than 1 sunrise schedule for bulb" + identification);
+        updateSunScheduleToggles();
 
-        if (sunsetSchedules.size() == 0) {
-            sunsetSwitch.setChecked(false);
-        } else if (sunsetSchedules.size() == 1){
-            if (sunsetSchedules.get(0).getStatus().equals(PHSchedule.PHScheduleStatus.ENABLED))
-                sunsetSwitch.setChecked(true);
-            else
-                sunsetSwitch.setChecked(false);
-        } else
-            Log.e(DEBUG_TAG, "There were more than 1 sunset schedule for bulb" + identification);
-
-
-
-        sunriseSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        sunriseSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onClick(View v) {
                 //check if there is recurring schedule for sunrise if there is, enable it, or create it.
-                if (isChecked) {
+                if (((ToggleButton) v).isChecked()) {
                     if (sunriseSchedules.size() == 0) {
-                        createSunSchedule(currentBulb.getIdentifier(), "sunrise");
+                        createSunSchedule(identifier, "sunrise");
                     } else if (sunriseSchedules.size() == 1) {
                         sunriseSchedules.get(0).setStatus(PHSchedule.PHScheduleStatus.ENABLED);
-                        updateSchedule(sunriseSchedules.get(0));
+                        updateSchedule(sunriseSchedules.get(0), "sunrise");
                     }
                 } else {
                     // if there is recurring schedule for sunrise, disable it.
                     if (sunriseSchedules.size() == 1) {
                         sunriseSchedules.get(0).setStatus(PHSchedule.PHScheduleStatus.DISABLED);
-                        updateSchedule(sunriseSchedules.get(0));
+                        updateSchedule(sunriseSchedules.get(0), "sunrise");
                     }
                 }
                 getSunSchedules();
+                updateSunScheduleToggles();
             }
         });
 
-        sunsetSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        sunsetSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked) {
+            public void onClick(View v) {
+                if (((ToggleButton) v).isChecked()) {
                     if (sunsetSchedules.size() == 0) {
-                        createSunSchedule(currentBulb.getIdentifier(), "sunset");
+                        createSunSchedule(identifier, "sunset");
                     } else if (sunsetSchedules.size() == 1) {
                         sunsetSchedules.get(0).setStatus(PHSchedule.PHScheduleStatus.ENABLED);
-                        updateSchedule(sunsetSchedules.get(0));
+                        updateSchedule(sunsetSchedules.get(0), "sunset");
                     }
                 } else {
                     // if there is recurring schedule for sunset, disable it.
                     if (sunsetSchedules.size() == 1) {
                         sunsetSchedules.get(0).setStatus(PHSchedule.PHScheduleStatus.DISABLED);
-                        updateSchedule(sunsetSchedules.get(0));
+                        updateSchedule(sunsetSchedules.get(0), "sunset");
                     }
                 }
                 getSunSchedules();
+                updateSunScheduleToggles();
             }
         });
 
@@ -212,8 +209,40 @@ public class AdvancedSettingFragment extends Fragment {
 
     }
 
-    private void updateSchedule(final PHSchedule phSchedule) {
+    private void updateSunScheduleToggles() {
+        if (sunriseSchedules.size() == 0) {
+            sunriseSwitch.setChecked(false);
+        } else if (sunriseSchedules.size() == 1){
+            PHSchedule.PHScheduleStatus status = sunriseSchedules.get(0).getStatus();
+            if (status==null || status.equals(PHSchedule.PHScheduleStatus.ENABLED)) //TODO right after creating new schedule, it returns null value for the status...
+                sunriseSwitch.setChecked(true);
+            else
+                sunriseSwitch.setChecked(false);
+        } else
+            Log.e(DEBUG_TAG, "There were more than 1 sunrise schedule for bulb" + identifier);
+
+        if (sunsetSchedules.size() == 0) {
+            sunsetSwitch.setChecked(false);
+        } else if (sunsetSchedules.size() == 1){
+            PHSchedule.PHScheduleStatus status = sunsetSchedules.get(0).getStatus();
+            if (status==null || status.equals(PHSchedule.PHScheduleStatus.ENABLED))
+                sunsetSwitch.setChecked(true);
+            else
+                sunsetSwitch.setChecked(false);
+        } else
+            Log.e(DEBUG_TAG, "There were more than 1 sunset schedule for bulb" + identifier);
+    }
+
+    private void updateSchedule(final PHSchedule phSchedule, String name) {
         phSchedule.setAutoDelete(true);
+
+        if(phSchedule.getStatus().equals(PHSchedule.PHScheduleStatus.ENABLED)) {
+            if (name.equals("sunrise"))
+                phSchedule.setDate(getSunriseTime());
+            else
+                phSchedule.setDate(getSunsetTime());
+        }
+
         final PHWizardAlertDialog dialogManager = PHWizardAlertDialog.getInstance();
         dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
 
@@ -237,7 +266,7 @@ public class AdvancedSettingFragment extends Fragment {
 
             @Override
             public void onError(int i, final String s) {
-                if (phSchedule.getDescription().equals("sunrise")) {
+                if (phSchedule.getDescription().equals("prism,sunrise")) {
                     if (phSchedule.getStatus().equals(PHSchedule.PHScheduleStatus.ENABLED))
                         sunriseSwitch.setChecked(false);
                     else
@@ -281,8 +310,12 @@ public class AdvancedSettingFragment extends Fragment {
         else
             state.setOn(true);
         currentSchedule.setLightState(state);
-        currentSchedule.setDescription(name);
-        currentSchedule.setLightIdentifier(currentBulb.getIdentifier());
+        currentSchedule.setDescription("prism," + name);
+        if (isGroup)
+            currentSchedule.setGroupIdentifier(identifier);
+        else
+            currentSchedule.setLightIdentifier(identifier);
+
         currentSchedule.setAutoDelete(true);
 
         final PHWizardAlertDialog dialogManager = PHWizardAlertDialog.getInstance();
@@ -339,6 +372,19 @@ public class AdvancedSettingFragment extends Fragment {
         String currentClass = "." + this.getClass().getSimpleName();
         String topActivity =  ar.topActivity.getShortClassName().toString();
         return topActivity.contains(currentClass);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getSunSchedules();
+        updateSunScheduleToggles();
+    }
+
+    @Override
+    public void cacheUpdated() {
+        getSunSchedules();
+        updateSunScheduleToggles();
     }
 //
 //    // TODO: Rename method, update argument and hook method into UI event

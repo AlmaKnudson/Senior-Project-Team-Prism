@@ -32,6 +32,7 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
     private ColorPickerViewGroup colorPicker;
 
     private Button advancedSettingButton;
+    private Button colorCycleButton;
     private ImageButton editGroupButton;
 
     private PHHueSDK hueSDK;
@@ -60,6 +61,8 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
         colorPicker = (ColorPickerViewGroup) frame.findViewById(R.id.colorPickerView);
 
         advancedSettingButton = (Button)frame.findViewById(R.id.advancedSettingButton);
+        colorCycleButton = (Button)frame.findViewById(R.id.colorCycleButton);
+
         editGroupButton = (ImageButton) frame.findViewById(R.id.editGroupButton);
         updateState();
         if(HueBulbChangeUtility.DEFAULT_GROUP_ID.equals(identifier)) {
@@ -123,20 +126,35 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
         });
 
         //for advanced settings, the default group must also work (id == "0")
-//        advancedSettingButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Bundle bundle = new Bundle();
-//                bundle.putString(RealHomeFragment.lightPositionString, identifier);
-//                bundle.putBoolean(RealHomeFragment.groupOrLightString, isGroup);
-//                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-//                AdvancedSettingFragment advancedSettingFragment = new AdvancedSettingFragment();
-//                advancedSettingFragment.setArguments(bundle);
-//                fragmentTransaction.replace(R.id.container, advancedSettingFragment);
-//                fragmentTransaction.addToBackStack("AdvancedSettings");
-//                fragmentTransaction.commit();
-//            }
-//        });
+        advancedSettingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString(RealHomeFragment.lightPositionString, identifier);
+                bundle.putBoolean(RealHomeFragment.groupOrLightString, true);
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                AdvancedSettingFragment advancedSettingFragment = new AdvancedSettingFragment();
+                advancedSettingFragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.container, advancedSettingFragment);
+                fragmentTransaction.addToBackStack("AdvancedSettings");
+                fragmentTransaction.commit();
+            }
+        });
+
+        colorCycleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString(RealHomeFragment.lightPositionString, identifier);
+                bundle.putBoolean(RealHomeFragment.groupOrLightString, true);
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                ColorCycleFragment colorCycleFragment = new ColorCycleFragment();
+                colorCycleFragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.container, colorCycleFragment);
+                fragmentTransaction.addToBackStack("colorCycle");
+                fragmentTransaction.commit();
+            }
+        });
 
         return frame;
     }

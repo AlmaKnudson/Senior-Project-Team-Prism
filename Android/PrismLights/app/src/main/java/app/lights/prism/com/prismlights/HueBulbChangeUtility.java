@@ -159,9 +159,12 @@ public class HueBulbChangeUtility {
         return lightState;
     }
 
+    // 100 scale -> 254 scale
     public static int convertBrightness(int brightness){
         return (int) Math.round((brightness/100.0) * 254.0);
     }
+
+    // 254 scale -> 100 scale
     public static int revertBrightness(int convertedBrightness){
         return (int) Math.round(convertedBrightness/254.0 * 100.0);
     }

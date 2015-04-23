@@ -1,6 +1,7 @@
 package app.lights.prism.com.prismlights;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.AlarmManager;
 import android.app.Dialog;
@@ -9,6 +10,7 @@ import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
@@ -158,6 +160,22 @@ public class MainActivity extends Activity implements PHSDKListener{
         } catch (Exception e) {
             Log.e(DEBUG_TAG, "Getting colorCycle info failed: "+ e);
             colorCycles = new ArrayList<>();
+
+            //add Demo cycle
+            ColorCycle demoCycle = new ColorCycle("My First Cycle");
+            float[] color = {0.1658f,0.0504f};
+            float[] color2 = {0.4087f,0.5158f};
+            float[] color3 = {0.6091f,0.3294f};
+            float[] color4 = {0.2207f,0.1386f};
+            float[] color5 = {0.3452f,0.1879f};
+
+            demoCycle.add(color, 100, 10, 2 );
+            demoCycle.add(color2, 30, 10, 2 );
+            demoCycle.add(color3, 100, 10, 2 );
+            demoCycle.add(color4, 30, 10, 2 );
+            demoCycle.add(color5, 100, 10, 2 );
+
+            colorCycles.add(demoCycle);
         }
 
         // get Stored colorCycleTasks
@@ -661,8 +679,41 @@ public class MainActivity extends Activity implements PHSDKListener{
     private void updateSunTime() {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         List<String> providers = locationManager.getProviders(true);
+        Location location = null;
 
-        Location location = locationManager.getLastKnownLocation(providers.get(0));
+        for (int i = 0; i<providers.size();i++){
+            if (locationManager.getLastKnownLocation(providers.get(0))!=null) {
+                location = locationManager.getLastKnownLocation(providers.get(0));
+                break;
+            }
+        }
+
+        //if there is no access to location make
+        if (location==null){
+            if(sunrise==null) {
+                sunrise = new Date();
+                sunrise.setDate(sunrise.getDate() - 1);
+                sunrise.setHours(7);
+                sunrise.setMinutes(24);
+                sunrise.setSeconds(00);
+                sunset = new Date();
+                sunset.setDate(sunrise.getDate() - 1);
+                sunset.setHours(20);
+                sunset.setMinutes(33);
+                sunset.setSeconds(00);
+            }
+            new AlertDialog.Builder(this)
+                    .setTitle("Warning")
+                    .setMessage("There is no access to the current location. The sunrise and sunset time may not be accurate. Please try again later for more accurate result.")
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+            return;
+        }
+
         Date date = new Date();
 
         URL url;

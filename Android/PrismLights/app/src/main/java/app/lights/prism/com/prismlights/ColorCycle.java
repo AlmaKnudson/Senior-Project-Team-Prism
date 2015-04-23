@@ -333,12 +333,14 @@ public class ColorCycle implements Serializable{
         for (int i = 0; i < timers.size(); i++){
             PHSchedule timer = timers.get(i);
             if(!isGroup) {
-                if (timer.getLightIdentifier().equals(identifier)
+                if (timer.getLightIdentifier()!=null
+                        &&timer.getLightIdentifier().equals(identifier)
                         && timer.getDescription().startsWith("prism"))
                     timersForThisBulb.add(timer);
             }
             else{
-                if (timer.getGroupIdentifier().equals(identifier)
+                if (timer.getGroupIdentifier()!=null
+                        && timer.getGroupIdentifier().equals(identifier)
                         && timer.getDescription().startsWith("prism"))
                     timersForThisBulb.add(timer);
             }

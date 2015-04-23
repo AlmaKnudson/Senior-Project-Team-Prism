@@ -33,10 +33,10 @@ import java.util.Map;
 
 public class ScheduleConfigFragment extends Fragment {
 
-    private int bulbID; // The number for the chosen Light
+    private String identifier;
+    private boolean isGroup;
     static private PHHueSDK phHueSDK;
     private static PHBridge bridge;
-    private PHLight currentBulb;
 
     private PHSchedule currentSchedule;
     private EditText nameEditor;
@@ -67,30 +67,6 @@ public class ScheduleConfigFragment extends Fragment {
 
     //TODO: validate name length, show error message when update or create schedule fails.
 
-    public static String lightPositionString = "CURRENT_BULB_POSITION";
-
-
-
-//    private OnFragmentInteractionListener mListener;
-
-//    /**
-//     * Use this factory method to create a new instance of
-//     * this fragment using the provided parameters.
-//     *
-//     * @param param1 Parameter 1.
-//     * @param param2 Parameter 2.
-//     * @return A new instance of fragment ScheduleConfigFragment.
-//     */
-//    // TODO: Rename and change types and number of parameters
-//    public static ScheduleConfigFragment newInstance(String param1, String param2) {
-//        ScheduleConfigFragment fragment = new ScheduleConfigFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
-
     public ScheduleConfigFragment() {
         // Required empty public constructor
     }
@@ -106,10 +82,9 @@ public class ScheduleConfigFragment extends Fragment {
         ((MainActivity)getActivity()).setCurrentSchedule(null);
 
         if (getArguments() != null) {
-            bulbID = getArguments().getInt(lightPositionString);
+            identifier = getArguments().getString(RealHomeFragment.lightPositionString);
+            isGroup = getArguments().getBoolean(RealHomeFragment.groupOrLightString);
         }
-
-        currentBulb = bridge.getResourceCache().getAllLights().get(bulbID);
 
         recurringDays = 0; //default value
     }
@@ -210,7 +185,7 @@ public class ScheduleConfigFragment extends Fragment {
             bulbOnState.setChecked(state.isOn());
 
             if(state.getBrightness() != null) {
-                int currentBrightness = state.getBrightness();
+                int currentBrightness = HueBulbChangeUtility.revertBrightness(state.getBrightness());
                 brightness.setProgress(currentBrightness);
                 brightnessPercentage.setText(currentBrightness + "%");
             }
@@ -293,6 +268,9 @@ public class ScheduleConfigFragment extends Fragment {
                 updateDisplay();
             }
         }
+        else {
+            brightness.setProgress(100);
+        }
 
         return frame;
     }
@@ -303,8 +281,11 @@ public class ScheduleConfigFragment extends Fragment {
         currentSchedule.setDate(timeToSend);
         currentSchedule.setRecurringDays(recurringDays);
         currentSchedule.setLightState(getLightState());
-        currentSchedule.setDescription("Prism");
-        currentSchedule.setLightIdentifier(currentBulb.getIdentifier());
+        currentSchedule.setDescription("prism");
+        if(isGroup)
+            currentSchedule.setGroupIdentifier(identifier);
+        else
+            currentSchedule.setLightIdentifier(identifier);
         currentSchedule.setAutoDelete(true);
 
         final PHWizardAlertDialog dialogManager = PHWizardAlertDialog
@@ -314,7 +295,7 @@ public class ScheduleConfigFragment extends Fragment {
         bridge.updateSchedule(currentSchedule, new PHScheduleListener() {
             @Override
             public void onCreated(PHSchedule phSchedule) {
-            ;
+                ;
             }
 
             @Override
@@ -336,7 +317,7 @@ public class ScheduleConfigFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showErrorDialog(getActivity(), s,R.string.btn_ok);
+                            PHWizardAlertDialog.showErrorDialog(getActivity(), s, R.string.btn_ok);
                         }
                     }
                 });
@@ -356,8 +337,11 @@ public class ScheduleConfigFragment extends Fragment {
         currentSchedule.setDate(timeToSend);
         currentSchedule.setRecurringDays(recurringDays);
         currentSchedule.setLightState(getLightState());
-        currentSchedule.setDescription("Prism");
-        currentSchedule.setLightIdentifier(currentBulb.getIdentifier());
+        currentSchedule.setDescription("prism");
+        if(isGroup)
+            currentSchedule.setGroupIdentifier(identifier);
+        else
+            currentSchedule.setLightIdentifier(identifier);
         currentSchedule.setAutoDelete(true);
 
         final PHWizardAlertDialog dialogManager = PHWizardAlertDialog.getInstance();
@@ -407,7 +391,7 @@ public class ScheduleConfigFragment extends Fragment {
         state.setOn(bulbOnState.isChecked());
 //        state.setHue(50);
 //        state.setSaturation(50);
-        state.setBrightness(brightness.getProgress());
+        state.setBrightness(HueBulbChangeUtility.convertBrightness(brightness.getProgress()));
         float xy[] = PHUtilities.calculateXY(currentColor, "");
         state.setX(xy[0]);
         state.setY(xy[1]);
@@ -421,23 +405,8 @@ public class ScheduleConfigFragment extends Fragment {
 
 
     private void goToScheduleFragment() {
-
         android.app.FragmentManager fm = getActivity().getFragmentManager();
         fm.popBackStack();
-//        Bundle bundle = new Bundle();
-//        bundle.putInt(lightPositionString, bulbID);
-//
-//        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-//        ScheduleFragment scheduleFragment = new ScheduleFragment();
-//        scheduleFragment.setArguments(bundle);
-//        fragmentTransaction.replace(R.id.container, scheduleFragment);
-//        fragmentTransaction.addToBackStack("ScheduleFragment");
-//        fragmentTransaction.commit();
-    }
-
-    //TODO: do I need this?
-    private int getCurrentBrightness(int phBrightness) {
-        return (int) Math.round((phBrightness * 100.0) / HueBulbChangeUtility.MAX_BRIGHTNESS);
     }
 
     private boolean isCurrentActivity() {

@@ -5,13 +5,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,18 +21,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.philips.lighting.hue.listener.PHBridgeConfigurationListener;
 import com.philips.lighting.hue.listener.PHScheduleListener;
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.model.PHBridge;
-import com.philips.lighting.model.PHBridgeConfiguration;
 import com.philips.lighting.model.PHHueError;
 import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
 import com.philips.lighting.model.PHSchedule;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,13 +45,13 @@ import java.util.Map;
 /**
  * Created by Brian_Oh on 2/10/15.
  */
-public class TimerFragment extends Fragment{
+public class TimerFragment extends Fragment implements CacheUpdateListener{
 
     public static String lightPositionString = "CURRENT_BULB_POSITION";
 
-    private int currentBulbId; // The chosen Light BULB ID
+    private String identifier;
+    private boolean isGroup;
     private int chosenTimerPosition;
-    private PHLight currentBulb;
     private ListView timerListView;
     static TimerAdapter adapter;
     static private PHHueSDK phHueSDK;
@@ -91,11 +85,11 @@ public class TimerFragment extends Fragment{
         timePickerDialog = null;
 
         if (getArguments() != null) {
-            currentBulbId = getArguments().getInt(lightPositionString);
+            identifier = getArguments().getString(RealHomeFragment.lightPositionString);
+            isGroup = getArguments().getBoolean(RealHomeFragment.groupOrLightString);
         }
 
         //get current bulb
-        currentBulb = bridge.getResourceCache().getAllLights().get(currentBulbId);
         getCurrentTimers();
         countDownTimers = new ArrayList<>();
     }
@@ -108,14 +102,18 @@ public class TimerFragment extends Fragment{
 
         // get schedules from Bridge those are for this bulb
 
-        String currentBulbIdentity = currentBulb.getIdentifier();
-
         for (int i=0; i< allTimers.size();i++)
         {
             PHSchedule schedule = allTimers.get(i);
-            if(schedule.getLightIdentifier() != null && schedule.getLightIdentifier().equals(currentBulbIdentity))
-            {
-                currentTimers.add(allTimers.get(i));
+
+            if(isGroup){
+                if (schedule.getGroupIdentifier() != null && schedule.getGroupIdentifier().equals(identifier)) {
+                    currentTimers.add(allTimers.get(i));
+                }
+            } else {
+                if (schedule.getLightIdentifier() != null && schedule.getLightIdentifier().equals(identifier)) {
+                    currentTimers.add(allTimers.get(i));
+                }
             }
         }
     }
@@ -141,23 +139,12 @@ public class TimerFragment extends Fragment{
 
         timerListView.setAdapter(adapter);
 
-        timerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                showTimePickerDialog(position);
-            }
-        });
-
-        ImageView refreshButton = (ImageView)view.findViewById(R.id.refreshButton);
-
-        refreshButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clearCountDown();
-                getCurrentTimers();
-                adapter.notifyDataSetChanged();
-            }
-        });
+//        timerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                showTimePickerDialog(position);
+//            }
+//        });
 
         return view;
     }
@@ -173,6 +160,13 @@ public class TimerFragment extends Fragment{
     public void onPause() {
         super.onPause();
         clearCountDown();
+    }
+
+    @Override
+    public void cacheUpdated() {
+        clearCountDown();
+        getCurrentTimers();
+        adapter.notifyDataSetChanged();
     }
 
     private class TimerAdapter extends BaseAdapter {
@@ -459,10 +453,10 @@ public class TimerFragment extends Fragment{
                             addNewTimer(timeToSend);
                         }
                         // user wants to change existing Timer
-                        else
-                        {
-                            updateTimer(chosenTimerPosition, timeToSend);
-                        }
+//                        else
+//                        {
+//                            updateTimer(chosenTimerPosition, timeToSend);
+//                        }
 
                         modeDialog.dismiss();
                         getCurrentTimers();
@@ -485,63 +479,66 @@ public class TimerFragment extends Fragment{
         timePickerDialog.show(getFragmentManager(), "timePicker");
     }
 
-    private void updateTimer(int timerPosition, int time) {
-
-        PHSchedule schedule = currentTimers.get(timerPosition);
-        schedule.setTimer(time);
-        schedule.setLightState(getLightState());
-
-        final PHWizardAlertDialog dialogManager = PHWizardAlertDialog
-                .getInstance();
-        dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
-
-        bridge.updateSchedule(schedule, new PHScheduleListener() {
-            @Override
-            public void onCreated(PHSchedule phSchedule) {
-
-            }
-
-            @Override
-            public void onSuccess() {
-                dialogManager.closeProgressDialog();
-                getActivity().runOnUiThread(new Runnable() {
-                    public void run() {
-                        if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_timer_updated), R.string.btn_ok, R.string.txt_result);
-                        }
-                        getCurrentTimers();
-                        clearCountDown();
-                        adapter.notifyDataSetChanged();
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int i, final String s) {
-                dialogManager.closeProgressDialog();
-                getActivity().runOnUiThread(new Runnable() {
-                    public void run() {
-                        if (isCurrentActivity()) {
-                            PHWizardAlertDialog.showErrorDialog(getActivity(), s,R.string.btn_ok);
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
-
-            }
-        });
-    }
+//    private void updateTimer(int timerPosition, int time) {
+//
+//        PHSchedule schedule = currentTimers.get(timerPosition);
+//        schedule.setTimer(time);
+//        schedule.setLightState(getLightState());
+//
+//        final PHWizardAlertDialog dialogManager = PHWizardAlertDialog
+//                .getInstance();
+//        dialogManager.showProgressDialog(R.string.sending_progress, getActivity());
+//
+//        bridge.updateSchedule(schedule, new PHScheduleListener() {
+//            @Override
+//            public void onCreated(PHSchedule phSchedule) {
+//
+//            }
+//
+//            @Override
+//            public void onSuccess() {
+//                dialogManager.closeProgressDialog();
+//                getActivity().runOnUiThread(new Runnable() {
+//                    public void run() {
+//                        if (isCurrentActivity()) {
+//                            PHWizardAlertDialog.showResultDialog(getActivity(), getString(R.string.txt_timer_updated), R.string.btn_ok, R.string.txt_result);
+//                        }
+//                        getCurrentTimers();
+//                        clearCountDown();
+//                        adapter.notifyDataSetChanged();
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void onError(int i, final String s) {
+//                dialogManager.closeProgressDialog();
+//                getActivity().runOnUiThread(new Runnable() {
+//                    public void run() {
+//                        if (isCurrentActivity()) {
+//                            PHWizardAlertDialog.showErrorDialog(getActivity(), s,R.string.btn_ok);
+//                        }
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void onStateUpdate(Map<String, String> stringStringMap, List<PHHueError> phHueErrors) {
+//
+//            }
+//        });
+//    }
 
     private void addNewTimer(int time) {
         String scheduleName = ""+ time;
         PHSchedule schedule = new PHSchedule(scheduleName);
         schedule.setTimer(time);
-        schedule.setLightIdentifier(currentBulb.getIdentifier());
+        if(isGroup)
+            schedule.setGroupIdentifier(identifier);
+        else
+            schedule.setLightIdentifier(identifier);
         schedule.setLightState(getLightState());
-        schedule.setDescription("Timer");
+        schedule.setDescription("prism");
 //        Date startTime = new Date();
 //        //TODO: inpect setting startTime and CreatedTime...
 //        schedule.setStartTime(startTime);
