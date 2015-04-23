@@ -427,4 +427,11 @@ public class ColorCycleDetailFragment extends Fragment {
 
         }
     }
+
+    @Override
+    public void onDestroyView() {
+        //add more often color cycle saving
+        ((MainActivity)getActivity()).saveColorCycles();
+        super.onDetach();
+    }
 }

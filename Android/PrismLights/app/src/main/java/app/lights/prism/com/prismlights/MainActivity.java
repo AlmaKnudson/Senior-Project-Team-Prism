@@ -423,9 +423,7 @@ public class MainActivity extends Activity implements PHSDKListener{
         DialogCreator.showLoadingDialog(waitingText.toString(), this);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
+    public void saveColorCycles() {
         //save the color cycles
         if(sunrise!= null && sunset != null) {
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -471,6 +469,11 @@ public class MainActivity extends Activity implements PHSDKListener{
                 System.out.println("Problem Saving colorCycleTasksGroup: " + e);
             }
         }
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveColorCycles();
         //turn of the internet connection
         PHHueSDK.getInstance().disableAllHeartbeat();
         PHHueSDK.getInstance().getNotificationManager().unregisterSDKListener(this);
