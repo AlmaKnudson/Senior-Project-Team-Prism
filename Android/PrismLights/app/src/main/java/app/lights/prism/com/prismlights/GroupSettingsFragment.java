@@ -71,6 +71,12 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
 
         advancedSettingButton = (Button)frame.findViewById(R.id.advancedSettingButton);
         colorCycleButton = (Button)frame.findViewById(R.id.colorCycleButton);
+        if(HueBulbChangeUtility.DEFAULT_GROUP_ID.equals(identifier)) {
+            advancedSettingButton.setVisibility(View.GONE);
+            advancedSettingButton.setEnabled(false);
+            colorCycleButton.setVisibility(View.GONE);
+            colorCycleButton.setEnabled(false);
+        }
 
         editGroupButton = (ImageButton) frame.findViewById(R.id.editGroupButton);
         updateState();
