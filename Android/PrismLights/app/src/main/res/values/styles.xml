@@ -13,6 +13,14 @@
         <item name="android:shadowDy">-2</item>
         <item name="android:shadowColor">#000</item>
     </style>
+
+    <style name="SegmentedViewLikeButton" parent="@android:style/Widget.Button">
+        <item name="android:textSize">16sp</item>
+        <item name="android:background">@drawable/segmented_view_like_button</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textColor">@drawable/segmented_view_text</item>
+    </style>
     <style name="Slider" parent="@android:style/Widget.Holo.SeekBar">
 
     </style>
