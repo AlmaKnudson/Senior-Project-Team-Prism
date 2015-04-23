@@ -187,7 +187,7 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
     // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell{
         
-        var cell:BulbCollectionCell! = bulbCollectionView.dequeueReusableCellWithReuseIdentifier("bulb", forIndexPath: indexPath) as? BulbCollectionCell
+        var cell:BulbCollectionCell! = bulbCollectionView.dequeueReusableCellWithReuseIdentifier("bulbCell", forIndexPath: indexPath) as? BulbCollectionCell
         if( cell == nil){
             cell = BulbCollectionCell()
         }

@@ -11,7 +11,7 @@ import Foundation
 
 
 
-class EditBulbsCollection: UICollectionViewController, UICollectionViewDataSource, UICollectionViewDelegate, RAReorderableLayoutDelegate, RAReorderableLayoutDataSource {
+class EditBulbsCollection: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, RAReorderableLayoutDelegate, RAReorderableLayoutDataSource {
     
     
     @IBAction func finishedButton(sender: UIButton) {
@@ -36,7 +36,7 @@ class EditBulbsCollection: UICollectionViewController, UICollectionViewDataSourc
         return 2.0
     }
     
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
     }
     
@@ -44,14 +44,14 @@ class EditBulbsCollection: UICollectionViewController, UICollectionViewDataSourc
         return UIEdgeInsetsMake(0, 0, 2.0, 0)
     }
     
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 {
             return 1
         }
         return 0
     }
     
-     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         var cell:UICollectionViewCell! = BulbCollectionCell()
         
         
@@ -60,14 +60,14 @@ class EditBulbsCollection: UICollectionViewController, UICollectionViewDataSourc
         
         switch editType! {
         case "single":
-            cell = self.collectionView!.dequeueReusableCellWithReuseIdentifier("bulbCell", forIndexPath: indexPath) as! BulbCollectionCell
+            cell = collectionView.dequeueReusableCellWithReuseIdentifier("bulbCell", forIndexPath: indexPath) as! BulbCollectionCell
             if cell == nil {
                 cell = BulbCollectionCell()
             }
             
             return cell
         case "group":
-            cell = self.collectionView!.dequeueReusableCellWithReuseIdentifier("groupCell", forIndexPath: indexPath) as! GroupBulbCell
+            cell = collectionView.dequeueReusableCellWithReuseIdentifier("groupCell", forIndexPath: indexPath) as! GroupBulbCell
             if cell == nil {
                 cell = GroupBulbCell()
             }
@@ -75,7 +75,7 @@ class EditBulbsCollection: UICollectionViewController, UICollectionViewDataSourc
             return cell
             
         case "favorite":
-            cell = self.collectionView!.dequeueReusableCellWithReuseIdentifier("favoriteCell", forIndexPath: indexPath) as! FavoriteCollectionCell
+            cell = collectionView.dequeueReusableCellWithReuseIdentifier("favoriteCell", forIndexPath: indexPath) as! FavoriteCollectionCell
             if cell == nil {
                 cell = FavoriteCollectionCell()
             }
@@ -118,7 +118,7 @@ class EditBulbsCollection: UICollectionViewController, UICollectionViewDataSourc
 //    }
     
     
-    override func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView{
+    func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView{
         //1
         switch kind {
             //2
