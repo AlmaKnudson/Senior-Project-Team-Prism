@@ -84,7 +84,7 @@ public class ColorCycleDetailFragment extends Fragment {
                 if(nameEditor.getText().toString().trim().equals(""))
                     new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_DARK)
                             .setTitle("Error")
-                            .setMessage("Please Enter Name for this Color Cycle.")
+                            .setMessage("Please Enter a Name for this Color Cycle.")
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
 
@@ -109,7 +109,7 @@ public class ColorCycleDetailFragment extends Fragment {
                     if(isNew && ((MainActivity) getActivity()).containsCycleName(newName) != -1) {
                         new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_DARK)
                                 .setTitle("Error")
-                                .setMessage("Same Name already exits, please enter other name.")
+                                .setMessage("Name already exits, please enter a different name.")
                                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                     }

@@ -31,7 +31,8 @@
                 android:layout_weight="1"
                 android:id="@+id/nameEditor"
                 android:inputType="textCapWords"
-                android:imeOptions="actionDone"/>
+                android:imeOptions="actionDone"
+                android:maxLength="32"/>
         </LinearLayout>
 
         <LinearLayout
