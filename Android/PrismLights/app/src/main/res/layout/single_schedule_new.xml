@@ -134,7 +134,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:src="@android:drawable/ic_menu_delete" />
+            android:src="@drawable/ic_menu_delete" />
 
     </LinearLayout>
 </LinearLayout>
