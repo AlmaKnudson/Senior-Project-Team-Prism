@@ -9,23 +9,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.CountDownTimer;
-
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-
-
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Random;
-
-
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.AudioProcessor;
@@ -39,8 +33,18 @@ import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
 import be.tarsos.dsp.pitch.PitchProcessor;
 
+
+/**
+* Music control/functionality fragment.
+* Handles all things music in the app.
+* 
+* @author Alma Knudson--Senior Project(Team Prism)
+*/
 public class MusicFragment extends Fragment implements OnsetHandler {
 
+/*
+ * Member variables for Music.
+ */
     public static final String musicSelectBulbsTag = "BULB_RANGE_FRAGMENT_TAG";
     private  AudioProcessor p;
     private PercussionOnsetDetector pOC;
@@ -61,19 +65,14 @@ public class MusicFragment extends Fragment implements OnsetHandler {
     private TextView midRangeMaxLabel;
     private TextView highRangeMinLabel;
     private Thread thread;
-
     private boolean stopped;
-
     //These lists will be SMALL
     private ArrayList<String> lows;
     private ArrayList<String> mids;
     private ArrayList<String> highs;
-
     private volatile double fX;
-
     private Random rng;
     private double mostRecentPitch;
-
     PitchDetectionHandler pdh;
 
     @Override
@@ -196,37 +195,21 @@ public class MusicFragment extends Fragment implements OnsetHandler {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     bpmLabel.setText("" + (progress + 60) );
                     int currentBPM = progress + 60;
-
 //                f(x) = 1/60 X + 3
                 double slope = -1.0/60.0;
                 double m =  (progress + 60.0); //BPM 60-180
                 fX = slope * m + 3.5;
-//                bpmLabel.setText("" + fX);
-
-
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 if(dispatcher != null) {
-//                    dispatcher.removeAudioProcessor(p);
-//                    dispatcher.removeAudioProcessor(cOP);
+                    
                 }
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
                   cOP.setThreshold(fX / 10);
-
-//                cOP.setThreshold();
-//                cOP  = new ComplexOnsetDetector(2048, fX/10, 0.002, -70);
-//                cOP.setHandler(this);
-//                p = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 44100, 2048, pdh);
-//                dispatcher.addAudioProcessor(p);
-//                dispatcher.addAudioProcessor(cOP);
-//                thread.start();
-//                dispatcher.addAudioProcessor(p);
-//                dispatcher.addAudioProcessor(cOP);
             }
         });
 
@@ -248,7 +231,7 @@ public class MusicFragment extends Fragment implements OnsetHandler {
         });
 
 
-        //doesn't used onCheckedChanged to avoid programmatic sending
+        //doesn't use onCheckedChanged to avoid programmatic sending
         View.OnClickListener listener = new View.OnClickListener() {
             ToggleButton startRecording;
             @Override
@@ -267,14 +250,12 @@ public class MusicFragment extends Fragment implements OnsetHandler {
                             mWaveformView.updateAudioData(data);
                             if(result.isPitched()){
                                 float pitchInHz = result.getPitch();
-//                    System.out.println("Most Recent Pitch: " + pitchInHz);
                                 mostRecentPitch = pitchInHz;
                             }
 //                System.out.println(result.isPitched());
 //                float pitchInHz = result.getPitch();
 //                if(pitchInHz != -1.0)
 //                    System.out.println("Pitch: " + pitchInHz);
-
                             MusicFragment.this.getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -284,7 +265,6 @@ public class MusicFragment extends Fragment implements OnsetHandler {
                             });
                         }
                     };
-
 
                     if(p!= null){
                         dispatcher.removeAudioProcessor(p);
@@ -337,7 +317,7 @@ public class MusicFragment extends Fragment implements OnsetHandler {
 
 //        System.out.println(String.format("%.4f;%.4f, %.4f", time, salience, (float)mostRecentPitch));
 
-        //TODO-- Send bulb requests based on FREQUENCY ranges and the frequency detected by this ONSET.
+        //Send bulb requests based on FREQUENCY ranges and the frequency detected by this ONSET.
         //Compare mostRecentPitch to the pitch selections on sliders.
 
         int lowThreshold = ( Integer.parseInt(lowRangeMaxLabel.getText().toString().replace("hz", "")) );
@@ -365,7 +345,6 @@ public class MusicFragment extends Fragment implements OnsetHandler {
 
     @Override
     public void onDestroyView() {
-
         if(dispatcher!= null)
             dispatcher.stop();
         if(p!=null)
