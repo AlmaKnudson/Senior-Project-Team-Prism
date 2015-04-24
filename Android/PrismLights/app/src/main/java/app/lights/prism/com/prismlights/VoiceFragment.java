@@ -8,40 +8,39 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import java.text.DecimalFormat;
 import java.util.Date;
-
 import com.google.gson.JsonElement;
-//import com.google.gson.JsonObject;
 import com.philips.lighting.hue.sdk.PHHueSDK;
-//import com.philips.lighting.hue.sdk.util.PHHueCountTimer;
 import com.philips.lighting.hue.sdk.util.PHHueCountTimerListener;
 import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
-//import com.philips.lighting.model.PHSchedule;
-
-//import org.json.JSONObject;
-//import org.w3c.dom.Text;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import ai.wit.sdk.IWitListener;
 import ai.wit.sdk.Wit;
 import ai.wit.sdk.model.WitOutcome;
 import ai.wit.sdk.WitMic;
-//import ai.wit.sdk.model.WitResponse;
 
+
+/**
+* This is the fragment that handles all of the voice command functionality.
+*  
+* Example voice commands: "Lights on", "Lights off", "Set 5 minute alarm", "Wake me up at 6:00AM", "It's too bright",...
+*  
+* @author Alma Knudson--Senior Project (Team Prism) 
+*/
 public class VoiceFragment extends Fragment implements IWitListener {
 
+    /**
+     * Private voice fragment global variables.
+     **/
     private Wit wit;
     private TextView micStatus;
     private TextView witResponse;
@@ -81,16 +80,18 @@ public class VoiceFragment extends Fragment implements IWitListener {
 
     @Override
     public void witDidGraspIntent(ArrayList<WitOutcome> witOutcomes, String s, Error error) {
+        //Check to see if we need to ignore this callback.
         if(ignoreCallback)
             return;
         //TODO: handle recieving this after the view has disappeared
-        System.out.println(witOutcomes);
+        // System.out.println(witOutcomes);
+        
+        //Parse what Wit passes us back.
         if(witOutcomes != null && !witOutcomes.isEmpty() && error == null) {
             WitOutcome outcome = witOutcomes.get(0);
+            //Notify User what their intent was interpretted to be.
             witResponse.setText("\nYOU SAID:\n" + outcome.get_text() + "\n\nYOUR INTENT:\n" + outcome.get_intent() + "\n");
             String intent = outcome.get_intent().trim();
-
-
             HashMap<String, JsonElement> entities = outcome.get_entities();
 
             //Hue Bridge:
@@ -98,6 +99,7 @@ public class VoiceFragment extends Fragment implements IWitListener {
             DecimalFormat formatter = new DecimalFormat("#0.00");
             /*
              * These are the 9 possible intents for voice control.
+             * Handling what to do if wit interpretted voice to be any of these 9 intents. 
              */
             if(intent.equals("alarm")){
 
@@ -125,7 +127,6 @@ public class VoiceFragment extends Fragment implements IWitListener {
                         PHLightState lightState = new PHLightState();
                         lightState.setOn(true);
                         lightState.setBrightness(newBrightness);
-
 //                    lightState.setBrightness(currentBrightness + (currentBrightness/5)); //Decrease brightness 20%
                         bridge.updateLightState(light, lightState);
                         message.append(light.getName() + ", is set to " + formatter.format((newBrightness * 1.0) / 254.0) + " brightness.\n");
@@ -137,16 +138,12 @@ public class VoiceFragment extends Fragment implements IWitListener {
                 try {
                     if (entities.containsKey("bulbname")) {
                         String bulbname = entities.get("bulbname").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsString();
-
-
-
                         boolean onOff = false;
                         if(entities.containsKey("on_off")){
                             if(entities.get("on_off").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsString().equals("on")){
                                 onOff = true;
                             }
                         }
-
                         int hV = -1;
                         if(entities.containsKey("color")){
                             String[] result = entities.get("color").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsString().split("~!~");
@@ -159,7 +156,6 @@ public class VoiceFragment extends Fragment implements IWitListener {
 
                             }
                         }
-
                         HueBulbChangeUtility.setLightOrGroupFromName(bulbname, onOff, hV, (MainActivity)getActivity());
                         witResponse.setText(witResponse.getText() + "Turning bulb/group '" + bulbname + "'" + onOff + "'.");
                     }
