@@ -13,7 +13,8 @@
             android:layout_gravity="center_vertical"
             android:id="@+id/colorCycleName"
             android:ellipsize="end"
-            android:maxLines="1"/>
+            android:maxLines="1"
+            android:textColor="@color/white"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -24,6 +24,7 @@ import android.widget.TimePicker;
 import com.philips.lighting.hue.listener.PHScheduleListener;
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.model.PHBridge;
+import com.philips.lighting.model.PHGroup;
 import com.philips.lighting.model.PHHueError;
 import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
@@ -46,6 +47,7 @@ import java.util.Map;
  */
 public class AlarmFragment extends Fragment implements CacheUpdateListener{
 
+    private boolean popping;
     private String identifier; // The chosen Light BULB ID
     private int chosenAlarmPosition;
     private ListView alarmListView;
@@ -67,6 +69,7 @@ public class AlarmFragment extends Fragment implements CacheUpdateListener{
      * fragment (e.g. upon screen orientation changes).
      */
     public AlarmFragment() {
+        popping = false;
     }
 
     @Override
@@ -86,10 +89,8 @@ public class AlarmFragment extends Fragment implements CacheUpdateListener{
             identifier = getArguments().getString(RealHomeFragment.lightPositionString);
             isGroup = getArguments().getBoolean(RealHomeFragment.groupOrLightString);
         }
-
         getAlarmSchedules();
     }
-
     // this function get list of schedule from the bridge, and return schedules that are alarm schedule and for this bulb
     private void getAlarmSchedules() {
         alarmSchedules = new ArrayList<PHSchedule>();
@@ -146,12 +147,19 @@ public class AlarmFragment extends Fragment implements CacheUpdateListener{
     @Override
     public void onResume() {
         super.onResume();
-        getAlarmSchedules();
-        adapter.notifyDataSetChanged();
+        updateCache();
     }
 
     @Override
     public void cacheUpdated() {
+        updateCache();
+    }
+
+    private void updateCache() {
+        if(popping || HueBulbChangeUtility.popBackStackIfItemNotExist(identifier, isGroup, getFragmentManager())) {
+            popping = true;
+            return;
+        }
         getAlarmSchedules();
         adapter.notifyDataSetChanged();
     }
@@ -489,9 +497,19 @@ public class AlarmFragment extends Fragment implements CacheUpdateListener{
         }
     }
 
+    private void closeAllDialogs() {
+        closeProgressDialog();
+        if(modeDialog!= null && modeDialog.isShowing()) {
+            modeDialog.dismiss();
+        }
+        if(timePickerDialog != null) {
+            timePickerDialog.dismiss();
+        }
+    }
+
     @Override
     public void onDetach() {
-        closeProgressDialog();
+        closeAllDialogs();
         super.onDetach();
     }
 }

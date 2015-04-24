@@ -1,5 +1,6 @@
 package app.lights.prism.com.prismlights;
 
+import android.app.FragmentManager;
 import android.text.format.DateFormat;
 
 import com.philips.lighting.hue.listener.PHGroupListener;
@@ -35,8 +36,6 @@ public class HueBulbChangeUtility {
     public static PHLight getLightFromId(String identifier, PHBridge bridge) {
         return bridge.getResourceCache().getLights().get(identifier);
     }
-
-
 
     public static void setLightOrGroupFromName(String name, boolean onOff, int hueValue, MainActivity activity){
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
@@ -918,4 +917,23 @@ public class HueBulbChangeUtility {
             }
         }
     }
+
+    public static boolean popBackStackIfItemNotExist(String identifier, boolean isGroup, FragmentManager fragmentManager) {
+        PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
+        if(isGroup) {
+            PHGroup group = bridge.getResourceCache().getGroups().get(identifier);
+            if(group == null) {
+                fragmentManager.popBackStack();
+                return true;
+            }
+        } else {
+            PHLight light = bridge.getResourceCache().getLights().get(identifier);
+            if(light == null) {
+                fragmentManager.popBackStack();
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

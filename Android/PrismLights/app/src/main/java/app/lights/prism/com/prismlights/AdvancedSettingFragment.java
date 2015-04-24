@@ -17,7 +17,9 @@ import android.widget.TextView;
 import com.philips.lighting.hue.listener.PHScheduleListener;
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.model.PHBridge;
+import com.philips.lighting.model.PHGroup;
 import com.philips.lighting.model.PHHueError;
+import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
 import com.philips.lighting.model.PHSchedule;
 
@@ -49,6 +51,7 @@ public class AdvancedSettingFragment extends Fragment implements CacheUpdateList
     private Dialog progressDialog;
 
     public AdvancedSettingFragment() {
+        name ="";
         // Required empty public constructor
     }
 
@@ -61,10 +64,24 @@ public class AdvancedSettingFragment extends Fragment implements CacheUpdateList
         }
         hueBridgeSdk = PHHueSDK.getInstance();
         bridge = hueBridgeSdk.getSelectedBridge();
-        if(isGroup)
-            name = hueBridgeSdk.getSelectedBridge().getResourceCache().getGroups().get(identifier).getName();
-        else
-            name = hueBridgeSdk.getSelectedBridge().getResourceCache().getLights().get(identifier).getName();
+        if(isGroup) {
+            PHGroup group = hueBridgeSdk.getSelectedBridge().getResourceCache().getGroups().get(identifier);
+            if(group == null) {
+                getFragmentManager().popBackStack();
+                return;
+            } else {
+                name = group.getName();
+            }
+        }
+        else {
+            PHLight light = hueBridgeSdk.getSelectedBridge().getResourceCache().getLights().get(identifier);
+            if(light == null) {
+                getFragmentManager().popBackStack();
+                return;
+            } else {
+                name = light.getName();
+            }
+        }
 
         getSunSchedules();
     }
@@ -394,12 +411,49 @@ public class AdvancedSettingFragment extends Fragment implements CacheUpdateList
     @Override
     public void onResume() {
         super.onResume();
+        if(isGroup) {
+            PHGroup group = hueBridgeSdk.getSelectedBridge().getResourceCache().getGroups().get(identifier);
+            if(group == null) {
+                getFragmentManager().popBackStack();
+                return;
+            } else {
+                name = group.getName();
+            }
+        }
+        else {
+            PHLight light = hueBridgeSdk.getSelectedBridge().getResourceCache().getLights().get(identifier);
+            if(light == null) {
+                getFragmentManager().popBackStack();
+                return;
+            } else {
+                name = light.getName();
+            }
+        }
         getSunSchedules();
         updateSunScheduleToggles();
     }
 
     @Override
     public void cacheUpdated() {
+        if(isGroup) {
+            PHGroup group = hueBridgeSdk.getSelectedBridge().getResourceCache().getGroups().get(identifier);
+            if(group == null) {
+                getFragmentManager().popBackStack();
+                return;
+            } else {
+                name = group.getName();
+            }
+        }
+        else {
+            PHLight light = hueBridgeSdk.getSelectedBridge().getResourceCache().getLights().get(identifier);
+            if(light == null) {
+                getFragmentManager().popBackStack();
+                return;
+            } else {
+                name = light.getName();
+            }
+        }
+
         getSunSchedules();
         updateSunScheduleToggles();
     }

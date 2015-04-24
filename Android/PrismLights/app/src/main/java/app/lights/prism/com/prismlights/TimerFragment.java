@@ -48,6 +48,7 @@ import java.util.Map;
 public class TimerFragment extends Fragment implements CacheUpdateListener{
 
     public static String lightPositionString = "CURRENT_BULB_POSITION";
+    private boolean popping;
 
     private String identifier;
     private boolean isGroup;
@@ -70,6 +71,7 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
      * fragment (e.g. upon screen orientation changes).
      */
     public TimerFragment() {
+        popping = false;
     }
 
     @Override
@@ -88,7 +90,10 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
             identifier = getArguments().getString(RealHomeFragment.lightPositionString);
             isGroup = getArguments().getBoolean(RealHomeFragment.groupOrLightString);
         }
-
+            if(popping || HueBulbChangeUtility.popBackStackIfItemNotExist(identifier, isGroup, getFragmentManager())) {
+                popping = true;
+                return;
+            }
         //get current bulb
         getCurrentTimers();
         countDownTimers = new ArrayList<>();
@@ -122,7 +127,10 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_timer, container, false);
-
+        if(popping || HueBulbChangeUtility.popBackStackIfItemNotExist(identifier, isGroup, getFragmentManager())) {
+            popping = true;
+            return view;
+        }
         ImageView addButton = (ImageView)view.findViewById(R.id.timerPlusButton);
 
         timerListView = (ListView)view.findViewById(R.id.timerListView);
@@ -152,6 +160,10 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
     @Override
     public void onResume() {
         super.onResume();
+        if(popping || HueBulbChangeUtility.popBackStackIfItemNotExist(identifier, isGroup, getFragmentManager())) {
+            popping = true;
+            return;
+        }
         getCurrentTimers();
         adapter.notifyDataSetChanged();
     }
@@ -164,6 +176,10 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
 
     @Override
     public void cacheUpdated() {
+        if(popping || HueBulbChangeUtility.popBackStackIfItemNotExist(identifier, isGroup, getFragmentManager())) {
+            popping = true;
+            return;
+        }
         clearCountDown();
         getCurrentTimers();
         adapter.notifyDataSetChanged();
@@ -352,12 +368,13 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
     }
 
     private void clearCountDown() {
-        for (int i = 0; i < countDownTimers.size();i++)
-        {
-            countDownTimers.get(i).cancel();
+        if(countDownTimers != null) {
+            for (int i = 0; i < countDownTimers.size(); i++) {
+                countDownTimers.get(i).cancel();
+            }
+            countDownTimers.clear();
+            countDownTimers = new ArrayList<CountDownTimer>(); //TODO: do I need this?
         }
-        countDownTimers.clear();
-        countDownTimers = new ArrayList<CountDownTimer>(); //TODO: do I need this?
     }
 
     private String getTimerString(int timerTime) {
@@ -606,9 +623,18 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
         }
     }
 
+    private void closeAllDialogs() {
+        closeProgressDialog();
+        if(modeDialog!= null && modeDialog.isShowing()) {
+            modeDialog.dismiss();
+        }
+        if(timePickerDialog != null) {
+            timePickerDialog.dismiss();
+        }
+    }
     @Override
     public void onDetach() {
-        closeProgressDialog();
+        closeAllDialogs();
         super.onDetach();
     }
 }

@@ -10,28 +10,32 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:id="@+id/colorEditText"
-        android:gravity="center" />
+        android:gravity="center"
+        android:textColor="@color/white"/>
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:id="@+id/brightnessEditText"
-        android:gravity="center" />
+        android:gravity="center"
+        android:textColor="@color/white" />
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:id="@+id/durationEditText"
-        android:gravity="center" />
+        android:gravity="center"
+        android:textColor="@color/white" />
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:id="@+id/transitionEditText"
-        android:gravity="center" />
+        android:gravity="center"
+        android:textColor="@color/white" />
 
     <ImageView
         android:layout_width="0dp"

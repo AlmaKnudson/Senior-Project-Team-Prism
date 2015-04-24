@@ -42,10 +42,12 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
     private int shouldUpdateBrightness;
     private int shouldUpdateName;
     private int shouldUpdateColor;
+    private boolean popping;
 
 
     public GroupSettingsFragment() {
         hueSDK = PHHueSDK.getInstance();
+        popping = false;
     }
 
     @Override
@@ -243,10 +245,20 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
     }
 
     private void updateState() {
+        PHBridgeResourcesCache cache = hueSDK.getSelectedBridge().getResourceCache();
+        if(!HueBulbChangeUtility.DEFAULT_GROUP_ID.equals(identifier) && cache.getGroups().get(identifier) == null) {
+            //each only needs to pop their back stack
+
+            if(popping) {
+                return;
+            }
+            getFragmentManager().popBackStack();
+            popping = true;
+            return;
+        }
         if(!nameEditor.hasFocus() && shouldUpdateName == 0) {
             nameEditor.setText(HueBulbChangeUtility.getGroupName(identifier));
         }
-        PHBridgeResourcesCache cache = hueSDK.getSelectedBridge().getResourceCache();
         PHLight currentLight;
         if(HueBulbChangeUtility.DEFAULT_GROUP_ID.equals("0")) {
             Collection<String> lights = cache.getLights().keySet();
