@@ -6,7 +6,9 @@ import android.util.AttributeSet;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-
+/**
+ * Creates an image view that animates the bulbs through 4 colors
+ */
 public class LoadingImageView extends FrameLayout {
 
     private CircularArray<ImageView> coloredBulbs;
@@ -31,7 +33,12 @@ public class LoadingImageView extends FrameLayout {
         construct(context);
     }
 
+    /**
+     * sets up all the bulb images
+     * @param context
+     */
     private void construct(Context context) {
+        //uses a circular array so I can increase the index every time I switch bulbs
         coloredBulbs = new CircularArray<ImageView>();
         ImageView firstBulb = new ImageView(context);
         ImageView secondBulb = new ImageView(context);
@@ -54,6 +61,9 @@ public class LoadingImageView extends FrameLayout {
         addView(fourthBulb);
     }
 
+    /**
+     * Animates the bulbs when it's visible
+     */
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -61,6 +71,9 @@ public class LoadingImageView extends FrameLayout {
 
     }
 
+    /**
+     * Animates the bulbs by fading from one view to another
+     */
     private void animateBulbs() {
         final ImageView currentImageView = coloredBulbs.get(currentShown);
         ImageView nextImageView = coloredBulbs.get(currentShown + 1);
@@ -94,11 +107,18 @@ public class LoadingImageView extends FrameLayout {
         nextImageView.animate().alpha(1f).setDuration(animationDurationIn).setListener(null);
     }
 
+    /**
+     * Stop the animation by cancelling it on all the bulbs
+     */
     private void stopAnimateBulb() {
         for(ImageView imageView : coloredBulbs) {
             imageView.animate().cancel();
         }
     }
+
+    /**
+     * Stops animating the bulbs when it's not visible
+     */
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();

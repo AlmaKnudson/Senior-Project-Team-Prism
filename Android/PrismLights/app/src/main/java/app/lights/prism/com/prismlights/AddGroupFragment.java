@@ -11,15 +11,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-
+/**
+ * Fragment allowing the user to add groups
+ */
 public class AddGroupFragment extends Fragment implements CacheUpdateListener {
 
     private BulbSelectionView bulbSelectionView;
     private EditText nameEditor;
     private Button doneButton;
     private Dialog progressDialog;
-    private boolean done;
-    private boolean groupCreated;
+    private boolean done; //prevents the user from adding the group twice
+    private boolean groupCreated; //prevents the callback from the group being created from running twice
 
 
 
@@ -82,6 +84,9 @@ public class AddGroupFragment extends Fragment implements CacheUpdateListener {
     }
 
     @Override
+    /**
+     * Update the selection view from the cache when we recieve a cache update
+     */
     public void cacheUpdated() {
         bulbSelectionView.cacheUpdated();
     }
@@ -89,6 +94,7 @@ public class AddGroupFragment extends Fragment implements CacheUpdateListener {
     @Override
     public void onDetach() {
         super.onDetach();
+        //get rid of the uncancelable dialog if the fragment is dismissed
         if(progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }

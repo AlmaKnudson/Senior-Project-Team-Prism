@@ -4,8 +4,15 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.widget.TextView;
 
+/**
+ * Allows dialogs to be controlled better with application lifecycle and adds utility methods
+ */
 public class DialogCreator {
 
+    /**
+     * Dismisses the current dialog created with this class or set on the main activity
+     * @param activity the main activity
+     */
     public static void cancelShowingDialog(MainActivity activity) {
         Dialog dialog = activity.getDialog();
         //check if it's a progress dialog so we can cancel it safely
@@ -14,6 +21,10 @@ public class DialogCreator {
         }
     }
 
+    /**
+     * Cancels the current dialog created with this class or set on the main activity if it's a progress dialog
+     * @param activity the main activity
+     */
     public static void cancelShowingDialogIfProgress(MainActivity activity) {
         Dialog dialog = activity.getDialog();
         //check if it's a progress dialog so we can cancel it safely
@@ -37,6 +48,12 @@ public class DialogCreator {
         activity.setDialog(dialog);
     }
 
+    /**
+     * Shows a loading dialog with the given loading text and sets it on the main activity
+     * @param loadingText the text to be displayed
+     * @param activity the main activity
+     * @return the dialog it displays
+     */
     public static Dialog showLoadingDialog(String loadingText, MainActivity activity) {
         if(activity.getDialog() != null && activity.getDialog().isShowing()) {
             activity.getDialog().hide();
@@ -52,6 +69,13 @@ public class DialogCreator {
         return dialog;
     }
 
+    /**
+     * Shows a warning dialog with the given titleText and explanation and sets it on the main activity
+     * @param titleText the text to put in the title of the dialog
+     * @param explanation the explanation for the warning
+     * @param activity the main activity
+     * @return the dialog shown
+     */
     public static Dialog showWarningDialog(String titleText, String explanation, MainActivity activity) {
         if(activity.getDialog() != null && activity.getDialog().isShowing()) {
             activity.getDialog().hide();

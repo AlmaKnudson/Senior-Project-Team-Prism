@@ -12,12 +12,15 @@ import android.widget.TextView;
 
 import com.philips.lighting.model.PHLightState;
 
+/**
+ * Fragment allowing the user to add  favorites
+ */
 public class AddFavoriteFragment extends Fragment implements CacheUpdateListener{
     private BulbSelectionView bulbSelectionView;
     private EditText nameEditor;
     private Button doneButton;
     private FavoritesDataModel favoritesDataModel;
-    private boolean done;
+    private boolean done; //used to prevent the user from adding the same favorite twice by pressing the done button quickly
 
 
 
@@ -77,6 +80,9 @@ public class AddFavoriteFragment extends Fragment implements CacheUpdateListener
     }
 
     @Override
+    /**
+     * Update the appearance of the bulb states in the selection view
+     */
     public void cacheUpdated() {
         bulbSelectionView.cacheUpdated();
     }

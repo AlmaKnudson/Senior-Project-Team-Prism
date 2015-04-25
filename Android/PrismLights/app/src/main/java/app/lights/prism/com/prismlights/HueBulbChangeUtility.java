@@ -24,6 +24,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Utility class for managing the bulbs. Will cancel color cycles on bulbs/groups when modifying them
+ */
 public class HueBulbChangeUtility {
 
 
@@ -83,6 +86,11 @@ public class HueBulbChangeUtility {
         return bridge.getResourceCache().getGroups().get(identifier);
     }
 
+    /**
+     * Sets the bulbs to flash once so it's clear they're selected
+     * @param lightId the id of the bulb to set the alert on
+     * @param on if it should flash, or stop
+     */
     public static void setBulbAlertState(String lightId, boolean on) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
         PHLight light = bridge.getResourceCache().getLights().get(lightId);
@@ -168,6 +176,10 @@ public class HueBulbChangeUtility {
         }
     }
 
+    /**
+     * Calls the on completed listener safely, checking if it's null
+     * @param onCompletedListener
+     */
     private static void callOnCompletedListener(OnCompletedListener onCompletedListener) {
         if(onCompletedListener != null) {
             onCompletedListener.onCompleted();
@@ -338,6 +350,12 @@ public class HueBulbChangeUtility {
         }
     }
 
+    /**
+     * Creates a brightness state for the bulbs
+     * @param brightness takes in a number between 0 and 100 and converts it to one between 0 and 254(max brightness) for the bulbs
+     * @param shouldSetOn if the light state should set the bulbs to on
+     * @return the generated light state
+     */
     private static PHLightState getBrightnessState(int brightness, boolean shouldSetOn) {
         PHLightState lightState = new PHLightState();
         int convertedBrightness = (int) Math.round((brightness * 254.0) / 100);
@@ -376,6 +394,12 @@ public class HueBulbChangeUtility {
         return lightState;
     }
 
+    /**
+     * Checks if the two colors are close to equal for the color picker cache updates (shouldn't update when color is the same)
+     * @param color1 the first color
+     * @param color2 the second color
+     * @return true if the colors are basically equal, false otherwise
+     */
     public static boolean colorsEqual(float[] color1, float[] color2) {
 //        System.out.println("x: " + Math.abs(color1[0] - color2[0]));
 //        System.out.println("y: " + Math.abs(color1[1] - color2[1]));
@@ -396,6 +420,11 @@ public class HueBulbChangeUtility {
         return PHHueSDK.getInstance().getSelectedBridge().getResourceCache().getGroups();
     }
 
+    /**
+     *
+     * @param groupId the group identifier
+     * @return True if at least one member of the group is reachable
+     */
     public static boolean isGroupReachable(String groupId) {
         if(DEFAULT_GROUP_ID.equals(groupId)) {
             return isGroupReachable(new ArrayList<String>(getAllLights().keySet()));
@@ -404,6 +433,11 @@ public class HueBulbChangeUtility {
         }
     }
 
+    /**
+     *
+     * @param lightIds the light identifiers inside the group
+     * @return True if at least one member of the group is reachable
+     */
     private static boolean isGroupReachable(List<String> lightIds) {
         Map<String, PHLight> lights = getAllLights();
         for(String id : lightIds) {
@@ -414,6 +448,11 @@ public class HueBulbChangeUtility {
         return false;
     }
 
+    /**
+     *
+     * @param groupId
+     * @return true if all the bulbs are off, false otherwise
+     */
     public static boolean isGroupOff(String groupId) {
         if(DEFAULT_GROUP_ID.equals(groupId)) {
             return isGroupOff(new ArrayList<String>(getAllLights().keySet()));
@@ -422,6 +461,11 @@ public class HueBulbChangeUtility {
         }
     }
 
+    /**
+     *
+     * @param lightIds
+     * @return true if all the bulbs are off, false otherwise
+     */
     private static boolean isGroupOff(List<String> lightIds) {
         Map<String, PHLight> lights = getAllLights();
         for(String id : lightIds) {

@@ -9,6 +9,10 @@ import android.view.View;
 
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 
+/**
+ * The background view of the color picker generated from the green triangle referenced by Philips in http://www.developers.meethue.com/documentation/core-concepts (although
+ * now it seems to be red)
+ */
 public class ColorPickerBackgroundView extends View{
 
 
@@ -38,6 +42,7 @@ public class ColorPickerBackgroundView extends View{
     private void construct() {
         currentBounds = new Rect(0, 0, 0, 0);
         currentColor = new Paint();
+        //don't allow the view to redraw unnecessarily
         setLayerType(View.LAYER_TYPE_HARDWARE, null);
     }
 
@@ -63,6 +68,7 @@ public class ColorPickerBackgroundView extends View{
         //(0.4089552, 0.5157895)
         //(0.1661765, 0.0503509)
         //(0.6731343, 0.3210526)
+        //take the triangle and stretch it to a rectangle
         for(int y = currentBounds.top; y < currentBounds.bottom; y+=colorIncrement) {
             double yPercentage =(double)(y - currentBounds.top)/ currentBounds.height();
             double currentY = (MAX_Y - MIN_Y) * yPercentage + MIN_Y;
@@ -79,6 +85,8 @@ public class ColorPickerBackgroundView extends View{
             }
         }
     }
+
+    //utility methods for stretching the triangle
 
     //y = mx + b
     //(0.4089552, 0.5157895)
@@ -124,6 +132,11 @@ public class ColorPickerBackgroundView extends View{
         }
     }
 
+    /**
+     *
+     * @param currentXYColor the xyColor given
+     * @return the position of the color given
+     */
     public int[] getPositionFromColor(float[] currentXYColor) {
         double currentXColor = currentXYColor[0];
         double currentYColor = currentXYColor[1];
@@ -136,6 +149,12 @@ public class ColorPickerBackgroundView extends View{
         return new int[]{(int) Math.round(currentX), (int) Math.round(currentY)};
     }
 
+    /**
+     *
+     * @param x the x on the view
+     * @param y the y on the view
+     * @return the color based on the position in the view
+     */
     public float[] getColorFromPosition(float x, float y) {
         double yPercentage = (double)(y - currentBounds.top)/ currentBounds.height();
         double currentY = (MAX_Y - MIN_Y) * yPercentage + MIN_Y;

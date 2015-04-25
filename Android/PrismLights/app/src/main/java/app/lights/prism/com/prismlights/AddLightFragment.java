@@ -22,6 +22,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Allows the user to add lights by using the bridge's search function
+ */
 public class AddLightFragment extends Fragment {
 
     private List<String> serialCodes;
@@ -29,8 +32,8 @@ public class AddLightFragment extends Fragment {
     private Button searchButton;
     private ImageButton plusSerialCodeButton;
     private Dialog addSerialCodeDialog;
-    private Button cancelButton;
-    private Button doneButton;
+    private Button cancelButton; //a button in the dialog that will cancel it
+    private Button doneButton; // a button in the dialog that will allow the user to set a serial code
     private EditText serialCode;
     private boolean searchCompleted;
     private boolean searching;
@@ -105,6 +108,7 @@ public class AddLightFragment extends Fragment {
 
                         @Override
                         public void afterTextChanged(Editable s) {
+                            //limit the user to 6 characters, the length of a serial code
                             if(serialCode.getText().length() == 6) {
                                 doneButton.setEnabled(true);
                             } else {
@@ -161,6 +165,9 @@ public class AddLightFragment extends Fragment {
         }
 
         @Override
+        /**
+         * Returns a simple text view representing the serial code
+         */
         public View getView(int position, View convertView, ViewGroup parent) {
             View currentView;
             if(convertView == null) {
@@ -177,6 +184,7 @@ public class AddLightFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        //remove the uncancelable dialog if this fragment is dismissed
         if(progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }

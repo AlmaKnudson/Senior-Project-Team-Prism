@@ -29,16 +29,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * A view to be used to select from all the bulbs on the bridge
+ */
 public class BulbSelectionView extends FrameLayout implements CacheUpdateListener{
     private GridView gridView;
-    private List<String> currentLightIdOrder;
-    private Map<String, PHLight> currentLights;
+    private List<String> currentLightIdOrder; //the current ordering of the lights
+    private Map<String, PHLight> currentLights; //the current lights on the bridge
     private PHHueSDK hueSDK;
-    private Set<String> checked;
-    private boolean allChecked;
+    private Set<String> checked;//the ids of the bulbs who are checked
+    private boolean allChecked;//true if select all is checked
     private CheckBox selectAllCheckBox;
     private CheckedNumberChangedListener checkedNumberChangedListener;
-    private LayoutIdOrder layoutIdOrder;
+    private LayoutIdOrder layoutIdOrder; //data model representing the order of the bulbs/groups
 
     public BulbSelectionView(Context context) {
         super(context);
@@ -55,6 +58,9 @@ public class BulbSelectionView extends FrameLayout implements CacheUpdateListene
         construct();
     }
 
+    /**
+     * Creates the view from a layout and setups the checked collection
+     */
     private void construct() {
         LayoutInflater.from(getContext()).inflate(R.layout.fragment_bulb_selection, this);
         layoutIdOrder = LayoutIdOrder.getInstance(getContext().getFilesDir());
@@ -89,6 +95,12 @@ public class BulbSelectionView extends FrameLayout implements CacheUpdateListene
         });
     }
 
+    /**
+     * If the checkbox is checked, unchecks it, otherwise checks it
+     * Also updates the model
+     * @param checkBox the checkbox in question
+     * @param id the id of the element associated with the checkbox
+     */
     private void changeChecked(CheckBox checkBox, String id) {
         if(checked.contains(id)) {
             checked.remove(id);
@@ -103,17 +115,28 @@ public class BulbSelectionView extends FrameLayout implements CacheUpdateListene
     }
 
     @Override
+    /**
+     * Updates the bulbs so they show the correct colors/state
+     */
     public void cacheUpdated() {
         updateFromCache();
         ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
 
     }
 
+    /**
+     * Updates the bulbs' state from the cache and their order from the model
+     */
     private void updateFromCache() {
         currentLights = hueSDK.getSelectedBridge().getResourceCache().getLights();
         currentLightIdOrder = layoutIdOrder.getLightsFromBridgeOrder(currentLights.keySet());
     }
 
+    /**
+     *
+     * @param shouldAllowLongClick if true, sets up the view to allow the user to edit the bulb's state
+     * @param fragmentManager can be null if shouldAllowLongClick is false
+     */
     public void allowLongClick(boolean shouldAllowLongClick, FragmentManager fragmentManager) {
         if(gridView != null) {
             if(shouldAllowLongClick) {
@@ -124,6 +147,10 @@ public class BulbSelectionView extends FrameLayout implements CacheUpdateListene
         }
     }
 
+    /**
+     * Sets up the grid view to allow the user to edit the bulb's state
+     * @param fragmentManager the fragment manager to use to open the settings view
+     */
     private void setGridViewLongClickListener(final FragmentManager fragmentManager) {
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -144,14 +171,24 @@ public class BulbSelectionView extends FrameLayout implements CacheUpdateListene
         });
     }
 
+    /**
+     * @return the light ids of the bulbs that are selected
+     */
     public List<String> getSelectedLightIds() {
         return new ArrayList<String>(checked);
     }
 
+    /**
+     * @return true if select all is checked, false otherwise
+     */
     public boolean getAllChecked() {
         return allChecked;
     }
 
+    /**
+     *
+     * @return true if all the bulbs have the same color, on, and brightness state, false otherwise
+     */
     public PHLightState allBulbsSameState() {
         PHLightState returnState = null;
         float[] currentColor = new float[2];
@@ -178,16 +215,26 @@ public class BulbSelectionView extends FrameLayout implements CacheUpdateListene
         return returnState;
     }
 
+    /**
+     * Allows the setting of a listener for when the bulbs that are selected change
+     * @param checkedNumberChangedListener
+     */
     public void setOnCheckedNumberChanged(CheckedNumberChangedListener checkedNumberChangedListener) {
         this.checkedNumberChangedListener = checkedNumberChangedListener;
     }
 
+    /**
+     * Safely calls the checked number changed listener, checking if it's null
+     */
     private void callCheckedNumberChangedListener() {
         if(checkedNumberChangedListener != null) {
             checkedNumberChangedListener.onCheckedNumberChanged(checked.size());
         }
     }
 
+    /**
+     * Slects all the bulbs and sets the select all checkbox to true
+     */
     public void selectAll() {
         selectAllCheckBox.setChecked(true);
         allChecked = true;
@@ -196,6 +243,10 @@ public class BulbSelectionView extends FrameLayout implements CacheUpdateListene
         callCheckedNumberChangedListener();
     }
 
+    /**
+     * Sets the ids given to checked
+     * @param ids
+     */
     public void setSelectedIds(Collection<String> ids) {
         this.checked.addAll(ids);
         if(checked.size() == gridView.getAdapter().getCount()) {
@@ -229,6 +280,9 @@ public class BulbSelectionView extends FrameLayout implements CacheUpdateListene
         }
 
         @Override
+        /**
+         * Returns a view a stateful bulb with a checkbox
+         */
         public View getView(int position, View convertView, ViewGroup parent) {
             View currentView;
             if(convertView == null) {

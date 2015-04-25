@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 
+/**
+ * View group which controls the color picker
+ */
 public class ColorPickerViewGroup extends ViewGroup {
 
 
@@ -18,8 +21,8 @@ public class ColorPickerViewGroup extends ViewGroup {
     private float[] currentXYColor;
     private float[] tempXYColor;
     private ColorChangedListener colorChangedListener;
-    private ColorPickerBackgroundView colorBackgroundView;
-    private SelectorView selectorView;
+    private ColorPickerBackgroundView colorBackgroundView; //the background of the view
+    private SelectorView selectorView; //the circle for the touch and state
 
     public final int halfSelectorWidth = PHUtilities.dpToPx(getResources().getDisplayMetrics().densityDpi, 30);
 
@@ -83,6 +86,9 @@ public class ColorPickerViewGroup extends ViewGroup {
     }
 
 
+    /**
+     * Sets the position of the selector from the current color
+     */
     private void setPositionFromColor() {
         int[] position = colorBackgroundView.getPositionFromColor(currentXYColor);
         setPositionX(position[0]);
@@ -91,6 +97,11 @@ public class ColorPickerViewGroup extends ViewGroup {
 //        setTempXYColor(colorBackgroundView.getColorFromPosition(positionX, positionY));
     }
 
+    /**
+     * Sets the color of the view form the current position
+     * @param x the x of the position
+     * @param y the y of the position
+     */
     private void setColorFromPosition(float x, float y) {
         setTempXYColor(colorBackgroundView.getColorFromPosition(x, y));
     }
