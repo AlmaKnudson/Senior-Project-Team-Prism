@@ -7,6 +7,8 @@ import java.util.Date;
 
 /**
  * Created by Brian_Oh on 4/22/15.
+ * This is class to contain paired PHSchedules.
+ * This is made for ScheduleFragment.
  */
 public class Schedule {
     private PHSchedule scheduleOn;

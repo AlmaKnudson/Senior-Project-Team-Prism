@@ -36,14 +36,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-//TODO: I need to add repeat option showing Mon~Sun
-//TODO: need to add option on, off, alert option
-/**
- * A fragment representing a list of currentBulbAlarms.
- * <p/>
- * Large screen devices (such as tablets) are supported by replacing the ListView
- * with a GridView.
- * <p/>
+/*
+ * this Fragment show current non recurring alarms.
  */
 public class AlarmFragment extends Fragment implements CacheUpdateListener{
 

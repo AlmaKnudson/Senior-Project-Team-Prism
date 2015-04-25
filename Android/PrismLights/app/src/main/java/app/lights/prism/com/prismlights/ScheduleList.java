@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * Created by Brian_Oh on 4/22/15.
+ * this class take list of PHSchedules and then make List of Schedule
  */
 public class ScheduleList {
     ArrayList<Schedule> list;

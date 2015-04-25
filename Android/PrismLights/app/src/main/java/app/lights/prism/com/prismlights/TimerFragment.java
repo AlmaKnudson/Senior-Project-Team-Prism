@@ -255,6 +255,7 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
 //            Date startTime = timer.getStartTime();
             int duration = timer.getTimer();
 //            String s;
+
 //
 //
 ////            String bridgeGetTime = bridge.getResourceCache().getBridgeConfiguration().getTime();
