@@ -433,7 +433,9 @@ public class MainActivity extends Activity implements PHSDKListener{
                 waitingText = getText(R.string.searching);
             }
             DialogCreator.showLoadingDialog(waitingText.toString(), this);
-        } else {
+        }
+        else if (dialog == null || !dialog.isShowing()){
+            //only search if not already connecting
             searchForBridge();
         }
 
