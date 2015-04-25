@@ -106,14 +106,6 @@ public class ColorCycleFragment extends Fragment {
         colorCycleListAdapter = new ColorCycleListAdapter();
         colorCycleListView.setAdapter(colorCycleListAdapter);
 
-//        colorCycleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                chosenColorCycle = position;
-//                colorCycleDetailListAdapter.notifyDataSetChanged();
-//            }
-//        });
-
         colorCycleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -128,16 +120,6 @@ public class ColorCycleFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
-//        okButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //TODO: need to get duration from user
-//                List<ScheduledFuture> tasks = colorCycles.get(chosenColorCycle).startColorCycle(10, bridge, currentIdentifier, isGroup, (MainActivity)getActivity());
-//                ((MainActivity)getActivity()).setColorCycleTasks(currentIdentifier,tasks, isGroup);
-//                android.app.FragmentManager fm = getActivity().getFragmentManager();
-//                fm.popBackStack();
-//            }
-//        });
 
         return view;
     }

@@ -35,13 +35,6 @@ import java.util.List;
 import java.util.Map;
 
 
-// TODO: need to change timer picker. 00 hour 00 min
-
-//TODO: need to change the format of time showing.
-
-//TODO: need to fix the left time to show correctly.
-
-
 /**
  * Created by Brian_Oh on 2/10/15.
  */
@@ -215,14 +208,6 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
 
             final TextView timeView = (TextView) currentView.findViewById(R.id.singleTimerTimeText);
 
-//            // When individual timer is clicked, open a time picker to change the timer
-//            timeView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    showTimePickerDialog(position);
-//                }
-//            });
-
             final TextView deleteTextView = (TextView) currentView.findViewById(R.id.TimerDeleteText);
 
             deleteTextView.setOnClickListener(new View.OnClickListener() {
@@ -252,65 +237,8 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
 
 
             Date createdTime = timer.getCreated();
-//            Date startTime = timer.getStartTime();
+
             int duration = timer.getTimer();
-//            String s;
-
-//
-//
-////            String bridgeGetTime = bridge.getResourceCache().getBridgeConfiguration().getTime();
-//            String bridgeGetLocalTime = bridge.getResourceCache().getBridgeConfiguration().getLocalTime();
-//
-//            Date bridgeTime= null;
-//            try {
-//                bridgeTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(bridgeGetLocalTime);
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//
-//
-////            PHBridgeConfiguration configuration = new PHBridgeConfiguration();
-////            configuration.setTime(new Date().toString());
-////            bridge.updateBridgeConfigurations(configuration, new PHBridgeConfigurationListener() {
-////                @Override
-////                public void onReceivingConfiguration(PHBridgeConfiguration phBridgeConfiguration) {
-////                   ;
-////                }
-////
-////                @Override
-////                public void onSuccess() {
-////                    ;
-////                }
-////
-////                @Override
-////                public void onError(int i, String s) {
-////                    ;
-////                }
-////
-////                @Override
-////                public void onStateUpdate(Map<String, String> map, List<PHHueError> list) {
-////                    ;
-////                }
-////            });
-//
-//
-//            // bridge is giving me wrong value. I am picking better date among the two value...
-//            if(startTime!=null)
-//                s = startTime.toString();
-//            else
-//                s = "null";
-//
-//            Log.d("TimeTest", "CreatedTime:" + createdTime.toString() +" startTime:"+ s + " bridgeTime:"+bridgeTime);
-//
-//            Date startedTime;
-//            if (startTime!=null)
-//                if (startTime.getTime() <= createdTime.getTime())
-//                    startedTime = startTime;
-//                else
-//                    startedTime = createdTime;
-//            else
-//                startedTime = createdTime;
-
 
             long timeLeft;
 
@@ -349,13 +277,6 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
                     public void onFinish() {
                         // clean currentTimers and countDownTimers and refresh the adapter
                         timeView.setText("Done");
-//                    getActivity().runOnUiThread(new Runnable() {
-//                        public void run() {
-//                            getCurrentTimers();
-//                            clearCountDown();
-//                            adapter.notifyDataSetChanged();
-//                        }
-//                    });
                     }
                 };
 
