@@ -390,28 +390,34 @@ public class MainActivity extends Activity implements PHSDKListener{
         musicButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.container, new MusicFragment(), musicFragmentTag);
-                fragmentTransaction.addToBackStack(musicFragmentTag);
-                fragmentTransaction.commit();
+                if(!(getCurrentFragment() instanceof MusicFragment)) {
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.container, new MusicFragment(), musicFragmentTag);
+                    fragmentTransaction.addToBackStack(musicFragmentTag);
+                    fragmentTransaction.commit();
+                }
             }
         });
         voiceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.container, new VoiceFragment(), voiceFragmentTag);
-                fragmentTransaction.addToBackStack(voiceFragmentTag);
-                fragmentTransaction.commit();
+                if(!(getCurrentFragment() instanceof VoiceFragment)) {
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.container, new VoiceFragment(), voiceFragmentTag);
+                    fragmentTransaction.addToBackStack(voiceFragmentTag);
+                    fragmentTransaction.commit();
+                }
             }
         });
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.container, new SettingsFragment());
-                fragmentTransaction.addToBackStack(settingsFragmentTag);
-                fragmentTransaction.commit();
+                if(!(getCurrentFragment() instanceof SettingsFragment)) {
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.container, new SettingsFragment());
+                    fragmentTransaction.addToBackStack(settingsFragmentTag);
+                    fragmentTransaction.commit();
+                }
             }
         });
         hueBridgeSdk = PHHueSDK.getInstance();
@@ -527,7 +533,7 @@ public class MainActivity extends Activity implements PHSDKListener{
         if(bridge != null) {
             hueBridgeSdk.enableHeartbeat(hueBridgeSdk.getSelectedBridge(), PHHueSDK.HB_INTERVAL);
             hueBridgeSdk.getHeartbeatManager().enableLightsHeartbeat(bridge, 2000);
-            if(getFragmentManager().findFragmentById(R.id.container) instanceof SettingsFragment) {
+            if(getCurrentFragment() instanceof SettingsFragment) {
                 openHomeScreen();
             }
         } else {
@@ -549,7 +555,7 @@ public class MainActivity extends Activity implements PHSDKListener{
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Fragment currentFragment = getFragmentManager().findFragmentById(R.id.container);
+                Fragment currentFragment = getCurrentFragment();
                 if (currentFragment instanceof CacheUpdateListener) {
                     CacheUpdateListener fragment = (CacheUpdateListener) currentFragment;
                     fragment.cacheUpdated();
@@ -574,7 +580,7 @@ public class MainActivity extends Activity implements PHSDKListener{
             public void run() {
                 connectionLostCount = 0;
                 //only open the home screen if really new connection or at least not when unexpected
-                Fragment currentFragment = getFragmentManager().findFragmentById(R.id.container);
+                Fragment currentFragment = getCurrentFragment();
                 if(currentFragment instanceof SettingsFragment || currentFragment instanceof PushButtonFragment) {
                     openHomeScreen();
                 }
@@ -643,7 +649,7 @@ public class MainActivity extends Activity implements PHSDKListener{
                             dialog.setCancelable(true);
                             dialog.cancel();
                         }
-                        Fragment fragment = getFragmentManager().findFragmentById(R.id.container);
+                        Fragment fragment = getCurrentFragment();
                         if(fragment instanceof SettingsFragment) {
                             SettingsFragment settingsFragment = (SettingsFragment) fragment;
                             settingsFragment.setAccessPoints(accessPoints);
@@ -910,6 +916,10 @@ public class MainActivity extends Activity implements PHSDKListener{
 
     public void setLongitude(double longitude) {
         prevLongitude = longitude+"";
+    }
+
+    public Fragment getCurrentFragment() {
+        return getFragmentManager().findFragmentById(R.id.container);
     }
 
     private class DownloaderTask extends AsyncTask<URL, Void, Boolean> {

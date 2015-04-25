@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicReference;
+
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.AudioProcessor;
@@ -66,7 +68,7 @@ public class MusicFragment extends Fragment implements OnsetHandler {
     private volatile TextView midRangeMaxLabel;
     private volatile TextView highRangeMinLabel;
     private Thread thread;
-    private boolean stopped;
+    private AtomicReference<Boolean> stopped;
     //These lists will be SMALL
     private ArrayList<String> lows;
     private ArrayList<String> mids;
@@ -76,6 +78,10 @@ public class MusicFragment extends Fragment implements OnsetHandler {
     private double mostRecentPitch;
     PitchDetectionHandler pdh;
 
+
+    public MusicFragment() {
+        stopped = new AtomicReference<Boolean>(true);
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,21 +95,15 @@ public class MusicFragment extends Fragment implements OnsetHandler {
     @Override
     public void onPause(){
         super.onPause();
-        try {
-        if (dispatcher != null) {
-            dispatcher.removeAudioProcessor(p);
-            dispatcher.stop();
-        } }
-        catch (Exception e){
-            System.out.println(e.toString());
-        }
+        gracefullyMurderAndThenKillThisMusic();
+        toggleButton.setChecked(false);
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        stopped = true;
+        stopped.set(true);
         fX = 1.75;
         HashMap<String, String> map = LightRangeMap.getLightRangeMap().getMap();
         lows = new ArrayList<String>();
@@ -242,18 +242,20 @@ public class MusicFragment extends Fragment implements OnsetHandler {
                 startRecording = (ToggleButton) v;
 
                 if(startRecording.isChecked()) {
-
+                    stopped.set(false);
                     dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(44100, 2048, 0);
 
                     pdh = new PitchDetectionHandler() {
                         @Override
                         public void handlePitch(PitchDetectionResult result,AudioEvent e) {
-                            short[] data = new short[e.getBufferSize()/2];
-                            ByteBuffer.wrap(e.getByteBuffer()).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(data);
-                            mWaveformView.updateAudioData(data);
-                            if(result.isPitched()){
-                                float pitchInHz = result.getPitch();
-                                mostRecentPitch = pitchInHz;
+                            if(!stopped.get()) {
+                                short[] data = new short[e.getBufferSize() / 2];
+                                ByteBuffer.wrap(e.getByteBuffer()).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(data);
+                                mWaveformView.updateAudioData(data);
+                                if (result.isPitched()) {
+                                    float pitchInHz = result.getPitch();
+                                    mostRecentPitch = pitchInHz;
+                                }
                             }
 //                System.out.println(result.isPitched());
 //                float pitchInHz = result.getPitch();
@@ -269,31 +271,30 @@ public class MusicFragment extends Fragment implements OnsetHandler {
                         }
                     };
 
-                    if(p!= null){
-                        dispatcher.removeAudioProcessor(p);
-                    }
-                    if(cOP != null){
-                        dispatcher.removeAudioProcessor(cOP);
-                        cOP.setHandler(null);
-                    }
 //        cOP  = new ComplexOnsetDetector(2048, fX/10, 0.002, -70);
-                    cOP  = new ComplexOnsetDetector(2048, fX/10, 0.002, -70);
-                    cOP.setHandler(MusicFragment.this);
-                    p = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 44100, 2048, pdh);
+                    if(cOP == null) {
+                        cOP = new ComplexOnsetDetector(2048, fX / 10, 0.002, -70);
+                        cOP.setHandler(MusicFragment.this);
+                    }
+                    if(p == null) {
+                        p = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 44100, 2048, pdh);
+                    }
                     // add a processor, handle percussion event.
-
-                    dispatcher.addAudioProcessor(p);
-                    dispatcher.addAudioProcessor(cOP);
+                    try {
+                        dispatcher.addAudioProcessor(p);
+                        dispatcher.addAudioProcessor(cOP);
+                    } catch (ConcurrentModificationException e) {
+                        System.out.println("CAUGHT CONCURRENT MODIFICATION EXCEPTION");
+                    }
 
                     thread = new Thread(dispatcher,"Audio Dispatcher");
                     thread.start();
-                    stopped = false;
 //                    midRangeSlider.setEnabled(false);
 //                    lowRangeSlider.setEnabled(false);
 //                    bPM.setEnabled(false);
 
                 } else {
-                    stopped = true;
+                    stopped.set(true);
 //                    dispatcher.removeAudioProcessor(p);
 //                    dispatcher.removeAudioProcessor(cOP);
 //                    cOP.setHandler(null);
@@ -333,7 +334,7 @@ public class MusicFragment extends Fragment implements OnsetHandler {
 
     @Override
     public void handleOnset(double time, double salience) {
-        if(stopped)
+        if(stopped.get())
             return;
 //        System.out.println(String.format("%.4f;%.4f, %.4f", time, salience, (float)mostRecentPitch));
 
@@ -378,32 +379,31 @@ public class MusicFragment extends Fragment implements OnsetHandler {
     }
 
     private void gracefullyMurderAndThenKillThisMusic(){
-        if(!stopped) {
+        if(!stopped.get()) {
+            stopped.set(true);
 //            p = null;
 //            pdh = null;
 
             try{
-                dispatcher.stop();
+                if(dispatcher != null) {
+                    dispatcher.stop();
+                }
 
             }
             catch(IllegalStateException e){
 
             }
             finally {
-                cOP.setHandler(null);
-                dispatcher.removeAudioProcessor(p);
-                dispatcher.removeAudioProcessor(cOP);
+                if(cOP != null) {
+                    cOP.setHandler(null);
+                }
+                p = null;
+                cOP = null;
                 if(thread != null) {
                     Thread t1 = thread;
                     thread = null;
-                    while(t1.isAlive()) {
+                    if(t1.isAlive()) {
                         t1.interrupt();
-                        try{
-                            Thread.sleep(200);
-//                            System.out.println("INTERRUPTING THREAD");
-                        } catch(Exception e){
-
-                        }
                     }
                 }
             }
