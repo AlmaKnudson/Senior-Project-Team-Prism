@@ -576,7 +576,7 @@ public class ScheduleConfigFragment extends Fragment implements CacheUpdateListe
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         closeProgressDialog();
-                        currentDialog = DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
+                        currentDialog = DialogCreator.showWarningDialog("Error", getText(R.string.failed_update_schedule).toString(), (MainActivity)getActivity());
                     }
                 });
             }
@@ -627,7 +627,7 @@ public class ScheduleConfigFragment extends Fragment implements CacheUpdateListe
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         closeProgressDialog();
-                        currentDialog = DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
+                        currentDialog = DialogCreator.showWarningDialog("Error", getText(R.string.failed_create_schedule).toString(), (MainActivity)getActivity());
                     }
                 });
             }
