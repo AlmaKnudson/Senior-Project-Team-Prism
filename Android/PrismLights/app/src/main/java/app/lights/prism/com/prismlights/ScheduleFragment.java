@@ -43,12 +43,14 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
     String delegate;
     ScheduleList scheduleList;
     private Dialog progressDialog;
+    private boolean popping;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
     public ScheduleFragment() {
+        popping = false;
     }
 
     @Override
@@ -64,7 +66,10 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
             identifier = getArguments().getString(RealHomeFragment.lightPositionString);
             isGroup = getArguments().getBoolean(RealHomeFragment.groupOrLightString);
         }
-
+        if(popping || HueBulbChangeUtility.popBackStackIfItemNotExist(identifier, isGroup, getFragmentManager())) {
+            popping = true;
+            return;
+        }
         getPhSchedules();
     }
 
@@ -150,6 +155,10 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
 
     @Override
     public void cacheUpdated() {
+        if(popping || HueBulbChangeUtility.popBackStackIfItemNotExist(identifier, isGroup, getFragmentManager())) {
+            popping = true;
+            return;
+        }
         getPhSchedules();
         adapter.notifyDataSetChanged();
     }
@@ -446,6 +455,10 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
     @Override
     public void onResume() {
         super.onResume();
+        if(popping || HueBulbChangeUtility.popBackStackIfItemNotExist(identifier, isGroup, getFragmentManager())) {
+            popping = true;
+            return;
+        }
         getPhSchedules();
         adapter.notifyDataSetChanged();
     }

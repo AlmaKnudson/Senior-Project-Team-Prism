@@ -97,10 +97,12 @@ public class MainActivity extends Activity implements PHSDKListener{
     private static final String colorCycleFileName = "colorCycle.out";
     private static final String colorCycleTaskFileName = "colorCycleTask.out";
     private static final String colorCycleTasksGroupFileName = "colorCycleTaskGroup.out";
-    private boolean connecting = false;
+    public  static final String REAL_HOME_FRAGMENT = "REAL_HOME_FRAGMENT";
 
     //colorCycle utilities
     private List<ColorCycle> colorCycles;
+    private boolean connecting = false;
+
     public List<ColorCycle> getAllColorCycles(){
         return  colorCycles;
     }
@@ -402,33 +404,39 @@ public class MainActivity extends Activity implements PHSDKListener{
         hueBridgeSdk.setAppName("Prism Lights");
         hueBridgeSdk.setDeviceName(Build.MODEL);
         hueBridgeSdk.getNotificationManager().registerSDKListener(this);
-        CharSequence waitingText = "";
+        connectToBridge(true);
+    }
 
+    private void connectToBridge(boolean create) {
+        if(create || (connecting && (dialog == null || !dialog.isShowing()))) {
+            CharSequence waitingText = "";
+            //code from example app
+            HueSharedPreferences prefs = HueSharedPreferences.getInstance(getApplicationContext());
+            String lastIpAddress = prefs.getLastConnectedIPAddress();
+            String lastUsername = prefs.getUsername();
+            if (lastIpAddress != null && !lastIpAddress.equals("")) {
+                PHAccessPoint lastAccessPoint = new PHAccessPoint();
+                lastAccessPoint.setIpAddress(lastIpAddress);
+                lastAccessPoint.setUsername(lastUsername);
+                if (!hueBridgeSdk.isAccessPointConnected(lastAccessPoint)) {
+                    connecting = true;
+                    hueBridgeSdk.connect(lastAccessPoint);
+                    waitingText = getText(R.string.connecting);
+                } else {
+                    openHomeScreen(); //already connected, can go directly to homescreen
+                    return;
+                }
 
-        //code from example app
-        HueSharedPreferences prefs = HueSharedPreferences.getInstance(getApplicationContext());
-        String lastIpAddress = prefs.getLastConnectedIPAddress();
-        String lastUsername = prefs.getUsername();
-        if (lastIpAddress !=null && !lastIpAddress.equals("")) {
-            PHAccessPoint lastAccessPoint = new PHAccessPoint();
-            lastAccessPoint.setIpAddress(lastIpAddress);
-            lastAccessPoint.setUsername(lastUsername);
-            if (!hueBridgeSdk.isAccessPointConnected(lastAccessPoint)) {
-                connecting = true;
-                hueBridgeSdk.connect(lastAccessPoint);
-                waitingText = getText(R.string.connecting);
             } else {
-                openHomeScreen(); //already connected, can go directly to homescreen
-                return;
+                PHBridgeSearchManager bridgeSearchManager = (PHBridgeSearchManager) hueBridgeSdk.getSDKService(PHHueSDK.SEARCH_BRIDGE);
+                bridgeSearchManager.search(true, true);
+                waitingText = getText(R.string.searching);
             }
+            DialogCreator.showLoadingDialog(waitingText.toString(), this);
         } else {
-            PHBridgeSearchManager bridgeSearchManager = (PHBridgeSearchManager) hueBridgeSdk.getSDKService(PHHueSDK.SEARCH_BRIDGE);
-            bridgeSearchManager.search(true, true);
-            waitingText = getText(R.string.searching);
+            searchForBridge();
         }
-        //end code from example app
 
-        DialogCreator.showLoadingDialog(waitingText.toString(), this);
     }
 
     public void saveColorCycles() {
@@ -481,10 +489,12 @@ public class MainActivity extends Activity implements PHSDKListener{
     @Override
     protected void onPause() {
         super.onPause();
+        System.out.println("PAUSED");
         saveColorCycles();
         //turn of the internet connection
         PHHueSDK.getInstance().disableAllHeartbeat();
         PHHueSDK.getInstance().getNotificationManager().unregisterSDKListener(this);
+        DialogCreator.cancelShowingDialogIfProgress(this);
         //consider destroying the sdk
     }
 
@@ -492,17 +502,17 @@ public class MainActivity extends Activity implements PHSDKListener{
     protected void onResume() {
         super.onResume();
         PHBridge bridge = hueBridgeSdk.getSelectedBridge();
+        hueBridgeSdk.getNotificationManager().registerSDKListener(this);
         if(bridge != null) {
-            hueBridgeSdk.getNotificationManager().registerSDKListener(this);
             hueBridgeSdk.enableHeartbeat(hueBridgeSdk.getSelectedBridge(), PHHueSDK.HB_INTERVAL);
             hueBridgeSdk.getHeartbeatManager().enableLightsHeartbeat(bridge, 2000);
+            if(getFragmentManager().findFragmentById(R.id.container) instanceof SettingsFragment) {
+                openHomeScreen();
+            }
+        } else {
+            //restart searching progress
+            connectToBridge(false);
         }
-    }
-
-    @Override
-
-    protected void onStop() {
-        super.onStop();
     }
 
     public void searchForBridge() {
@@ -526,7 +536,6 @@ public class MainActivity extends Activity implements PHSDKListener{
             }
         });
     }
-
     @Override
     /**
      * From API:
@@ -543,7 +552,10 @@ public class MainActivity extends Activity implements PHSDKListener{
             @Override
             public void run() {
                 connectionLostCount = 0;
-                openHomeScreen();
+                //only open the home screen if really new connection or at least not when unexpected
+                if(getFragmentManager().findFragmentById(R.id.container) instanceof SettingsFragment) {
+                    openHomeScreen();
+                }
             }
         });
     }
@@ -551,12 +563,9 @@ public class MainActivity extends Activity implements PHSDKListener{
 
     private void openHomeScreen() {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.container, new RealHomeFragment());
+        fragmentTransaction.replace(R.id.container, new RealHomeFragment(), REAL_HOME_FRAGMENT);
         fragmentTransaction.commit();
-        if(dialog != null && dialog.isShowing()) {
-            dialog.setCancelable(true);
-            dialog.cancel();
-        }
+        DialogCreator.cancelShowingDialog(this);
         //enable tab buttons so we can use them
         voiceButton.setEnabled(true);
         settingsButton.setEnabled(true);
@@ -622,6 +631,13 @@ public class MainActivity extends Activity implements PHSDKListener{
                     }
                 });
             }
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    DialogCreator.showWarningDialog(getText(R.string.no_bridge_found).toString(), getText(R.string.no_bridge_message).toString(), MainActivity.this);
+                }
+            });
         }
     }
 

@@ -23,11 +23,13 @@ public class EditGroupFragment extends Fragment implements CacheUpdateListener {
     private PHGroup group;
     private Dialog progressDialog;
     private boolean groupEdited;
+    private boolean popping;
 
     public EditGroupFragment() {
         done = false;
         hueSDK = PHHueSDK.getInstance();
         groupEdited = false;
+        popping = false;
     }
 
     @Override
@@ -35,6 +37,12 @@ public class EditGroupFragment extends Fragment implements CacheUpdateListener {
         super.onCreate(savedInstanceState);
         groupId = getArguments().getString(RealHomeFragment.lightPositionString);
         group = hueSDK.getSelectedBridge().getResourceCache().getGroups().get(groupId);
+        if(group == null) {
+            if(!popping) {
+                getFragmentManager().popBackStack();
+                popping = true;
+            }
+        }
     }
 
     @Override
@@ -42,6 +50,13 @@ public class EditGroupFragment extends Fragment implements CacheUpdateListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View layout = inflater.inflate(R.layout.edit_group, container, false);
+        if(group == null) {
+            if(!popping) {
+                getFragmentManager().popBackStack();
+                popping = true;
+            }
+            return layout;
+        }
         TextView title = (TextView) layout.findViewById(R.id.title);
         title.setText(R.string.edit_group);
         bulbSelectionView = (BulbSelectionView) layout.findViewById(R.id.selectBulbView);
@@ -93,6 +108,15 @@ public class EditGroupFragment extends Fragment implements CacheUpdateListener {
     public void cacheUpdated() {
         bulbSelectionView.cacheUpdated();
         group = hueSDK.getSelectedBridge().getResourceCache().getGroups().get(groupId);
+        if(group == null) {
+            if(popping) {
+                return;
+            } else {
+                getFragmentManager().popBackStack();
+                popping = true;
+            }
+            return;
+        }
         name.setText(group.getName());
 
     }

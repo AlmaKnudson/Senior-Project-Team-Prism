@@ -73,6 +73,9 @@ public class ColorCycleFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_color_cycle, container, false);
+        if(popping || HueBulbChangeUtility.popBackStackIfItemNotExist(currentIdentifier, isGroup, getFragmentManager())) {
+            return view;
+        }
 //        TextView nameTextView = (TextView)view.findViewById(R.id.colorCycleBulbNameText);
         ImageView colorCycleAddImageView = (ImageView)view.findViewById(R.id.colorCycleAddButton);
         ListView colorCycleListView = (ListView)view.findViewById(R.id.colorCycleListView);
@@ -137,6 +140,9 @@ public class ColorCycleFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        if(popping || HueBulbChangeUtility.popBackStackIfItemNotExist(currentIdentifier, isGroup, getFragmentManager())) {
+            return;
+        }
         colorCycles = ((MainActivity)getActivity()).getAllColorCycles();
         colorCycleListAdapter.notifyDataSetChanged();
     }

@@ -36,7 +36,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class ScheduleConfigFragment extends Fragment {
+public class ScheduleConfigFragment extends Fragment implements CacheUpdateListener {
 
     private String identifier;
     private boolean isGroup;
@@ -73,6 +73,7 @@ public class ScheduleConfigFragment extends Fragment {
     private static String recurringDaysBitStr;
 
     private int updateCounter;
+    private Dialog currentDialog;
 
 
 
@@ -81,6 +82,7 @@ public class ScheduleConfigFragment extends Fragment {
     //TODO: validate name length, show error message when update or create schedule fails.
 
     private Dialog progressDialog;
+    private boolean popping;
 
 
 //    private OnFragmentInteractionListener mListener;
@@ -105,6 +107,7 @@ public class ScheduleConfigFragment extends Fragment {
 
     public ScheduleConfigFragment() {
         // Required empty public constructor
+        popping = false;
     }
 
     @Override
@@ -122,7 +125,10 @@ public class ScheduleConfigFragment extends Fragment {
             identifier = getArguments().getString(RealHomeFragment.lightPositionString);
             isGroup = getArguments().getBoolean(RealHomeFragment.groupOrLightString);
         }
-
+        if(popping || HueBulbChangeUtility.popBackStackIfItemNotExist(identifier, isGroup, getFragmentManager())) {
+            popping = true;
+            return;
+        }
         recurringDays = 0; //default value
         if(currentSchedule!=null) {
             currentOnSchedule = currentSchedule.getScheduleOn();
@@ -197,16 +203,16 @@ public class ScheduleConfigFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String name = nameEditor.getText().toString().trim();
+                
                 if (name.equals("")) {
-                    DialogCreator.showWarningDialog("Error", "Please enter a name.", (MainActivity) getActivity());
+                    currentDialog = DialogCreator.showWarningDialog("Error", "Please enter a name.", (MainActivity) getActivity());
                 } else if (name.length()>50){
-                    DialogCreator.showWarningDialog("Error", "Name is too long. Please enter shorter name.", (MainActivity) getActivity());
+                    currentDialog = DialogCreator.showWarningDialog("Error", "Name is too long. Please enter shorter name.", (MainActivity) getActivity());
                 } else if (timeChoiceOn==-1 && timeChoiceOff==-1){
-                    DialogCreator.showWarningDialog("Error", "Please enter On time or Off time", (MainActivity) getActivity());
+                    currentDialog = DialogCreator.showWarningDialog("Error", "Please enter On time or Off time", (MainActivity) getActivity());
                 } else if (recurringDays == 0){
-                    DialogCreator.showWarningDialog("Error", "Please choose at least one day.", (MainActivity) getActivity());
-                }
-                else {
+                    currentDialog = DialogCreator.showWarningDialog("Error", "Please choose at least one day.", (MainActivity) getActivity());
+                } else {
                     String key = new Date().getTime() + "";
 
                     if (currentSchedule != null && currentOnSchedule != null) {
@@ -278,7 +284,7 @@ public class ScheduleConfigFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_DARK);
                 builder.setTitle("Choose Turn On Time");
 
                 //timeChoiceOn 0:timePick, 1:sunrise, 2:sunset, none
@@ -345,7 +351,7 @@ public class ScheduleConfigFragment extends Fragment {
                     }
                 });
                 builder.setView(view);
-                builder.show();
+                currentDialog = builder.show();
             }
         });
 
@@ -353,7 +359,7 @@ public class ScheduleConfigFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_DARK);
                 builder.setTitle("Choose Turn Off Time");
 
                 //timeChoiceOn 0:timePick, 1:sunrise, 2:sunset, none
@@ -417,7 +423,7 @@ public class ScheduleConfigFragment extends Fragment {
                     }
                 });
                 builder.setView(view);
-                builder.show();
+                currentDialog = builder.show();
             }
         });
 
@@ -570,7 +576,7 @@ public class ScheduleConfigFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         closeProgressDialog();
-                        DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
+                        currentDialog = DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
                     }
                 });
             }
@@ -621,7 +627,7 @@ public class ScheduleConfigFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         closeProgressDialog();
-                        DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
+                        currentDialog = DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
                     }
                 });
             }
@@ -813,10 +819,23 @@ public class ScheduleConfigFragment extends Fragment {
         }
     }
 
+    private void closeAllDialogs() {
+        closeProgressDialog();
+        if(currentDialog!= null && currentDialog.isShowing()) {
+            currentDialog.dismiss();
+        }
+    }
+
     @Override
     public void onDetach() {
-        closeProgressDialog();
+        closeAllDialogs();
         super.onDetach();
     }
 
+    @Override
+    public void cacheUpdated() {
+        if(popping || HueBulbChangeUtility.popBackStackIfItemNotExist(identifier, isGroup, getFragmentManager())) {
+            popping = true;
+        }
+    }
 }

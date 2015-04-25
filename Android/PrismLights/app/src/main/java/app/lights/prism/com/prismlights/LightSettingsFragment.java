@@ -44,10 +44,12 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
     private int shouldUpdateBrightness;
     private int shouldUpdateName;
     private int shouldUpdateColor;
+    private boolean popping;
 
 
     public LightSettingsFragment() {
         hueSDK = PHHueSDK.getInstance();
+        popping = false;
     }
 
     @Override
@@ -246,6 +248,15 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
         }
 
         PHLight  currentLight = hueSDK.getSelectedBridge().getResourceCache().getLights().get(identifier);
+        //means light has been deleted
+        if(currentLight == null) {
+            if(popping) {
+                return;
+            }
+            getFragmentManager().popBackStack();
+            popping = true;
+            return;
+        }
         PHLightState state = currentLight.getLastKnownLightState();
         if(!nameEditor.hasFocus() && shouldUpdateName == 0) {
             nameEditor.setText(currentLight.getName());
