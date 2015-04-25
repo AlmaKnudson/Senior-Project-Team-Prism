@@ -260,7 +260,7 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
             nameEditor.setText(HueBulbChangeUtility.getGroupName(identifier));
         }
         PHLight currentLight;
-        if(HueBulbChangeUtility.DEFAULT_GROUP_ID.equals("0")) {
+        if(HueBulbChangeUtility.DEFAULT_GROUP_ID.equals(identifier)) {
             Collection<String> lights = cache.getLights().keySet();
             currentLight = getFirstReachableBulb(lights);
             if(currentLight == null) {
