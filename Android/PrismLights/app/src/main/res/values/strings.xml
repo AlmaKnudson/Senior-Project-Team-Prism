@@ -83,4 +83,12 @@
     <string name="run">Run</string>
     <string name="could_not_connect">Failed to Connect</string>
     <string name="could_not_connect_explanation">Failed to connect to bridge. Please make sure your bridge is plugged directly into the router.</string>
+    <string name="failed_create_schedule">Failed to create schedule</string>
+    <string name="failed_update_schedule">Failed to update schedule</string>
+    <string name="failed_create_alarm">Failed to create alarm</string>
+    <string name="failed_delete_alarm">Failed to delete alarm</string>
+    <string name="failed_update_alarm">Failed to update alarm</string>
+    <string name="failed_delete_schedule">Failed to delete schedule</string>
+    <string name="failed_timer_create">Failed to create timer</string>
+    <string name="failed_timer_delete">Failed to delete timer</string>
 </resources>

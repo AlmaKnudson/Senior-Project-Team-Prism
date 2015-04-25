@@ -332,7 +332,7 @@ public class AdvancedSettingFragment extends Fragment implements CacheUpdateList
                                 sunsetSwitch.setChecked(true);
                         }
                         closeProgressDialog();
-                        DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
+                        DialogCreator.showWarningDialog("Error", getText(R.string.failed_update_schedule).toString(), (MainActivity)getActivity());
                     }
                 });
             }
@@ -394,7 +394,7 @@ public class AdvancedSettingFragment extends Fragment implements CacheUpdateList
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         closeProgressDialog();
-                        DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
+                        DialogCreator.showWarningDialog("Error", getText(R.string.failed_create_schedule).toString(), (MainActivity)getActivity());
                     }
                 });
             }

@@ -357,7 +357,7 @@ public class AlarmFragment extends Fragment implements CacheUpdateListener{
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         closeProgressDialog();
-                        DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
+                        DialogCreator.showWarningDialog("Error", getText(R.string.failed_update_alarm).toString(), (MainActivity)getActivity());
                     }
                 });
             }
@@ -407,7 +407,7 @@ public class AlarmFragment extends Fragment implements CacheUpdateListener{
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         closeProgressDialog();
-                        DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
+                        DialogCreator.showWarningDialog("Error", getText(R.string.failed_create_alarm).toString(), (MainActivity)getActivity());
                     }
                 });
             }
@@ -449,7 +449,7 @@ public class AlarmFragment extends Fragment implements CacheUpdateListener{
                     @Override
                     public void run() {
                         closeProgressDialog();
-                        DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
+                        DialogCreator.showWarningDialog("Error", getText(R.string.failed_delete_alarm).toString(), (MainActivity)getActivity());
                     }
                 });
             }

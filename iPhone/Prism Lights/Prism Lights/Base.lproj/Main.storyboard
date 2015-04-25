@@ -1514,7 +1514,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Voice" id="iL1-Ar-mGN"/>
+                    <tabBarItem key="tabBarItem" title="Voice" image="mic" id="iL1-Ar-mGN"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OWL-nX-lSy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -3574,6 +3574,7 @@
         <image name="groupTop" width="141" height="150"/>
         <image name="home" width="25" height="25"/>
         <image name="lock" width="48" height="60"/>
+        <image name="mic" width="50" height="50"/>
         <image name="note" width="25" height="25"/>
         <image name="p" width="60" height="60"/>
         <image name="pushAuth" width="516" height="475"/>

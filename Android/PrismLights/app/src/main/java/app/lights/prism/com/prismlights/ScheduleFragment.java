@@ -398,7 +398,7 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
                     @Override
                     public void run() {
                         closeProgressDialog();
-                        DialogCreator.showWarningDialog("Error", s, (MainActivity) getActivity());
+                        DialogCreator.showWarningDialog("Error", getText(R.string.failed_update_schedule).toString(), (MainActivity) getActivity());
                     }
                 });
             }
@@ -440,7 +440,7 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
                     @Override
                     public void run() {
                         closeProgressDialog();
-                        DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
+                        DialogCreator.showWarningDialog("Error", getText(R.string.failed_delete_schedule).toString(), (MainActivity)getActivity());
                     }
                 });
             }

@@ -1,6 +1,7 @@
 package app.lights.prism.com.prismlights;
 
 
+import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -46,10 +47,10 @@ public class MusicFragment extends Fragment implements OnsetHandler {
  * Member variables for Music.
  */
     public static final String musicSelectBulbsTag = "BULB_RANGE_FRAGMENT_TAG";
-    private  AudioProcessor p;
+    private volatile AudioProcessor p;
     private PercussionOnsetDetector pOC;
-    private ComplexOnsetDetector cOP;
-    private AudioDispatcher dispatcher;
+    private volatile ComplexOnsetDetector cOP;
+    private volatile AudioDispatcher dispatcher;
     private WaveformView mWaveformView;
     private ToggleButton toggleButton;
     private Button selectLightsButton;
@@ -60,10 +61,10 @@ public class MusicFragment extends Fragment implements OnsetHandler {
     private SeekBar highRangeSlider;
     private TextView bpmLabel;
     private TextView brightnessLabel;
-    private TextView lowRangeMaxLabel;
-    private TextView midRangeMinLabel;
-    private TextView midRangeMaxLabel;
-    private TextView highRangeMinLabel;
+    private volatile TextView lowRangeMaxLabel;
+    private volatile TextView midRangeMinLabel;
+    private volatile TextView midRangeMaxLabel;
+    private volatile TextView highRangeMinLabel;
     private Thread thread;
     private boolean stopped;
     //These lists will be SMALL
@@ -102,6 +103,7 @@ public class MusicFragment extends Fragment implements OnsetHandler {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        stopped = true;
         fX = 1.75;
         HashMap<String, String> map = LightRangeMap.getLightRangeMap().getMap();
         lows = new ArrayList<String>();
@@ -209,6 +211,7 @@ public class MusicFragment extends Fragment implements OnsetHandler {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                if(cOP != null)
                   cOP.setThreshold(fX / 10);
             }
         });
@@ -256,13 +259,13 @@ public class MusicFragment extends Fragment implements OnsetHandler {
 //                float pitchInHz = result.getPitch();
 //                if(pitchInHz != -1.0)
 //                    System.out.println("Pitch: " + pitchInHz);
-                            MusicFragment.this.getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-//                        TextView text = (TextView) findViewById(R.id.textView1);
-//                        System.out.println("" + pitchInHz);
-                                }
-                            });
+//                            MusicFragment.this.getActivity().runOnUiThread(new Runnable() {
+//                                @Override
+//                                public void run() {
+////                        TextView text = (TextView) findViewById(R.id.textView1);
+////                        System.out.println("" + pitchInHz);
+//                                }
+//                            });
                         }
                     };
 
@@ -274,7 +277,7 @@ public class MusicFragment extends Fragment implements OnsetHandler {
                         cOP.setHandler(null);
                     }
 //        cOP  = new ComplexOnsetDetector(2048, fX/10, 0.002, -70);
-                    cOP  = new ComplexOnsetDetector(2048, .15, 0.002, -70);
+                    cOP  = new ComplexOnsetDetector(2048, fX/10, 0.002, -70);
                     cOP.setHandler(MusicFragment.this);
                     p = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 44100, 2048, pdh);
                     // add a processor, handle percussion event.
@@ -284,12 +287,23 @@ public class MusicFragment extends Fragment implements OnsetHandler {
 
                     thread = new Thread(dispatcher,"Audio Dispatcher");
                     thread.start();
+                    stopped = false;
+//                    midRangeSlider.setEnabled(false);
+//                    lowRangeSlider.setEnabled(false);
+//                    bPM.setEnabled(false);
 
                 } else {
-                    dispatcher.stop();
+                    stopped = true;
 //                    dispatcher.removeAudioProcessor(p);
 //                    dispatcher.removeAudioProcessor(cOP);
-//                    dispatcher.skip(20);
+//                    cOP.setHandler(null);
+//                    p = null;
+//                    pdh = null;
+                    dispatcher.stop();
+//                    thread.interrupt();
+                    Thread t1 = thread;
+                    thread = null;
+                    t1.interrupt();
                 }
             }
         };
@@ -298,6 +312,7 @@ public class MusicFragment extends Fragment implements OnsetHandler {
 
             @Override
             public void onClick(View v) {
+                gracefullyMurderAndThenKillThisMusic();
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.container, new BulbRangeFragment(), musicSelectBulbsTag);
                 fragmentTransaction.addToBackStack(musicSelectBulbsTag);
@@ -314,7 +329,8 @@ public class MusicFragment extends Fragment implements OnsetHandler {
 
     @Override
     public void handleOnset(double time, double salience) {
-
+        if(stopped)
+            return;
 //        System.out.println(String.format("%.4f;%.4f, %.4f", time, salience, (float)mostRecentPitch));
 
         //Send bulb requests based on FREQUENCY ranges and the frequency detected by this ONSET.
@@ -339,20 +355,55 @@ public class MusicFragment extends Fragment implements OnsetHandler {
             float[] xY = {rng.nextFloat(), rng.nextFloat()};
             HueBulbChangeUtility.musicChangeBulbsColor(lightsToChange, xY, 1, 254 * (Integer.parseInt(brightnessLabel.getText().toString().replace("%", "")) / 100));
             //Fade out slowly
-            HueBulbChangeUtility.musicChangeBulbsColor(lightsToChange, xY, 20, 0);
+//            HueBulbChangeUtility.musicChangeBulbsColor(lightsToChange, xY, 20, 0);
         }
     }
 
+
+
+//    @Override
+//    public void onDetach() {
+//        gracefullyMurderAndThenKillThisMusic();
+//        super.onDetach();
+//    }
+
     @Override
     public void onDestroyView() {
-        if(dispatcher!= null)
-            dispatcher.stop();
-        if(p!=null)
-            dispatcher.removeAudioProcessor(p);
-        if(cOP!=null) {
-            dispatcher.removeAudioProcessor(cOP);
-            cOP.setHandler(null);
-        }
+
+        gracefullyMurderAndThenKillThisMusic();
         super.onDestroyView();
+    }
+
+    private void gracefullyMurderAndThenKillThisMusic(){
+        if(!stopped) {
+//            p = null;
+//            pdh = null;
+
+            try{
+                dispatcher.stop();
+
+            }
+            catch(IllegalStateException e){
+
+            }
+            finally {
+                cOP.setHandler(null);
+                dispatcher.removeAudioProcessor(p);
+                dispatcher.removeAudioProcessor(cOP);
+                if(thread != null) {
+                    Thread t1 = thread;
+                    thread = null;
+                    while(t1.isAlive()) {
+                        t1.interrupt();
+                        try{
+                            Thread.sleep(200);
+//                            System.out.println("INTERRUPTING THREAD");
+                        } catch(Exception e){
+
+                        }
+                    }
+                }
+            }
+        }
     }
 }

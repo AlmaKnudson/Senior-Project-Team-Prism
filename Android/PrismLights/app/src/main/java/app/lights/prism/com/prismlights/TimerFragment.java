@@ -532,7 +532,7 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         closeProgressDialog();
-                        DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
+                        DialogCreator.showWarningDialog("Error", getText(R.string.failed_timer_create).toString(), (MainActivity)getActivity());
                     }
                 });
             }
@@ -575,7 +575,7 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
                     @Override
                     public void run() {
                         closeProgressDialog();
-                        DialogCreator.showWarningDialog("Error", s, (MainActivity)getActivity());
+                        DialogCreator.showWarningDialog("Error", getText(R.string.failed_timer_delete).toString(), (MainActivity)getActivity());
                     }
                 });
             }
