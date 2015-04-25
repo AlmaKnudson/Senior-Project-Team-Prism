@@ -61,8 +61,6 @@ public class ColorCycleFragment extends Fragment {
         if(popping || HueBulbChangeUtility.popBackStackIfItemNotExist(currentIdentifier, isGroup, getFragmentManager())) {
             return;
         }
-
-
         if(!isGroup) {
             currentLight = bridge.getResourceCache().getLights().get(currentIdentifier);
             currentIdentifier = currentLight.getIdentifier();
