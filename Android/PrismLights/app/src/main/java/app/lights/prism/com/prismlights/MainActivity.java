@@ -99,9 +99,9 @@ public class MainActivity extends Activity implements PHSDKListener{
     private static final String colorCycleTaskFileName = "colorCycleTask.out";
     private static final String colorCycleTasksGroupFileName = "colorCycleTaskGroup.out";
     public  static final String REAL_HOME_FRAGMENT = "REAL_HOME_FRAGMENT";
-    private boolean requestedPressingButton;
     private String prevLatitude;
     private String prevLongitude;
+    private boolean authenticating = false;
 
     //colorCycle utilities
     private List<ColorCycle> colorCycles;
@@ -365,7 +365,6 @@ public class MainActivity extends Activity implements PHSDKListener{
         }
 
         currentSchedule = null;
-        requestedPressingButton = false;
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container, new SettingsFragment());
@@ -566,7 +565,7 @@ public class MainActivity extends Activity implements PHSDKListener{
      * Also it is recommended you store the connected IP Address/ Username in your app here.  This will allow easy automatic connection on subsequent use.
      */
     public void onBridgeConnected(PHBridge phBridge) {
-
+        authenticating = false;
         hueBridgeSdk.setSelectedBridge(phBridge);
         hueBridgeSdk.enableHeartbeat(phBridge, PHHueSDK.HB_INTERVAL);
         hueBridgeSdk.getHeartbeatManager().enableLightsHeartbeat(phBridge, 2000);
@@ -575,7 +574,8 @@ public class MainActivity extends Activity implements PHSDKListener{
             public void run() {
                 connectionLostCount = 0;
                 //only open the home screen if really new connection or at least not when unexpected
-                if(getFragmentManager().findFragmentById(R.id.container) instanceof SettingsFragment) {
+                Fragment currentFragment = getFragmentManager().findFragmentById(R.id.container);
+                if(currentFragment instanceof SettingsFragment || currentFragment instanceof PushButtonFragment) {
                     openHomeScreen();
                 }
             }
@@ -604,11 +604,14 @@ public class MainActivity extends Activity implements PHSDKListener{
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.container, new PushButtonFragment());
-                fragmentTransaction.addToBackStack("authenticationRequired");
-                fragmentTransaction.commit();
-                DialogCreator.cancelShowingDialog(MainActivity.this);
+                if(!authenticating) {
+                    authenticating = true;
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.container, new PushButtonFragment());
+                    fragmentTransaction.addToBackStack("authenticationRequired");
+                    fragmentTransaction.commit();
+                    DialogCreator.cancelShowingDialog(MainActivity.this);
+                }
             }
         });
         hueBridgeSdk.startPushlinkAuthentication(accessPoint);
@@ -700,6 +703,9 @@ public class MainActivity extends Activity implements PHSDKListener{
                 }
                 if (code == PHHueError.NO_CONNECTION) {
                     return;
+                }
+                if(code == PHHueError.AUTHENTICATION_FAILED) {
+                    authenticating = false;
                 }
 //                Toast toast = Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT);
 //                toast.show();
