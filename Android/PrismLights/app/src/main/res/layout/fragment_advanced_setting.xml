@@ -73,6 +73,18 @@
             android:paddingBottom="10dp"
             android:id="@+id/sunsetText"/>
 
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text=""
+            android:layout_gravity="center_horizontal"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:id="@+id/sunsetTime"/>
+
         <ToggleButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -102,6 +114,18 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:id="@+id/sunriseText" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text=""
+            android:layout_gravity="center_horizontal"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:id="@+id/sunriseTime"/>
 
         <ToggleButton
             android:layout_width="wrap_content"

@@ -73,13 +73,13 @@ public class ColorCycleFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_color_cycle, container, false);
-        TextView nameTextView = (TextView)view.findViewById(R.id.colorCycleBulbNameText);
+//        TextView nameTextView = (TextView)view.findViewById(R.id.colorCycleBulbNameText);
         ImageView colorCycleAddImageView = (ImageView)view.findViewById(R.id.colorCycleAddButton);
         ListView colorCycleListView = (ListView)view.findViewById(R.id.colorCycleListView);
-        if(isGroup)
-            nameTextView.setText(currentGroup.getName());
-        else
-            nameTextView.setText(currentLight.getName());
+//        if(isGroup)
+//            nameTextView.setText(currentGroup.getName());
+//        else
+//            nameTextView.setText(currentLight.getName());
 
         colorCycleAddImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,11 +174,20 @@ public class ColorCycleFragment extends Fragment {
             runColorCycleButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO: need to get duration from user
                     List<ScheduledFuture> tasks = colorCycles.get(position).startColorCycle(10, bridge, currentIdentifier, isGroup, (MainActivity)getActivity());
                     ((MainActivity)getActivity()).setColorCycleTasks(currentIdentifier,tasks, isGroup);
 //                    android.app.FragmentManager fm = getActivity().getFragmentManager();
 //                    fm.popBackStack();
+                }
+            });
+
+            ImageView deleteImage = (ImageView)currentView.findViewById(R.id.colorCyleListDeleteImage);
+            deleteImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((MainActivity)getActivity()).deleteColorCycle(position);
+                    colorCycles = ((MainActivity)getActivity()).getAllColorCycles();
+                    colorCycleListAdapter.notifyDataSetChanged();
                 }
             });
             return currentView;

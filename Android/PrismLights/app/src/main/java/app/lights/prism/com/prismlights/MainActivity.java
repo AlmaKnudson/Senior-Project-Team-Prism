@@ -280,7 +280,6 @@ public class MainActivity extends Activity implements PHSDKListener{
         /* BEACON/BLUETOOTH END */
 
 
-        //TODO: get stored sunrise sunset
         // get Stored sunrise and sunset time
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         if(settings.contains("sunrise")) {
@@ -803,16 +802,16 @@ public class MainActivity extends Activity implements PHSDKListener{
 
         //if there is no access to location make
         if (location==null){
-            if(sunrise==null) {
+            if(sunrise==null) {// no location, and no previous sunrise or sunset time, make one
                 sunrise = new Date();
                 sunrise.setDate(sunrise.getDate() - 1);
-                sunrise.setHours(7);
-                sunrise.setMinutes(24);
+                sunrise.setHours(6);
+                sunrise.setMinutes(31);
                 sunrise.setSeconds(00);
                 sunset = new Date();
-                sunset.setDate(sunrise.getDate() - 1);
+                sunset.setDate(sunset.getDate() - 1);
                 sunset.setHours(20);
-                sunset.setMinutes(33);
+                sunset.setMinutes(21);
                 sunset.setSeconds(00);
             }
             new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK)

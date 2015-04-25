@@ -81,11 +81,13 @@ public class ScheduleFragment extends Fragment implements CacheUpdateListener {
             PHSchedule schedule = recurringSchedules.get(i);
             if(isGroup){
                 if (schedule.getGroupIdentifier() != null && schedule.getGroupIdentifier().equals(identifier)
+                        && !schedule.getDescription().startsWith("prism,smartsun")
                         && schedule.getDescription().startsWith("prism")) {
                     phSchedules.add(recurringSchedules.get(i));
                 }
             }else {
                 if (schedule.getLightIdentifier() != null && schedule.getLightIdentifier().equals(identifier)
+                        && !schedule.getDescription().startsWith("prism,smartsun")
                         && schedule.getDescription().startsWith("prism")) {
                     phSchedules.add(recurringSchedules.get(i));
                 }

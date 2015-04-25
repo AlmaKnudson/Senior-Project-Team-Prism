@@ -196,10 +196,17 @@ public class ScheduleConfigFragment extends Fragment {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: validate
-                if (nameEditor.getText().toString().trim().equals("")) {
-                    DialogCreator.showWarningDialog("Error", "Please Enter a name.", (MainActivity) getActivity());
-                } else {
+                String name = nameEditor.getText().toString().trim();
+                if (name.equals("")) {
+                    DialogCreator.showWarningDialog("Error", "Please enter a name.", (MainActivity) getActivity());
+                } else if (name.length()>50){
+                    DialogCreator.showWarningDialog("Error", "Name is too long. Please enter shorter name.", (MainActivity) getActivity());
+                } else if (timeChoiceOn==-1 && timeChoiceOff==-1){
+                    DialogCreator.showWarningDialog("Error", "Please enter On time or Off time", (MainActivity) getActivity());
+                } else if (recurringDays == 0){
+                    DialogCreator.showWarningDialog("Error", "Please choose at least one day.", (MainActivity) getActivity());
+                }
+                else {
                     String key = new Date().getTime() + "";
 
                     if (currentSchedule != null && currentOnSchedule != null) {

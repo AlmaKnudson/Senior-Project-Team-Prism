@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,8 @@ public class AdvancedSettingFragment extends Fragment implements CacheUpdateList
     private TextView alarmText;
     private TextView timerText;
     private TextView scheduleText;
+    private TextView sunsetTimeText;
+    private TextView sunriseTimeText;
 
     private TextView beaconsText;
     private ToggleButton sunriseSwitch;
@@ -114,6 +117,8 @@ public class AdvancedSettingFragment extends Fragment implements CacheUpdateList
         beaconsText = (TextView)view.findViewById(R.id.beaconsText);
         sunriseSwitch = (ToggleButton)view.findViewById(R.id.SunriseSwitch);
         sunsetSwitch = (ToggleButton)view.findViewById(R.id.SunsetSwitch);
+        sunriseTimeText = (TextView)view.findViewById(R.id.sunriseTime);
+        sunsetTimeText = (TextView)view.findViewById(R.id.sunsetTime);
 
 
         alarmText.setOnClickListener(new View.OnClickListener() {
@@ -182,7 +187,6 @@ public class AdvancedSettingFragment extends Fragment implements CacheUpdateList
 
         updateSunScheduleToggles();
 
-
         sunriseSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -237,10 +241,14 @@ public class AdvancedSettingFragment extends Fragment implements CacheUpdateList
             sunriseSwitch.setChecked(false);
         } else if (sunriseSchedules.size() == 1){
             PHSchedule.PHScheduleStatus status = sunriseSchedules.get(0).getStatus();
-            if (status==null || status.equals(PHSchedule.PHScheduleStatus.ENABLED)) //TODO right after creating new schedule, it returns null value for the status...
+            if (status==null || status.equals(PHSchedule.PHScheduleStatus.ENABLED)) {
                 sunriseSwitch.setChecked(true);
-            else
+                sunriseTimeText.setText("On: "+getTimeString(sunriseSchedules.get(0).getDate()));
+            }
+            else {
                 sunriseSwitch.setChecked(false);
+                sunriseTimeText.setText("");
+            }
         } else
             Log.e(DEBUG_TAG, "There were more than 1 sunrise schedule for bulb" + identifier);
 
@@ -248,12 +256,20 @@ public class AdvancedSettingFragment extends Fragment implements CacheUpdateList
             sunsetSwitch.setChecked(false);
         } else if (sunsetSchedules.size() == 1){
             PHSchedule.PHScheduleStatus status = sunsetSchedules.get(0).getStatus();
-            if (status==null || status.equals(PHSchedule.PHScheduleStatus.ENABLED))
+            if (status==null || status.equals(PHSchedule.PHScheduleStatus.ENABLED)) {
                 sunsetSwitch.setChecked(true);
-            else
+                sunsetTimeText.setText("Off: "+getTimeString(sunsetSchedules.get(0).getDate()));
+            }
+            else {
                 sunsetSwitch.setChecked(false);
+                sunsetTimeText.setText("");
+            }
         } else
             Log.e(DEBUG_TAG, "There were more than 1 sunset schedule for bulb" + identifier);
+    }
+
+    private String getTimeString(Date date) {
+        return (String) DateFormat.format("hh:mm aaa", date);
     }
 
     private void updateSchedule(final PHSchedule phSchedule, int name) {

@@ -10,30 +10,37 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/colorCycleInfoLayout">
+            android:id="@+id/colorCycleInfoLayout"
+            android:weightSum="10">
 
             <TextView
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="8.5"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/color_cycles_label"
                 android:id="@+id/colorCycleListText"
                 style="@style/TitleTextView"/>
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="bulb name"
-                android:id="@+id/colorCycleBulbNameText"
-                android:ellipsize="end"
-                android:maxLines="1"
-                style="@style/TitleTextView"/>
+            <!--<TextView-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+                <!--android:text="bulb name"-->
+                <!--android:id="@+id/colorCycleBulbNameText"-->
+                <!--android:ellipsize="end"-->
+                <!--android:maxLines="1"-->
+                <!--style="@style/TitleTextView"/>-->
 
             <ImageButton
                 style="@style/TopButton"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1.5"
                 android:id="@+id/colorCycleAddButton"
                 android:src="@drawable/plus_button"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                 />
         </LinearLayout>
     <View
         style="@style/TitleUnderline"/>
