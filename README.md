@@ -20,6 +20,8 @@ Android Application-Build and Run
 ---------------------------------
 * Clone the repository on github at https://github.com/AlmaKnudson/Senior-Project-Team-Prism.git
 * Install Android Studio 1.1.0 and the Android SDK
+* Choose to open an existing project
+* Open the "Android/PrismLights" folder
 * Open the Android SDK manager and install:
   + Android Support Library 22.1.1
   + Android Support Repository 14
@@ -34,7 +36,7 @@ Android Application-Build and Run
   + Click Run or Debug
   + Choose to start the emulator
   + Unlock the emulated device
-* To run on your Android Phone(Your phone's API must be greater than 19 although 21 is preferred):
+* To run on your Android Phone(Your phone's API must be greater than 17 although 21 is preferred):
   + Insure that you have debugging mode enabled ([How do I do that?](http://www.kingoapp.com/root-tutorials/how-to-enable-usb-debugging-mode-on-android.htm))
   + Connect your device to your computer via USB
   + Allow debugging from your computer in the dialog that pops up on your phone
