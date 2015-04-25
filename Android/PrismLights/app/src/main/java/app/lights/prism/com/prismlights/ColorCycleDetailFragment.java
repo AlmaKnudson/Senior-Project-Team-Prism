@@ -297,6 +297,12 @@ public class ColorCycleDetailFragment extends Fragment {
                             int time = Integer.parseInt(hourText.getText().toString().split("\\s")[0]) * 3600
                             + Integer.parseInt(minText.getText().toString().split("\\s")[0]) * 60
                             + Integer.parseInt(secText.getText().toString().split("\\s")[0]);
+
+                            if (time == 0){
+                                time = 1;
+                                DialogCreator.showWarningDialog("Error", "Duration cannot be 0.", (MainActivity) getActivity());
+                            }
+
                             newColorCycle.setDuration(position, time);
                             adapter.notifyDataSetChanged();
                         }

@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
@@ -98,6 +99,9 @@ public class MainActivity extends Activity implements PHSDKListener{
     private static final String colorCycleTaskFileName = "colorCycleTask.out";
     private static final String colorCycleTasksGroupFileName = "colorCycleTaskGroup.out";
     public  static final String REAL_HOME_FRAGMENT = "REAL_HOME_FRAGMENT";
+    private boolean requestedPressingButton;
+    private String prevLatitude;
+    private String prevLongitude;
 
     //colorCycle utilities
     private List<ColorCycle> colorCycles;
@@ -292,6 +296,14 @@ public class MainActivity extends Activity implements PHSDKListener{
             sunrise = null;
             sunset = null;
         }
+        if(settings.contains("latitude")) {
+            prevLatitude = settings.getString("latitude", "0");
+            prevLongitude = settings.getString("longitude", "0");
+        }
+        else{
+            prevLatitude = null;
+            prevLongitude = null;
+        }
 
         // get Stored colorCycles
         try {
@@ -313,12 +325,14 @@ public class MainActivity extends Activity implements PHSDKListener{
             float[] color3 = {0.6091f,0.3294f};
             float[] color4 = {0.2207f,0.1386f};
             float[] color5 = {0.3452f,0.1879f};
+            float[] color6 = {0.4407f,0.5200f};
 
-            demoCycle.add(color, 100, 5, 2 );
-            demoCycle.add(color2, 20, 5, 2 );
-            demoCycle.add(color3, 100, 5, 2 );
-            demoCycle.add(color4, 20, 5, 2 );
-            demoCycle.add(color5, 100, 5, 2 );
+            demoCycle.add(color, 100, 7, 2 );
+            demoCycle.add(color2, 20, 7, 2 );
+            demoCycle.add(color3, 100, 7, 2 );
+            demoCycle.add(color4, 20, 7, 2 );
+            demoCycle.add(color5, 100, 7, 2 );
+            demoCycle.add(color6, 20, 7, 2 );
 
             colorCycles.add(demoCycle);
         }
@@ -351,6 +365,7 @@ public class MainActivity extends Activity implements PHSDKListener{
         }
 
         currentSchedule = null;
+        requestedPressingButton = false;
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container, new SettingsFragment());
@@ -447,6 +462,11 @@ public class MainActivity extends Activity implements PHSDKListener{
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
             settings.edit().putLong("sunrise", sunrise.getTime()).commit();
             settings.edit().putLong("sunset", sunset.getTime()).commit();
+        }
+        if(prevLatitude != null && prevLongitude!=null){
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+            settings.edit().putString("latitude", prevLatitude).commit();
+            settings.edit().putString("longitude", prevLongitude).commit();
         }
         if(colorCycles != null){
             try {
@@ -592,11 +612,6 @@ public class MainActivity extends Activity implements PHSDKListener{
             }
         });
         hueBridgeSdk.startPushlinkAuthentication(accessPoint);
-
-        // TODO: find a perfect place for this.
-        //set recurring service here once. it is ok to be called multiple time, previous alarm broadcasting will be replaced.
-//        Context context = this.getApplicationContext();
-//        setAlarmBroadcasting(context);
     }
 
     @Override
@@ -671,7 +686,7 @@ public class MainActivity extends Activity implements PHSDKListener{
             public void run() {
                 if (code == PHHueError.BRIDGE_NOT_RESPONDING) {
                     //seems to only happen when connecting to bridge that's there but won't respond
-                    if(!connecting) {
+                    if (!connecting) {
                         DialogCreator.showWarningDialog(getText(R.string.could_not_connect).toString(), getText(R.string.could_not_connect_explanation).toString(), MainActivity.this);
                     } else {
                         connecting = false;
@@ -755,7 +770,7 @@ public class MainActivity extends Activity implements PHSDKListener{
     /* this function starts recurring service.
     *  Once this is called, SmartSunService will be triggered every day.
     */
-    private void setAlarmBroadcasting(Context context) {
+    public void setAlarmBroadcasting(Context context) {
         Calendar updateTime = Calendar.getInstance();
         updateTime.setTimeZone(TimeZone.getDefault());
         updateTime.set(Calendar.HOUR_OF_DAY, 01);
@@ -807,20 +822,28 @@ public class MainActivity extends Activity implements PHSDKListener{
     }
 
     private void updateSunTime() {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        List<String> providers = locationManager.getProviders(true);
-        Location location = null;
 
-        for (int i = 0; i<providers.size();i++){
-            if (locationManager.getLastKnownLocation(providers.get(0))!=null) {
-                location = locationManager.getLastKnownLocation(providers.get(0));
-                break;
-            }
-        }
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_LOW);
+        criteria.setPowerRequirement(Criteria.POWER_LOW);
+        String provider = locationManager.getBestProvider(criteria, true);
+        Location location = locationManager.getLastKnownLocation(provider);
 
         //if there is no access to location make
-        if (location==null){
-            if(sunrise==null) {// no location, and no previous sunrise or sunset time, make one
+        if (location!=null) {
+            setLatitude(location.getLatitude());
+            setLongitude(location.getLongitude());
+            callWebservice(prevLatitude, prevLongitude);
+
+        }else if (prevLatitude!=null && prevLongitude!=null){
+            callWebservice(prevLatitude, prevLongitude);
+
+        }else {
+            // if no location is available, user can use previous sunrise sunset time...
+
+            // if no location, and no previous location, no previous sunrise or sunset time, make one. this shouldn't happen though.
+            if(sunrise==null) {
                 sunrise = new Date();
                 sunrise.setDate(sunrise.getDate() - 1);
                 sunrise.setHours(6);
@@ -841,9 +864,10 @@ public class MainActivity extends Activity implements PHSDKListener{
                     })
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
-            return;
         }
+    }
 
+    private void callWebservice(String latitude, String longitude) {
         Date date = new Date();
 
         URL url;
@@ -853,8 +877,8 @@ public class MainActivity extends Activity implements PHSDKListener{
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             try {
-                url = new URL("http://www.earthtools.org/sun/" + location.getLatitude() + "/"
-                        + location.getLongitude() + "/" + date.getMonth() + "/" + date.getDate() + "/99/1");
+                url = new URL("http://www.earthtools.org/sun/" + latitude + "/"
+                        + longitude + "/" + date.getMonth() + "/" + date.getDate() + "/99/1");
                 DownloaderTask downloaderTask = new DownloaderTask();
                 downloaderTask.execute(url);
             } catch (MalformedURLException e) {
@@ -872,6 +896,14 @@ public class MainActivity extends Activity implements PHSDKListener{
 
     public void setDialog(Dialog dialog) {
         this.dialog = dialog;
+    }
+
+    public void setLatitude(double latitude) {
+        prevLatitude = latitude+"";
+    }
+
+    public void setLongitude(double longitude) {
+        prevLongitude = longitude+"";
     }
 
     private class DownloaderTask extends AsyncTask<URL, Void, Boolean> {
