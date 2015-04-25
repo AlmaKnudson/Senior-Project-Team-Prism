@@ -35,7 +35,7 @@ Android Application-Build and Run
   + Choose to start the emulator
   + Unlock the emulated device
 * To run on your Android Phone:
-  + Insure that you have debugging mode enabled [(How do I do that?)](http://www.kingoapp.com/root-tutorials/how-to-enable-usb-debugging-mode-on-android.htm)
+  + Insure that you have debugging mode enabled ([How do I do that?](http://www.kingoapp.com/root-tutorials/how-to-enable-usb-debugging-mode-on-android.htm))
   + Connect your device to your computer via USB
   + Allow debugging from your computer in the dialog that pops up on your phone
   + Click Run or Debug in Android Studio
