@@ -325,7 +325,11 @@ public class MusicFragment extends Fragment implements OnsetHandler {
         return layout;
     }
 
-
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        toggleButton.setChecked(false);
+    }
 
     @Override
     public void handleOnset(double time, double salience) {
@@ -369,7 +373,6 @@ public class MusicFragment extends Fragment implements OnsetHandler {
 
     @Override
     public void onDestroyView() {
-
         gracefullyMurderAndThenKillThisMusic();
         super.onDestroyView();
     }
