@@ -33,7 +33,14 @@ public class Schedule {
 
     public int getTimeChoiceOn(){
         if(scheduleOn!=null) {
-            return Integer.parseInt(getScheduleOn().getDescription().split("[,]")[2]);
+            try {
+                // all of our schedule must have "prism,[key],[choice]" format. if it is not, it is from other app.
+                // key is usually time of the creation in milliseconds.
+                // choice 0:fix time, 1:sunrise, 2:sunset, 3:nothing(user wants only on or off, not both of them and one of them has to be none)
+                return Integer.parseInt(getScheduleOn().getDescription().split("[,]")[2]);
+            }catch (Exception e){
+                return 0;
+            }
         }
         else
             return 3; // 3 means user did not want any turn on scheduled.

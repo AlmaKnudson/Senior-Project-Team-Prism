@@ -41,9 +41,11 @@ public class ColorCycleFragment extends Fragment {
     private PHGroup currentGroup;
     private String currentIdentifier;
     private ColorCycleListAdapter colorCycleListAdapter;
+    private boolean popping;
 
     public ColorCycleFragment() {
         // Required empty public constructor
+        popping = false;
     }
 
     @Override
@@ -56,6 +58,11 @@ public class ColorCycleFragment extends Fragment {
         }
         colorCycles = ((MainActivity)getActivity()).getAllColorCycles();
         bridge = PHHueSDK.getInstance().getSelectedBridge();
+        if(popping || HueBulbChangeUtility.popBackStackIfItemNotExist(currentIdentifier, isGroup, getFragmentManager())) {
+            return;
+        }
+
+
         if(!isGroup) {
             currentLight = bridge.getResourceCache().getLights().get(currentIdentifier);
             currentIdentifier = currentLight.getIdentifier();
@@ -180,8 +187,8 @@ public class ColorCycleFragment extends Fragment {
             runColorCycleButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    List<ScheduledFuture> tasks = colorCycles.get(position).startColorCycle(10, bridge, currentIdentifier, isGroup, (MainActivity)getActivity());
-                    ((MainActivity)getActivity()).setColorCycleTasks(currentIdentifier,tasks, isGroup);
+                    List<ScheduledFuture> tasks = colorCycles.get(position).startColorCycle(10, bridge, currentIdentifier, isGroup, (MainActivity) getActivity());
+                    ((MainActivity) getActivity()).setColorCycleTasks(currentIdentifier, tasks, isGroup);
 //                    android.app.FragmentManager fm = getActivity().getFragmentManager();
 //                    fm.popBackStack();
                 }
