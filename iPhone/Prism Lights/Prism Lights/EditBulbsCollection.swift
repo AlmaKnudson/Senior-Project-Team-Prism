@@ -108,7 +108,6 @@ RAReorderableLayoutDelegate, RAReorderableLayoutDataSource {
                 (cell as! BulbCollectionCell).turnOff(false)
             } else{
                 (cell as! BulbCollectionCell).SetBulbColor(GetBulbUIColor(BulbsModel[indexPath.row])!)
-                
             }
             
             
