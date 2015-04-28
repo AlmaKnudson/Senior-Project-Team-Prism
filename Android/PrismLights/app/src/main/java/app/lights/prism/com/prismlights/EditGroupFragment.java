@@ -24,6 +24,7 @@ public class EditGroupFragment extends Fragment implements CacheUpdateListener {
     private Dialog progressDialog;
     private boolean groupEdited;
     private boolean popping;
+    private boolean paused;
 
     public EditGroupFragment() {
         done = false;
@@ -93,7 +94,7 @@ public class EditGroupFragment extends Fragment implements CacheUpdateListener {
                                     public void run() {
                                         if (!groupEdited) {
                                             groupEdited = true;
-                                            if(isVisible()) {
+                                            if(!paused) {
                                                 getFragmentManager().popBackStack();
                                             }
                                         }
@@ -131,5 +132,18 @@ public class EditGroupFragment extends Fragment implements CacheUpdateListener {
         if(progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
+    }
+
+
+    @Override
+    public void onPause() {
+        paused = true;
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        paused = false;
     }
 }

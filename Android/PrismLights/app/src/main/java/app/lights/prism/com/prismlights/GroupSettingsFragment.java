@@ -43,6 +43,7 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
     private int shouldUpdateName;
     private int shouldUpdateColor;
     private boolean popping;
+    private boolean paused;
 
 
     public GroupSettingsFragment() {
@@ -117,7 +118,7 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
                                             if (!hasCompleted && shouldUpdateName > 0) {
                                                 hasCompleted = true;
                                                 shouldUpdateName--;
-                                                if(isVisible()) {
+                                                if(!paused) {
                                                     nameEditor.clearFocus();
                                                 }
                                             }
@@ -323,6 +324,19 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
     @Override
     public void cacheUpdated() {
         updateState();
+    }
+
+
+    @Override
+    public void onPause() {
+        paused = true;
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        paused = false;
     }
 
 }

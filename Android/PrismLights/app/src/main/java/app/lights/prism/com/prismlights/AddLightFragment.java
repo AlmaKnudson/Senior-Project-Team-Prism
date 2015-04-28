@@ -38,6 +38,7 @@ public class AddLightFragment extends Fragment {
     private boolean searchCompleted;
     private boolean searching;
     private Dialog progressDialog;
+    private boolean paused;
 
     public AddLightFragment() {
         serialCodes = new ArrayList<String>();
@@ -67,7 +68,7 @@ public class AddLightFragment extends Fragment {
                                     public void run() {
                                         if (!searchCompleted) {
                                             searchCompleted = true;
-                                            if (isVisible()) {
+                                            if (!paused) {
                                                 getFragmentManager().popBackStack();
                                             }
                                         }
@@ -192,5 +193,17 @@ public class AddLightFragment extends Fragment {
         if(progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
+    }
+
+    @Override
+    public void onPause() {
+        paused = true;
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        paused = false;
     }
 }

@@ -22,7 +22,7 @@ public class AddGroupFragment extends Fragment implements CacheUpdateListener {
     private Dialog progressDialog;
     private boolean done; //prevents the user from adding the group twice
     private boolean groupCreated; //prevents the callback from the group being created from running twice
-
+    private boolean paused;
 
 
     public AddGroupFragment() {
@@ -72,7 +72,7 @@ public class AddGroupFragment extends Fragment implements CacheUpdateListener {
                                     public void run() {
                                         if (!groupCreated) {
                                             groupCreated = true;
-                                            if(isVisible()) {
+                                            if(!paused) {
                                                 getFragmentManager().popBackStack();
                                             }
                                         }
@@ -102,5 +102,18 @@ public class AddGroupFragment extends Fragment implements CacheUpdateListener {
         if(progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
+    }
+
+
+    @Override
+    public void onPause() {
+        paused = true;
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        paused = false;
     }
 }
