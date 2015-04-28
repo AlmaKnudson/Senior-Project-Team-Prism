@@ -191,7 +191,7 @@ public class AdvancedSettingFragment extends Fragment implements CacheUpdateList
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putString(RealHomeFragment.lightPositionString, identifier);
-
+                bundle.putBoolean(RealHomeFragment.groupOrLightString, isGroup);
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 BeaconFragment beaconFragment = new BeaconFragment();
                 System.out.println();

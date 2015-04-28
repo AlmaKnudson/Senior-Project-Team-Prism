@@ -205,7 +205,7 @@ public class MainActivity extends Activity implements PHSDKListener{
 //                                    String beaconId = result[0];
                                     String bulbId = result[1];
                                     String range = result[2];
-
+                                    boolean isGroup = Boolean.parseBoolean(result[3]);
                                     double distance = Utils.computeAccuracy(beacon);
                                     if (((int) (distance * 3)) <= Integer.parseInt(range)) {
                                         beaconInRange = true;
@@ -218,7 +218,11 @@ public class MainActivity extends Activity implements PHSDKListener{
                                         if(beaconInRange){
                                             int count = beaconInRangeMapCount.get(beaconId);
                                             if((count+1) >= threshold){
-                                                HueBulbChangeUtility.turnBulbOnOff(bulbId, true, MainActivity.this, null);
+                                                if(isGroup){
+                                                    HueBulbChangeUtility.turnGroupOnOff(bulbId, true, MainActivity.this, null);
+                                                } else {
+                                                    HueBulbChangeUtility.turnBulbOnOff(bulbId, true, MainActivity.this, null);
+                                                }
                                                 beaconInRangeMapCount.put(beaconId, 0);
                                             } else {
                                                 beaconInRangeMapCount.put(beaconId, count + 1);
@@ -237,7 +241,11 @@ public class MainActivity extends Activity implements PHSDKListener{
                                         if(!beaconInRange){
                                             int count = beaconOutOfRangeMapCount.get(beaconId);
                                             if( (count+1) >= threshold){
-                                                HueBulbChangeUtility.turnBulbOnOff(bulbId, false, MainActivity.this, null);
+                                                if(isGroup){
+                                                    HueBulbChangeUtility.turnGroupOnOff(bulbId, false, MainActivity.this, null);
+                                                } else {
+                                                    HueBulbChangeUtility.turnBulbOnOff(bulbId, false, MainActivity.this, null);
+                                                }
                                                 beaconOutOfRangeMapCount.put(beaconId, 0);
                                             } else
                                                 beaconOutOfRangeMapCount.put(beaconId, count + 1);

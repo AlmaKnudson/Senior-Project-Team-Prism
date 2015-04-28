@@ -49,6 +49,7 @@ public class BeaconFragment extends Fragment {
 
     private double currentAverageDistance = 0;
     private boolean addAssociation = false;
+    private boolean isGroup = false;
 
     //Beacon gobblygoop
 //    private BeaconManager beaconManager;
@@ -71,6 +72,7 @@ public class BeaconFragment extends Fragment {
 
         if (getArguments() != null) {
             currentBulbId = getArguments().getString(RealHomeFragment.lightPositionString);
+            isGroup = getArguments().getBoolean(RealHomeFragment.groupOrLightString);
         }
 
 //        beaconManager = new BeaconManager(this.getActivity());
@@ -227,7 +229,7 @@ public class BeaconFragment extends Fragment {
             @Override
             public void onBeaconAssociation(String beaconId) {
                 if(addAssociation) {
-                    String association = beaconId + "~!~" + currentBulbId + "~!~" + currentRange;
+                    String association = beaconId + "~!~" + currentBulbId + "~!~" + currentRange + "~!~" + isGroup;
                     HueSharedPreferences.getInstance(getActivity().getApplicationContext()).addBeaconAssociation(association);
                     addAssociation = false;
                     beaconLabel.setText(beaconId);
