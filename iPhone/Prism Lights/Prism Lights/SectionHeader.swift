@@ -14,14 +14,6 @@ class SectionHeader :UICollectionReusableView {
     
     @IBOutlet weak var headerLabel: UILabel!
     
-    @IBAction func AddBulb(sender: AnyObject) {
-        
-    }
-    
-    @IBAction func EditBulb(sender: AnyObject) {
-//        self.performSegueWithIdentifier("editCollection", sender: self)
-    }
-    
     func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if(DEBUG){
             println("In Prepare For Segue")

@@ -31,6 +31,7 @@ class FavoriteCollectionCell : UICollectionViewCell {
     func SetupView(colors:[CGColor], name:String){
         favoriteView.colors = colors
         favoriteLabel.text = name
+        MakeUnSelected()
     }
     
     func MakeSelected(){

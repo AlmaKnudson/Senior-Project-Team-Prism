@@ -25,11 +25,6 @@ class BulbModel : NSObject {
         
         var cacheIds:[String] = (cache.lights.keys.array as! [NSString]) as! [String]
         
-        if bulbIds.count == cacheIds.count {
-            return
-        }
-        
-        
         //Adds new bulbs and removes bulbs that have been removed.
         
         //Create a mapping to insure all bulbs in the cache have been recorded
@@ -108,6 +103,7 @@ class BulbModel : NSObject {
         if CanMoveItem(fromIndex, toIndex: toIndex) {
             var fromTemp = bulbIds.removeAtIndex(fromIndex)
             bulbIds.insert(fromTemp, atIndex: toIndex)
+            saveToFile()
             return true
         } else {
             return false
@@ -126,11 +122,20 @@ class BulbModel : NSObject {
     func DeleteItemAt(index:Int) -> Bool {
         if CanDeleteItemAt(index) {
             bulbIds.removeAtIndex(index)
+            saveToFile()
         }
         return false
     }
     
-    
+//    
+//    func RemoveBulbs(toRemove: [Int]) {
+//        var subtractIndex = 0
+//        for index in toRemove {
+//            bulbIds.removeAtIndex(index - subtractIndex)
+//            subtractIndex++
+//        }
+//        saveToFile()
+//    }
     
     
     private func saveToFile() -> Bool {

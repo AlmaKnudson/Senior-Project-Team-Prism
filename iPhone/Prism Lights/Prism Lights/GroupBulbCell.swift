@@ -22,6 +22,7 @@ class GroupBulbCell : UICollectionViewCell{
         top_bulb!.image = UIImage(named: "groupTop")
         bottom_bulb!.image = UIImage(named: "groupBottom")
         unReachableImage.hidden = true
+        MakeUnSelected()
     }
     
     func turnOff(animate:Bool){

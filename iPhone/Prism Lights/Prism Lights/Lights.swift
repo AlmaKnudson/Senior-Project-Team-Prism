@@ -44,6 +44,16 @@ func GetBulbColorXY(bulbId:String) -> (x:Double?, y:Double?){
     return (x,y)
 }
 
+func GetBulbIsReachable(bulbId:String) -> Bool? {
+    let cache:PHBridgeResourcesCache = PHBridgeResourcesReader.readBridgeResourcesCache()
+    let lights = cache.lights as! [String:PHLight]
+    let light:PHLight? = lights[bulbId]
+    let isReachable = light?.lightState?.reachable.boolValue
+    
+    return isReachable
+
+}
+
 func GetBulbUIColor(bulbId:String) -> UIColor? {
     let cache:PHBridgeResourcesCache = PHBridgeResourcesReader.readBridgeResourcesCache()
     let lights = cache.lights as! [String:PHLight]
@@ -90,6 +100,20 @@ func SetBulbLightState(bulbId:String, lightState:PHLightState){
         if error != nil {
             if(DEBUG){
                 println("Error updating light state.")
+            }
+            return
+        }
+        
+    }
+}
+
+func SearchForNewLightsAuto(){
+    var bridgeSendAPI = PHBridgeSendAPI()
+    bridgeSendAPI.searchForNewLights(){
+        error -> Void in
+        if error != nil {
+            if(DEBUG){
+                println("Could not find new lights")
             }
             return
         }

@@ -22,6 +22,7 @@ class BulbCollectionCell : UICollectionViewCell{
         top_bulb!.image = UIImage(named: "bulb_top")
         bottom_bulb!.image = UIImage(named: "bulb_bottom")
         unReachableImage.hidden = true
+        MakeUnSelected()
     }
     
     func initGroupCell(name:String){

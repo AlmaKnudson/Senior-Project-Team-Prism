@@ -114,6 +114,7 @@ class GroupModel : NSObject {
         if CanMoveItem(fromIndex, toIndex: toIndex) {
             var fromTemp = groupIds.removeAtIndex(fromIndex)
             groupIds.insert(fromTemp, atIndex: toIndex)
+            saveToFile()
             return true
         } else {
             return false
@@ -131,9 +132,20 @@ class GroupModel : NSObject {
     func DeleteItemAt(index:Int) -> Bool {
         if CanDeleteItemAt(index) {
             DeleteGroup(groupIds[index], nil)
+            saveToFile()
         }
         return false
     }
+    
+    func RemoveGroups(toRemove: [Int]) {
+        var subtractIndex = 0
+        for index in toRemove {
+            groupIds.removeAtIndex(index - subtractIndex)
+            subtractIndex++
+        }
+        saveToFile()
+    }
+
     
     
     private func saveToFile() -> Bool {

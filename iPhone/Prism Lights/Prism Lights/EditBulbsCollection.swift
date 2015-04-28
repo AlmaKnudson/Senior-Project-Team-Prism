@@ -12,7 +12,6 @@ class EditBulbsCollection: UIViewController, //UICollectionViewDataSource, UICol
 RAReorderableLayoutDelegate, RAReorderableLayoutDataSource {
     
     
-    
     @IBOutlet weak var bulbCollectionView: UICollectionView!
     
     @IBAction func finishedButton(sender: UIButton) {
@@ -20,21 +19,24 @@ RAReorderableLayoutDelegate, RAReorderableLayoutDataSource {
         dismissDeleget?.DismissMe()
     }
     @IBAction func deleteButton(sender: UIButton) {
+        var list = [Int]()
+        for index in selected {
+            list.append(index)
+        }
+        
         switch editType! {
         case "single":
             return
         case "group":
-            //TODO:  For in selected delete
-            return
+            Groups.RemoveGroups(list)
         case "favorite":
-            //TODO:  For in selected delete
-            return
+            
+            favoritesDataModel.removeFavorites(list)
         default:
             assertionFailure("Edit wasn't setup with a type")
         }
 
         
-        //TODO: Delete thing
         dismissDeleget?.DismissMe()
     }
     
@@ -47,8 +49,12 @@ RAReorderableLayoutDelegate, RAReorderableLayoutDataSource {
     override func viewDidLoad() {
         bulbCollectionView.dataSource = self
         bulbCollectionView.delegate = self
+        
     }
     
+    
+    override func viewWillAppear(animated: Bool) {
+    }
     
     
     
@@ -95,7 +101,17 @@ RAReorderableLayoutDelegate, RAReorderableLayoutDataSource {
                 cell = BulbCollectionCell()
             }
             (cell as! BulbCollectionCell).initBulbCell(GetBulbName(BulbsModel[indexPath.row])!)
-            (cell as! BulbCollectionCell).SetBulbColor(GetBulbUIColor(BulbsModel[indexPath.row])!)
+            
+            if !GetBulbIsReachable(BulbsModel[indexPath.row])! {
+                (cell as! BulbCollectionCell).SetUnreachable()
+            } else if IsBulbOn(BulbsModel[indexPath.row]){
+                (cell as! BulbCollectionCell).turnOff(false)
+            } else{
+                (cell as! BulbCollectionCell).SetBulbColor(GetBulbUIColor(BulbsModel[indexPath.row])!)
+                
+            }
+            
+            
             
             return cell
         case "group":
@@ -103,7 +119,8 @@ RAReorderableLayoutDelegate, RAReorderableLayoutDataSource {
             if cell == nil {
                 cell = GroupBulbCell()
             }
-            (cell as! GroupBulbCell).initGroupCell(Groups[indexPath.row])
+            (cell as! GroupBulbCell).initGroupCell(GetGroupName(Groups[indexPath.row])!)
+            //TODO: is off?
             
             return cell
             
@@ -130,7 +147,52 @@ RAReorderableLayoutDelegate, RAReorderableLayoutDataSource {
         return true
     }
     
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        var shouldBeSelected = true
+        if selected.contains(indexPath.row) {
+            shouldBeSelected = false
+            selected.remove(indexPath.row)
+        } else {
+            selected.insert(indexPath.row)
+        }
+        
+        
+        switch editType! {
+            case "single":
+                var cell = (collectionView.cellForItemAtIndexPath(indexPath) as! BulbCollectionCell)
+                if shouldBeSelected {
+                    cell.MakeSelected()
+                } else {
+                    cell.MakeUnSelected()
+                }
+            
+            case "group":
+                if Groups[indexPath.row] == "0" {
+                    selected.remove(indexPath.row)
+                    return
+                }
+                
+                
+                var cell = (collectionView.cellForItemAtIndexPath(indexPath) as! GroupBulbCell)
+                if shouldBeSelected {
+                    cell.MakeSelected()
+                } else {
+                    cell.MakeUnSelected()
+                }
+            case "favorite":
+                var cell = (collectionView.cellForItemAtIndexPath(indexPath) as! FavoriteCollectionCell)
+                if shouldBeSelected {
+                    cell.MakeSelected()
+                } else {
+                    cell.MakeUnSelected()
+            }
+            default:
+            assertionFailure("Edit wasn't setup with a type")
+        }
+    }
+    
     func collectionView(collectionView: UICollectionView, atIndexPath: NSIndexPath, didMoveToIndexPath toIndexPath: NSIndexPath) {
+        
         switch editType! {
         case "single":
             BulbsModel.MoveItem(atIndexPath.row, toIndex: toIndexPath.row)
@@ -141,8 +203,14 @@ RAReorderableLayoutDelegate, RAReorderableLayoutDataSource {
         default:
             assertionFailure("Edit wasn't setup with a type")
         }
-
     }
+    
+    func collectionView(collectionView: UICollectionView, collectionViewLayout layout: RAReorderableLayout, didEndDraggingItemToIndexPath indexPath: NSIndexPath) {
+        selected.removeAll(keepCapacity: true)
+        collectionView.reloadData()
+        return
+    }
+    
     
     func scrollTrigerEdgeInsetsInCollectionView(collectionView: UICollectionView) -> UIEdgeInsets {
         return UIEdgeInsetsMake(100.0, 100.0, 100.0, 100.0)
@@ -169,13 +237,14 @@ RAReorderableLayoutDelegate, RAReorderableLayoutDataSource {
             //3
             let headerView =
             collectionView.dequeueReusableSupplementaryViewOfKind(kind,
-                withReuseIdentifier: "SectionHeader",
+                withReuseIdentifier: "EditHeader",
                 forIndexPath: indexPath)
-                as! SectionHeader
+                as! EditHeader
             
             switch editType! {
             case "single":
                 headerView.headerLabel.text = "Edit Bulbs"
+                headerView.trashButton.hidden = true
             case "group":
                 headerView.headerLabel.text = "Edit Groups"
             case "favorite":
