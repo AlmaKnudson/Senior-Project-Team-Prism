@@ -66,15 +66,19 @@ public class AddGroupFragment extends Fragment implements CacheUpdateListener {
                     HueBulbChangeUtility.createGroup(nameEditor.getText().toString(), bulbSelectionView.getSelectedLightIds(), new OnCompletedListener() {
                         @Override
                         public void onCompleted() {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (!groupCreated) {
-                                        groupCreated = true;
-                                        getFragmentManager().popBackStack();
+                            if(getActivity() != null) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (!groupCreated) {
+                                            groupCreated = true;
+                                            if(isVisible()) {
+                                                getFragmentManager().popBackStack();
+                                            }
+                                        }
                                     }
-                                }
-                            });
+                                });
+                            }
                         }
                     });
                 }

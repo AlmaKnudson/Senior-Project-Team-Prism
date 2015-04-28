@@ -61,15 +61,19 @@ public class AddLightFragment extends Fragment {
                     OnCompletedListener onCompletedListener = new OnCompletedListener() {
                         @Override
                         public void onCompleted() {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                if (!searchCompleted) {
-                                    searchCompleted = true;
-                                    getFragmentManager().popBackStack();
-                                }
-                                }
-                            });
+                            if(getActivity() != null) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (!searchCompleted) {
+                                            searchCompleted = true;
+                                            if (isVisible()) {
+                                                getFragmentManager().popBackStack();
+                                            }
+                                        }
+                                    }
+                                });
+                            }
                         }
                     };
                     if (serialCodes.isEmpty()) {

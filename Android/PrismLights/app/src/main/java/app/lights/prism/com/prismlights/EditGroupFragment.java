@@ -87,15 +87,19 @@ public class EditGroupFragment extends Fragment implements CacheUpdateListener {
                     HueBulbChangeUtility.editGroup(groupId, bulbSelectionView.getSelectedLightIds(), new OnCompletedListener() {
                         @Override
                         public void onCompleted() {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (!groupEdited) {
-                                        groupEdited = true;
-                                        getFragmentManager().popBackStack();
+                            if(getActivity() != null) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (!groupEdited) {
+                                            groupEdited = true;
+                                            if(isVisible()) {
+                                                getFragmentManager().popBackStack();
+                                            }
+                                        }
                                     }
-                                }
-                            });
+                                });
+                            }
                         }
                     });
                 }

@@ -68,21 +68,23 @@ public class GroupsEditFragment extends Fragment implements OnItemShiftedListene
                 HueBulbChangeUtility.deleteGroups(checked, new OnCompletedListener() {
                     @Override
                     public void onCompleted() {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (progressDialog != null && progressDialog.isShowing()) {
-                                    progressDialog.hide();
-                                    updateFromCache();
-                                    ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
-                                    //close fragment when view only contains 1 item, the uneditable all lights
-                                    if(currentGroupIdOrder.size() < 2) {
-                                        getFragmentManager().popBackStack();
+                        if(getActivity() != null) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (progressDialog != null && progressDialog.isShowing()) {
+                                        progressDialog.hide();
+                                        updateFromCache();
+                                        ((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
+                                        //close fragment when view only contains 1 item, the uneditable all lights
+                                        if (currentGroupIdOrder.size() < 2) {
+                                            getFragmentManager().popBackStack();
+                                        }
+                                        checked.clear();
                                     }
-                                    checked.clear();
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 });
             }

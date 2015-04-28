@@ -110,17 +110,20 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
 
                             @Override
                             public void onCompleted() {
-
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (!hasCompleted && shouldUpdateName > 0) {
-                                            hasCompleted = true;
-                                            shouldUpdateName--;
-                                            nameEditor.clearFocus();
+                                if(getActivity() != null) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (!hasCompleted && shouldUpdateName > 0) {
+                                                hasCompleted = true;
+                                                shouldUpdateName--;
+                                                if(isVisible()) {
+                                                    nameEditor.clearFocus();
+                                                }
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                                }
                             }
                         });
                     }
@@ -140,15 +143,17 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
                     @Override
                     public void onCompleted() {
 
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (!hasCompleted && shouldUpdateOnOffState > 0) {
-                                    hasCompleted = true;
-                                    shouldUpdateOnOffState--;
+                        if(getActivity() != null) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (!hasCompleted && shouldUpdateOnOffState > 0) {
+                                        hasCompleted = true;
+                                        shouldUpdateOnOffState--;
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 });
             }
@@ -171,16 +176,17 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
 
                     @Override
                     public void onCompleted() {
-
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (!hasCompleted && shouldUpdateBrightness > 0) {
-                                    hasCompleted = true;
-                                    shouldUpdateBrightness--;
+                        if(getActivity() != null) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (!hasCompleted && shouldUpdateBrightness > 0) {
+                                        hasCompleted = true;
+                                        shouldUpdateBrightness--;
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 });
             }
@@ -195,16 +201,17 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
 
                     @Override
                     public void onCompleted() {
-
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(!hasCompleted && shouldUpdateColor > 0) {
-                                    hasCompleted = true;
-                                    shouldUpdateColor--;
+                        if(getActivity() != null) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (!hasCompleted && shouldUpdateColor > 0) {
+                                        hasCompleted = true;
+                                        shouldUpdateColor--;
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 });
             }
