@@ -66,7 +66,10 @@ import UIKit
         intentView = UILabel(frame: CGRectMake(0, 200, screen.size.width, 50));
         intentView.textAlignment = NSTextAlignment.Center;
         entitiesView = UITextView(frame: CGRectMake(0, 250, screen.size.width, screen.size.height - 300));
-        entitiesView.backgroundColor = UIColor.purpleColor();
+        entitiesView.backgroundColor = UIColor.blackColor();
+        intentView.backgroundColor = UIColor.blackColor()
+        entitiesView.textColor = UIColor.whiteColor()
+        intentView.textColor = UIColor.whiteColor()
         self.view.addSubview(entitiesView);
         self.view.addSubview(intentView);
         
@@ -208,6 +211,9 @@ import UIKit
                 for el in color{
                     if let value:NSString = el["value"] as? NSString{
                         var colorPlusHueValue = value.componentsSeparatedByString("~!~")
+                        if(colorPlusHueValue.count != 2){
+                            return
+                        }
                         var colorName:String = colorPlusHueValue[0] as! String
                         var colorHue:String = colorPlusHueValue[1] as! String
                         println("Color is: " + (value as! String) );
