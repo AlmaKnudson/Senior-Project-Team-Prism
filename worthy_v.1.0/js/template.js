@@ -79,6 +79,40 @@
 			});
 		};
 
+		//switch tutorials
+		if($('#androidTutorialContent').length>0 && $('#iOSTutorialContent').length > 0) {
+			var $androidContent = $('#androidTutorialContent');
+			var $iOSContent = $('#iOSTutorialContent');
+			if($('#androidTutorial a').length>0 && $('#iOSTutorial a').length> 0) {
+				$(window).load(function() {
+					var $androidLoadButton = $('#androidTutorial a');
+					var $iOSLoadButton = $('#iOSTutorial a');
+					var $androidContainingLi = $('#androidTutorial');
+					var $iOSContainingLi = $('#iOSTutorial');
+					//set up android tutorial as default
+					$iOSContainingLi.removeClass('active')
+					$androidContainingLi.addClass('active')
+					$iOSContent.addClass('collapse');
+					$androidContent.removeClass('collapse')	;
+					$androidLoadButton.on('click', function() {
+						$iOSContainingLi.removeClass('active')
+						$androidContainingLi.addClass('active')
+						$iOSContent.addClass('collapse');
+						$androidContent.removeClass('collapse');
+						$androidContent.fadeIn();
+						return false;
+					});
+					$iOSLoadButton.on('click', function() {
+						$androidContainingLi.removeClass('active')
+						$iOSContainingLi.addClass('active')
+						$androidContent.addClass('collapse');
+						$iOSContent.removeClass('collapse');
+						return false;
+					});
+				});
+			}
+		}
+
 		// Isotope filters
 		//-----------------------------------------------
 		if ($('.isotope-container').length>0) {
