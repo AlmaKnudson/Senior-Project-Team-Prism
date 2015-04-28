@@ -12,6 +12,7 @@ class FavoriteCollectionCell : UICollectionViewCell {
     
     @IBOutlet weak var favoriteView: SingleFavoriteView!
     @IBOutlet weak var favoriteLabel: UILabel!
+    @IBOutlet weak var selectedImage: UIImageView!
     
     func SetColors(colors:[CGColor]){
         favoriteView.colors = colors
@@ -30,7 +31,15 @@ class FavoriteCollectionCell : UICollectionViewCell {
     func SetupView(colors:[CGColor], name:String){
         favoriteView.colors = colors
         favoriteLabel.text = name
+        MakeUnSelected()
     }
     
+    func MakeSelected(){
+        selectedImage.hidden = false
+    }
+    
+    func MakeUnSelected(){
+        selectedImage.hidden = true
+    }
     
 }

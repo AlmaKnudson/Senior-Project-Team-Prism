@@ -22,6 +22,9 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
     var skipNextHeartbeat = false
     var bulbToBeacon:[String:String] = [String:String]()
     
+    @IBAction func addButtonPressed(sender: UIButton) {
+        SearchForNewLightsAuto()
+    }
     //Create beacon manager instance
     let beaconManager : ESTBeaconManager = ESTBeaconManager()
     

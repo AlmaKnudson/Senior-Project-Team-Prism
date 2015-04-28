@@ -16,4 +16,13 @@ protocol DismissPresentedController{
     func DismissMe()
 }
 
+protocol EditLightModel{
+    func CanMoveItem(fromIndex:Int, toIndex:Int ) -> Bool
+    func MoveItem(fromIndex:Int, toIndex:Int) -> Bool
+    func DeleteItemAt(index:Int) -> Bool
+}
+
+
+
+
 let MAX_HUE:UInt32 = 65535

@@ -14,6 +14,7 @@ class GroupBulbCell : UICollectionViewCell{
     @IBOutlet weak var bulbLabel: UILabel!
     @IBOutlet weak var bottom_bulb: UIImageView!
     @IBOutlet weak var unReachableImage: UIImageView!
+    @IBOutlet weak var selectedImage: UIImageView!
     
     
     func initGroupCell(name:String){
@@ -21,6 +22,7 @@ class GroupBulbCell : UICollectionViewCell{
         top_bulb!.image = UIImage(named: "groupTop")
         bottom_bulb!.image = UIImage(named: "groupBottom")
         unReachableImage.hidden = true
+        MakeUnSelected()
     }
     
     func turnOff(animate:Bool){
@@ -51,6 +53,14 @@ class GroupBulbCell : UICollectionViewCell{
             top_bulb.layer.opacity = 1.0
             bottom_bulb.layer.opacity = 1.0
         }
+    }
+    
+    func MakeSelected(){
+        selectedImage.hidden = false
+    }
+    
+    func MakeUnSelected(){
+        selectedImage.hidden = true
     }
     
     

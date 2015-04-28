@@ -49,35 +49,35 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="bulbCell" id="LUK-uY-nM0" customClass="BulbCollectionCell" customModule="Prism_Lights" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="bulbCell" id="axW-YI-fDg" customClass="BulbCollectionCell" customModule="Prism_Lights" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="80" height="140"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bulb_top" translatesAutoresizingMaskIntoConstraints="NO" id="xVj-fg-MHE">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bulb_top" translatesAutoresizingMaskIntoConstraints="NO" id="AQY-d0-5rR">
                                                     <rect key="frame" x="0.0" y="10" width="80" height="80"/>
                                                     <variation key="heightClass=regular-widthClass=regular" misplaced="YES">
                                                         <rect key="frame" x="0.0" y="0.0" width="0.0" height="150"/>
                                                     </variation>
                                                 </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bulb_bottom" translatesAutoresizingMaskIntoConstraints="NO" id="Sfk-4u-qEu">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bulb_bottom" translatesAutoresizingMaskIntoConstraints="NO" id="dC0-ed-Vwr">
                                                     <rect key="frame" x="0.0" y="10" width="80" height="80"/>
                                                     <variation key="heightClass=regular-widthClass=regular" misplaced="YES">
                                                         <rect key="frame" x="0.0" y="0.0" width="0.0" height="150"/>
                                                     </variation>
                                                 </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lock" translatesAutoresizingMaskIntoConstraints="NO" id="rN1-Tn-aEH">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lock" translatesAutoresizingMaskIntoConstraints="NO" id="z1m-WN-Q6V">
                                                     <rect key="frame" x="29" y="15" width="25" height="25"/>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Kitchen" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="qys-lB-WEW">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Kitchen" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="kSj-2P-qQw">
                                                     <rect key="frame" x="0.0" y="97" width="80" height="35"/>
                                                     <accessibility key="accessibilityConfiguration">
                                                         <accessibilityTraits key="traits" none="YES"/>
                                                     </accessibility>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="35" id="KeI-hP-x7p"/>
+                                                        <constraint firstAttribute="height" constant="35" id="un8-le-ZJs"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -86,37 +86,41 @@
                                                         <rect key="frame" x="0.0" y="-35" width="0.0" height="35"/>
                                                     </variation>
                                                 </label>
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="done" translatesAutoresizingMaskIntoConstraints="NO" id="IEV-jI-vZt">
+                                                    <rect key="frame" x="55" y="76" width="25" height="25"/>
+                                                </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="xVj-fg-MHE" firstAttribute="leading" secondItem="Sfk-4u-qEu" secondAttribute="leading" id="0Tp-24-r9A"/>
-                                            <constraint firstItem="qys-lB-WEW" firstAttribute="bottom" secondItem="LUK-uY-nM0" secondAttribute="bottomMargin" id="2p3-9X-UBG"/>
-                                            <constraint firstItem="rN1-Tn-aEH" firstAttribute="leading" secondItem="LUK-uY-nM0" secondAttribute="leadingMargin" constant="21" id="B45-zX-yhd"/>
-                                            <constraint firstItem="rN1-Tn-aEH" firstAttribute="centerX" secondItem="xVj-fg-MHE" secondAttribute="centerX" constant="1.5" id="FbU-Ej-xWT"/>
-                                            <constraint firstItem="xVj-fg-MHE" firstAttribute="trailing" secondItem="Sfk-4u-qEu" secondAttribute="trailing" id="HPy-hh-8O1"/>
-                                            <constraint firstItem="xVj-fg-MHE" firstAttribute="trailing" secondItem="qys-lB-WEW" secondAttribute="trailing" id="Mfg-Ya-KLc"/>
-                                            <constraint firstAttribute="bottomMargin" secondItem="Sfk-4u-qEu" secondAttribute="bottom" constant="42" id="WcL-iS-N4k"/>
-                                            <constraint firstItem="Sfk-4u-qEu" firstAttribute="top" secondItem="xVj-fg-MHE" secondAttribute="top" id="iiq-Gu-VOb"/>
-                                            <constraint firstAttribute="bottom" secondItem="qys-lB-WEW" secondAttribute="bottom" constant="8" id="jD8-t7-Yyc"/>
-                                            <constraint firstItem="qys-lB-WEW" firstAttribute="top" secondItem="rN1-Tn-aEH" secondAttribute="bottom" constant="57" id="nlC-cx-LOU"/>
-                                            <constraint firstItem="xVj-fg-MHE" firstAttribute="bottom" secondItem="Sfk-4u-qEu" secondAttribute="bottom" id="oJe-Ib-Nis"/>
-                                            <constraint firstItem="qys-lB-WEW" firstAttribute="leading" secondItem="Sfk-4u-qEu" secondAttribute="leading" id="ohN-hg-MsT"/>
-                                            <constraint firstItem="Sfk-4u-qEu" firstAttribute="top" secondItem="LUK-uY-nM0" secondAttribute="top" constant="10" id="pc0-7F-5s0"/>
-                                            <constraint firstItem="rN1-Tn-aEH" firstAttribute="top" secondItem="LUK-uY-nM0" secondAttribute="topMargin" constant="7" id="sCk-6q-R37"/>
-                                            <constraint firstItem="qys-lB-WEW" firstAttribute="leading" secondItem="LUK-uY-nM0" secondAttribute="leading" id="tWU-tt-UaY"/>
-                                            <constraint firstAttribute="trailing" secondItem="Sfk-4u-qEu" secondAttribute="trailing" id="zg5-Ue-1lJ"/>
+                                            <constraint firstItem="AQY-d0-5rR" firstAttribute="trailing" secondItem="dC0-ed-Vwr" secondAttribute="trailing" id="7Kb-Az-ICp"/>
+                                            <constraint firstItem="z1m-WN-Q6V" firstAttribute="leading" secondItem="axW-YI-fDg" secondAttribute="leadingMargin" constant="21" id="AGp-gS-Yjm"/>
+                                            <constraint firstItem="kSj-2P-qQw" firstAttribute="leading" secondItem="axW-YI-fDg" secondAttribute="leading" id="AfI-ro-DGU"/>
+                                            <constraint firstItem="AQY-d0-5rR" firstAttribute="trailing" secondItem="kSj-2P-qQw" secondAttribute="trailing" id="Htl-dN-R0d"/>
+                                            <constraint firstItem="AQY-d0-5rR" firstAttribute="bottom" secondItem="dC0-ed-Vwr" secondAttribute="bottom" id="KwL-BY-dNu"/>
+                                            <constraint firstItem="AQY-d0-5rR" firstAttribute="leading" secondItem="dC0-ed-Vwr" secondAttribute="leading" id="NJD-hZ-Fnf"/>
+                                            <constraint firstAttribute="bottomMargin" secondItem="dC0-ed-Vwr" secondAttribute="bottom" constant="42" id="OLH-Ib-m3m"/>
+                                            <constraint firstItem="z1m-WN-Q6V" firstAttribute="centerX" secondItem="AQY-d0-5rR" secondAttribute="centerX" constant="1.5" id="QfF-ph-vhB"/>
+                                            <constraint firstItem="z1m-WN-Q6V" firstAttribute="top" secondItem="axW-YI-fDg" secondAttribute="topMargin" constant="7" id="TKF-Gi-ylB"/>
+                                            <constraint firstItem="dC0-ed-Vwr" firstAttribute="top" secondItem="axW-YI-fDg" secondAttribute="top" constant="10" id="UMW-AK-EcI"/>
+                                            <constraint firstItem="kSj-2P-qQw" firstAttribute="top" secondItem="z1m-WN-Q6V" secondAttribute="bottom" constant="57" id="c9o-MG-rti"/>
+                                            <constraint firstItem="kSj-2P-qQw" firstAttribute="bottom" secondItem="axW-YI-fDg" secondAttribute="bottomMargin" id="fZ6-3g-Ycg"/>
+                                            <constraint firstAttribute="bottom" secondItem="kSj-2P-qQw" secondAttribute="bottom" constant="8" id="gX5-jM-Lj9"/>
+                                            <constraint firstItem="kSj-2P-qQw" firstAttribute="leading" secondItem="dC0-ed-Vwr" secondAttribute="leading" id="ldI-04-yCF"/>
+                                            <constraint firstItem="dC0-ed-Vwr" firstAttribute="top" secondItem="AQY-d0-5rR" secondAttribute="top" id="vP5-EB-gzt"/>
+                                            <constraint firstAttribute="trailing" secondItem="dC0-ed-Vwr" secondAttribute="trailing" id="xWq-os-LF3"/>
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
-                                                <exclude reference="2p3-9X-UBG"/>
+                                                <exclude reference="fZ6-3g-Ycg"/>
                                             </mask>
                                         </variation>
                                         <connections>
-                                            <outlet property="bottom_bulb" destination="Sfk-4u-qEu" id="Vwm-HM-2Fa"/>
-                                            <outlet property="bulbLabel" destination="qys-lB-WEW" id="rIm-aa-4xD"/>
-                                            <outlet property="top_bulb" destination="xVj-fg-MHE" id="aRI-ZV-rNq"/>
-                                            <outlet property="unReachableImage" destination="rN1-Tn-aEH" id="GoA-Zu-Ry5"/>
+                                            <outlet property="bottom_bulb" destination="dC0-ed-Vwr" id="t6Z-dC-Glk"/>
+                                            <outlet property="bulbLabel" destination="kSj-2P-qQw" id="Nbo-zI-F4o"/>
+                                            <outlet property="selectedImage" destination="IEV-jI-vZt" id="wF8-eN-SBo"/>
+                                            <outlet property="top_bulb" destination="AQY-d0-5rR" id="alS-dU-gqQ"/>
+                                            <outlet property="unReachableImage" destination="z1m-WN-Q6V" id="6Fa-fN-Xun"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -136,7 +140,7 @@
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                             <connections>
-                                                <action selector="AddBulb:" destination="K8y-NP-4T9" eventType="touchUpInside" id="dgP-2o-yZX"/>
+                                                <action selector="addButtonPressed:" destination="9pv-A4-QxB" eventType="touchUpInside" id="u3x-Aa-Msr"/>
                                             </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ymL-M1-lO7">
@@ -145,7 +149,6 @@
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                             <connections>
-                                                <action selector="EditBulb:" destination="K8y-NP-4T9" eventType="touchUpInside" id="vk1-bc-hsW"/>
                                                 <segue destination="sgI-6l-pKs" kind="show" identifier="editCollection" id="kTA-oR-AUT"/>
                                             </connections>
                                         </button>
@@ -250,6 +253,9 @@
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="lock" translatesAutoresizingMaskIntoConstraints="NO" id="f1V-wf-JHA">
                                                     <rect key="frame" x="25" y="19" width="25" height="25"/>
                                                 </imageView>
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="done" translatesAutoresizingMaskIntoConstraints="NO" id="tI1-0q-APd">
+                                                    <rect key="frame" x="55" y="85" width="25" height="25"/>
+                                                </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
@@ -275,6 +281,7 @@
                                         <connections>
                                             <outlet property="bottom_bulb" destination="aGK-qg-vvH" id="FKi-DD-88f"/>
                                             <outlet property="bulbLabel" destination="hcT-7g-JY1" id="jj4-y5-87X"/>
+                                            <outlet property="selectedImage" destination="tI1-0q-APd" id="Gge-Zl-f6E"/>
                                             <outlet property="top_bulb" destination="gX8-EP-OhG" id="Hm3-5j-kgS"/>
                                             <outlet property="unReachableImage" destination="f1V-wf-JHA" id="CyT-MB-GrV"/>
                                         </connections>
@@ -295,9 +302,6 @@
                                             <state key="normal" image="add">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
-                                            <connections>
-                                                <action selector="AddBulb:" destination="wuf-9E-BWm" eventType="touchUpInside" id="vwy-Z4-2Nn"/>
-                                            </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TGD-Gh-tD4">
                                             <rect key="frame" x="524" y="10" width="30" height="30"/>
@@ -305,7 +309,6 @@
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                             <connections>
-                                                <action selector="EditBulb:" destination="wuf-9E-BWm" eventType="touchUpInside" id="sXq-Fs-non"/>
                                                 <segue destination="sgI-6l-pKs" kind="show" identifier="editCollection" id="ELy-yh-MaZ"/>
                                             </connections>
                                         </button>
@@ -1233,7 +1236,7 @@
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="7jE-AM-ssl">
                                 <rect key="frame" x="0.0" y="20" width="600" height="580"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="69B-Dn-VhY">
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="69B-Dn-VhY" customClass="RAReorderableLayout" customModule="Prism_Lights" customModuleProvider="target">
                                     <size key="itemSize" width="80" height="130"/>
                                     <size key="headerReferenceSize" width="50" height="50"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -1266,6 +1269,9 @@
                                                     <rect key="frame" x="8" y="8" width="64" height="70"/>
                                                     <color key="backgroundColor" red="1" green="0.0" blue="0.83528858080000001" alpha="1" colorSpace="calibratedRGB"/>
                                                 </view>
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="done" translatesAutoresizingMaskIntoConstraints="NO" id="1jv-ps-fS3">
+                                                    <rect key="frame" x="55" y="78" width="25" height="25"/>
+                                                </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
@@ -1287,6 +1293,7 @@
                                         <connections>
                                             <outlet property="favoriteLabel" destination="6G4-mo-GEk" id="met-SS-IWS"/>
                                             <outlet property="favoriteView" destination="JRA-0B-eBq" id="2Qc-be-sfo"/>
+                                            <outlet property="selectedImage" destination="1jv-ps-fS3" id="JD6-x4-bvK"/>
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="groupCell" id="s3L-lw-tuv" customClass="GroupBulbCell" customModule="Prism_Lights" customModuleProvider="target">
@@ -1326,6 +1333,9 @@
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="lock" translatesAutoresizingMaskIntoConstraints="NO" id="eYU-O8-IMa">
                                                     <rect key="frame" x="25" y="19" width="25" height="25"/>
                                                 </imageView>
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="done" translatesAutoresizingMaskIntoConstraints="NO" id="P2F-3k-QK1">
+                                                    <rect key="frame" x="55" y="76" width="25" height="25"/>
+                                                </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
@@ -1351,6 +1361,7 @@
                                         <connections>
                                             <outlet property="bottom_bulb" destination="hw1-87-brz" id="Isw-dY-8zX"/>
                                             <outlet property="bulbLabel" destination="6BM-KU-KHP" id="qk0-C1-Fyw"/>
+                                            <outlet property="selectedImage" destination="P2F-3k-QK1" id="SXY-WX-RbP"/>
                                             <outlet property="top_bulb" destination="KU2-eq-Z8H" id="8bR-o9-KGe"/>
                                             <outlet property="unReachableImage" destination="eYU-O8-IMa" id="Wi0-KH-Rrc"/>
                                         </connections>
@@ -1392,6 +1403,9 @@
                                                         <rect key="frame" x="0.0" y="-35" width="0.0" height="35"/>
                                                     </variation>
                                                 </label>
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="done" translatesAutoresizingMaskIntoConstraints="NO" id="N8R-1M-rdn">
+                                                    <rect key="frame" x="55" y="76" width="25" height="25"/>
+                                                </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
@@ -1421,12 +1435,13 @@
                                         <connections>
                                             <outlet property="bottom_bulb" destination="ym9-gF-axb" id="svQ-ha-3wa"/>
                                             <outlet property="bulbLabel" destination="s5V-mm-Wtz" id="RZV-kF-8AY"/>
+                                            <outlet property="selectedImage" destination="N8R-1M-rdn" id="GEp-LZ-jAB"/>
                                             <outlet property="top_bulb" destination="5Eg-HD-oKS" id="hYy-py-W68"/>
                                             <outlet property="unReachableImage" destination="KrH-8m-GDz" id="c3d-Xs-FNS"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
-                                <collectionReusableView key="sectionHeaderView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SectionHeader" id="FGv-JD-Dzd" customClass="SectionHeader" customModule="Prism_Lights" customModuleProvider="target">
+                                <collectionReusableView key="sectionHeaderView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="EditHeader" id="FGv-JD-Dzd" customClass="EditHeader" customModule="Prism_Lights" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
@@ -1442,7 +1457,7 @@
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                             <connections>
-                                                <action selector="AddBulb:" destination="FGv-JD-Dzd" eventType="touchUpInside" id="SBa-FY-yMk"/>
+                                                <action selector="finishedButton:" destination="sgI-6l-pKs" eventType="touchUpInside" id="yKk-2r-4Ra"/>
                                             </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WSK-ri-vm4">
@@ -1451,7 +1466,7 @@
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                             <connections>
-                                                <action selector="EditBulb:" destination="FGv-JD-Dzd" eventType="touchUpInside" id="7NN-ZG-shA"/>
+                                                <action selector="deleteButton:" destination="sgI-6l-pKs" eventType="touchUpInside" id="NEp-rV-hBM"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -1462,7 +1477,8 @@
                                         <constraint firstItem="Y6h-k1-p1d" firstAttribute="trailing" secondItem="FGv-JD-Dzd" secondAttribute="trailingMargin" id="clg-Sp-VNG"/>
                                     </constraints>
                                     <connections>
-                                        <outlet property="headerLabel" destination="FHU-jk-8vM" id="gDm-h9-hId"/>
+                                        <outlet property="headerLabel" destination="FHU-jk-8vM" id="zDh-VX-dni"/>
+                                        <outlet property="trashButton" destination="WSK-ri-vm4" id="QUG-KK-PWm"/>
                                     </connections>
                                 </collectionReusableView>
                             </collectionView>
@@ -1475,6 +1491,9 @@
                             <constraint firstItem="7jE-AM-ssl" firstAttribute="top" secondItem="FNF-UM-bXD" secondAttribute="bottom" id="dtG-zv-Jiu"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="bulbCollectionView" destination="7jE-AM-ssl" id="t4w-l5-LX9"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Xd-WM-z7n" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -3468,6 +3487,9 @@
                                                     <rect key="frame" x="8" y="8" width="64" height="70"/>
                                                     <color key="backgroundColor" red="1" green="0.0" blue="0.83528858083287716" alpha="1" colorSpace="calibratedRGB"/>
                                                 </view>
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="done" translatesAutoresizingMaskIntoConstraints="NO" id="ZbZ-r3-WFD">
+                                                    <rect key="frame" x="55" y="84" width="25" height="25"/>
+                                                </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
@@ -3489,6 +3511,7 @@
                                         <connections>
                                             <outlet property="favoriteLabel" destination="HKU-Wn-xnN" id="XL4-3G-B9f"/>
                                             <outlet property="favoriteView" destination="FKf-FK-VWu" id="p60-M3-w4d"/>
+                                            <outlet property="selectedImage" destination="ZbZ-r3-WFD" id="5Mo-Z4-kOp"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -3507,9 +3530,6 @@
                                             <state key="normal" image="add">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
-                                            <connections>
-                                                <action selector="AddBulb:" destination="aEv-G7-3uL" eventType="touchUpInside" id="A0h-ba-qVr"/>
-                                            </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XDa-kr-Rup">
                                             <rect key="frame" x="524" y="10" width="30" height="30"/>
@@ -3517,7 +3537,6 @@
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                             <connections>
-                                                <action selector="EditBulb:" destination="aEv-G7-3uL" eventType="touchUpInside" id="Iam-fB-ScP"/>
                                                 <segue destination="sgI-6l-pKs" kind="show" identifier="editCollection" id="YVs-Ve-hT2"/>
                                             </connections>
                                         </button>
@@ -3582,10 +3601,10 @@
         <image name="x" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="kTA-oR-AUT"/>
-        <segue reference="VIG-4p-d0T"/>
         <segue reference="oPu-gS-aiX"/>
+        <segue reference="YVs-Ve-hT2"/>
         <segue reference="MV1-5L-hp4"/>
         <segue reference="agp-MF-nMt"/>
+        <segue reference="VIG-4p-d0T"/>
     </inferredMetricsTieBreakers>
 </document>

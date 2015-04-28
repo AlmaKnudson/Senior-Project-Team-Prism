@@ -84,9 +84,13 @@ class FavoritesDataModel {
         if let actualFilePath = filePath {
             let optStoredFavorites: NSArray? = NSArray(contentsOfFile: actualFilePath)
             if let storedFavorites = optStoredFavorites {
-                for storedFavorite in storedFavorites {
-                    var favorite = Favorite(lightStates: storedFavorite as! NSDictionary)
-                    _favorites.append(favorite)
+                if storedFavorites.count == 0 {
+                    loadDefaultFavorites()
+                } else {
+                    for storedFavorite in storedFavorites {
+                        var favorite = Favorite(lightStates: storedFavorite as! NSDictionary)
+                        _favorites.append(favorite)
+                    }
                 }
                 return
             }
