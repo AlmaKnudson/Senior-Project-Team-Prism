@@ -48,7 +48,7 @@ class BulbsCollectionController: UIViewController, UICollectionViewDataSource, U
         
         //Add long press Gesture
         var gesture = UILongPressGestureRecognizer(target: self, action: "ShowBulbSettings:")
-        gesture.minimumPressDuration = 0.50
+        gesture.minimumPressDuration = 0.25
         gesture.delegate = self
         self.bulbCollectionView.addGestureRecognizer(gesture)
         

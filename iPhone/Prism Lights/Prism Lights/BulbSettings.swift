@@ -12,7 +12,7 @@ protocol ColorSelectedProtocol{
     func ColorSelected(color :UIColor)
 }
 
-class BulbSettingsController : UIViewController, ColorChangedDelegate, UITextFieldDelegate{
+class BulbSettingsController : UIViewController, ColorChangedDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var onSwitch: UISwitch!
@@ -30,6 +30,7 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate, UITextFie
     
     //MARK - Actions
     @IBAction func onSwitchToggle(sender: UISwitch) {
+        self.view.endEditing(true)
         if(DEBUG){
             println("On Switch Toggled")
         }
@@ -61,8 +62,15 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate, UITextFie
         BrightnessFinished(sender)
     }
     @IBAction func brightnessChanged(sender: UISlider) {
+        self.view.endEditing(true)
         var value = sender.value
-        self.brightnessPercentLabel.text = "\(Int(value*100))%"
+        var percent = Int(value*100)
+        if percent == 0 {
+            self.brightnessPercentLabel.text = "1%"
+        } else {
+            self.brightnessPercentLabel.text = "\(percent)%"
+        }
+        
         brightnessInt = Int(254*value)
         if(DEBUG){
             println("Changing: \(Int(254*sender.value)) ")
@@ -86,13 +94,19 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate, UITextFie
     
 
     required init(coder aDecoder: NSCoder) {
-     super.init(coder: aDecoder)
+        super.init(coder: aDecoder)
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
+    //MARK - Keyboard Methods
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
     
     
     
@@ -100,6 +114,7 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate, UITextFie
     
     //MARK - UIViewController Methods
     override func viewWillAppear(animated: Bool) {
+        self.nameTextField.delegate = self
         if !setupCalled {
             assertionFailure("Setup on BulbSettingsController not called before view Will Appear")
         }
@@ -158,6 +173,7 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate, UITextFie
     //MARK - ColorSelectedProtocol Methods
     
     func onColorChanged(color: CGPoint) {
+        self.view.endEditing(true)
         
         var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
         

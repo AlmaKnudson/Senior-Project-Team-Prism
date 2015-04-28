@@ -385,6 +385,7 @@ public class RAReorderableLayout: UICollectionViewFlowLayout, UIGestureRecognize
         }
         
         self.longPress = UILongPressGestureRecognizer(target: self, action: "handleLongPress:")
+        self.longPress?.minimumPressDuration = 0.1
         self.panGesture = UIPanGestureRecognizer(target: self, action: "handlePanGesture:")
         self.longPress?.delegate = self
         self.panGesture?.delegate = self

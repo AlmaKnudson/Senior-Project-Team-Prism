@@ -140,7 +140,13 @@ class GroupModel : NSObject {
     func RemoveGroups(toRemove: [Int]) {
         var subtractIndex = 0
         for index in toRemove {
-            groupIds.removeAtIndex(index - subtractIndex)
+            DeleteGroup(groupIds[index], {
+                error in Void()
+                if error == nil {
+                    self.groupIds.removeAtIndex(index - subtractIndex)
+                }
+            })
+            
             subtractIndex++
         }
         saveToFile()

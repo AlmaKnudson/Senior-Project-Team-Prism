@@ -258,7 +258,15 @@ RAReorderableLayoutDelegate, RAReorderableLayoutDataSource {
         }
     }
     
+    /**
+    Sets the phone status bar to be light colored for dark background
     
+    :returns: UIStatusBarStyle
+    */
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
+    }
+
     
     
     
