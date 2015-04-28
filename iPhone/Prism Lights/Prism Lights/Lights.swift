@@ -152,9 +152,9 @@ func CreateGroup(bulbIds:[String], groupName:String){
     bridgeSendAPI.createGroupWithName(groupName, lightIds: bulbIds, completionHandler: nil)
 }
 
-func DeleteGroup(groupId:String) {
+func DeleteGroup(groupId:String, completionHandler:PHBridgeSendErrorArrayCompletionHandler?) {
     var bridgeSendAPI = PHBridgeSendAPI()
-    bridgeSendAPI.removeGroupWithId(groupId, completionHandler: nil)
+    bridgeSendAPI.removeGroupWithId(groupId, completionHandler: completionHandler)
 }
 
 func UpdateGroupWithGroup(group:PHGroup){

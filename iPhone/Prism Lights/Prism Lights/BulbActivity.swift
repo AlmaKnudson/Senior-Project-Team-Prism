@@ -26,10 +26,7 @@ class BulbActivity : UIView {
         topFrontImage = UIImageView(coder: aDecoder)
         topFrontImage.image = UIImage(named: "bulb_top")!
         
-
-        
         super.init(coder: aDecoder)
-
     }
     
     

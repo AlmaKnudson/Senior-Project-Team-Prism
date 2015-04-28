@@ -10,7 +10,7 @@ import Foundation
 
 var Groups = GroupModel()
 
-class GroupModel {
+class GroupModel : NSObject {
     
     var groupIds:[String]
     
@@ -64,15 +64,23 @@ class GroupModel {
         
     }
     
-    init(){
+    override init(){
         groupIds = []
-        loadFromFile()
+        super.init()
+        self.loadFromFile()
+        self.CompareToCache()
+        var manager = PHNotificationManager.defaultManager()
+        manager!.registerObject(self, withSelector: "HeartBeatReceivedGroup", forNotification: "LOCAL_CONNECTION_NOTIFICATION")
+    }
+    
+    
+    func HeartBeatReceivedGroup() {
         CompareToCache()
     }
     
     subscript(index: Int) -> String {
         if index < 0 || index >= groupIds.count {
-            assertionFailure("Index out of bound within BulbModel")
+            return "0"
         }
         return groupIds[index]
     }
@@ -87,6 +95,44 @@ class GroupModel {
             assertionFailure("Index out of bound within BulbModel")
         }
         return groupIds[index]
+    }
+    
+    
+    
+    func CanMoveItem(fromIndex:Int, toIndex:Int ) -> Bool {
+        if fromIndex < 0 || fromIndex >= groupIds.count {
+            return false
+        }
+        if toIndex < 0 || toIndex >= groupIds.count {
+            return false
+        }
+        return true
+        
+    }
+    
+    func MoveItem(fromIndex:Int, toIndex:Int) -> Bool {
+        if CanMoveItem(fromIndex, toIndex: toIndex) {
+            var fromTemp = groupIds.removeAtIndex(fromIndex)
+            groupIds.insert(fromTemp, atIndex: toIndex)
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func CanDeleteItemAt(index:Int) -> Bool {
+        if index < 1 || index >= groupIds.count {
+            return false
+        }
+        
+        return true
+    }
+    
+    func DeleteItemAt(index:Int) -> Bool {
+        if CanDeleteItemAt(index) {
+            DeleteGroup(groupIds[index], nil)
+        }
+        return false
     }
     
     

@@ -10,7 +10,7 @@ import Foundation
 
 var BulbsModel = BulbModel()
 
-class BulbModel {
+class BulbModel : NSObject {
     
     var bulbs:[String:PHLightState] = [:]
     var bulbIds:[String]
@@ -58,10 +58,17 @@ class BulbModel {
         
     }
     
-    init(){
+    override init(){
         bulbs = [:]
         bulbIds = []
+        super.init()
         loadFromFile()
+        CompareToCache()
+        var manager = PHNotificationManager.defaultManager()
+        manager!.registerObject(self, withSelector: "HeartBeatReceivedBulb", forNotification: "LOCAL_CONNECTION_NOTIFICATION")
+    }
+    
+    func HeartBeatReceivedBulb() {
         CompareToCache()
     }
     
@@ -83,6 +90,47 @@ class BulbModel {
         }
         return bulbIds[index]
     }
+    
+    
+    
+    func CanMoveItem(fromIndex:Int, toIndex:Int ) -> Bool {
+        if fromIndex < 0 || fromIndex >= bulbIds.count {
+            return false
+        }
+        if toIndex < 0 || toIndex >= bulbIds.count {
+            return false
+        }
+        return true
+        
+    }
+    
+    func MoveItem(fromIndex:Int, toIndex:Int) -> Bool {
+        if CanMoveItem(fromIndex, toIndex: toIndex) {
+            var fromTemp = bulbIds.removeAtIndex(fromIndex)
+            bulbIds.insert(fromTemp, atIndex: toIndex)
+            return true
+        } else {
+            return false
+        }
+    }
+
+    func CanDeleteItemAt(index:Int) -> Bool {
+        if index < 0 || index >= bulbIds.count {
+            return false
+        }
+        
+        //Can't remove bulbs at the moment
+        return false
+    }
+    
+    func DeleteItemAt(index:Int) -> Bool {
+        if CanDeleteItemAt(index) {
+            bulbIds.removeAtIndex(index)
+        }
+        return false
+    }
+    
+    
     
     
     private func saveToFile() -> Bool {
@@ -114,7 +162,6 @@ class BulbModel {
                 }
                 return
             }
-            
         }
         CompareToCache()
     }
