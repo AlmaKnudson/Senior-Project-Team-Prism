@@ -214,6 +214,7 @@ class FavoriteCollectionController : UIViewController, UIGestureRecognizerDelega
     }
     
     func DismissMe() {
+        self.bulbCollectionView.reloadData()
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
