@@ -15,11 +15,14 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.philips.lighting.hue.sdk.PHHueSDK;
+import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHBridgeResourcesCache;
 import com.philips.lighting.model.PHGroup;
 import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
+import com.philips.lighting.model.PHSchedule;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -253,6 +256,31 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
     }
 
     private void updateState() {
+        /****************Checking Color Cycle**************/
+        //check if there is current colorCycle going on.
+        PHBridge bridge = hueSDK.getSelectedBridge();
+        List<PHSchedule> colorCycles = bridge.getResourceCache().getAllTimers(true);
+        List<PHSchedule> colorCyclesForThisBulb = new ArrayList<>();
+        for (int i = 0; i< colorCycles.size();i++){
+            if (colorCycles.get(i).getGroupIdentifier()!=null
+                    &&colorCycles.get(i).getGroupIdentifier().equals(identifier)
+                    && colorCycles.get(i).getDescription().startsWith("prism"))
+                colorCyclesForThisBulb.add(colorCycles.get(i));
+        }
+
+        // if there is a color cycle running, set it as current color cycle. if this is new color cycle from other device, add it to the list.
+        if (colorCyclesForThisBulb.size()!=0){
+            ColorCycle currentColorCycle = new ColorCycle(colorCyclesForThisBulb); // this generate ColorCycle class out of List of recurring timer schedule
+            String currentName = currentColorCycle.getName();
+            int nameExist = ((MainActivity)getActivity()).containsCycleName(currentName);
+            if(nameExist < 0){ // if nameExist is -1, this means there is no such name in current color cycles, so add new one.
+                ((MainActivity)getActivity()).addColorCycle(currentColorCycle);
+            } else{ // if the same name exist, just replace with recent one. Other user might have changed this cycle.
+                ((MainActivity)getActivity()).setColorCycle(nameExist, currentColorCycle);     //<-- this doesn't work. no replacement....
+            }
+        }
+        /****************Checking Color Cycle END**************/
+
         PHBridgeResourcesCache cache = hueSDK.getSelectedBridge().getResourceCache();
         if(!HueBulbChangeUtility.DEFAULT_GROUP_ID.equals(identifier) && cache.getGroups().get(identifier) == null) {
             //each only needs to pop their back stack
