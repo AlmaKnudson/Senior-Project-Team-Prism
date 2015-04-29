@@ -116,7 +116,7 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
             public void onClick(View v) {
                 shouldUpdateOnOffState++;
                 ToggleButton bulbOn = (ToggleButton) v;
-                HueBulbChangeUtility.turnBulbOnOff(identifier, bulbOn.isChecked(), (MainActivity) getActivity(), new OnCompletedListener() {
+                HueBulbChangeUtility.turnBulbOnOff(identifier, bulbOn.isChecked(), true, (MainActivity) getActivity(), new OnCompletedListener() {
                     boolean hasCompleted = false;
 
                     @Override

@@ -219,9 +219,9 @@ public class MainActivity extends Activity implements PHSDKListener{
                                             int count = beaconInRangeMapCount.get(beaconId);
                                             if((count+1) >= threshold){
                                                 if(isGroup){
-                                                    HueBulbChangeUtility.turnGroupOnOff(bulbId, true, MainActivity.this, null);
+                                                    HueBulbChangeUtility.turnGroupOnOff(bulbId, true, false, MainActivity.this, null);
                                                 } else {
-                                                    HueBulbChangeUtility.turnBulbOnOff(bulbId, true, MainActivity.this, null);
+                                                    HueBulbChangeUtility.turnBulbOnOff(bulbId, true,false, MainActivity.this, null);
                                                 }
                                                 beaconInRangeMapCount.put(beaconId, 0);
                                             } else {
@@ -242,9 +242,9 @@ public class MainActivity extends Activity implements PHSDKListener{
                                             int count = beaconOutOfRangeMapCount.get(beaconId);
                                             if( (count+1) >= threshold){
                                                 if(isGroup){
-                                                    HueBulbChangeUtility.turnGroupOnOff(bulbId, false, MainActivity.this, null);
+                                                    HueBulbChangeUtility.turnGroupOnOff(bulbId, false, false, MainActivity.this, null);
                                                 } else {
-                                                    HueBulbChangeUtility.turnBulbOnOff(bulbId, false, MainActivity.this, null);
+                                                    HueBulbChangeUtility.turnBulbOnOff(bulbId, false, false, MainActivity.this, null);
                                                 }
                                                 beaconOutOfRangeMapCount.put(beaconId, 0);
                                             } else

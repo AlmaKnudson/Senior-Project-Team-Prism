@@ -53,7 +53,7 @@ public class HueBulbChangeUtility {
                    lightState.setSaturation(254);
                    bridge.updateLightState(light, lightState);
                } else {
-                   turnBulbOnOff(light, onOff, activity, null);
+                   turnBulbOnOff(light, onOff,true,  activity, null);
                }
            }
        }
@@ -71,7 +71,7 @@ public class HueBulbChangeUtility {
                    lightState.setSaturation(254);
                    bridge.setLightStateForGroup(group.getIdentifier(), lightState);
                } else {
-                   turnGroupOnOff(group.getIdentifier(), onOff, activity, null);
+                   turnGroupOnOff(group.getIdentifier(), onOff,true, activity, null);
                }
            }
        }
@@ -128,16 +128,18 @@ public class HueBulbChangeUtility {
 
 
 
-    public static void turnBulbOnOff(String lightId, boolean on, MainActivity activity, OnCompletedListener onCompletedListener) {
+    public static void turnBulbOnOff(String lightId, boolean on, boolean shouldCancelColorCycle, MainActivity activity, OnCompletedListener onCompletedListener) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
-        turnBulbOnOff(getLightFromId(lightId, bridge), on, activity, onCompletedListener);
+        turnBulbOnOff(getLightFromId(lightId, bridge), on, shouldCancelColorCycle, activity, onCompletedListener);
 
     }
 
-    public static void turnBulbOnOff(PHLight light, final boolean on, MainActivity activity, final OnCompletedListener onCompletedListener) {
+    public static void turnBulbOnOff(PHLight light, final boolean on, boolean shouldCancelColorCycle, MainActivity activity, final OnCompletedListener onCompletedListener) {
         if(light != null) {
             PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
-            ColorCycle.removePreviousColorCycle(bridge, light.getIdentifier(), false, activity);
+            if(shouldCancelColorCycle) {
+                ColorCycle.removePreviousColorCycle(bridge, light.getIdentifier(), false, activity);
+            }
             PHLightState lightState = new PHLightState();
             lightState.setOn(on);
             bridge.updateLightState(light, lightState, new PHLightListener() {
@@ -576,9 +578,11 @@ public class HueBulbChangeUtility {
 
 
 
-    public static void turnGroupOnOff(String identifier, final boolean on, MainActivity activity, final OnCompletedListener onCompletedListener) {
+    public static void turnGroupOnOff(String identifier, final boolean on, boolean shouldCancelColorCycle, MainActivity activity, final OnCompletedListener onCompletedListener) {
         PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
-        ColorCycle.removePreviousColorCycle(bridge, identifier, true, activity);
+        if(shouldCancelColorCycle) {
+            ColorCycle.removePreviousColorCycle(bridge, identifier, true, activity);
+        }
         //same for default group as group
         bridge.setLightStateForGroup(identifier, getOnState(on), new PHGroupListener() {
             @Override
