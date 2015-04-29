@@ -84,6 +84,7 @@
 		CC54AEC31AE6D29E008EED17 /* FavoritesDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC54AEC11AE6D29E008EED17 /* FavoritesDataModel.swift */; };
 		CC54AEC51AE6D459008EED17 /* SingleFavoriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC54AEC41AE6D459008EED17 /* SingleFavoriteView.swift */; };
 		CC7C00481AEF5734002B5090 /* EditHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7C00471AEF5734002B5090 /* EditHeader.swift */; };
+		CC7C004A1AF07707002B5090 /* AddGroupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7C00491AF07707002B5090 /* AddGroupController.swift */; };
 		CC89CA011ADD8E0B00E25DCD /* HomePageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC89CA001ADD8E0B00E25DCD /* HomePageController.swift */; };
 		CC89CA031ADD903D00E25DCD /* GroupCollectionControlller.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC89CA021ADD903D00E25DCD /* GroupCollectionControlller.swift */; };
 		CC89CA051ADD904F00E25DCD /* FavoriteCollectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC89CA041ADD904F00E25DCD /* FavoriteCollectionController.swift */; };
@@ -249,6 +250,7 @@
 		CC54AEC11AE6D29E008EED17 /* FavoritesDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritesDataModel.swift; sourceTree = "<group>"; };
 		CC54AEC41AE6D459008EED17 /* SingleFavoriteView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleFavoriteView.swift; sourceTree = "<group>"; };
 		CC7C00471AEF5734002B5090 /* EditHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditHeader.swift; sourceTree = "<group>"; };
+		CC7C00491AF07707002B5090 /* AddGroupController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddGroupController.swift; sourceTree = "<group>"; };
 		CC89CA001ADD8E0B00E25DCD /* HomePageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageController.swift; sourceTree = "<group>"; };
 		CC89CA021ADD903D00E25DCD /* GroupCollectionControlller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupCollectionControlller.swift; sourceTree = "<group>"; };
 		CC89CA041ADD904F00E25DCD /* FavoriteCollectionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteCollectionController.swift; sourceTree = "<group>"; };
@@ -693,6 +695,7 @@
 			children = (
 				CC89CA061ADDF16800E25DCD /* GroupBulbCell.swift */,
 				CC89CA021ADD903D00E25DCD /* GroupCollectionControlller.swift */,
+				CC7C00491AF07707002B5090 /* AddGroupController.swift */,
 			);
 			name = Group;
 			sourceTree = "<group>";
@@ -892,6 +895,7 @@
 				CC26D2591AD990EB00AEE7F7 /* ConnectingViewController.swift in Sources */,
 				117F49591A96DA4500A31746 /* EZAudioPlotGLKViewController.m in Sources */,
 				117F49531A96DA4500A31746 /* AEFloatConverter.m in Sources */,
+				CC7C004A1AF07707002B5090 /* AddGroupController.swift in Sources */,
 				CC7C00481AEF5734002B5090 /* EditHeader.swift in Sources */,
 				0D3A79131A26A716003AC6D4 /* DDASLLogger.m in Sources */,
 				11FDAB541AAFF2460055C2AD /* MusicBulbRangeSelection.swift in Sources */,

@@ -118,6 +118,11 @@ class GroupCollectionController: UIViewController, UICollectionViewDataSource, U
             dest.editType = "group"
             dest.dismissDeleget = self
         }
+        else if segue.identifier == "CreateGroup" {
+            var dest = segue.destinationViewController as! AddGroupController
+            dest.dismissDeleget = self
+        }
+
     }
     
     //MARK: - UICollectionView Methods
