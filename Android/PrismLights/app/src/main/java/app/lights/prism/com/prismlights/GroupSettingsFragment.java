@@ -141,7 +141,7 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
             public void onClick(View v) {
                 shouldUpdateOnOffState++;
                 ToggleButton bulbOn = (ToggleButton) v;
-                HueBulbChangeUtility.turnGroupOnOff(identifier, bulbOn.isChecked(), (MainActivity)getActivity(), new OnCompletedListener() {
+                HueBulbChangeUtility.turnGroupOnOff(identifier, bulbOn.isChecked(), true, (MainActivity)getActivity(), new OnCompletedListener() {
                     boolean hasCompleted = false;
 
                     @Override
