@@ -81,6 +81,9 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate, UITextFie
         var bridgeSend = PHBridgeSendAPI()
         var lights:NSDictionary = PHBridgeResourcesReader.readBridgeResourcesCache().lights as NSDictionary
         var name = nameTextField.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        if count(name) > 20 {
+            name = name.substringToIndex(advance(name.startIndex, 21))
+        }
         if name != ""{
             if isGroup {
                 SetGroupName(self.id, name)
