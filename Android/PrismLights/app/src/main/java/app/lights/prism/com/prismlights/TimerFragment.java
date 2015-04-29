@@ -214,8 +214,8 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
                 @Override
                 public void onClick(View v) {
                     if (timeView.getText() == "Done") {
-                        getCurrentTimers();
                         clearCountDown();
+                        getCurrentTimers();
                         adapter.notifyDataSetChanged();
                     } else
                         deleteTimer(position);
@@ -236,54 +236,46 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
             modeView.setText(modeString);
 
 
-            Date createdTime = timer.getCreated();
+            long startTime = Long.parseLong(timer.getDescription().split("[,]")[1]);
+
+            //Date createdTime = timer.getCreated();
 
             int duration = timer.getTimer();
 
-            long timeLeft;
 
-            if (createdTime == null)
-                timeLeft = duration * 1000;
+            long endTime = startTime + (long) (duration * 1000); //add duration of the timer to current time.
 
-            else{
-                Date startedTime;
+            long timeLeft = endTime - new Date().getTime(); // calculate the difference between current time and timer time
 
-                startedTime = createdTime;
+//            if (timeLeft < 0) {
+//                timeView.setText("Error");
+//                getActivity().runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        DialogCreator.showWarningDialog(getText(R.string.time_sync_error).toString(), getText(R.string.time_sync_error_message).toString(), (MainActivity)getActivity());
+//                    }
+//                });
+//            }
+//            else {
+            CountDownTimer countDownTimer = new CountDownTimer(timeLeft, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    //changer time left text
+                    String timerString = getTimerString((int) millisUntilFinished / 1000);
+                    timeView.setText(timerString);
+                }
 
-                startedTime.setTime(startedTime.getTime() + (long) (duration * 1000)); //add duration of the timer to current time.
+                @Override
+                public void onFinish() {
+                    // clean currentTimers and countDownTimers and refresh the adapter
+                    timeView.setText("Done");
+                }
+            };
 
-                timeLeft = startedTime.getTime() - new Date().getTime(); // calculate the difference between current time and timer time
-            }
+            countDownTimer.start();
 
-            if (timeLeft < 0) {
-                timeView.setText("Error");
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        DialogCreator.showWarningDialog(getText(R.string.time_sync_error).toString(), getText(R.string.time_sync_error_message).toString(), (MainActivity)getActivity());
-                    }
-                });
-            }
-            else {
-                CountDownTimer countDownTimer = new CountDownTimer(timeLeft, 1000) {
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                        //changer time left text
-                        String timerString = getTimerString((int) millisUntilFinished / 1000);
-                        timeView.setText(timerString);
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        // clean currentTimers and countDownTimers and refresh the adapter
-                        timeView.setText("Done");
-                    }
-                };
-
-                countDownTimer.start();
-
-                countDownTimers.add(position, countDownTimer);
-            }
+            countDownTimers.add(position, countDownTimer);
+            //}
 
             return currentView;
         }
@@ -295,7 +287,7 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
                 countDownTimers.get(i).cancel();
             }
             countDownTimers.clear();
-            countDownTimers = new ArrayList<CountDownTimer>(); //TODO: do I need this?
+            countDownTimers = new ArrayList<CountDownTimer>();
         }
     }
 
@@ -330,20 +322,9 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
             int hour;
             int minute;
 
-//            if (chosenTimerPosition == -1) {
-//                // Use the current time as the default values for the picker
-//
                 hour = 0;
                 minute = 0;
 
-//            }
-//            else{
-//                Date date = currentTimers.get(chosenTimerPosition).getDate();
-//                hour = date.getHours();
-//                minute = date.getMinutes();
-//            }
-
-            // Create a new instance of TimePickerDialog and return it
             return new TimePickerDialog(getActivity(), this, hour, minute, true);
         }
 
@@ -383,16 +364,11 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
                         {
                             addNewTimer(timeToSend);
                         }
-                        // user wants to change existing Timer
-//                        else
-//                        {
-//                            updateTimer(chosenTimerPosition, timeToSend);
-//                        }
 
                         modeDialog.dismiss();
-                        getCurrentTimers();
-                        clearCountDown();
-                        adapter.notifyDataSetChanged();
+//                        clearCountDown();
+//                        getCurrentTimers();
+//                        adapter.notifyDataSetChanged();
                     }
                 });
                 modeDialog = builder.create();
@@ -420,12 +396,8 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
         else
             schedule.setLightIdentifier(identifier);
         schedule.setLightState(getLightState());
-        schedule.setDescription("prism");
-//        Date startTime = new Date();
-//        //TODO: inpect setting startTime and CreatedTime...
-//        schedule.setStartTime(startTime);
-//        schedule.setCreated(startTime);
-//        Log.d("StartTime", ""+startTime);
+        long startTime = new Date().getTime();
+        schedule.setDescription("prism,"+startTime);
 
         progressDialog = DialogCreator.showLoadingDialog(getText(R.string.sending_progress).toString(), (MainActivity)getActivity());
 
@@ -436,8 +408,8 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
                     @Override
                     public void run() {
                         closeProgressDialog();
-                        getCurrentTimers();
                         clearCountDown();
+                        getCurrentTimers();
                         adapter.notifyDataSetChanged();
                     }
                 });
@@ -482,8 +454,8 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
                     @Override
                     public void run() {
                         closeProgressDialog();
-                        getCurrentTimers();
                         clearCountDown();
+                        getCurrentTimers();
                         adapter.notifyDataSetChanged();
                     }
                 });

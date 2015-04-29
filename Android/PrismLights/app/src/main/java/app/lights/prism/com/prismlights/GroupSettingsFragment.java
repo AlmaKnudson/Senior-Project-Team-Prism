@@ -276,7 +276,7 @@ public class GroupSettingsFragment extends Fragment implements CacheUpdateListen
             if(nameExist < 0){ // if nameExist is -1, this means there is no such name in current color cycles, so add new one.
                 ((MainActivity)getActivity()).addColorCycle(currentColorCycle);
             } else{ // if the same name exist, just replace with recent one. Other user might have changed this cycle.
-                ((MainActivity)getActivity()).setColorCycle(nameExist, currentColorCycle);     //<-- this doesn't work. no replacement....
+               // ((MainActivity)getActivity()).setColorCycle(nameExist, currentColorCycle);     //<-- this doesn't work. no replacement....
             }
         }
         /****************Checking Color Cycle END**************/
