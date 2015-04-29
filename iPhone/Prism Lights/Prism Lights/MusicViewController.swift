@@ -1,4 +1,3 @@
-//
 //  SecondViewController.swift
 //  Prism Lights
 //
@@ -8,7 +7,7 @@
 
 import UIKit
 
-    class MusicViewController: UIViewController, WitDelegate {
+class MusicViewController: UIViewController, WitDelegate {
     
     var statusView:UILabel = UILabel();
     var intentView:UILabel = UILabel();
@@ -24,16 +23,16 @@ import UIKit
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-        
-//    
-//    override init() {
-//        super.init()
-//    }
+    
+    //
+    //    override init() {
+    //        super.init()
+    //    }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     
     
     
@@ -50,7 +49,7 @@ import UIKit
         
         Wit.sharedInstance().accessToken = "SAIGZN56HURQBH5PSTPPQQ545ZNVBSSF";
         Wit.sharedInstance().detectSpeechStop = WITVadConfig.DetectSpeechStop;
-
+        
         
         self.setupUI();
     }
@@ -60,27 +59,30 @@ import UIKit
         var w:CGFloat = 100;
         var rect:CGRect = CGRectMake(screen.size.width/2 - w/2, 60, w, 100);
         witButton = WITMicButton(frame: rect);
+        witButton.backgroundColor = UIColor.blackColor();
+        self.view.backgroundColor = UIColor.blackColor();
         self.view.addSubview(witButton);
         
         //create the label
         intentView = UILabel(frame: CGRectMake(0, 200, screen.size.width, 50));
         intentView.textAlignment = NSTextAlignment.Center;
+        intentView.backgroundColor = UIColor.blackColor();
+        intentView.textColor = UIColor.whiteColor();
         entitiesView = UITextView(frame: CGRectMake(0, 250, screen.size.width, screen.size.height - 300));
         entitiesView.backgroundColor = UIColor.blackColor();
-        intentView.backgroundColor = UIColor.blackColor()
-        entitiesView.textColor = UIColor.whiteColor()
-        intentView.textColor = UIColor.whiteColor()
         self.view.addSubview(entitiesView);
         self.view.addSubview(intentView);
         
         intentView.text = "Intent will show up here";
         entitiesView.textAlignment = NSTextAlignment.Center;
+        entitiesView.textColor = UIColor.whiteColor();
         entitiesView.text = "Entities will show up here";
         entitiesView.editable = false;
         entitiesView.font = UIFont.systemFontOfSize(17);
         
         statusView = UILabel(frame: CGRectMake(0, 150, screen.size.width, 50));
         statusView.textAlignment = NSTextAlignment.Center;
+        statusView.textColor = UIColor.whiteColor();
         self.view.addSubview(statusView);
     }
     
@@ -94,7 +96,7 @@ import UIKit
     }
     
     func witDidStartRecording() {
-        statusView.text = "Witting...";
+        statusView.text = "Listening...";
         entitiesView.text = "";
     }
     
@@ -114,20 +116,21 @@ import UIKit
     * param error Nil if no error occurred during processing
     */
     func witDidGraspIntent(outcomes: [AnyObject]!, messageId: String!, customData: AnyObject!, error e: NSError!) {
+        
+        
         //initialize flags
-        var onOff = false;
+        var onOff = false; //onOff = false when off and true when on or toggle
         var color = false;
         //default color
         var onOffVal = "off"
         var colorVal = "white";
-        var hueVal = "";
-        //change all bulbs by default
-        var bulb = "all lights"
-        var message_subject = "";
+        var hueVal = "36210"; //default hue color for white
         //brightness not handled for demo
-        var brightness = 100;
+        var brightness = 100; //brightness in % of [0-254]
+        var brighter = true;
+        var adjustBrightness = false;
         
-    
+        
         //duration and date time
         var durationVal = 0;
         var durationUnit = "second";
@@ -135,303 +138,407 @@ import UIKit
         var datetimeval = "";
         
         //Boolean flags for demo:
-        var changeBulb = false;
-        var changeBulbs = false;
-        var setTimer = false;
         var setAlarm = false;
-//        
-//        var json:NSData = NSJSONSerialization.dataWithJSONObject(outcomes, options: NSJSONWritingOptions.PrettyPrinted, error: nil)!;
-//        var jsonString = NSString(data: json, encoding: NSUTF8StringEncoding);
-//        println(jsonString);
+        
+        //        var json:NSData = NSJSONSerialization.dataWithJSONObject(outcomes, options: NSJSONWritingOptions.PrettyPrinted, error: nil)!;
+        //        var jsonString = NSString(data: json, encoding: NSUTF8StringEncoding);
+        //        println(jsonString);
         if outcomes == nil{
             return;
         }
         
         
         var firstOutcome:NSDictionary = outcomes[0] as! NSDictionary;
-//        intentView.text = firstOutcome as NSString;
+        //        intentView.text = firstOutcome as NSString;
         
-        if let intent:NSString = firstOutcome.objectForKey("intent") as? NSString{
-            println(intent);
+        if let spokenWords:NSString = firstOutcome.objectForKey("_text") as? NSString{
+//            entitiesView.text = spokenWords as String;
+            statusView.text = spokenWords as String;
         }
-//        if(intent.equals("alarm")){
-//            
-//            if (entities.containsKey("datetime") ){
-//                JsonElement datetime =  entities.get("datetime");
-//                String dateString = datetime.getAsJsonArray().get(0).getAsJsonObject().get("value").getAsJsonObject().get("from").getAsString();
-//                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-//                try {
-//                    Date myDate = sdf.parse(dateString);
-//                    witResponse.setText("Setting alarm for:\n" + myDate.toString());
-//                    
-//                } catch (Exception e){
-//                    witResponse.setText("Error parsing the date: " + dateString);
-//                }
-//            }
-//            //                witResponse.setText();
-//        }
         
+        //Intent will always be "lights" because we are only controlling lights for now.
+        if let intent:NSString = firstOutcome.objectForKey("intent") as? NSString{
+            println(intent)
+        }
+        //        if(intent.equals("alarm")){
+        //
+        //            if (entities.containsKey("datetime") ){
+        //                JsonElement datetime =  entities.get("datetime");
+        //                String dateString = datetime.getAsJsonArray().get(0).getAsJsonObject().get("value").getAsJsonObject().get("from").getAsString();
+        //                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        //                try {
+        //                    Date myDate = sdf.parse(dateString);
+        //                    witResponse.setText("Setting alarm for:\n" + myDate.toString());
+        //
+        //                } catch (Exception e){
+        //                    witResponse.setText("Error parsing the date: " + dateString);
+        //                }
+        //            }
+        //            //                witResponse.setText();
+        //        }
+        
+        
+        //There will always be entities...
         if let entities:NSDictionary = firstOutcome.objectForKey("entities") as? NSDictionary{
-            
+            //Grab on_off value if it exists
             if let on_off:NSArray = entities.objectForKey("on_off") as? NSArray{
                 for el in on_off{
                     if let value:NSString = el["value"] as? NSString{
-                        println("on_of value is:" + (value as! String));
-                        entitiesView.text = entitiesView.text + "TURNING BULB(S): " + (value as! String) + "\n";
-                        onOffVal = (value as! String);
-                        onOff = true;
-                        if(onOffVal == "off"){
-                            if(cache != nil) {
-                                for light in cache!.lights.values{
-                                    if(light.reachable != 0){
-//                                        //println("Light \(light.identifier)  \(light.lightState.description)");
-//                                        var lightState = PHLightState();
-//                                        if onOffVal == "off"{
-//                                            lightState.on = false;
-//                                        } else if(onOffVal == "on"){
-//                                            lightState.on = true;
-//                                        }
-//                                        lightState.hue = hueVal.toInt();
-//                                        lightState.on = false;
-//                                        var bridgeSendAPI = PHBridgeSendAPI();
-//                                        bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil);
-                                        var lightState = PHLightState()
-                                        lightState.on = false;
-                                        var bridgeSend = PHBridgeSendAPI()
-                                        bridgeSend.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil)
-                                    }
+                        if(value == "off"){
+                            onOff = false
+                        } else {
+                            onOff = true
+                        }
+                    }
+                }
+            }
+            //Grab color value if it exists:
+            if let color:NSArray = entities.objectForKey("color") as? NSArray{
+                for el in color{
+                    if let value:NSString = el["value"] as? NSString{
+                        var colorPlusHueValue = value.componentsSeparatedByString("~!~")
+                        if(colorPlusHueValue.count != 2){
+                            break
+                        } else {
+                            if let colorName:String = colorPlusHueValue[0] as? String{
+                                if let colorHue:String = colorPlusHueValue[1] as? String{
+                                    colorVal = colorName
+                                    hueVal = colorHue
                                 }
                             }
                         }
                     }
                 }
             }
-            
-            if let color:NSArray = entities.objectForKey("color") as? NSArray{
-                for el in color{
-                    if let value:NSString = el["value"] as? NSString{
-                        var colorPlusHueValue = value.componentsSeparatedByString("~!~")
-                        if(colorPlusHueValue.count != 2){
-                            return
-                        }
-                        var colorName:String = colorPlusHueValue[0] as! String
-                        var colorHue:String = colorPlusHueValue[1] as! String
-                        println("Color is: " + (value as! String) );
-                        entitiesView.text = entitiesView.text + "COLOR: " + (colorName) + "\n";
-                        entitiesView.text = entitiesView.text + "HUE VALUE: " + (colorHue) + "\n";
-                        colorVal = value.uppercaseString;
-                    }
-                    
-                    /* Taking this out for now as per follow-up with Laurent from Wit.ai:
-                    "Thanks for reaching out. Yes we do have a regression here. We will fix it soon.
-                    Sorry for the inconvenience!
-                    Laurent"
-                    if let tempHueVal:NSString = el["metadata"] as? NSString{
-                        println("Hue value is: " + (tempHueVal as! String) );
-                        entitiesView.text = entitiesView.text + "HUE VALUE: " + (tempHueVal as! String) + "\n";
-                        hueVal = (tempHueVal as! String);
-                        //colorVal = value.uppercaseString;
-                    }
-*/
-                }
-            }
-            
-            
-            
+            //Grab whether alarm intent exists
             if let alarm:NSArray = entities.objectForKey("alarm") as? NSArray{
-                for el in alarm{
+                setAlarm = true
+            }
+            
+            if let date_time:NSArray = entities.objectForKey("datetime") as? NSArray{
+                if let el: NSDictionary = date_time.objectAtIndex(0) as? NSDictionary{
+                    if let value:NSString = el["grain"] as? NSString{
+                        //Grain seems to always be minute and doesn't really matter too much.
+                    }
                     if let value:NSString = el["value"] as? NSString{
-                        println("alarm is: " + (value as! String) );
-                        entitiesView.text = entitiesView.text + "SETTING AN: " + (value as! String) + "\n";
-                        setAlarm = true;
+                        //2015-04-29T08:00:00.000-06:00
+                        datetimeval = value as! String
                     }
                 }
             }
-            
-            if let timer:NSArray = entities.objectForKey("timer") as? NSArray{
-                for el in timer{
-                    if let value:NSString = el["value"] as? NSString{
-                        println("timer is: " + (value as! String) );
-                        entitiesView.text = entitiesView.text + "SETTING A: " + (value as! String) + "\n";
-                        setTimer = true;
-                    }
-                }
-            }
-            
             
             if let duration:NSArray = entities.objectForKey("duration") as? NSArray{
                 if let norm:NSDictionary = duration[0].objectForKey("normalized") as? NSDictionary{
                     if let val:NSInteger = norm.objectForKey("value") as? NSInteger{
-                        println("duration value: \(val)")
-                        entitiesView.text = entitiesView.text + "DURATION:  \(val)" + "\n";
-                        durationVal = val;
+                        //                        println("duration value: \(val)")
+                        //                        entitiesView.text = entitiesView.text + "DURATION:  \(val)" + "\n";
+                        durationVal = val
                     }
                     if let unit:NSString = norm.objectForKey("unit") as? NSString{
-                        println("duration unit: \(unit)")
-                        entitiesView.text = entitiesView.text + "DURATION UNIT:  \(unit)" + "\n";
-                        durationUnit = (unit as! String);
+                        //                        println("duration unit: \(unit)")
+                        //                        entitiesView.text = entitiesView.text + "DURATION UNIT:  \(unit)" + "\n";
+                        durationUnit = (unit as! String)
                     }
                 }
             }
             
-            if let b:NSArray = entities.objectForKey("bulb") as? NSArray{
-                for el in b{
-                    if let value:NSString = el["value"] as? NSString{
-                        println("bulb is: " + (value as! String) );
-                        entitiesView.text = entitiesView.text + "BULB NAME: " + (value as! String) + "\n";
-                        bulb = (value as! String);
+            
+            if let brightness:NSArray = entities.objectForKey("brightness") as? NSArray{
+                //                entitiesView.text = entitiesView.text + "MAKING BULBS BRIGHTER\n";
+                if let val:NSString = brightness[0].objectForKey("value") as? NSString{
+                    if (val == "brighter"){
+                        adjustBrightness = true
+                        brighter = true
+                    } else if (val == "dimmer"){
+                        adjustBrightness = true
+                        brighter = false
                     }
                 }
             }
             
-            if let dim:NSArray = entities.objectForKey("dim") as? NSArray{
-                entitiesView.text = entitiesView.text + "DIMMING BULBS\n";
-                if (cache == nil){
-                    return;
-                }
-                for light in cache!.lights.values{
-                    if((light.reachable) != nil){
-                    //println("Light \(light.identifier)  \(light.lightState.description)");
-                    
-//                    var convertedBrightness = ((light.brightness * 254.0) / 100);
-//                    var currentBrightness = light.brightness;
-                    var currentBrightness = light.brightness - 85;
-                    var lightState = PHLightState();
-                    if onOffVal == "off"{
-                        lightState.on = false;
-                    } else if(onOffVal == "on"){
-                        lightState.on = true;
-                    }
-//                    lightState.hue = hueVal.toInt();
-                    lightState.on = true;
-                    lightState.saturation = 254;
-                    
-                    lightState.brightness = (currentBrightness - 85);
-                    
-                    
-                    var bridgeSendAPI = PHBridgeSendAPI();
-                    bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil);
-                    }
-                }
-//                var lightState = PHLightState()
-//                lightState.brightness = Int(254)
-//                var bridgeSend = PHBridgeSendAPI()
-//                bridgeSend.updateLightStateForId(self.bulbId, withLightState: lightState, completionHandler: nil)
-//                
-//                var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-//                var light = (cache.lights?[bulbId!]) as PHLight
-//                light.lightState.brightness = Int(254*sender.value)
-            }
-            
-            if let brighter:NSArray = entities.objectForKey("brighter") as? NSArray{
-                entitiesView.text = entitiesView.text + "MAKING BULBS BRIGHTER\n";
-                if (cache == nil){
-                    return;
-                }
-                for light in cache!.lights.values{
-                    if((light.reachable) != nil){
-                    //println("Light \(light.identifier)  \(light.lightState.description)");
-                    
-//                    var convertedBrightness = ((light.brightness * 254.0) / 100);
-                    //                    var currentBrightness = light.brightness;
-                    var currentBrightness = light.brightness + 85;
-                    var lightState = PHLightState();
-                    if onOffVal == "off"{
-                        lightState.on = false;
-                    } else if(onOffVal == "on"){
-                        lightState.on = true;
-                    }
-                    //                    lightState.hue = hueVal.toInt();
-                    lightState.on = true;
-                    lightState.saturation = 254;
-                    
-                    lightState.brightness = currentBrightness;
-                    
-                    
-                    var bridgeSendAPI = PHBridgeSendAPI();
-                    bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil);
-                    }
-                }
-            }
-            
-            if let date_time:NSArray = entities.objectForKey("datetime") as? NSArray{
-                for el in date_time{
-                    if let value:NSString = el["grain"] as? NSString{
-                        println("grain of datetime is: " + (value as! String) );
-//                        entitiesView.text = entitiesView.text + "DATETIME GRAIN: " + value + "\n";
-                        datetimegrain = (value as! String);
-                    }
-                    if let value:NSString = el["value"] as? NSString{
-                        println("datetime is: " + (value as! String) );
-                        entitiesView.text = entitiesView.text + "DATETIME: \n" + (value as! String) + "\n";
-                        datetimeval = (value as! String);
-                    }
-                }
-            }
-            
-            if let ms:NSArray = entities.objectForKey("message_subject") as? NSArray{
-                for el in ms{
-                    if let value:NSString = el["value"] as? NSString{
-                        println("message_subject is: " + (value as String) );
-                        entitiesView.text = entitiesView.text + "MESSAGE_SUBJECT: " + (value as! String ) + "\n";
-                        message_subject = (value as! String);
-                    }
-                }
-            }
             
         }
-        if let confidence:NSString = firstOutcome.objectForKey("confidence") as? NSString{
-            println(confidence);
-            entitiesView.text = entitiesView.text + "CONFIDENCE: " + (confidence as! String) + "\n";
+        
+        
+        
+        
+        /*
+        {
+        "msg_id" : "2e7103a6-8324-49a0-826f-751f0227ea1d",
+        "_text" : "bulbs dimmer",
+        "outcomes" : [ {
+        "_text" : "bulbs dimmer",
+        "intent" : "lights",
+        "entities" : {
+        "bulbname" : [ {
+        "suggested" : true,
+        "value" : "bulbs",
+        "type" : "value"
+        } ],
+        "on_off" : [ {
+        "value" : "on"
+        } ],
+        "brightness" : [ {
+        "value" : "dimmer"
+        } ]
+        },
+        "confidence" : 1.0
+        } ]
+        ---------------------------------------------------------
+        {
+        "msg_id" : "274c17e4-d78e-4251-8062-e435967fa8b4",
+        "_text" : "wake me up at 8:00AM",
+        "outcomes" : [ {
+        "_text" : "wake me up at 8:00AM",
+        "intent" : "lights",
+        "entities" : {
+        "datetime" : [ {
+        "grain" : "minute",
+        "value" : "2015-04-29T08:00:00.000-06:00",
+        "type" : "value",
+        "values" : [ {
+        "type" : "value",
+        "value" : "2015-04-29T08:00:00.000-06:00",
+        "grain" : "minute"
+        }, {
+        "type" : "value",
+        "value" : "2015-04-30T08:00:00.000-06:00",
+        "grain" : "minute"
+        }, {
+        "type" : "value",
+        "value" : "2015-05-01T08:00:00.000-06:00",
+        "grain" : "minute"
+        } ]
+        } ],
+        "on_off" : [ {
+        "value" : "on"
+        } ],
+        "alarm" : [ {
+        "value" : "alarm"
+        } ]
+        },
+        "confidence" : 1.0
+        } ]
+        
+        ----------------------------------------------------------------
+        {
+        "msg_id" : "214af95e-c0f1-4ca5-ba75-c3d9b23b705d",
+        "_text" : "set 5 minute timer",
+        "outcomes" : [ {
+        "_text" : "set 5 minute timer",
+        "intent" : "lights",
+        "entities" : {
+        "duration" : [ {
+        "minute" : 5,
+        "value" : 5,
+        "unit" : "minute",
+        "normalized" : {
+        "value" : 300,
+        "unit" : "second"
         }
-        if let text:NSString = firstOutcome.objectForKey("_text") as? NSString{
-            println(text);
-            intentView.text = (text as! String);
-        }
-        
-        //Criteria for determining what to do with lights.
-        
-        
-        if (setAlarm) {
-            println("Setting an alarm for \(durationVal)  \(durationUnit) in the future");
-            return;
-        } else if (setTimer){
-            println("Setting time for \(datetimeval). Grain \(datetimegrain)");
-            return;
-        }
+        } ],
+        "on_off" : [ {
+        "value" : "off"
+        } ],
+        "alarm" : [ {
+        "value" : "timer"
+        } ]
+        },
+        "confidence" : 1.0
+        } ]
+        */
         
         
-        println("Will send-- on_off: \(onOffVal). Color: \(colorVal). Bulb: \(bulb). Message_subject: \(message_subject)." );
+        //Now it is time to send appropriate commands to the light/group.... 
+        var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
+        let lightState:PHLightState
         
+        //Double check for the existence of the cahce:
+        if(cache != nil){
+            /*
+            //initialize flags
+            var onOff = false; //onOff = false when off and true when on or toggle
+            var color = false;
+            //default color
+            var onOffVal = "off"
+            var colorVal = "white";
+            var hueVal = "";
+            //brightness not handled for demo
+            var brightness = 100;
+            var brighter = true;
+            var adjustBrightness = false;
+            
+            
+            //duration and date time
+            var durationVal = 0;
+            var durationUnit = "second";
+            var datetimegrain = "";
+            var datetimeval = "";
+            
+            //Boolean flags for demo:
+            var setAlarm = false;
+            */
+            
+            
+            //Do we set alarm/timer?
+            if(setAlarm){
+                if(durationVal != 0){
+                    //We found a duration... Setting Timer
+                    intentView.text = "Setting Timer for \(durationVal) seconds."
+                } else {
+                    var newSchedule:PHSchedule = PHSchedule()
+                    //Name Schedule: 
+                    newSchedule.name = "\(datetimeval)"
+                    newSchedule.localTime = true
+                    var date : NSDate
+                    var dateFormatter : NSDateFormatter = NSDateFormatter()
+                    //Specify Format of String to Parse
+                    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZ"
+                    dateFormatter.locale = NSLocale.currentLocale()
+                    dateFormatter.timeZone = NSTimeZone(abbreviation: "MST")
+//                    [dateFormatter setTimeZone: [NSTimeZone timeZoneWithAbbreviation: @"MST"]];
+                    
+                    /*
 
-        //var COLORDIC:NSDictionary = ["RED":65280, "YELLOW":12950, "WHITE":36210, "BLUE":46920, "PURPLE":56100, "PINK":53505, "ORANGE":10000, "GREEN": 25500];
-        if(cache != nil) {
-        for light in cache!.lights.values{
-            if(light.reachable != 0){
-            //println("Light \(light.identifier)  \(light.lightState.description)");
-            var lightState = PHLightState();
-            if onOffVal == "off"{
-                lightState.on = false;
-            } else if(onOffVal == "on"){
-                lightState.on = true;
-            }
-                lightState.hue = hueVal.toInt();
-                lightState.on = true;
-                lightState.saturation = 254;
+                    NSDateFormatter *dateFormatter=[[NSDateFormatter alloc]init];
+                    
+                    NSString *currentDateString = @"2014-01-08T21:21:22.737+05:30";
+                    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZ"];
+                    NSDate *currentDate = [dateFormatter dateFromString:currentDateString];
+                    
+                    NSLog(@"CurrentDate:%@", currentDate);
+*/
+                    
+                    date = dateFormatter.dateFromString(datetimeval)!
+                    intentView.text = "Setting Alarm \(datetimeval)"
+                    newSchedule.date = date
+                    newSchedule.identifier = "20"
+                    
+                    var lightState:PHLightState = PHLightState()
+                    
+                    lightState.on = 1
+                    newSchedule.state = lightState
+                    newSchedule.lightIdentifier = "1"
+                    
+                    var bridgeSendAPI:PHBridgeSendAPI = PHBridgeSendAPI()
+                    // bridgeSendAPI.createSchedule(newSchedule, completionHandler: nil)
             
-            lightState.brightness = 254;
-            
-
-            var bridgeSendAPI = PHBridgeSendAPI();
-            bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil);
+                    
+                    /*
+                    // Create a new schedule object
+                    PHSchedule *newSchedule = [[PHSchedule alloc] init];
+                    
+                    // Give it a name
+                    newSchedule.name = @”Turn off light 1 schedule”;
+                    
+                    // Set schedule to use local time, so you can specify you date in the same timezone as your bridge.
+                    newSchedule.localTime = YES;
+                    
+                    // Set a date for when you want to schedule your action.
+                    newSchedule.date = futureDate;
+                    
+                    //Create light state object for action of the schedule
+                    PHLightState *lightState = [[PHLightState alloc] init];
+                    
+                    // Configure light state to turn lights of
+                    lightState.on = @NO;
+                    // Set light state to schedule object
+                    newSchedule.lightState = lightState;
+                    // Set light identifier that should have its light state updated
+                    newSchedule.lightIdentifier = @”1”;
+                    
+                    // Create PHBridgeSendAPI object
+                    PHBridgeSendApi *bridgeSendAPI = [PHBridgeSendAPI alloc] init];
+                    
+                    // Call create group on bridge API
+                    [bridgeSendAPI createScheduleWithSchedule:newSchedule completionHandler:^(NSArray *errors) {
+                    if (!errors){
+                    // Create successful
+                    } else {
+                    // Error occurred
+                    }
+                    }
+                    */
+                }
+                
+            } else {
+                /*
+                //initialize flags
+                var onOff = false; //onOff = false when off and true when on or toggle
+                var color = false;
+                //default color
+                var onOffVal = "off"
+                var colorVal = "white";
+                var hueVal = "";
+                //brightness not handled for demo
+                var brightness = 100;
+                var brighter = true;
+                var adjustBrightness = false;
+                
+*/
+                
+                
+                
+                var bridgeSendAPI:PHBridgeSendAPI = PHBridgeSendAPI()
+                
+                //Just set color/brightness/on_off accordingly
+                intentView.text = "Need to adjust color/brightness/on_off"
+                if(hueVal != ""){
+                    var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
+                    if(cache != nil){
+                        for light in cache!.lights.values{
+                            var currentLightState:PHLightState = light.lightState as PHLightState
+                            if((currentLightState.reachable) != nil) {
+                                
+                                var lightState = PHLightState();
+                                lightState.on = onOff;
+                                var currentBrightness = currentLightState.brightness
+                                if(adjustBrightness){
+                                    if(brighter){
+                                        currentBrightness = (NSNumber) (double: min(254, Double(currentBrightness) * 1.3))
+                                    } else {
+                                        currentBrightness = (NSNumber) (double: max(0, Double(currentBrightness) * 0.7))
+                                    }
+                                    lightState.on = true;
+                                }
+                                lightState.hue = NSNumber(integer: hueVal.toInt()!);
+                                lightState.saturation = 254;
+                                lightState.brightness = currentBrightness;
+                                var bridgeSendAPI = PHBridgeSendAPI();
+                                bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil);
+                            }
+                        }
+                    }
+                    if(onOff){
+                        intentView.text = "Turning lights \(colorVal)"
+                    } else {
+                        intentView.text = "Turning lights off"
+                    }
+                }
+                if(adjustBrightness == true){
+                    //Default, increment brightness by 30%.
+                    if(brighter){
+                        
+                    } else {
+                        
+                    }
+                }
             }
+            
+            //Do we set color?
+            
+            //Do we adjust brightness?
+            
+            //
+            
+            
         }
-        }
-    
+        
     }
-
     
-   
+    
+    
 }
+
 
 
