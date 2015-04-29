@@ -324,8 +324,12 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
 
                 hour = 0;
                 minute = 0;
-
-            return new TimePickerDialog(getActivity(), this, hour, minute, true);
+            TimePickerDialog timeDialog = new TimePickerDialog(getActivity(), this, hour, minute, true);
+            TextView textView = new TextView(getActivity());
+            textView.setText(R.string.setTimer);
+            textView.setTextAppearance(getActivity(), R.style.TitleTextView);
+            timeDialog.setCustomTitle(textView);
+            return timeDialog;
         }
 
         public void onTimeSet(TimePicker view, int hour, int minute) {

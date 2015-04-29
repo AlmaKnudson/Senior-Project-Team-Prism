@@ -91,4 +91,5 @@
     <string name="failed_delete_schedule">Failed to delete schedule</string>
     <string name="failed_timer_create">Failed to create timer</string>
     <string name="failed_timer_delete">Failed to delete timer</string>
+    <string name="setTimer">Set Timer</string>
 </resources>
