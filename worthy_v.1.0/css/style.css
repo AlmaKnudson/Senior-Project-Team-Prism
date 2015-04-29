@@ -239,6 +239,10 @@ blockquote {
 	background: url("../images/bg-image-2.jpg") 50% 0px no-repeat;
 }
 
+.bg-color-gray {
+	background-color: #EEEEEE;
+}
+
 /* Misc
 ----------------------------------------------------------------------------- */
 .object-non-visible {
