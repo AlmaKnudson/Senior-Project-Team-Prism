@@ -80,14 +80,13 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate, UITextFie
     @IBAction func ApplySettings(sender: UIBarButtonItem) {
         var bridgeSend = PHBridgeSendAPI()
         var lights:NSDictionary = PHBridgeResourcesReader.readBridgeResourcesCache().lights as NSDictionary
-        
-        if isGroup {
-            
-        } else {
-            var light:PHLight = lights.valueForKey(self.id) as! PHLight
-            light.name = nameTextField.text;
-        
-            bridgeSend.updateLightWithLight(light, completionHandler: nil)
+        var name = nameTextField.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        if name != ""{
+            if isGroup {
+                SetGroupName(self.id, name)
+            } else {
+                SetBulbName(self.id, name)
+            }
         }
         homeDelegate?.ApplySettings()
     }
@@ -141,6 +140,9 @@ class BulbSettingsController : UIViewController, ColorChangedDelegate, UITextFie
             onSwitch.on = false
         }
         
+        if self.isGroup && id == "0" {
+            nameTextField.userInteractionEnabled = false
+        }
         
         self.title = self.name
     }

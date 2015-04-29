@@ -118,9 +118,46 @@ RAReorderableLayoutDelegate, RAReorderableLayoutDataSource {
             if cell == nil {
                 cell = GroupBulbCell()
             }
-            (cell as! GroupBulbCell).initGroupCell(GetGroupName(Groups[indexPath.row])!)
-            //TODO: is off?
-            
+            var groupCell = (cell as! GroupBulbCell)
+            var groupId = Groups[indexPath.row]
+
+                if groupId == "0" {
+                    
+                    //Name the group cell to all
+                    groupCell.initGroupCell("All Lights")
+                    
+                } else {
+                    //Set the name of the group cell from group name
+                    var group:PHGroup! = GetGroupPHGroup(groupId)
+                    if group != nil {
+                        groupCell.initGroupCell(group.name)
+                    } else{
+                        groupCell.initGroupCell("Unknown")
+                        groupCell.SetUnreachable()
+                        return groupCell
+                    }
+                }
+                
+                var tuple  = GetGroupState(groupId)
+                let modelNumber = tuple.modelNumber
+                let lightState = tuple.lightState
+                
+                //Check that the group is reachable
+                if !lightState.reachable.boolValue {
+                    groupCell.SetUnreachable()
+                    return cell
+                }
+                
+                //Set the bulb image
+                if lightState.on.boolValue{
+                    var point = CGPoint(x: Double(lightState.x), y: Double(lightState.y))
+                    var color = PHUtilities.colorFromXY(point, forModel: modelNumber)
+                    groupCell.turnOn(false)
+                    groupCell.SetGroupColor(color)
+                } else{
+                    groupCell.turnOff(false)
+                }
+
             return cell
             
         case "favorite":

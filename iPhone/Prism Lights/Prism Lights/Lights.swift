@@ -22,6 +22,28 @@ func GetBulbName(bulbId:String) -> String? {
     return name
 }
 
+func SetBulbName(bulbId:String, name:String) {
+    
+    let cache:PHBridgeResourcesCache = PHBridgeResourcesReader.readBridgeResourcesCache()
+    let lights = cache.lights as! [String:PHLight]
+    let light:PHLight? = lights[bulbId]
+    
+    if light != nil {
+        light!.name = name
+        var bridgeSendAPI = PHBridgeSendAPI()
+        bridgeSendAPI.updateLightWithLight(light){
+            error -> Void in
+            if error != nil {
+                if(DEBUG){
+                    println("Error updating light state.")
+                }
+                return
+            }
+        
+        }
+    }
+}
+
 
 func GetBulbColorType(bulbId:String) -> PHLightColormode? {
     let cache:PHBridgeResourcesCache = PHBridgeResourcesReader.readBridgeResourcesCache()
@@ -123,6 +145,14 @@ func SearchForNewLightsAuto(){
 
 
 //MARK: - Group Methods
+
+func GetGroupPHGroup(groupId:String) -> PHGroup? {
+    
+    let cache:PHBridgeResourcesCache = PHBridgeResourcesReader.readBridgeResourcesCache()
+    let groups = cache.groups as! [String:PHGroup]
+    let group:PHGroup! = groups[groupId]
+    return group
+}
 
 func SetGroupLightState(groupId:String, lightState:PHLightState){
     var bridgeSendAPI = PHBridgeSendAPI()
@@ -247,63 +277,14 @@ func GetGroupName(groupId:String) -> String? {
 }
 
 
-
-// var hueSDK = (UIApplication.sharedApplication().delegate as! AppDelegate).hueSDK!
-
-//
-//
-//
-//
-//
-//
-//
-//    if(DEBUG){
-//        println("Bulb tapped")
-//    }
-//    var cache = PHBridgeResourcesReader.readBridgeResourcesCache()
-//    var light = cache!.lights["\(indexPath.row+1)"] as PHLight
-//
-//    if(light.lightState.reachable == 0){
-//        return
-//    }
-//    var lightState = PHLightState()
-//    var cell = bulbCollectionView.cellForItemAtIndexPath(indexPath) as BulbCollectionCell
-//    if light.lightState.on == 1{
-//        light.lightState.on = false
-//        lightState.on = false
-//    } else{
-//        lightState.on = true
-//        light.lightState.on = true
-//        //cell.SetBulbImage(true)
-//
-//    }
-//    var bridgeSendAPI = PHBridgeSendAPI()
-//    bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState, completionHandler: nil)
-//    if(light.lightState.on == 1){
-//        var point = CGPoint(x: Double(light.lightState.x), y: Double(light.lightState.y))
-//        var color = PHUtilities.colorFromXY(point, forModel: light.modelNumber)
-//        cell.SetBulbColor(color)
-//    } else{
-//        cell.SetBulbImage(false)
-//    }
-//    bridgeSendAPI.updateLightStateForId(light.identifier, withLightState: lightState){
-//        error -> Void in
-//        if error != nil {
-//            if(DEBUG){
-//                println("Error updating light state.")
-//            }
-//            return
-//        }
-//
-//        if(light.lightState.on == 1){
-//            var point = CGPoint(x: Double(light.lightState.x), y: Double(light.lightState.y))
-//            var color = PHUtilities.colorFromXY(point, forModel: light.modelNumber)
-//            cell.SetBulbColor(color)
-//        } else{
-//            cell.SetBulbImage(false)
-//        }
-//        self.skipNextHeartbeat = true
-//    }
-
-
+func SetGroupName(groupId:String, name:String){
+    var bridgeSendAPI = PHBridgeSendAPI()
+    let cache:PHBridgeResourcesCache = PHBridgeResourcesReader.readBridgeResourcesCache()
+    let groups = cache.groups as! [String:PHGroup]
+    let group:PHGroup? = groups[groupId]
+    if group != nil {
+        group!.name = name
+        bridgeSendAPI.updateGroupWithGroup(group, completionHandler: nil)
+    }
+}
 

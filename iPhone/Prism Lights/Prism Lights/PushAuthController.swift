@@ -52,7 +52,6 @@ class PushAuthController : UIViewController {
     
     func AuthFailed(){
         PHNotificationManager.defaultManager().deregisterObjectForAllNotifications(self)
-        //TODO: AuthFailed Method
         navigationController?.popViewControllerAnimated(true)
         delegate?.DismissMe()
     }

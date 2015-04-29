@@ -387,7 +387,6 @@ class GroupCollectionController: UIViewController, UICollectionViewDataSource, U
         manager!.registerObject(self, withSelector: "NotAuthorized", forNotification: "NO_LOCAL_AUTHENTICATION_NOTIFICATION")
         self.dismissViewControllerAnimated(true, completion: nil)
         self.bulbCollectionView.reloadData()
-        //TODO: Need protocol for pushAuth
     }
     
     func DismissMe() {
