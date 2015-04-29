@@ -370,5 +370,6 @@ public class ColorCycle implements Serializable{
                 }
             });
         }
+        mainActivity.setCurrentColorCycleName(null);
     }
 }

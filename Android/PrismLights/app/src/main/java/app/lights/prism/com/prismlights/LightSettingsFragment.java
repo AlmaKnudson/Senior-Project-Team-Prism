@@ -230,31 +230,6 @@ public class LightSettingsFragment extends Fragment implements CacheUpdateListen
 
     private void updateState() {
 
-        /****************Checking Color Cycle**************/
-        //check if there is current colorCycle going on.
-        bridge = hueSDK.getSelectedBridge();
-        List<PHSchedule> colorCycles = bridge.getResourceCache().getAllTimers(true);
-        List<PHSchedule> colorCyclesForThisBulb = new ArrayList<>();
-        for (int i = 0; i< colorCycles.size();i++){
-            if (colorCycles.get(i).getLightIdentifier()!=null
-                    &&colorCycles.get(i).getLightIdentifier().equals(identifier)
-                    && colorCycles.get(i).getDescription().startsWith("prism"))
-                colorCyclesForThisBulb.add(colorCycles.get(i));
-        }
-
-        // if there is a color cycle running, set it as current color cycle. if this is new color cycle from other device, add it to the list.
-        if (colorCyclesForThisBulb.size()!=0){
-            ColorCycle currentColorCycle = new ColorCycle(colorCyclesForThisBulb); // this generate ColorCycle class out of List of recurring timer schedule
-            String currentName = currentColorCycle.getName();
-            int nameExist = ((MainActivity)getActivity()).containsCycleName(currentName);
-            if(nameExist < 0){ // if nameExist is -1, this means there is no such name in current color cycles, so add new one.
-                ((MainActivity)getActivity()).addColorCycle(currentColorCycle);
-            } else{ // if the same name exist, just replace with recent one. Other user might have changed this cycle.
-               // ((MainActivity)getActivity()).setColorCycle(nameExist, currentColorCycle);     //<-- this doesn't work. no replacement....
-            }
-        }
-        /****************Checking Color Cycle END**************/
-
         PHLight  currentLight = hueSDK.getSelectedBridge().getResourceCache().getLights().get(identifier);
         //means light has been deleted
         if(currentLight == null) {

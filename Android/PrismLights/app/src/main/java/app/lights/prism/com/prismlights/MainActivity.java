@@ -164,6 +164,13 @@ public class MainActivity extends Activity implements PHSDKListener{
         currentSchedule = schedule;
     }
 
+    private String currentColorCycleName;
+    public String getCurrentColorCycleName(){
+        return currentColorCycleName;
+    }
+    public void setCurrentColorCycleName(String name){
+        currentColorCycleName = name;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

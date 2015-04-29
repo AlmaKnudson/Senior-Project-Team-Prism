@@ -1,6 +1,7 @@
 package app.lights.prism.com.prismlights;
 
 import android.app.FragmentTransaction;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
 
@@ -20,9 +21,10 @@ import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHGroup;
 
 import com.philips.lighting.model.PHLight;
+import com.philips.lighting.model.PHSchedule;
 
 
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 
@@ -57,7 +59,8 @@ public class ColorCycleFragment extends Fragment {
 
         }
         colorCycles = ((MainActivity)getActivity()).getAllColorCycles();
-        bridge = PHHueSDK.getInstance().getSelectedBridge();
+        hueSDK = PHHueSDK.getInstance();
+        bridge = hueSDK.getSelectedBridge();
         if(popping || HueBulbChangeUtility.popBackStackIfItemNotExist(currentIdentifier, isGroup, getFragmentManager())) {
             return;
         }
@@ -71,6 +74,7 @@ public class ColorCycleFragment extends Fragment {
             currentIdentifier = currentGroup.getIdentifier();
             currentLight = null;
         }
+        checkColorCycle();
     }
 
     @Override
@@ -124,15 +128,57 @@ public class ColorCycleFragment extends Fragment {
         return view;
     }
 
+    private void checkColorCycle(){
+        /****************Checking Color Cycle**************/
+        //check if there is current colorCycle going on.
+        List<PHSchedule> colorCycles = bridge.getResourceCache().getAllTimers(true);
+        List<PHSchedule> colorCyclesForThisBulb = new ArrayList<>();
+        if(isGroup){
+            for (int i = 0; i < colorCycles.size(); i++) {
+                if (colorCycles.get(i).getGroupIdentifier() != null
+                        && colorCycles.get(i).getGroupIdentifier().equals(currentIdentifier)
+                        && colorCycles.get(i).getDescription().startsWith("prism"))
+                    colorCyclesForThisBulb.add(colorCycles.get(i));
+            }
+        } else {
+            for (int i = 0; i < colorCycles.size(); i++) {
+                if (colorCycles.get(i).getLightIdentifier() != null
+                        && colorCycles.get(i).getLightIdentifier().equals(currentIdentifier)
+                        && colorCycles.get(i).getDescription().startsWith("prism"))
+                    colorCyclesForThisBulb.add(colorCycles.get(i));
+            }
+        }
+
+        // if there is a color cycle running, set it as current color cycle. if this is new color cycle from other device, add it to the list.
+        if (colorCyclesForThisBulb.size()!=0) {
+            ColorCycle currentColorCycle = new ColorCycle(colorCyclesForThisBulb); // this generate ColorCycle class out of List of recurring timer schedule
+            String currentColorCycleName = currentColorCycle.getName();
+            ((MainActivity) getActivity()).setCurrentColorCycleName(currentColorCycleName);
+            int nameExist = ((MainActivity) getActivity()).containsCycleName(currentColorCycleName);
+            if (nameExist < 0) { // if nameExist is -1, this means there is no such name in current color cycles, so add new one.
+                ((MainActivity) getActivity()).addColorCycle(currentColorCycle);
+            }
+        }
+        /****************Checking Color Cycle END**************/
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         if(popping || HueBulbChangeUtility.popBackStackIfItemNotExist(currentIdentifier, isGroup, getFragmentManager())) {
             return;
         }
-        colorCycles = ((MainActivity)getActivity()).getAllColorCycles();
-        colorCycleListAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+    //    private void refresh(){
+//        checkColorCycle();
+//        colorCycles = ((MainActivity)getActivity()).getAllColorCycles();
+//        colorCycleListAdapter.notifyDataSetChanged();
+//    }
 
     private class ColorCycleListAdapter extends BaseAdapter{
 
@@ -163,14 +209,28 @@ public class ColorCycleFragment extends Fragment {
             colorCycleName.setText(colorCycles.get(position).getName());
             SingleColorCycleView cycleView = (SingleColorCycleView) currentView.findViewById(R.id.colorCycleSmallDetailView);
             cycleView.setColors(colorCycles.get(position).getColors());
-            Button runColorCycleButton = (Button) currentView.findViewById(R.id.colorCycleRun);
+            final Button runColorCycleButton = (Button) currentView.findViewById(R.id.colorCycleRun);
+            String currentColorCycleName = ((MainActivity)getActivity()).getCurrentColorCycleName();
+            if(currentColorCycleName!=null && currentColorCycleName.equals(colorCycles.get(position).getName()))
+                runColorCycleButton.setText("Stop");
+            else
+                runColorCycleButton.setText("Run");
+
             runColorCycleButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    List<ScheduledFuture> tasks = colorCycles.get(position).startColorCycle(10, bridge, currentIdentifier, isGroup, (MainActivity) getActivity());
-                    ((MainActivity) getActivity()).setColorCycleTasks(currentIdentifier, tasks, isGroup);
-//                    android.app.FragmentManager fm = getActivity().getFragmentManager();
-//                    fm.popBackStack();
+                    if(runColorCycleButton.getText().equals("Run")) {
+                        List<ScheduledFuture> tasks = colorCycles.get(position).startColorCycle(10, bridge, currentIdentifier, isGroup, (MainActivity) getActivity());
+                        ((MainActivity) getActivity()).setColorCycleTasks(currentIdentifier, tasks, isGroup);
+                        ((MainActivity)getActivity()).setCurrentColorCycleName(colorCycles.get(position).getName());
+                        //runColorCycleButton.setText("Stop");
+                        colorCycleListAdapter.notifyDataSetChanged();
+
+                    } else if(runColorCycleButton.getText().equals("Stop")){
+                        ColorCycle.removePreviousColorCycle(bridge,currentIdentifier, isGroup, (MainActivity)getActivity());
+                        //runColorCycleButton.setText("Run");
+                        colorCycleListAdapter.notifyDataSetChanged();
+                    }
                 }
             });
 
@@ -178,9 +238,13 @@ public class ColorCycleFragment extends Fragment {
             deleteImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(runColorCycleButton.getText().equals("Stop")) {
+                        ColorCycle.removePreviousColorCycle(bridge, currentIdentifier, isGroup, (MainActivity) getActivity());
+                    }
+
                     ((MainActivity)getActivity()).deleteColorCycle(position);
                     colorCycles = ((MainActivity)getActivity()).getAllColorCycles();
-                    colorCycleListAdapter.notifyDataSetChanged();
+                    notifyDataSetChanged();
                 }
             });
             return currentView;
