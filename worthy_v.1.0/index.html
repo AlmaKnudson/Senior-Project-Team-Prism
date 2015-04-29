@@ -147,9 +147,6 @@
 								<h4 class="media-heading">Manual Control</h4>
 								<p>Prism Lights allows for changing the on/off state, brightness, and color of the lights. This is the simplest form of control and applies to individual lights as well as groups of lights.</p>
 							</div>
-							<div class="media-right">
-								<i class="fa fa-cog"></i>
-							</div>
 							<br>
 						</div>
 						<div class="media">
@@ -157,18 +154,12 @@
 								<h4 class="media-heading">Automated Control</h4>
 								<p>Automated control allows for automatically adjusting bulbs according to sunset and sunrise times, cycling colors, timers, and creating schedules for when bulbs turn on and off throughout the week.</p>
 							</div>
-							<div class="media-right">
-								<i class="fa fa-check"></i>
-							</div>
 							<br>
 						</div>
 						<div class="media">
 							<div class="media-body text-right">
 								<h4 class="media-heading">Favorites</h4>
-								<p>Favorites allow for saving favorite bulb states for easy access later.</p>
-							</div>
-							<div class="media-right">
-								<i class="fa fa-desktop"></i>
+								<p>Favorites allow for saving favorite bulb states for easy access later. They enable the user to create a color, brightness, and on/off state for certain bulbs and record that state for recalling later.</p>
 							</div>
 						</div>
 					</div>
@@ -176,18 +167,13 @@
 					<div class="space visible-xs"></div>
 					<div class="col-sm-6">
 						<div class="media">
-							<div class="media-left">
-								<i class="fa fa-users"></i>
-							</div>
 							<div class="media-body">
 								<h4 class="media-heading">Music Synchronization</h4>
 								<p>Music synchronization allows for controlling the lights by associating each light to a particular frequency range, setting frequency ranges, beats per minute of the music, and maximum brightness that the lights can be.</p>
 							</div>
+							<br>
 						</div>
 						<div class="media">
-							<div class="media-left">
-								<i class="fa fa-leaf"></i>
-							</div>
 							<div class="media-body">
 								<h4 class="media-heading">Position Tracking</h4>
 								<p>Using Bluetooth beacons, Prism Lights tracks your position inside your home and turns your lights on and off as you move from room to room.</p>
@@ -196,9 +182,6 @@
 							<br>
 						</div>
 						<div class="media">
-							<div class="media-left">
-								<i class="fa fa-area-chart"></i>
-							</div>
 							<div class="media-body">
 								<h4 class="media-heading">Voice Commands</h4>
 								<p>Allows for controlling the lights using spoken English. For example, "Turn kitchen lights purple."</p>
@@ -280,25 +263,46 @@
 								<img src="images/androidScreenshots/schedulesFragment.png" class="center-block" alt="Schedules">
 								<p class="text-center center-block">To create a schedule, tap the plus button in the top right corner.</p>
 								<img src="images/androidScreenshots/addSchedule.png" class="center-block" alt="Add Schedule">
+								<p class="text-center center-block">Add a name to your schedule by editing the text field. Select a color from the color picker you want the lights to turn on to at the time given. Use the slider to select a brightness. Then choose the days you want the schedule to repeat on (Blue is selected). Finally, select the time you want the light to turn off and the time you want it to turn on.</p>
 								<img src="images/androidScreenshots/setScheduleTime.png" class="center-block" alt="Set Schedule Time">
+								For a schedule, you can set the on and off times to a simple time or you can choose to use the sunrise or sunset time based on your location. When you're done creating the schedule tap save.
 								<img src="images/androidScreenshots/addedSchedule.png" class="center-block" alt="Schedules">
-								
+								<p class="text-center center-block">After the schedule is added to the bridge it will show up in your schedules list where you can delete it or enable and disable it.</p>
 								<img src="images/androidScreenshots/beacons.png" class="center-block" alt="Beacons">
+								<p class="text-center center-block">For our proximity lighting to work, place an Estimote bluetooth beacon close to the bulb. Then, make sure your bluetooth is on. Choose a the maximum range from the beacon your phone should be before it automatically turns the light off. When your phone is within this range, it will automatically turn the light on. Then place your phone close to the beacon and tap start tracking. If the label beneath "Associated Beacon" changes from "no beacon" to a number, you'll know that the beacon is being tracked. If you want to stop controlling the light with bluetooth, simply tap "Stop Tracking." The bluetooth control will work as long as Prism Lights is running in the background on your phone.</p>
 								
+								<p class="text-center center-block">If you return to the home screen and swipe from right to left, you'll see the groups home screen.</p>
 								<img src="images/androidScreenshots/groupsHome.png" class="center-block" alt="Groups Home">
+								<p class="text-center center-block">From this screen, you can tap any group to turn the bulbs in it on or off. If you tap the plus button in the upper right corner, you can create additional groups.</p>
 								<img src="images/androidScreenshots/groupsAdd.png" class="center-block" alt="Groups Add">
+								<p class="text-center center-block">To create a group, simply enter a name in the text field and select the bulbs you want by tapping on them (they will flash once as you do so). When done choosing bulbs, simply click the done button and the group will be added and you will return to the group home screen. If you want to cancel, simply hit the back button.</p>
+								<p class="text-center center-block">To rearrange or remove the groups on the group home screen, tap on the edit button next to the plus button on the groups home screen.</p>
 								<img src="images/androidScreenshots/groupsEdit.png" class="center-block" alt="Groups Edit">
+								<p class="text-center center-block">Groups can be rearranged in the same way as lights, and they can be deleted by selecting them and pressing the trash button next to the checkmark in the upper right corner. To return to the groups home screen tap the check mark.</p>
+								<p class="text-center center-block">Just as on the lights home page, you can long pres on any group to enter its settings.</p>
 								<img src="images/androidScreenshots/groupsSettings.png" class="center-block" alt="Groups Settings">
+								<p class="text-center center-block">Group settings allow you to do anything you can do with lights (except on the special "All Lights" group which only permits basic manual control. You cana easily access alarms, timers, beacons, schedules, and color cycles in the same way as you do with lights. However, you can also choose to edit the group by tapping the edit button next to the group name field.</p>
 								<img src="images/androidScreenshots/groupsEditSingle.png" class="center-block" alt="Single Group Edit">
-								
-								<img src="images/androidScreenshots/favoritesHome.png" class="center-block" alt="Favorites Home">	
-								<img src="images/androidScreenshots/favoritesSingleEdit.png" class="center-block" alt="Single Favorite Edit">
+								<p class="text-center center-block">This screen allows you to edit the group in the same way as you created it.</p>
+								<p class="text-center center-block">If you return to the groups home page and swipe from right to left once more, you'll be at the favorites home screen.</p>
+								<img src="images/androidScreenshots/favoritesHome.png" class="center-block" alt="Favorites Home">
+								<p class="text-center center-block">There will already be two defaults present. The first, "Normal All On," will turn all the lights connected to the bridge on and set them to the color the lights are originally set to when you first turn them on. The second, "All Off," will turn all the lights connected to the bridge off. To activate a favorite simply tap it. To create a favorite, simply tap the plus button in the top right corner.</p>
 								<img src="images/androidScreenshots/favoritesAdd.png" class="center-block" alt="Favorites Add">
+								<p class="text-center center-block">Similarly, to adding a group you can select bulbs and choose a name for the favorite. The application will save the current state of the bulbs selected to be restored when the favorite is activated. To change the state of a bulb while in the favorite creation screen, simply long press on any bulb, and the application will open the light settings for that bulb, allowing you to change its state. When you're finished selecting bulbs, tap "Done" and you'll be returned to the favorites home screen.</p>
+								<p class="text-center center-block">From that screen, if you tap the edit button next to the plus button, you can rearrange and delete favorites in the same way as groups.</p>
+								<img src="images/androidScreenshots/favoritesSingleEdit.png" class="center-block" alt="Single Favorite Edit">
+								<p class="text-center center-block">When you've returned to the favorites home screen, you can also edit any favorite by long pressing it. The favorite will activate and you'll be able to edit it in the same way as you created it. If you change your mind and want to cancel, hit the back button.</p>
 								<img src="images/androidScreenshots/favoritesEdit.png" class="center-block" alt="Favorites Edit">
-								
+								<p class="text-center center-block">From any screen, you can tap on the "Music" tab at the bottom of the screen to start controlling the lights with music.</p>
 								<img src="images/androidScreenshots/music1.png" class="center-block" alt="Music">
+								<p class="text-center center-block">Here, you can choose the beats per minute of your song with the slider as well as choose low, middle, and high ranges for the song. Tap "Select Lights" to choose which bulbs will be associated with each range.</p>
 								<img src="images/androidScreenshots/selectBulbs.png" class="center-block" alt="Music Select Bulbs">
+								<p class="text-center center-block">Tap the appropriate range for each bulb. If you don't want the bulb to be controlled by music, tap "None." When done choosing ranges, tap the back button. Now that your music control is fully set up, tap the button in the bottom right corner to activate music control.</p>
+								<p class="text-center center-block">Note: Music control only works when the application is on the music screen, open, and your device is unlocked.</p>
+								<p class="text-center center-block">From any screen, you can tap on the "Voice Control" tab at the bottom of the screen to start controlling the lights with your spoken English commands.</p>
 								<img src="images/androidScreenshots/voice.png" class="center-block" alt="Voice Control">
+								<p class="text-center center-block">Tap the mic to activate voice control, and say something like "Turn all bulbs on" and the application will interpret your words and turn the bulbs on.</p>
+								<p class="text-center center-block">Note: Due to an unexpected bug with Wit.ai, our voice processing sdk, this portion of the application is not currently functional. </p>
 							</div>
 						</div>
 						
@@ -396,6 +400,7 @@
 					<div class="row">
 						<div class="col-md-12">
 							<p class="text-center">Modified from the Bootstrap Worthy template (Copyright © 2014 Worthy by <a target="_blank" href="http://htmlcoder.me">HtmlCoder</a>) as permitted by the  <a target="_blank" href="https://creativecommons.org/licenses/by/3.0/">CC 3.0 License</a>.</p>
+							
 						</div>
 					</div>
 				</div>
