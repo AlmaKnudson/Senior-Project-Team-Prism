@@ -489,13 +489,13 @@ bool throttleSkip = true;
         
         
         for (PHLight *light in myLights) {
-            
-            MusicBulbRangeSelection *mbrs = [[MusicBulbRangeSelection alloc] init];
-            
-            mbrs.bulbRange = 0;
-            mbrs.bulbName = light.name;
-            mbrs.bulbIdentifier = light.identifier;
-            [musicBulbs insertObject:mbrs atIndex:0];
+            if(light.lightState.reachable.boolValue){
+                MusicBulbRangeSelection *mbrs = [[MusicBulbRangeSelection alloc] init];
+                mbrs.bulbRange = 0;
+                mbrs.bulbName = light.name;
+                mbrs.bulbIdentifier = light.identifier;
+                [musicBulbs insertObject:mbrs atIndex:0];
+            }
         }
         
         
@@ -741,7 +741,7 @@ bool throttleSkip = true;
 //    }
 //
     
-    int brightness = arc4random() % maxBrightness;
+    int brightness = maxBrightness;//arc4random() % maxBrightness;
     
     //    brightness = max((double)brightness, (double)maxBrightness);
     

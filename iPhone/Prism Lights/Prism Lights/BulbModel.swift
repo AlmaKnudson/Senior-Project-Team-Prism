@@ -37,6 +37,7 @@ class BulbModel : NSObject {
         for var i = 0; i < bulbIds.count; i++ {
             if cachedBulbs.indexForKey(bulbIds[i]) == nil {
                 bulbIds.removeAtIndex(i)
+                i--
             } else {
                 cachedBulbs[bulbIds[i]] = true
             }
