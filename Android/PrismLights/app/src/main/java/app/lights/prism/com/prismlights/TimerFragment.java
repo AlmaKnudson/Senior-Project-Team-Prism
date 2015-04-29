@@ -392,6 +392,10 @@ public class TimerFragment extends Fragment implements CacheUpdateListener{
 
 
     private void addNewTimer(int time) {
+        if(time == 0) {
+            DialogCreator.showWarningDialog("Timer Length Cannot be Zero", "Please choose a longer time.", (MainActivity)getActivity());
+            return;
+        }
         String scheduleName = ""+ time;
         PHSchedule schedule = new PHSchedule(scheduleName);
         schedule.setTimer(time);
