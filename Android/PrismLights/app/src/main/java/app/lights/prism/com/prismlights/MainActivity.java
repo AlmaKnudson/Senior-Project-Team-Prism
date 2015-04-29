@@ -25,6 +25,7 @@ import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -103,9 +104,16 @@ public class MainActivity extends Activity implements PHSDKListener{
     private String prevLongitude;
     private boolean authenticating = false;
 
+    private String attemptingToConnectIP;
+    private Map<String, PHBridge> currentConnectedBridges; //since I can't seem to disconnect them
     //colorCycle utilities
     private List<ColorCycle> colorCycles;
     private boolean connecting = false;
+
+    public MainActivity() {
+        super();
+        currentConnectedBridges = new HashMap<String, PHBridge>();
+    }
 
     public List<ColorCycle> getAllColorCycles(){
         return  colorCycles;
@@ -448,6 +456,7 @@ public class MainActivity extends Activity implements PHSDKListener{
                 lastAccessPoint.setUsername(lastUsername);
                 if (!hueBridgeSdk.isAccessPointConnected(lastAccessPoint)) {
                     connecting = true;
+                    attemptingToConnectIP = lastAccessPoint.getIpAddress();
                     hueBridgeSdk.connect(lastAccessPoint);
                     waitingText = getText(R.string.connecting);
                 } else {
@@ -578,7 +587,7 @@ public class MainActivity extends Activity implements PHSDKListener{
      * At this point you are connected to a bridge so you should pass control to your main program/activity.
      * Also it is recommended you store the connected IP Address/ Username in your app here.  This will allow easy automatic connection on subsequent use.
      */
-    public void onBridgeConnected(PHBridge phBridge) {
+    public void onBridgeConnected(final PHBridge phBridge) {
         authenticating = false;
         hueBridgeSdk.setSelectedBridge(phBridge);
         hueBridgeSdk.enableHeartbeat(phBridge, PHHueSDK.HB_INTERVAL);
@@ -586,6 +595,10 @@ public class MainActivity extends Activity implements PHSDKListener{
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                if(attemptingToConnectIP != null) {
+                    currentConnectedBridges.put(attemptingToConnectIP, phBridge);
+                    attemptingToConnectIP = null;
+                }
                 connectionLostCount = 0;
                 //only open the home screen if really new connection or at least not when unexpected
                 Fragment currentFragment = getCurrentFragment();
@@ -675,21 +688,27 @@ public class MainActivity extends Activity implements PHSDKListener{
         }
     }
 
-    public void connectToAccessPoint(PHAccessPoint accessPoint) {
+    public void connectToAccessPoint(final PHAccessPoint accessPoint) {
         HueSharedPreferences preferences = HueSharedPreferences.getInstance(this.getApplicationContext());
         accessPoint.setUsername(preferences.getUsername());
         preferences.setLastConnectedIPAddress(accessPoint.getIpAddress());
-        if(!hueBridgeSdk.isAccessPointConnected(accessPoint)) {
-            hueBridgeSdk.connect(accessPoint);
-        } else {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                attemptingToConnectIP= accessPoint.getIpAddress();
+                if(!hueBridgeSdk.isAccessPointConnected(accessPoint)) {
+                    hueBridgeSdk.connect(accessPoint);
+                } else if(currentConnectedBridges.containsKey(accessPoint.getIpAddress())) {
+                    hueBridgeSdk.setSelectedBridge(currentConnectedBridges.get(accessPoint.getIpAddress()));
+                    connecting = false;
+                    openHomeScreen();
+                }else {
+
                     connecting = false;
                     openHomeScreen();
                 }
-            });
-        }
+            }
+        });
     }
 
     @Override
